@@ -48,4 +48,8 @@ class ContentSummary {
   factory ContentSummary.blank(int homileticId) {
     return ContentSummary(homileticId: homileticId);
   }
+
+  Future<void> delete() async {
+    await deleteSummary(this);
+  }
 }

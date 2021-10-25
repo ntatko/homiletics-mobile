@@ -58,3 +58,18 @@ Future<void> updateApplication(Application application) async {
   await db.update('applications', application.toJson()..remove('id'),
       where: 'id = ?', whereArgs: [application.id]);
 }
+
+Future<void> deleteApplication(Application application) async {
+  final Database db = await database;
+
+  await db.delete('applications', where: 'id = ?', whereArgs: [application.id]);
+}
+
+Future<List<Application>> deleteApplicationByHomileticId(int id) async {
+  final Database db = await database;
+
+  List<Application> things = await getApplicationsByHomileticId(id);
+
+  await db.delete('applications', where: 'homiletic_id = ?', whereArgs: [id]);
+  return things;
+}

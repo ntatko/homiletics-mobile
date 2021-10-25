@@ -25,7 +25,11 @@ final Future<Database> database = getDatabasesPath().then((String path) {
 Future<List<Homiletic>> getAllHomiletics() async {
   final Database db = await database;
 
+  print("getting here");
+
   final List<Map<String, dynamic>> maps = await db.query('homiletics');
+
+  print("this is the string $maps");
 
   if (maps.isEmpty) {
     return [];
@@ -67,4 +71,10 @@ Future<void> updateHomiletic(Homiletic homiletic) async {
 
   await db
       .update('homiletics', json, where: 'id = ?', whereArgs: [homiletic.id]);
+}
+
+Future<void> deleteHomiletic(Homiletic homiletic) async {
+  final Database db = await database;
+
+  await db.delete('homiletics', where: 'id = ?', whereArgs: [homiletic.id]);
 }

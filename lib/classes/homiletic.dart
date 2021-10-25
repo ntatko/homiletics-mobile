@@ -1,6 +1,9 @@
 import 'package:homiletics/classes/Division.dart';
 import 'package:homiletics/classes/application.dart';
 import 'package:homiletics/classes/content_summary.dart';
+import 'package:homiletics/storage/application_storage.dart';
+import 'package:homiletics/storage/content_summary_storage.dart';
+import 'package:homiletics/storage/division_storage.dart';
 import 'package:homiletics/storage/homiletic_storage.dart';
 
 class Homiletic {
@@ -21,12 +24,12 @@ class Homiletic {
       this.updatedAt});
 
   factory Homiletic.fromJson(Map<String, dynamic> json) {
+    print("here $json");
     return Homiletic(
         passage: json['passage'],
         subjectSentence: json['subject_sentence'],
         aim: json['aim'],
-        id: json['id'],
-        updatedAt: DateTime(json['updated_at']));
+        id: json['id']);
   }
 
   Map<String, dynamic> toJson() => {
@@ -57,5 +60,18 @@ class Homiletic {
   Future<void> updateSubjectSentence(String text) async {
     subjectSentence = text;
     await update();
+  }
+
+  Future<Map<String, dynamic>> delete() async {
+    List<ContentSummary> summaries = await deleteSummaryByHomileticId(id);
+    List<Application> applications = await deleteApplicationByHomileticId(id);
+    List<Division> divisions = await deleteDivisionByHomileticId(id);
+    await deleteHomiletic(this);
+    return {
+      "summaries": summaries,
+      "applications": applications,
+      "divisions": divisions,
+      "homiletic": this
+    };
   }
 }

@@ -31,4 +31,8 @@ class Application {
     text = updatedText;
     await update();
   }
+
+  Future<void> delete() async {
+    deleteApplication(this);
+  }
 }

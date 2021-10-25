@@ -59,3 +59,18 @@ Future<void> updateDivision(Division division) async {
   await db.update('divisions', division.toJson()..remove('id'),
       where: 'id = ?', whereArgs: [division.id]);
 }
+
+Future<void> deleteDivision(Division division) async {
+  final Database db = await database;
+
+  await db.delete('divisions', where: 'id = ?', whereArgs: [division.id]);
+}
+
+Future<List<Division>> deleteDivisionByHomileticId(int id) async {
+  final Database db = await database;
+
+  List<Division> divisions = await getDivisionsByHomileticId(id);
+
+  await db.delete('divisions', where: 'homiletic_id = ?', whereArgs: [id]);
+  return divisions;
+}

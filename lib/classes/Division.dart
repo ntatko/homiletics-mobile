@@ -43,4 +43,8 @@ class Division {
     title = text;
     await update();
   }
+
+  Future<void> delete() async {
+    deleteDivision(this);
+  }
 }

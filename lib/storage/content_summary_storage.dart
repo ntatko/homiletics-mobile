@@ -60,3 +60,20 @@ Future<void> updateSummary(ContentSummary summary) async {
   await db.update('content_summaries', summary.toJson()..remove('id'),
       where: 'id = ?', whereArgs: [summary.id]);
 }
+
+Future<void> deleteSummary(ContentSummary summary) async {
+  final Database db = await database;
+
+  await db
+      .delete('content_summaries', where: 'id = ?', whereArgs: [summary.id]);
+}
+
+Future<List<ContentSummary>> deleteSummaryByHomileticId(int id) async {
+  final Database db = await database;
+
+  List<ContentSummary> summaries = await getSummariesByHomileticId(id);
+
+  await db
+      .delete('content_summaries', where: 'homiletic_id = ?', whereArgs: [id]);
+  return summaries;
+}
