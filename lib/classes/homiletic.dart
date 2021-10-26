@@ -24,7 +24,6 @@ class Homiletic {
       this.updatedAt});
 
   factory Homiletic.fromJson(Map<String, dynamic> json) {
-    print("here $json");
     return Homiletic(
         passage: json['passage'],
         subjectSentence: json['subject_sentence'],

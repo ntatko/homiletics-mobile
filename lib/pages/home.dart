@@ -4,12 +4,12 @@ import 'package:homiletics/classes/application.dart';
 import 'package:homiletics/classes/content_summary.dart';
 import 'package:homiletics/classes/homiletic.dart';
 import 'package:homiletics/pages/homeletic_editor.dart';
-import 'package:homiletics/storage/application_storage.dart';
-import 'package:homiletics/storage/content_summary_storage.dart';
-import 'package:homiletics/storage/division_storage.dart';
+// import 'package:homiletics/storage/application_storage.dart';
+// import 'package:homiletics/storage/content_summary_storage.dart';
+// import 'package:homiletics/storage/division_storage.dart';
 import 'package:homiletics/storage/homiletic_storage.dart';
 import 'package:loggy/loggy.dart';
-import 'package:timeago/timeago.dart' as timeago;
+// import 'package:timeago/timeago.dart' as timeago;
 import 'package:string_to_hex/string_to_hex.dart';
 
 // ignore: must_be_immutable
@@ -92,7 +92,6 @@ class DisplayLessons extends StatelessWidget {
               return Dismissible(
                   key: Key("${homiletic.id}"),
                   onDismissed: (direction) async {
-                    print(direction);
                     Map<String, dynamic> restores = await homiletic.delete();
                     await resetData();
 
@@ -104,7 +103,6 @@ class DisplayLessons extends StatelessWidget {
                             Homiletic hom = restores['homiletic'];
                             hom.id = -1;
                             await hom.update();
-                            print("id ${hom.id}");
                             for (ContentSummary i in restores['summaries']) {
                               i.homileticId = hom.id;
                               i.id = -1;
@@ -161,7 +159,12 @@ class DisplayLessons extends StatelessWidget {
                                             right: 10, left: 10),
                                         decoration: BoxDecoration(
                                             color: Color(StringToHex.toColor(
-                                                homiletic.passage.padRight(3))),
+                                                homiletic.passage
+                                                    .padLeft(3)
+                                                    .toLowerCase()
+                                                    .replaceAll(
+                                                        RegExp(r'[^\w\s]+'), '')
+                                                    .substring(0, 3))),
                                             borderRadius:
                                                 BorderRadius.circular(25),
                                             border: Border.all(

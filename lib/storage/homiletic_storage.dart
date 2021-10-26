@@ -25,11 +25,7 @@ final Future<Database> database = getDatabasesPath().then((String path) {
 Future<List<Homiletic>> getAllHomiletics() async {
   final Database db = await database;
 
-  print("getting here");
-
   final List<Map<String, dynamic>> maps = await db.query('homiletics');
-
-  print("this is the string $maps");
 
   if (maps.isEmpty) {
     return [];

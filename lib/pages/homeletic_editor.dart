@@ -77,7 +77,7 @@ class _HomileticState extends State<HomileticEditor> {
             onPressed: () {
               Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (context) => Home()),
+                  MaterialPageRoute(builder: (context) => const Home()),
                   (r) => false);
             },
           ),
@@ -88,7 +88,7 @@ class _HomileticState extends State<HomileticEditor> {
               onPressed: () {
                 Navigator.pushAndRemoveUntil(
                     context,
-                    MaterialPageRoute(builder: (context) => Home()),
+                    MaterialPageRoute(builder: (context) => const Home()),
                     (r) => false);
               },
             ),
@@ -121,12 +121,10 @@ class _HomileticState extends State<HomileticEditor> {
             ..._summaries.map((element) {
               int index = _summaries.indexOf(element);
               return Dismissible(
-                  key: Key(element.toString()),
+                  key: Key(index.toString()),
                   onDismissed: (_) {
+                    _summaries = _summaries..removeAt(index);
                     element.delete();
-                    setState(() {
-                      _summaries = _summaries..remove(element);
-                    });
                   },
                   child: Container(
                       margin: const EdgeInsets.all(8),
@@ -149,8 +147,8 @@ class _HomileticState extends State<HomileticEditor> {
                                     labelText: 'Verses',
                                     border: OutlineInputBorder(),
                                   ),
-                                  onChanged: (String value) async {
-                                    await element.updatePassage(value);
+                                  onChanged: (String value) {
+                                    element.updatePassage(value);
                                   })),
                           SizedBox(
                               width: 250,
@@ -269,6 +267,7 @@ class _HomileticState extends State<HomileticEditor> {
             Container(
                 margin: const EdgeInsets.all(8),
                 child: TextField(
+                    maxLines: null,
                     keyboardType: TextInputType.text,
                     textCapitalization: TextCapitalization.sentences,
                     controller: TextEditingController(
@@ -286,6 +285,7 @@ class _HomileticState extends State<HomileticEditor> {
             Container(
                 margin: const EdgeInsets.all(8),
                 child: TextField(
+                    maxLines: null,
                     keyboardType: TextInputType.text,
                     textCapitalization: TextCapitalization.sentences,
                     controller:
