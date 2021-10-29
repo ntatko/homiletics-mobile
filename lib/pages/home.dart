@@ -11,6 +11,7 @@ import 'package:homiletics/storage/homiletic_storage.dart';
 import 'package:loggy/loggy.dart';
 // import 'package:timeago/timeago.dart' as timeago;
 import 'package:string_to_hex/string_to_hex.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 // ignore: must_be_immutable
 class Home extends StatefulWidget {
@@ -21,6 +22,11 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  Future<InitializationStatus> _initGoogleMobileAds() {
+    // TODO: Initialize Google Mobile Ads SDK
+    return MobileAds.instance.initialize();
+  }
+
   Future<List<Homiletic>> homiletics = getAllHomiletics();
 
   Future<void> resetData() async {
