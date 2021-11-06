@@ -28,14 +28,16 @@ class Homiletic {
         passage: json['passage'],
         subjectSentence: json['subject_sentence'],
         aim: json['aim'],
-        id: json['id']);
+        id: json['id'],
+        updatedAt: DateTime.parse(json['updated_at']));
   }
 
   Map<String, dynamic> toJson() => {
         "passage": passage,
         "subject_sentence": subjectSentence,
         "aim": aim,
-        "id": id
+        "id": id,
+        "updated_at": updatedAt?.toIso8601String() ?? ''
       };
 
   Future<void> update() async {
