@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:homiletics/common/rounded_button.dart';
 import 'package:homiletics/pages/homeletic_editor.dart';
 import 'package:homiletics/pages/notes_editor.dart';
 
@@ -15,8 +16,8 @@ class StartActivity extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                ElevatedButton(
-                    onPressed: () {
+                RoundedButton(
+                    onClick: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -24,8 +25,8 @@ class StartActivity extends StatelessWidget {
                       );
                     },
                     child: const Text("New Homiletics")),
-                ElevatedButton(
-                    onPressed: () {
+                RoundedButton(
+                    onClick: () {
                       Navigator.push(
                           context,
                           MaterialPageRoute(

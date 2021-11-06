@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:homiletics/classes/homiletic.dart';
 import 'package:homiletics/classes/lecture_note.dart';
+import 'package:homiletics/common/rounded_button.dart';
 import 'package:homiletics/pages/homeletic_editor.dart';
 import 'package:homiletics/pages/notes_editor.dart';
 import 'package:http/http.dart' as http;
@@ -55,9 +56,10 @@ class CurrentLesson extends StatelessWidget {
               )),
           Column(
             children: [
-              ElevatedButton(
-                  onPressed: disabled
-                      ? null
+              RoundedButton(
+                  shadow: false,
+                  onClick: disabled
+                      ? () {}
                       : () {
                           Homiletic homilet =
                               Homiletic(passage: schedule.reference);
@@ -69,9 +71,10 @@ class CurrentLesson extends StatelessWidget {
                                       HomileticEditor(homiletic: homilet)));
                         },
                   child: const Text("Start Homiletics")),
-              ElevatedButton(
-                  onPressed: disabled
-                      ? null
+              RoundedButton(
+                  shadow: false,
+                  onClick: disabled
+                      ? () {}
                       : () {
                           LectureNote note =
                               LectureNote(passage: schedule.reference);
