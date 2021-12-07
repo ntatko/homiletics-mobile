@@ -13,6 +13,7 @@ final Future<Database> database = getDatabasesPath().then((String path) {
               id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
               summary TEXT,
               passage TEXT,
+              sort INTEGER,
               homiletic_id INTEGER
             )
             ''');
@@ -42,6 +43,7 @@ Future<void> resetSummariesTable() async {
               id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
               summary TEXT,
               passage TEXT,
+              sort INTEGER,
               homiletic_id INTEGER
             )
             ''');

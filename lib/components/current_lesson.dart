@@ -32,28 +32,30 @@ class CurrentLesson extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SizedBox(
-              height: 60,
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    "This week's passage:",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  disabled
-                      ? Container(
-                          color: Colors.grey,
-                          width: 120,
-                          height: 50,
-                        )
-                      : Text(
-                          schedule.reference,
-                          style: const TextStyle(
-                              color: Colors.white, fontSize: 30),
-                        )
-                ],
-              )),
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                "This week's passage:",
+                style: TextStyle(color: Colors.white),
+              ),
+              disabled
+                  ? Container(
+                      color: Colors.grey[100],
+                      width: 120,
+                      height: 30,
+                    )
+                  : Container(
+                      width: MediaQuery.of(context).size.width - 200,
+                      child: Flexible(
+                          child: Text(
+                        schedule.reference,
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 30),
+                      )))
+            ],
+          )),
           Column(
             children: [
               RoundedButton(

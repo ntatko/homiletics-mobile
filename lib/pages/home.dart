@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:homiletics/components/application_list.dart';
 import 'package:homiletics/components/current_lesson.dart';
+import 'package:homiletics/components/help_menu.dart';
 import 'package:homiletics/components/past_lecture_notes.dart';
 import 'package:homiletics/components/past_lessons.dart';
 import 'package:homiletics/components/start_activity.dart';
-import 'package:homiletics/pages/homeletic_editor.dart';
 import 'package:homiletics/storage/application_storage.dart';
 import 'package:homiletics/storage/content_summary_storage.dart';
 import 'package:homiletics/storage/division_storage.dart';
 import 'package:homiletics/storage/homiletic_storage.dart';
+import 'package:homiletics/storage/lecture_note_storage.dart';
 
 // ignore: must_be_immutable
 class Home extends StatefulWidget {
@@ -32,6 +33,7 @@ class _HomeState extends State<Home> {
       //       await resetApplicationsTable();
       //       await resetDivisionsTable();
       //       await resetSummariesTable();
+      //       await resetLectureNoteTable();
       //     },
       //   ),
       // ),
@@ -40,7 +42,8 @@ class _HomeState extends State<Home> {
         StartActivity(),
         ApplicationList(),
         PastLessons(),
-        PastLectureNotes()
+        PastLectureNotes(),
+        HelpMenu()
       ]),
     );
   }

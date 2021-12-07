@@ -4,11 +4,13 @@ class ContentSummary {
   String summary;
   String passage;
   int? id;
+  int order;
   int homileticId;
 
   ContentSummary(
       {this.summary = '',
       this.passage = '',
+      this.order = 0,
       this.id,
       required this.homileticId});
 
@@ -16,6 +18,7 @@ class ContentSummary {
         "summary": summary,
         "passage": passage,
         "homiletic_id": homileticId,
+        "order": order,
         "id": id
       };
 
@@ -24,6 +27,7 @@ class ContentSummary {
         summary: json['summary'],
         passage: json['passage'],
         homileticId: json['homiletic_id'],
+        order: json['order'],
         id: json['id']);
   }
 

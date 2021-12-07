@@ -13,6 +13,7 @@ final Future<Database> database = getDatabasesPath().then((String path) {
               id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
               title TEXT,
               passage TEXT,
+              sort INTEGER,
               homiletic_id INTEGER
             )
             ''');
@@ -41,6 +42,7 @@ Future<void> resetDivisionsTable() async {
               id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
               title TEXT,
               passage TEXT,
+              sort INTEGER,
               homiletic_id INTEGER
             )
             ''');

@@ -27,7 +27,7 @@ class LectureNote {
 
   Future<void> update() async {
     if (id == -1) {
-      await insertLectureNote(this);
+      id = await insertLectureNote(this);
     } else {
       await updateLectureNote(this);
     }
@@ -41,5 +41,11 @@ class LectureNote {
       passage = updatePassage;
     }
     await update();
+  }
+
+  Future<LectureNote> delete() async {
+    await deleteLectureNote(this);
+    id = -1;
+    return this;
   }
 }

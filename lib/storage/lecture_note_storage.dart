@@ -29,6 +29,8 @@ Future<List<LectureNote>> getLectureNotes() async {
   if (maps.isEmpty) {
     return [];
   }
+
+  print("other maps $maps");
   return List.generate(
       maps.length, (index) => LectureNote.fromJson(maps[index]));
 }
@@ -37,7 +39,7 @@ Future<void> resetLectureNoteTable() async {
   final Database db = await database;
   await db.execute("DROP TABLE IF EXISTS lectures ");
   await db.execute('''
-            CREATE TABLE applications (
+            CREATE TABLE lectures (
               id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
               note TEXT,
               passage TEXT,
@@ -50,7 +52,7 @@ Future<int> insertLectureNote(LectureNote note) async {
   final Database db = await database;
   note.time = DateTime.now();
 
-  return await db.insert('lectures', note.toJson(),
+  return await db.insert('lectures', note.toJson()..remove('id'),
       conflictAlgorithm: ConflictAlgorithm.replace);
 }
 
