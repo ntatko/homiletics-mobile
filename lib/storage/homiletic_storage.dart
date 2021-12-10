@@ -14,7 +14,7 @@ final Future<Database> database = getDatabasesPath().then((String path) {
               passage TEXT,
               subject_sentence TEXT,
               aim TEXT,
-              updated_at INT
+              updated_at TEXT
             )
             ''');
     },
@@ -23,9 +23,12 @@ final Future<Database> database = getDatabasesPath().then((String path) {
 });
 
 Future<List<Homiletic>> getAllHomiletics() async {
+  print("tryna get");
   final Database db = await database;
 
   final List<Map<String, dynamic>> maps = await db.query('homiletics');
+
+  print("maps ${maps}");
 
   if (maps.isEmpty) {
     return [];
@@ -43,30 +46,25 @@ Future<void> resetTable() async {
               passage TEXT,
               subject_sentence TEXT,
               aim TEXT,
-              updated_at INT
+              updated_at TEXT
             )
             ''');
 }
 
 Future<int> insertHomiletic(Homiletic homiletic) async {
   final Database db = await database;
+  homiletic.updatedAt = DateTime.now();
 
-  Map<String, dynamic> json = homiletic.toJson();
-  json.remove('id');
-  json['updated_at'] = DateTime.now().millisecondsSinceEpoch;
-
-  return await db.insert('homiletics', json,
+  return await db.insert('homiletics', homiletic.toJson()..remove('id'),
       conflictAlgorithm: ConflictAlgorithm.replace);
 }
 
 Future<void> updateHomiletic(Homiletic homiletic) async {
   final Database db = await database;
+  homiletic.updatedAt = DateTime.now();
 
-  Map<String, dynamic> json = homiletic.toJson()..remove('id');
-  json['updated_at'] = DateTime.now().millisecondsSinceEpoch;
-
-  await db
-      .update('homiletics', json, where: 'id = ?', whereArgs: [homiletic.id]);
+  await db.update('homiletics', homiletic.toJson()..remove('id'),
+      where: 'id = ?', whereArgs: [homiletic.id]);
 }
 
 Future<void> deleteHomiletic(Homiletic homiletic) async {

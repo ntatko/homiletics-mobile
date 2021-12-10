@@ -73,3 +73,17 @@ Future<List<Application>> deleteApplicationByHomileticId(int id) async {
   await db.delete('applications', where: 'homiletic_id = ?', whereArgs: [id]);
   return things;
 }
+
+Future<List<Application>> getAllApplications() async {
+  final Database db = await database;
+
+  final List<Map<String, dynamic>> maps = await db.query('applications');
+
+  print("maps here $maps");
+
+  if (maps.isEmpty) {
+    return [];
+  }
+  return List.generate(
+      maps.length, (index) => Application.fromJson(maps[index]));
+}

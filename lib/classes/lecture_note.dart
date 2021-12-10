@@ -1,16 +1,45 @@
-// class LectureNote {
-//   int id;
-//   String note;
-//   String passage;
+import 'package:homiletics/storage/lecture_note_storage.dart';
 
-//   LectureNote({this.id = -1, this.note = '', this.passage = ''});
+class LectureNote {
+  int id;
+  String note;
+  String passage;
+  DateTime? time;
 
-//   factory LectureNote.fromJson(Map<String, dynamic> json) {
-//     return LectureNote(
-//         id: json['id'], note: json['note'], passage: json['passage']);
-//   }
+  LectureNote({this.id = -1, this.note = '', this.passage = '', this.time});
 
-//   toJson() {
-//     return {"id": id, "passage": passage, "note": note};
-//   }
-// }
+  factory LectureNote.fromJson(Map<String, dynamic> json) {
+    return LectureNote(
+        id: json['id'],
+        note: json['note'],
+        passage: json['passage'],
+        time: DateTime.parse(json['time']));
+  }
+
+  toJson() {
+    return {
+      "id": id,
+      "passage": passage,
+      "note": note,
+      "time": time?.toIso8601String() ?? ''
+    };
+  }
+
+  Future<void> update() async {
+    if (id == -1) {
+      await insertLectureNote(this);
+    } else {
+      await updateLectureNote(this);
+    }
+  }
+
+  Future<void> updateNote(String? updateNote, String? updatePassage) async {
+    if (updateNote != null && updateNote != '') {
+      note = updateNote;
+    }
+    if (updatePassage != null && updatePassage != '') {
+      passage = updatePassage;
+    }
+    await update();
+  }
+}
