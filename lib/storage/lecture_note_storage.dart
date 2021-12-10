@@ -30,7 +30,6 @@ Future<List<LectureNote>> getLectureNotes() async {
     return [];
   }
 
-  print("other maps $maps");
   return List.generate(
       maps.length, (index) => LectureNote.fromJson(maps[index]));
 }

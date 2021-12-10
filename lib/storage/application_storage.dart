@@ -79,8 +79,6 @@ Future<List<Application>> getAllApplications() async {
 
   final List<Map<String, dynamic>> maps = await db.query('applications');
 
-  print("maps here $maps");
-
   if (maps.isEmpty) {
     return [];
   }
