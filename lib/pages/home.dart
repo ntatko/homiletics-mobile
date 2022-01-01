@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:homiletics/components/application_list.dart';
 import 'package:homiletics/components/current_lesson.dart';
 import 'package:homiletics/components/help_menu.dart';
@@ -21,6 +22,16 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   @override
+  void initState() {
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      systemNavigationBarColor: Colors.blue, // navigation bar color
+      statusBarColor: Colors.pink, // status bar color
+    ));
+
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       // appBar: AppBar(title: const Text('Homiletics')),
@@ -37,14 +48,20 @@ class _HomeState extends State<Home> {
       //     },
       //   ),
       // ),
-      body: ListView(children: const [
-        CurrentLessonActions(),
-        StartActivity(),
-        ApplicationList(),
-        PastLessons(),
-        PastLectureNotes(),
-        HelpMenu()
-      ]),
+      body: Container(
+          color: Colors.blue,
+          child: SafeArea(
+              bottom: false,
+              child: Container(
+                  color: Colors.grey[100],
+                  child: ListView(children: const [
+                    CurrentLessonActions(),
+                    StartActivity(),
+                    ApplicationList(),
+                    PastLessons(),
+                    PastLectureNotes(),
+                    HelpMenu()
+                  ])))),
     );
   }
 }

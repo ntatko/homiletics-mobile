@@ -15,8 +15,9 @@ class HelpMenu extends StatelessWidget {
           const Center(
               child: Text("All rights reserved",
                   style: TextStyle(color: Colors.grey))),
-          const TextButton(
-              onPressed: _sendEmail, child: Text("Report a problem"))
+          // TextButton(
+          //     onPressed: () => _sendEmail(),
+          //     child: const Text("Report a problem"))
         ]));
   }
 }

@@ -20,10 +20,13 @@ class CurrentLesson extends StatelessWidget {
       : super(key: key);
 
   @override
+  void initState() {}
+
+  @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: Colors.blue, // status bar color
-    ));
+    // SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    //   statusBarColor: Colors.blue, // status bar color
+    // ));
 
     return SizedBox(
       width: MediaQuery.of(context).size.width,

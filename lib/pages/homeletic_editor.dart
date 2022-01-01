@@ -280,7 +280,7 @@ class _HomileticState extends State<HomileticEditor> {
                           SizedBox(
                               width: 75,
                               child: TextField(
-                                  keyboardType: TextInputType.number,
+                                  keyboardType: TextInputType.text,
                                   textCapitalization:
                                       TextCapitalization.sentences,
                                   controller: TextEditingController(
@@ -304,6 +304,8 @@ class _HomileticState extends State<HomileticEditor> {
                                     labelText: 'Summary',
                                     border: OutlineInputBorder(),
                                   ),
+                                  maxLines: 4,
+                                  minLines: 1,
                                   onChanged: (String value) async {
                                     await element.updateText(value);
                                   }))
@@ -330,8 +332,8 @@ class _HomileticState extends State<HomileticEditor> {
               int index = _divisions.indexOf(division);
               return Dismissible(
                   key: Key(division.toString()),
-                  onDismissed: (_) {
-                    division.delete();
+                  onDismissed: (_) async {
+                    await division.delete();
                     _thisHomiletic?.update();
                     setState(() {
                       _divisions = _divisions..remove(division);
@@ -374,6 +376,8 @@ class _HomileticState extends State<HomileticEditor> {
                                     labelText: 'Division Title',
                                     border: OutlineInputBorder(),
                                   ),
+                                  maxLines: 4,
+                                  minLines: 1,
                                   onChanged: (String value) async {
                                     await division.updateText(value);
                                   }))
@@ -442,6 +446,7 @@ class _HomileticState extends State<HomileticEditor> {
                       width: MediaQuery.of(context).size.width,
                       margin: const EdgeInsets.all(8),
                       child: TextField(
+                          maxLines: null,
                           keyboardType: TextInputType.text,
                           textCapitalization: TextCapitalization.sentences,
                           controller:
