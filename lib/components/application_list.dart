@@ -45,7 +45,7 @@ class ApplicationList extends StatelessWidget {
                                     top: 10, left: 10, right: 10, bottom: 20),
                                 padding: const EdgeInsets.all(10),
                                 decoration: BoxDecoration(
-                                    color: Colors.green,
+                                    color: Colors.green[600],
                                     boxShadow: [
                                       BoxShadow(
                                           color: Colors.grey[400]!,

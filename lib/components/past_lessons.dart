@@ -19,7 +19,7 @@ class PastLessons extends StatelessWidget {
           return snapshot.hasData
               ? Container(
                   padding: const EdgeInsets.only(
-                      left: 8, right: 8, top: 12, bottom: 10),
+                      left: 10, right: 10, top: 12, bottom: 10),
                   child: DisplayLessons(snapshot.data!))
               : const SizedBox.shrink();
         });
@@ -35,20 +35,21 @@ class DisplayLessons extends StatelessWidget {
   Widget build(BuildContext context) {
     return homiletics.isNotEmpty
         ? Column(children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text("Past Homiletics"),
-                // TextButton(
-                //     onPressed: () {
-                //       Navigator.push(
-                //           context,
-                //           MaterialPageRoute(
-                //               builder: (context) => const PastLessons()));
-                //     },
-                //     child: const Text("See all"))
-              ],
-            ),
+            Container(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: const [
+                      Text("Past Homiletics"),
+                      // TextButton(
+                      //     onPressed: () {
+                      //       Navigator.push(
+                      //           context,
+                      //           MaterialPageRoute(
+                      //               builder: (context) => const PastLessons()));
+                      //     },
+                      //     child: const Text("See all"))
+                    ])),
             ...homiletics
                 // .sublist(homiletics.length > 5
                 //     ? homiletics.length - 5
@@ -70,10 +71,10 @@ class DisplayLessons extends StatelessWidget {
                           },
                           child: Container(
                               padding: const EdgeInsets.only(
-                                  top: 8, left: 8, bottom: 8, right: 20),
+                                  top: 8, left: 0, bottom: 8, right: 25),
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(200),
+                                  color: Colors.orange[400],
                                   boxShadow: [
                                     BoxShadow(
                                         color: Colors.grey[400]!,

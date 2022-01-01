@@ -21,16 +21,18 @@ class PastLectureNotes extends StatelessWidget {
         return snapshot.hasData && notes.isNotEmpty
             ? Container(
                 padding: const EdgeInsets.only(
-                    left: 8, right: 8, top: 20, bottom: 10),
+                    left: 10, right: 10, top: 20, bottom: 10),
                 child: Column(
                   children: [
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text("Past Notes"),
-                          // TextButton(
-                          //     onPressed: () {}, child: const Text("See all"))
-                        ]),
+                    Container(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: const [
+                              Text("Past Notes"),
+                              // TextButton(
+                              //     onPressed: () {}, child: const Text("See all"))
+                            ])),
                     ...notes.map((note) {
                       return SizedBox(
                           key: Key("${note.id}"),
@@ -49,13 +51,13 @@ class PastLectureNotes extends StatelessWidget {
                                   child: Container(
                                       padding: const EdgeInsets.only(
                                           top: 8,
-                                          left: 8,
+                                          left: 0,
                                           bottom: 8,
-                                          right: 20),
+                                          right: 25),
                                       decoration: BoxDecoration(
                                           borderRadius:
-                                              BorderRadius.circular(8),
-                                          color: Colors.white,
+                                              BorderRadius.circular(200),
+                                          color: Colors.orange[400],
                                           boxShadow: [
                                             BoxShadow(
                                                 color: Colors.grey[400]!,
