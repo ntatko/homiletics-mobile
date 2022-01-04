@@ -1,18 +1,14 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:homiletics/classes/application.dart';
 import 'package:homiletics/classes/content_summary.dart';
 import 'package:homiletics/classes/Division.dart';
 import 'package:homiletics/classes/homiletic.dart';
-import 'package:homiletics/classes/passage.dart';
 import 'package:homiletics/common/rounded_button.dart';
 import 'package:homiletics/common/verse_container.dart';
-import 'package:homiletics/components/current_lesson.dart';
 import 'package:homiletics/pages/home.dart';
 import 'package:homiletics/storage/application_storage.dart';
 import 'package:homiletics/storage/content_summary_storage.dart';
 import 'package:homiletics/storage/division_storage.dart';
-import 'package:reorderables/reorderables.dart';
 
 class HomileticEditor extends StatefulWidget {
   const HomileticEditor({Key? key, this.homiletic}) : super(key: key);
@@ -28,7 +24,6 @@ class _HomileticState extends State<HomileticEditor> {
   List<ContentSummary> _summaries = [];
   List<Division> _divisions = [];
   List<Application> _applications = [];
-  List<Passage> _passages = [];
 
   @override
   void initState() {
@@ -71,11 +66,6 @@ class _HomileticState extends State<HomileticEditor> {
         }
       });
     }
-  }
-
-  fetchPassages(String reference) async {
-    List<Passage> passage = await fetchPassage(reference);
-    _passages = passage;
   }
 
   List<Widget> buildContentDivisionsList() {

@@ -6,11 +6,11 @@ import 'package:homiletics/components/help_menu.dart';
 import 'package:homiletics/components/past_lecture_notes.dart';
 import 'package:homiletics/components/past_lessons.dart';
 import 'package:homiletics/components/start_activity.dart';
-import 'package:homiletics/storage/application_storage.dart';
-import 'package:homiletics/storage/content_summary_storage.dart';
-import 'package:homiletics/storage/division_storage.dart';
-import 'package:homiletics/storage/homiletic_storage.dart';
-import 'package:homiletics/storage/lecture_note_storage.dart';
+// import 'package:homiletics/storage/application_storage.dart';
+// import 'package:homiletics/storage/content_summary_storage.dart';
+// import 'package:homiletics/storage/division_storage.dart';
+// import 'package:homiletics/storage/homiletic_storage.dart';
+// import 'package:homiletics/storage/lecture_note_storage.dart';
 
 // ignore: must_be_immutable
 class Home extends StatefulWidget {

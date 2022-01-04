@@ -10,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:homiletics/classes/passage_schedule.dart';
 import 'package:homiletics/storage/passage_schedule_storage.dart';
 import 'package:loggy/loggy.dart';
-import 'package:flutter/services.dart';
 
 class CurrentLesson extends StatelessWidget {
   final PassageSchedule schedule;
@@ -20,14 +19,7 @@ class CurrentLesson extends StatelessWidget {
       : super(key: key);
 
   @override
-  void initState() {}
-
-  @override
   Widget build(BuildContext context) {
-    // SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-    //   statusBarColor: Colors.blue, // status bar color
-    // ));
-
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       child: Row(
@@ -49,7 +41,7 @@ class CurrentLesson extends StatelessWidget {
                       width: 120,
                       height: 30,
                     )
-                  : Container(
+                  : SizedBox(
                       width: MediaQuery.of(context).size.width - 200,
                       child: Flexible(
                           child: Text(

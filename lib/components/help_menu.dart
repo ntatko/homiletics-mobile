@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
+// import 'package:url_launcher/url_launcher.dart';
 
 class HelpMenu extends StatelessWidget {
   const HelpMenu({Key? key}) : super(key: key);
@@ -22,11 +22,11 @@ class HelpMenu extends StatelessWidget {
   }
 }
 
-_sendEmail() async {
-  const url = "mailto:stlyabsf+support@gmail.com?subject=Support%20Request";
-  if (await canLaunch(url)) {
-    await launch(url);
-  } else {
-    throw "could not launch $url";
-  }
-}
+// _sendEmail() async {
+//   const url = "mailto:stlyabsf+support@gmail.com?subject=Support%20Request";
+//   if (await canLaunch(url)) {
+//     await launch(url);
+//   } else {
+//     throw "could not launch $url";
+//   }
+// }
