@@ -25,7 +25,7 @@ class _HomeState extends State<Home> {
   void initState() {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       systemNavigationBarColor: Colors.blue, // navigation bar color
-      statusBarColor: Colors.pink, // status bar color
+      statusBarColor: Colors.blue, // status bar color
     ));
 
     super.initState();
