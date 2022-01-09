@@ -158,7 +158,7 @@ Future<List<PassageSchedule>> getWebPassages() async {
 
     print("we're in this now");
 
-    schedules.sort((a, b) => a.rollout.compareTo(b.rollout));
+    schedules.sort((a, b) => a.expires.compareTo(b.expires));
     return schedules;
   } else {
     throw Exception('Failed to load scheduled passages');
