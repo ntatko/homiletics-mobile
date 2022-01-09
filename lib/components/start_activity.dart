@@ -16,7 +16,10 @@ class StartActivity extends StatelessWidget {
           children: [
             Container(
                 padding: const EdgeInsets.only(bottom: 10),
-                child: const Text("Start a new lesson")),
+                child: const Text(
+                  "Start with your own passage",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                )),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [

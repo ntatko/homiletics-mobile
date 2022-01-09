@@ -8,18 +8,36 @@ import 'package:homiletics/pages/notes_editor.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:homiletics/classes/passage_schedule.dart';
-import 'package:homiletics/storage/passage_schedule_storage.dart';
 import 'package:loggy/loggy.dart';
 
-class CurrentLesson extends StatelessWidget {
-  final PassageSchedule schedule;
-  final bool disabled;
+class CurrentLesson extends StatefulWidget {
+  final List<PassageSchedule> schedules;
 
-  const CurrentLesson({Key? key, required this.schedule, this.disabled = false})
-      : super(key: key);
+  const CurrentLesson({Key? key, required this.schedules}) : super(key: key);
+
+  @override
+  State<CurrentLesson> createState() => _CurrentLessonState();
+}
+
+class _CurrentLessonState extends State<CurrentLesson> {
+  PassageSchedule? selectedSchedule;
+
+  @override
+  void initState() {
+    setState(() {
+      selectedSchedule = widget.schedules.isNotEmpty
+          ? widget.schedules.firstWhere(
+              (element) => element.expires.compareTo(DateTime.now()) == 1,
+              orElse: () => widget.schedules.last)
+          : null;
+    });
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    print("are they in here ${widget.schedules}");
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       child: Row(
@@ -31,35 +49,64 @@ class CurrentLesson extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                "This week's passage:",
-                style: TextStyle(color: Colors.white),
-              ),
-              disabled
+              const Text("This week's passage:",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16)),
+              widget.schedules.isEmpty
                   ? Container(
-                      color: Colors.grey[100],
-                      width: 120,
-                      height: 30,
-                    )
-                  : SizedBox(
-                      width: MediaQuery.of(context).size.width - 200,
-                      child: Flexible(
-                          child: Text(
-                        schedule.reference,
-                        style:
-                            const TextStyle(color: Colors.white, fontSize: 30),
+                      padding: const EdgeInsets.only(top: 12),
+                      width: 150,
+                      child: const Center(
+                          child: CircularProgressIndicator(
+                        color: Colors.white,
                       )))
+                  : Container(
+                      padding: const EdgeInsets.only(left: 6, right: 6),
+                      margin: const EdgeInsets.only(top: 5),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        color: Colors.blue[400],
+                      ),
+                      width: MediaQuery.of(context).size.width - 200,
+                      child: DropdownButton(
+                        itemHeight: 65,
+                        borderRadius: BorderRadius.circular(30),
+                        dropdownColor: Colors.blue[400],
+                        iconEnabledColor: Colors.white,
+                        onChanged: (value) {
+                          setState(() {
+                            selectedSchedule = widget.schedules.firstWhere(
+                                (element) => element.reference == value);
+                          });
+                        },
+                        value: selectedSchedule!.reference,
+                        items: widget.schedules.map((schedule) {
+                          return DropdownMenuItem(
+                              value: schedule.reference,
+                              child: SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width - 240,
+                                  child: Flexible(
+                                      child: Text(
+                                    schedule.reference,
+                                    style: const TextStyle(
+                                        color: Colors.white, fontSize: 20),
+                                  ))));
+                        }).toList(),
+                      ))
             ],
           )),
           Column(
             children: [
               RoundedButton(
                   shadow: false,
-                  onClick: disabled
+                  onClick: widget.schedules.isEmpty
                       ? () {}
                       : () {
                           Homiletic homilet =
-                              Homiletic(passage: schedule.reference);
+                              Homiletic(passage: selectedSchedule!.reference);
                           homilet.update();
                           Navigator.push(
                               context,
@@ -70,11 +117,11 @@ class CurrentLesson extends StatelessWidget {
                   child: const Text("Start Homiletics")),
               RoundedButton(
                   shadow: false,
-                  onClick: disabled
+                  onClick: widget.schedules.isEmpty
                       ? () {}
                       : () {
                           LectureNote note =
-                              LectureNote(passage: schedule.reference);
+                              LectureNote(passage: selectedSchedule!.reference);
                           Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -95,22 +142,12 @@ class LoadingLesson extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CurrentLesson(
-      schedule: PassageSchedule(rollout: DateTime.now(), reference: ''),
-      disabled: true,
-    );
+    return const CurrentLesson(schedules: []);
   }
 }
 
-Future<PassageSchedule> getPassage() async {
-  List<PassageSchedule> passages = await getPassageSchedules();
-
-  passages.sort((a, b) => a.rollout.compareTo(b.rollout));
-  return passages
-      .firstWhere((element) => element.rollout.compareTo(DateTime.now()) == 1);
-}
-
-Future<PassageSchedule> loadPassages() async {
+Future<List<PassageSchedule>> getWebPassages() async {
+  print("do we ever do this?");
   final response = await http.get(Uri.parse(
       'https://homiletics.cloud.zipidy.org/items/assigned_passages?limit=-1'));
 
@@ -119,19 +156,23 @@ Future<PassageSchedule> loadPassages() async {
         jsonDecode(response.body)['data']
             .map((x) => PassageSchedule.fromJson(x)));
 
-    await putNewSchedules(schedules);
+    print("we're in this now");
 
     schedules.sort((a, b) => a.rollout.compareTo(b.rollout));
-    return schedules.firstWhere(
-        (element) => element.rollout.compareTo(DateTime.now()) == 1);
+    return schedules;
   } else {
     throw Exception('Failed to load scheduled passages');
   }
 }
 
-class CurrentLessonActions extends StatelessWidget {
+class CurrentLessonActions extends StatefulWidget {
   const CurrentLessonActions({Key? key}) : super(key: key);
 
+  @override
+  State<CurrentLessonActions> createState() => _CurrentLessonActionsState();
+}
+
+class _CurrentLessonActionsState extends State<CurrentLessonActions> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -148,23 +189,17 @@ class CurrentLessonActions extends StatelessWidget {
             borderRadius: const BorderRadius.only(
                 bottomLeft: Radius.elliptical(100, 40),
                 bottomRight: Radius.elliptical(100, 40))),
-        child: FutureBuilder<PassageSchedule>(
-            future: loadPassages(),
+        child: FutureBuilder<List<PassageSchedule>>(
+            future: getWebPassages(),
             builder: (context, htmlSnapshot) {
               if (htmlSnapshot.hasError) logError("${htmlSnapshot.error}");
 
               if (htmlSnapshot.hasData) {
-                return CurrentLesson(schedule: htmlSnapshot.data!);
+                print("sql stuff ${htmlSnapshot.data!}");
+                return CurrentLesson(schedules: htmlSnapshot.data!);
               }
-              return FutureBuilder<PassageSchedule>(
-                  future: getPassage(),
-                  builder: (context, sqlSnapshot) {
-                    if (sqlSnapshot.hasError) logError("${sqlSnapshot.error}");
-                    if (sqlSnapshot.hasData) {
-                      return CurrentLesson(schedule: sqlSnapshot.data!);
-                    }
-                    return const LoadingLesson();
-                  });
+
+              return const LoadingLesson();
             }));
   }
 }
