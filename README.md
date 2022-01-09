@@ -6,7 +6,9 @@ A new Flutter project.
 
 ### Building your project
 
-`flutter build appbundle --build-number 2 --build-name 1.0.0`
+```
+flutter build appbundle --build-number 2 --build-name 1.0.0
+```
 
 ### Other info
 
