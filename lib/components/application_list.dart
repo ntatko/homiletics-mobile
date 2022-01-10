@@ -53,14 +53,12 @@ class ApplicationList extends StatelessWidget {
                                           offset: const Offset(0, 3))
                                     ],
                                     borderRadius: BorderRadius.circular(12)),
-                                child: Flexible(
-                                    flex: 1,
-                                    child: Text(
-                                      application.text,
-                                      maxLines: 6,
-                                      style: const TextStyle(
-                                          color: Colors.white, fontSize: 20),
-                                    )));
+                                child: Text(
+                                  application.text,
+                                  maxLines: 6,
+                                  style: const TextStyle(
+                                      color: Colors.white, fontSize: 20),
+                                ));
                           }))
                 ])
               : const SizedBox.shrink(),

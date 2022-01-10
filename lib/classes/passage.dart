@@ -23,7 +23,8 @@ class Passage {
 }
 
 Future<List<Passage>> fetchPassage(String reference) async {
-  final response = await http.get(
+  var client = http.Client();
+  final response = await client.get(
       Uri.parse('https://bible-api.com/${reference.replaceAll(' ', '+')}'));
 
   if (response.statusCode == 200) {
