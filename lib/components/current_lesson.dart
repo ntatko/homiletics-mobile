@@ -37,7 +37,6 @@ class _CurrentLessonState extends State<CurrentLesson> {
 
   @override
   Widget build(BuildContext context) {
-    print("are they in here ${widget.schedules}");
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       child: Row(
@@ -147,7 +146,6 @@ class LoadingLesson extends StatelessWidget {
 }
 
 Future<List<PassageSchedule>> getWebPassages() async {
-  print("do we ever do this?");
   final response = await http.get(Uri.parse(
       'https://homiletics.cloud.zipidy.org/items/assigned_passages?limit=-1'));
 
@@ -155,8 +153,6 @@ Future<List<PassageSchedule>> getWebPassages() async {
     List<PassageSchedule> schedules = List<PassageSchedule>.from(
         jsonDecode(response.body)['data']
             .map((x) => PassageSchedule.fromJson(x)));
-
-    print("we're in this now");
 
     schedules.sort((a, b) => a.expires.compareTo(b.expires));
     return schedules;
@@ -195,7 +191,6 @@ class _CurrentLessonActionsState extends State<CurrentLessonActions> {
               if (htmlSnapshot.hasError) logError("${htmlSnapshot.error}");
 
               if (htmlSnapshot.hasData) {
-                print("sql stuff ${htmlSnapshot.data!}");
                 return CurrentLesson(schedules: htmlSnapshot.data!);
               }
 

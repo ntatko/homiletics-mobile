@@ -134,7 +134,6 @@ class _HomileticState extends State<HomileticEditor> {
                   controller:
                       TextEditingController(text: _thisHomiletic?.passage),
                   decoration: const InputDecoration(
-                    hintText: 'Genesis 1:1-15',
                     border: OutlineInputBorder(),
                   ),
                   onChanged: (String value) async {
@@ -148,8 +147,30 @@ class _HomileticState extends State<HomileticEditor> {
                       showModalBottomSheet(
                           context: context,
                           builder: (context) {
-                            return VerseContainer(
-                                passage: _thisHomiletic?.passage ?? '');
+                            return Column(children: [
+                              Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 10, right: 10, top: 5, bottom: 3),
+                                  child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          _thisHomiletic?.passage ?? '',
+                                          style: const TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        IconButton(
+                                            onPressed: () =>
+                                                Navigator.pop(context),
+                                            icon: const Icon(Icons.close))
+                                      ])),
+                              Expanded(
+                                  flex: 1,
+                                  child: VerseContainer(
+                                      passage: _thisHomiletic?.passage ?? ''))
+                            ]);
                           });
                     },
                     child: Center(
@@ -167,7 +188,7 @@ class _HomileticState extends State<HomileticEditor> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "${index + 1}:",
+                        "${index + 1}. ",
                         style: const TextStyle(fontSize: 20),
                       ),
                       SizedBox(

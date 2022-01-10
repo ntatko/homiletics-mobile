@@ -99,7 +99,6 @@ class _NotesState extends State<NotesEditor> {
                 textCapitalization: TextCapitalization.sentences,
                 controller: TextEditingController(text: _thisNote?.passage),
                 decoration: const InputDecoration(
-                  labelText: 'Genesis 1:1-15',
                   border: OutlineInputBorder(),
                 ),
                 onChanged: (String value) async {
@@ -114,8 +113,30 @@ class _NotesState extends State<NotesEditor> {
                     showModalBottomSheet(
                         context: context,
                         builder: (context) {
-                          return VerseContainer(
-                              passage: _thisNote?.passage ?? '');
+                          return Column(children: [
+                            Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 10, right: 10, top: 5, bottom: 3),
+                                child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        _thisNote?.passage ?? '',
+                                        style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      IconButton(
+                                          onPressed: () =>
+                                              Navigator.pop(context),
+                                          icon: const Icon(Icons.close))
+                                    ])),
+                            Expanded(
+                                flex: 1,
+                                child: VerseContainer(
+                                    passage: _thisNote?.passage ?? ''))
+                          ]);
                         });
                   },
                   child: Center(
