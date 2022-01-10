@@ -1,7 +1,5 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:homiletics/classes/lecture_note.dart';
-import 'package:homiletics/classes/passage.dart';
 import 'package:homiletics/common/rounded_button.dart';
 import 'package:homiletics/common/verse_container.dart';
 import 'package:homiletics/pages/home.dart';
@@ -17,7 +15,6 @@ class NotesEditor extends StatefulWidget {
 
 class _NotesState extends State<NotesEditor> {
   LectureNote? _thisNote;
-  int _tab = 0;
 
   @override
   void initState() {

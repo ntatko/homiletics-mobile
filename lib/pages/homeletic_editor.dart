@@ -1,18 +1,14 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:homiletics/classes/application.dart';
 import 'package:homiletics/classes/content_summary.dart';
 import 'package:homiletics/classes/Division.dart';
 import 'package:homiletics/classes/homiletic.dart';
-import 'package:homiletics/classes/passage.dart';
 import 'package:homiletics/common/rounded_button.dart';
 import 'package:homiletics/common/verse_container.dart';
-import 'package:homiletics/components/current_lesson.dart';
 import 'package:homiletics/pages/home.dart';
 import 'package:homiletics/storage/application_storage.dart';
 import 'package:homiletics/storage/content_summary_storage.dart';
 import 'package:homiletics/storage/division_storage.dart';
-import 'package:reorderables/reorderables.dart';
 
 class HomileticEditor extends StatefulWidget {
   const HomileticEditor({Key? key, this.homiletic}) : super(key: key);
@@ -28,7 +24,6 @@ class _HomileticState extends State<HomileticEditor> {
   List<ContentSummary> _summaries = [];
   List<Division> _divisions = [];
   List<Application> _applications = [];
-  List<Passage> _passages = [];
 
   @override
   void initState() {
@@ -71,11 +66,6 @@ class _HomileticState extends State<HomileticEditor> {
         }
       });
     }
-  }
-
-  fetchPassages(String reference) async {
-    List<Passage> passage = await fetchPassage(reference);
-    _passages = passage;
   }
 
   List<Widget> buildContentDivisionsList() {
@@ -144,7 +134,7 @@ class _HomileticState extends State<HomileticEditor> {
                   controller:
                       TextEditingController(text: _thisHomiletic?.passage),
                   decoration: const InputDecoration(
-                    labelText: 'Genesis 1:1-15',
+                    hintText: 'Genesis 1:1-15',
                     border: OutlineInputBorder(),
                   ),
                   onChanged: (String value) async {
@@ -167,150 +157,51 @@ class _HomileticState extends State<HomileticEditor> {
                       Icon(Icons.search),
                       Text("Show passage")
                     ])))),
-            // const Divider(),
-            // const Text("Content List",
-            //     style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-            // SizedBox(
-            //     width: MediaQuery.of(context).size.width,
-            //     height: 40 *
-            //         (_summaries.length.toDouble() +
-            //             _divisions.length.toDouble()),
-            //     child: ReorderableColumn(
-            //         children: () {
-            //           List<Widget> contentSumWidgets =
-            //               _summaries.map((summary) {
-            //             return SizedBox(
-            //                 key: Key("${summary.id}"),
-            //                 height: 40,
-            //                 width: MediaQuery.of(context).size.width,
-            //                 child: Row(
-            //                   children: [
-            //                     SizedBox(
-            //                         child: Text(
-            //                             "${_summaries.indexOf(summary) + 1}:")),
-            //                     SizedBox(
-            //                         width: 75,
-            //                         child: TextField(
-            //                             keyboardType: TextInputType.number,
-            //                             textCapitalization:
-            //                                 TextCapitalization.sentences,
-            //                             controller: TextEditingController(
-            //                                 text: summary.passage),
-            //                             decoration: const InputDecoration(
-            //                               labelText: 'Verses',
-            //                               border: OutlineInputBorder(),
-            //                             ),
-            //                             onChanged: (String value) {
-            //                               summary.updatePassage(value);
-            //                             })),
-            //                     Container(
-            //                         padding: const EdgeInsets.only(left: 5),
-            //                         width: 250,
-            //                         child: TextField(
-            //                             keyboardType: TextInputType.text,
-            //                             textCapitalization:
-            //                                 TextCapitalization.sentences,
-            //                             controller: TextEditingController(
-            //                                 text: summary.summary),
-            //                             decoration: const InputDecoration(
-            //                               labelText: 'Summary',
-            //                               border: OutlineInputBorder(),
-            //                             ),
-            //                             onChanged: (String value) async {
-            //                               await summary.updateText(value);
-            //                             }))
-            //                   ],
-            //                 ));
-            //           }).toList();
-
-            //           return contentSumWidgets;
-            //         }(),
-            //         onReorder: (_, __) {})),
-            // // Container(child: Column(
-            // //     // onReorder: (int oldIndex, int newIndex) {},
-            // //     children: [])), //buildContentDivisionsList())),
-            // Container(
-            //     child: Row(
-            //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            //   children: [
-            //     RoundedButton(
-            //         child: Row(
-            //             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            //             children: const [
-            //               Icon(Icons.add),
-            //               Text("Add Division")
-            //             ]),
-            //         onClick: () {
-            //           setState(() {
-            //             _divisions
-            //                 .add(Division.blank(_thisHomiletic?.id ?? -1));
-            //           });
-            //         }),
-            //     RoundedButton(
-            //         child: Row(
-            //             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            //             children: const [Icon(Icons.add), Text("Add Summary")]),
-            //         onClick: () {
-            //           setState(() {
-            //             _summaries.add(
-            //                 ContentSummary.blank(_thisHomiletic?.id ?? -1));
-            //           });
-            //         })
-            //   ],
-            // )),
             const Text("Content Summaries",
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
             ..._summaries.map((element) {
               int index = _summaries.indexOf(element);
-              return Dismissible(
-                  key: Key(index.toString()),
-                  onDismissed: (_) {
-                    _summaries = _summaries..removeAt(index);
-                    element.delete();
-                  },
-                  child: Container(
-                      margin: const EdgeInsets.all(8),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "${index + 1}:",
-                            style: const TextStyle(fontSize: 20),
-                          ),
-                          SizedBox(
-                              width: 75,
-                              child: TextField(
-                                  keyboardType: TextInputType.text,
-                                  textCapitalization:
-                                      TextCapitalization.sentences,
-                                  controller: TextEditingController(
-                                      text: element.passage),
-                                  decoration: const InputDecoration(
-                                    labelText: 'Verses',
-                                    border: OutlineInputBorder(),
-                                  ),
-                                  onChanged: (String value) {
-                                    element.updatePassage(value);
-                                  })),
-                          SizedBox(
-                              width: 250,
-                              child: TextField(
-                                  keyboardType: TextInputType.text,
-                                  textCapitalization:
-                                      TextCapitalization.sentences,
-                                  controller: TextEditingController(
-                                      text: element.summary),
-                                  decoration: const InputDecoration(
-                                    labelText: 'Summary',
-                                    border: OutlineInputBorder(),
-                                  ),
-                                  maxLines: 4,
-                                  minLines: 1,
-                                  onChanged: (String value) async {
-                                    await element.updateText(value);
-                                  }))
-                        ],
-                      )));
+              return Container(
+                  margin: const EdgeInsets.all(8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "${index + 1}:",
+                        style: const TextStyle(fontSize: 20),
+                      ),
+                      SizedBox(
+                          width: 75,
+                          child: TextField(
+                              keyboardType: TextInputType.text,
+                              textCapitalization: TextCapitalization.sentences,
+                              controller:
+                                  TextEditingController(text: element.passage),
+                              decoration: const InputDecoration(
+                                labelText: 'Verses',
+                                border: OutlineInputBorder(),
+                              ),
+                              onChanged: (String value) {
+                                element.updatePassage(value);
+                              })),
+                      SizedBox(
+                          width: 250,
+                          child: TextField(
+                              keyboardType: TextInputType.text,
+                              textCapitalization: TextCapitalization.sentences,
+                              controller:
+                                  TextEditingController(text: element.summary),
+                              decoration: const InputDecoration(
+                                labelText: 'Summary',
+                                border: OutlineInputBorder(),
+                              ),
+                              maxLines: 4,
+                              minLines: 1,
+                              onChanged: (String value) async {
+                                await element.updateText(value);
+                              }))
+                    ],
+                  ));
             }).toList(),
             RoundedButton(
                 onClick: () {
@@ -330,59 +221,47 @@ class _HomileticState extends State<HomileticEditor> {
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
             ..._divisions.map((division) {
               int index = _divisions.indexOf(division);
-              return Dismissible(
-                  key: Key(division.toString()),
-                  onDismissed: (_) async {
-                    await division.delete();
-                    _thisHomiletic?.update();
-                    setState(() {
-                      _divisions = _divisions..remove(division);
-                    });
-                  },
-                  child: Container(
-                      margin: const EdgeInsets.all(8),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "${index + 1}:",
-                            style: const TextStyle(fontSize: 20),
-                          ),
-                          SizedBox(
-                              width: 75,
-                              child: TextField(
-                                  keyboardType: TextInputType.text,
-                                  textCapitalization:
-                                      TextCapitalization.sentences,
-                                  controller: TextEditingController(
-                                      text: division.passage),
-                                  decoration: const InputDecoration(
-                                    labelText: 'Verses',
-                                    border: OutlineInputBorder(),
-                                  ),
-                                  onChanged: (String value) async {
-                                    await _divisions[index]
-                                        .updatePassage(value);
-                                  })),
-                          SizedBox(
-                              width: 250,
-                              child: TextField(
-                                  keyboardType: TextInputType.text,
-                                  textCapitalization:
-                                      TextCapitalization.sentences,
-                                  controller: TextEditingController(
-                                      text: division.title),
-                                  decoration: const InputDecoration(
-                                    labelText: 'Division Title',
-                                    border: OutlineInputBorder(),
-                                  ),
-                                  maxLines: 4,
-                                  minLines: 1,
-                                  onChanged: (String value) async {
-                                    await division.updateText(value);
-                                  }))
-                        ],
-                      )));
+              return Container(
+                  margin: const EdgeInsets.all(8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "${index + 1}:",
+                        style: const TextStyle(fontSize: 20),
+                      ),
+                      SizedBox(
+                          width: 75,
+                          child: TextField(
+                              keyboardType: TextInputType.text,
+                              textCapitalization: TextCapitalization.sentences,
+                              controller:
+                                  TextEditingController(text: division.passage),
+                              decoration: const InputDecoration(
+                                labelText: 'Verses',
+                                border: OutlineInputBorder(),
+                              ),
+                              onChanged: (String value) async {
+                                await _divisions[index].updatePassage(value);
+                              })),
+                      SizedBox(
+                          width: 250,
+                          child: TextField(
+                              keyboardType: TextInputType.text,
+                              textCapitalization: TextCapitalization.sentences,
+                              controller:
+                                  TextEditingController(text: division.title),
+                              decoration: const InputDecoration(
+                                labelText: 'Division Title',
+                                border: OutlineInputBorder(),
+                              ),
+                              maxLines: 4,
+                              minLines: 1,
+                              onChanged: (String value) async {
+                                await division.updateText(value);
+                              }))
+                    ],
+                  ));
             }),
             RoundedButton(
                 onClick: () {
@@ -405,7 +284,7 @@ class _HomileticState extends State<HomileticEditor> {
                     controller: TextEditingController(
                         text: _thisHomiletic?.subjectSentence ?? ''),
                     decoration: const InputDecoration(
-                      labelText: '10 words or fewer, please XD',
+                      hintText: 'Summarize: 10 words or fewer',
                       border: OutlineInputBorder(),
                     ),
                     onChanged: (String ss) async {
@@ -434,30 +313,21 @@ class _HomileticState extends State<HomileticEditor> {
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
             ..._applications.map((application) {
               // int index = _applications.indexOf(application);
-              return Dismissible(
-                  key: Key(application.toString()),
-                  onDismissed: (_) {
-                    application.delete();
-                    setState(() {
-                      _applications = _applications..remove(application);
-                    });
-                  },
-                  child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      margin: const EdgeInsets.all(8),
-                      child: TextField(
-                          maxLines: null,
-                          keyboardType: TextInputType.text,
-                          textCapitalization: TextCapitalization.sentences,
-                          controller:
-                              TextEditingController(text: application.text),
-                          decoration: const InputDecoration(
-                            labelText: 'How can I...',
-                            border: OutlineInputBorder(),
-                          ),
-                          onChanged: (value) async {
-                            await application.updateText(value);
-                          })));
+              return Container(
+                  width: MediaQuery.of(context).size.width,
+                  margin: const EdgeInsets.all(8),
+                  child: TextField(
+                      maxLines: null,
+                      keyboardType: TextInputType.text,
+                      textCapitalization: TextCapitalization.sentences,
+                      controller: TextEditingController(text: application.text),
+                      decoration: const InputDecoration(
+                        hintText: 'How can I...',
+                        border: OutlineInputBorder(),
+                      ),
+                      onChanged: (value) async {
+                        await application.updateText(value);
+                      }));
             }),
             RoundedButton(
                 onClick: () {
