@@ -26,11 +26,10 @@ class VerseContainer extends StatelessWidget {
                           color: index % 2 == 1
                               ? Colors.grey[100]
                               : Colors.grey[300],
-                          child: Flexible(
-                              child: Text(
+                          child: Text(
                             "${current?.chapter}:${current?.verse} ${current?.text}"
                                 .replaceAll('\n', ''),
-                          )));
+                          ));
                     })
                 : const Center(child: CircularProgressIndicator());
           }),

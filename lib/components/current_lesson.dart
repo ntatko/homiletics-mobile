@@ -68,7 +68,7 @@ class _CurrentLessonState extends State<CurrentLesson> {
                         borderRadius: BorderRadius.circular(5),
                         color: Colors.blue[400],
                       ),
-                      width: MediaQuery.of(context).size.width - 200,
+                      width: 210,
                       child: DropdownButton(
                         itemHeight: 65,
                         borderRadius: BorderRadius.circular(30),
@@ -85,14 +85,12 @@ class _CurrentLessonState extends State<CurrentLesson> {
                           return DropdownMenuItem(
                               value: schedule.reference,
                               child: SizedBox(
-                                  width:
-                                      MediaQuery.of(context).size.width - 240,
-                                  child: Flexible(
-                                      child: Text(
+                                  width: 174,
+                                  child: Text(
                                     schedule.reference,
                                     style: const TextStyle(
                                         color: Colors.white, fontSize: 20),
-                                  ))));
+                                  )));
                         }).toList(),
                       ))
             ],
@@ -146,7 +144,9 @@ class LoadingLesson extends StatelessWidget {
 }
 
 Future<List<PassageSchedule>> getWebPassages() async {
-  final response = await http.get(Uri.parse(
+  var client = http.Client();
+
+  final response = await client.get(Uri.parse(
       'https://homiletics.cloud.zipidy.org/items/assigned_passages?limit=-1'));
 
   if (response.statusCode == 200) {
@@ -174,15 +174,15 @@ class _CurrentLessonActionsState extends State<CurrentLessonActions> {
     return Container(
         padding:
             const EdgeInsets.only(top: 30, bottom: 30, left: 13, right: 13),
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
             color: Colors.blue,
-            boxShadow: [
-              BoxShadow(
-                  color: Colors.grey[400]!,
-                  blurRadius: 10,
-                  offset: const Offset(0, 3))
-            ],
-            borderRadius: const BorderRadius.only(
+            // boxShadow: [
+            //   BoxShadow(
+            //       color: Colors.grey[400]!,
+            //       blurRadius: 10,
+            //       offset: const Offset(0, 3))
+            // ],
+            borderRadius: BorderRadius.only(
                 bottomLeft: Radius.elliptical(100, 40),
                 bottomRight: Radius.elliptical(100, 40))),
         child: FutureBuilder<List<PassageSchedule>>(
