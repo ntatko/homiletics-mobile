@@ -70,26 +70,25 @@ class _HomileticState extends State<HomileticEditor> {
 
   List<Widget> buildContentDivisionsList() {
     return _divisions
-        .map((e) => Container(
-              key: Key("${e.order}"),
-              child: Row(
-                children: [
-                  Text("${_divisions.indexOf(e) + 1}"),
-                  TextField(
-                    keyboardType: TextInputType.text,
-                    textCapitalization: TextCapitalization.sentences,
-                    controller: TextEditingController(text: e.title),
-                    decoration: const InputDecoration(
-                      labelText: 'Division Title',
-                      border: OutlineInputBorder(),
-                    ),
-                    onChanged: (String value) async {
-                      await e.updateText(value);
-                    },
-                  )
-                ],
-              ),
-            ))
+        .map(
+          (e) => Row(
+            children: [
+              Text("${_divisions.indexOf(e) + 1}"),
+              TextField(
+                keyboardType: TextInputType.text,
+                textCapitalization: TextCapitalization.sentences,
+                controller: TextEditingController(text: e.title),
+                decoration: const InputDecoration(
+                  labelText: 'Division Title',
+                  border: OutlineInputBorder(),
+                ),
+                onChanged: (String value) async {
+                  await e.updateText(value);
+                },
+              )
+            ],
+          ),
+        )
         .toList();
   }
 
