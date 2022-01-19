@@ -68,7 +68,7 @@ class _CurrentLessonState extends State<CurrentLesson> {
                         borderRadius: BorderRadius.circular(5),
                         color: Colors.blue[400],
                       ),
-                      width: 210,
+                      width: 200,
                       child: DropdownButton(
                         itemHeight: 65,
                         borderRadius: BorderRadius.circular(30),
@@ -85,7 +85,7 @@ class _CurrentLessonState extends State<CurrentLesson> {
                           return DropdownMenuItem(
                               value: schedule.reference,
                               child: SizedBox(
-                                  width: 174,
+                                  width: 164,
                                   child: Text(
                                     schedule.reference,
                                     style: const TextStyle(
