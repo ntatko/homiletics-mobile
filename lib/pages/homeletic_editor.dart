@@ -204,8 +204,7 @@ class _HomileticState extends State<HomileticEditor> {
                               onChanged: (String value) {
                                 element.updatePassage(value);
                               })),
-                      SizedBox(
-                          width: 250,
+                      Expanded(
                           child: TextField(
                               keyboardType: TextInputType.text,
                               textCapitalization: TextCapitalization.sentences,
@@ -264,8 +263,7 @@ class _HomileticState extends State<HomileticEditor> {
                               onChanged: (String value) async {
                                 await _divisions[index].updatePassage(value);
                               })),
-                      SizedBox(
-                          width: 250,
+                      Expanded(
                           child: TextField(
                               keyboardType: TextInputType.text,
                               textCapitalization: TextCapitalization.sentences,
