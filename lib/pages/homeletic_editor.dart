@@ -5,6 +5,7 @@ import 'package:homiletics/classes/Division.dart';
 import 'package:homiletics/classes/homiletic.dart';
 import 'package:homiletics/common/rounded_button.dart';
 import 'package:homiletics/common/verse_container.dart';
+import 'package:homiletics/components/help_menu.dart';
 import 'package:homiletics/pages/home.dart';
 import 'package:homiletics/storage/application_storage.dart';
 import 'package:homiletics/storage/content_summary_storage.dart';
@@ -505,39 +506,48 @@ class _HomileticState extends State<HomileticEditor> {
                         await _thisHomiletic?.update();
                       }));
             }),
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              RoundedButton(
-                  disabled: _applications.isEmpty,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: const [
-                      Padding(
-                          padding: EdgeInsets.only(left: 10, right: 10),
-                          child: Icon(Icons.remove)),
-                      Text('Remove')
-                    ],
-                  ),
-                  onClick: () async {
-                    try {
-                      await _applications[_applications.length - 1].delete();
-                      setState(() {
-                        _applications.removeLast();
-                      });
-                    } catch (error) {
-                      print("Removing that Application didn't work");
-                    }
-                  }),
-              RoundedButton(
-                  onClick: () {
-                    setState(() {
-                      _applications
-                          .add(Application.blank(_thisHomiletic?.id ?? -1));
-                    });
-                  },
-                  child: Row(
-                    children: const [Icon(Icons.add), Text('Application')],
-                  )),
-            ])
+            Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      RoundedButton(
+                          disabled: _applications.isEmpty,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: const [
+                              Padding(
+                                  padding: EdgeInsets.only(left: 10, right: 10),
+                                  child: Icon(Icons.remove)),
+                              Text('Remove')
+                            ],
+                          ),
+                          onClick: () async {
+                            try {
+                              await _applications[_applications.length - 1]
+                                  .delete();
+                              setState(() {
+                                _applications.removeLast();
+                              });
+                            } catch (error) {
+                              print("Removing that Application didn't work");
+                            }
+                          }),
+                      RoundedButton(
+                          onClick: () {
+                            setState(() {
+                              _applications.add(
+                                  Application.blank(_thisHomiletic?.id ?? -1));
+                            });
+                          },
+                          child: Row(
+                            children: const [
+                              Icon(Icons.add),
+                              Text('Application')
+                            ],
+                          )),
+                    ])),
+            const HelpMenu()
           ],
         )));
   }
