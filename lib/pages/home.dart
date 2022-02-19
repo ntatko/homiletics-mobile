@@ -55,18 +55,21 @@ class _HomeState extends State<Home> {
               bottom: false,
               child: Container(
                   color: Colors.grey[100],
-                  child: ListView(children: const [
-                    CurrentLessonActions(),
-                    StartActivity(),
-                    ApplicationList(),
-                    PastLessons(),
-                    PastLectureNotes(),
-                    HelpMenu(),
-                    // RoundedButton(
-                    //     child: Text("Reset Tables"),
-                    //     onClick: () async {
-                    //       resetScheduleTable();
-                    //     })
+                  child: Column(children: [
+                    const CurrentLessonActions(),
+                    Expanded(
+                        child: ListView(children: const [
+                      StartActivity(),
+                      ApplicationList(),
+                      PastLessons(),
+                      PastLectureNotes(),
+                      HelpMenu(),
+                      // RoundedButton(
+                      //     child: Text("Reset Tables"),
+                      //     onClick: () async {
+                      //       resetScheduleTable();
+                      //     })
+                    ]))
                   ])))),
     );
   }

@@ -15,13 +15,15 @@ class ApplicationList extends StatelessWidget {
 
         List<Application> filteredDataList = snapshot.data
                 ?.where((application) => application.text != '')
+                .toList()
+                .reversed
                 .toList() ??
             [];
 
         return AnimatedContainer(
           height: snapshot.hasData && filteredDataList.isNotEmpty ? 240 : 0,
           width: MediaQuery.of(context).size.width,
-          padding: const EdgeInsets.only(top: 20),
+          padding: const EdgeInsets.only(top: 10),
           duration: const Duration(milliseconds: 400),
           child: snapshot.hasData
               ? Column(children: [
@@ -29,7 +31,12 @@ class ApplicationList extends StatelessWidget {
                     padding: const EdgeInsets.only(
                         top: 10, bottom: 10, left: 10, right: 10),
                     child: Row(
-                      children: const [Text("Application Questions")],
+                      children: const [
+                        Text(
+                          "Application Questions",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        )
+                      ],
                     ),
                   ),
                   Expanded(
@@ -39,8 +46,7 @@ class ApplicationList extends StatelessWidget {
                           itemBuilder: (context, index) {
                             Application? application = filteredDataList[index];
                             return Container(
-                                width: 160,
-                                height: 180,
+                                width: 170,
                                 margin: const EdgeInsets.only(
                                     top: 10, left: 10, right: 10, bottom: 20),
                                 padding: const EdgeInsets.all(10),
@@ -56,6 +62,7 @@ class ApplicationList extends StatelessWidget {
                                 child: Text(
                                   application.text,
                                   maxLines: 6,
+                                  overflow: TextOverflow.ellipsis,
                                   style: const TextStyle(
                                       color: Colors.white, fontSize: 20),
                                 ));

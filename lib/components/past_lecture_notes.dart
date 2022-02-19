@@ -16,7 +16,7 @@ class PastLectureNotes extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.hasError) logError("${snapshot.error}");
 
-        List<LectureNote> notes = snapshot.data ?? [];
+        List<LectureNote> notes = snapshot.data?.reversed.toList() ?? [];
 
         return snapshot.hasData && notes.isNotEmpty
             ? Container(
@@ -29,9 +29,10 @@ class PastLectureNotes extends StatelessWidget {
                         child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: const [
-                              Text("Past Notes"),
-                              // TextButton(
-                              //     onPressed: () {}, child: const Text("See all"))
+                              Text(
+                                "Past Notes",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
                             ])),
                     ...notes.map((note) {
                       return SizedBox(
