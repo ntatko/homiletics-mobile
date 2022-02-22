@@ -111,7 +111,10 @@ class _CurrentLessonState extends State<CurrentLesson> {
                                   builder: (context) =>
                                       HomileticEditor(homiletic: homilet)));
                         },
-                  child: const Text("Start Homiletics")),
+                  child: const Text(
+                    "Start Homiletics",
+                    textAlign: TextAlign.center,
+                  )),
               RoundedButton(
                   shadow: false,
                   onClick: widget.schedules.isEmpty
@@ -125,7 +128,10 @@ class _CurrentLessonState extends State<CurrentLesson> {
                                   builder: (context) =>
                                       NotesEditor(note: note)));
                         },
-                  child: const Text("Take notes"))
+                  child: const Text(
+                    "Take notes",
+                    textAlign: TextAlign.center,
+                  ))
             ],
           )
         ],

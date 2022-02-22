@@ -53,15 +53,11 @@ class DisplayLessons extends StatelessWidget {
                       //     },
                       //     child: const Text("See all"))
                     ])),
-            ...homiletics
-                // .sublist(homiletics.length > 5
-                //     ? homiletics.length - 5
-                //     : homiletics.length)
-                .map((homiletic) {
+            ...homiletics.map((homiletic) {
               return SizedBox(
                   key: Key("${homiletic.id}"),
                   height: 80,
-                  width: MediaQuery.of(context).size.width,
+                  // width: MediaQuery.of(context).size.width,
                   child: Container(
                       margin: const EdgeInsets.only(top: 5, bottom: 5),
                       child: GestureDetector(
@@ -84,8 +80,8 @@ class DisplayLessons extends StatelessWidget {
                                         blurRadius: 10,
                                         offset: const Offset(0, 3))
                                   ]),
-                              width: MediaQuery.of(context).size.width - 20,
-                              height: 75,
+                              // width: MediaQuery.of(context).size.width - 20,
+                              // height: 75,
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -114,10 +110,12 @@ class DisplayLessons extends StatelessWidget {
                                                 .replaceAll(RegExp(r'\s'), '')
                                                 .padRight(3)
                                                 .substring(0, 3),
+                                            textScaleFactor: 1.0,
                                             style: const TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 22),
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 22,
+                                            ),
                                           ),
                                         )),
                                     Text(homiletic.passage,

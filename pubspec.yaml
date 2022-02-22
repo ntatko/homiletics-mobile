@@ -40,7 +40,6 @@ dependencies:
   string_to_hex: ^0.2.2
   http: ^0.13.4
   url_launcher: ^6.0.12
-  reorderables: ^0.4.1
   # pdf: ^3.7.1
   # path_provider: ^2.0.9
 

@@ -101,6 +101,7 @@ class PastLectureNotes extends StatelessWidget {
                                                             RegExp(r'\s'), '')
                                                         .padRight(3)
                                                         .substring(0, 3),
+                                                    textScaleFactor: 1.0,
                                                     style: const TextStyle(
                                                         color: Colors.white,
                                                         fontWeight:

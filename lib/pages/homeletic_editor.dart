@@ -97,49 +97,60 @@ class _HomileticState extends State<HomileticEditor> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        floatingActionButton: RoundedButton(
-          child: Center(
-              child: Row(
-                  children: const [Icon(Icons.search), Text("Show passage")])),
-          onClick: () {
-            if (_thisHomiletic?.passage == '') {
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: const Text("Please enter a passage"),
-                action: SnackBarAction(
-                  onPressed: () {},
-                  label: "Ok",
-                ),
-              ));
-            } else {
-              showModalBottomSheet(
-                  context: context,
-                  builder: (context) {
-                    return Column(children: [
-                      Padding(
-                          padding: const EdgeInsets.only(
-                              left: 10, right: 10, top: 5, bottom: 3),
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  _thisHomiletic?.passage ?? '',
-                                  style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                IconButton(
-                                    onPressed: () => Navigator.pop(context),
-                                    icon: const Icon(Icons.close))
-                              ])),
-                      Expanded(
-                          flex: 1,
-                          child: VerseContainer(
-                              passage: _thisHomiletic?.passage ?? ''))
-                    ]);
-                  });
-            }
-          },
-        ),
+        floatingActionButton: SizedBox(
+            height: 80,
+            child: RoundedButton(
+              child: Center(
+                  child: Row(children: const [
+                Icon(Icons.search),
+                SizedBox(
+                    width: 100,
+                    child: Text(
+                      "Show passage",
+                      maxLines: 2,
+                      textAlign: TextAlign.center,
+                    ))
+              ])),
+              onClick: () {
+                if (_thisHomiletic?.passage == '') {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: const Text("Please enter a passage"),
+                    action: SnackBarAction(
+                      onPressed: () {},
+                      label: "Ok",
+                    ),
+                  ));
+                } else {
+                  showModalBottomSheet(
+                      context: context,
+                      builder: (context) {
+                        return Column(children: [
+                          Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 10, right: 10, top: 5, bottom: 3),
+                              child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      _thisHomiletic?.passage ?? '',
+                                      style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    IconButton(
+                                        onPressed: () => Navigator.pop(context),
+                                        icon: const Icon(Icons.close))
+                                  ])),
+                          Expanded(
+                              flex: 1,
+                              child: VerseContainer(
+                                  passage: _thisHomiletic?.passage ?? ''))
+                        ]);
+                      });
+                }
+              },
+            )),
         appBar: AppBar(
           title: const Text('Homiletics'),
           leading: IconButton(
@@ -362,8 +373,10 @@ class _HomileticState extends State<HomileticEditor> {
                         width: 300,
                         child: Row(
                           children: const [
-                            Icon(Icons.add),
-                            Text('Add Summary')
+                            Padding(
+                                padding: EdgeInsets.only(left: 0, right: 10),
+                                child: Icon(Icons.add)),
+                            Text('Summary')
                           ],
                         ))),
               ],
@@ -445,7 +458,12 @@ class _HomileticState extends State<HomileticEditor> {
                     });
                   },
                   child: Row(
-                    children: const [Icon(Icons.add), Text('Add Division')],
+                    children: const [
+                      Padding(
+                          padding: EdgeInsets.only(left: 0, right: 10),
+                          child: Icon(Icons.add)),
+                      Text('Division')
+                    ],
                   )),
             ]),
             const Divider(),
@@ -542,8 +560,16 @@ class _HomileticState extends State<HomileticEditor> {
                           },
                           child: Row(
                             children: const [
-                              Icon(Icons.add),
-                              Text('Application')
+                              Padding(
+                                  padding: EdgeInsets.only(left: 0, right: 10),
+                                  child: Icon(Icons.add)),
+                              SizedBox(
+                                  width: 90,
+                                  child: Text(
+                                    'Application',
+                                    maxLines: 1,
+                                    overflow: TextOverflow.fade,
+                                  ))
                             ],
                           )),
                     ])),
