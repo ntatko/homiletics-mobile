@@ -20,7 +20,7 @@ class PastLessons extends StatelessWidget {
               ? Container(
                   padding: const EdgeInsets.only(
                       left: 10, right: 10, top: 12, bottom: 10),
-                  child: DisplayLessons(snapshot.data!))
+                  child: DisplayLessons(snapshot.data?.reversed.toList() ?? []))
               : const SizedBox.shrink();
         });
   }
@@ -40,7 +40,10 @@ class DisplayLessons extends StatelessWidget {
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: const [
-                      Text("Past Homiletics"),
+                      Text(
+                        "Past Homiletics",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
                       // TextButton(
                       //     onPressed: () {
                       //       Navigator.push(

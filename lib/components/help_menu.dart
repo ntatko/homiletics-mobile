@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:homiletics/components/feedback_form.dart';
 // import 'package:url_launcher/url_launcher.dart';
 
 class HelpMenu extends StatelessWidget {
@@ -15,18 +16,18 @@ class HelpMenu extends StatelessWidget {
           const Center(
               child: Text("All rights reserved",
                   style: TextStyle(color: Colors.grey))),
-          // TextButton(
-          //     onPressed: () => _sendEmail(),
-          //     child: const Text("Report a problem"))
+          TextButton(
+              onPressed: () {
+                showModalBottomSheet(
+                    context: context,
+                    builder: (context) {
+                      return const Padding(
+                        child: FeedbackForm(),
+                        padding: EdgeInsets.all(12),
+                      );
+                    });
+              },
+              child: const Text("Request Help / Leave Feedback?"))
         ]));
   }
 }
-
-// _sendEmail() async {
-//   const url = "mailto:stlyabsf+support@gmail.com?subject=Support%20Request";
-//   if (await canLaunch(url)) {
-//     await launch(url);
-//   } else {
-//     throw "could not launch $url";
-//   }
-// }

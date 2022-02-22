@@ -52,30 +52,57 @@ class _NotesState extends State<NotesEditor> {
           ),
           actions: [
             IconButton(
-              icon: const Icon(Icons.delete),
-              tooltip: 'Delete',
-              onPressed: () async {
-                LectureNote removed =
-                    await _thisNote?.delete() ?? LectureNote();
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: const Text('Deleted Lecture Note'),
-                  action: SnackBarAction(
-                      label: 'UNDO',
-                      onPressed: () async {
-                        await removed.update();
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    NotesEditor(note: removed)));
-                      }),
-                ));
-                Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => const Home()),
-                    (r) => false);
-              },
-            ),
+                onPressed: () {
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: const Text("Are you sure?"),
+                          content: const Text(
+                              "Deleting these lecture notes cannot be undone. Are you sure you wish to proceed?"),
+                          actions: [
+                            TextButton(
+                                onPressed: () => Navigator.pop(context),
+                                child: const Text('Cancel')),
+                            TextButton(
+                              onPressed: () async {
+                                try {
+                                  await _thisNote?.delete();
+                                  Navigator.pushAndRemoveUntil(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => const Home()),
+                                      (r) => false);
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                    content: const Text("Notes Deleted"),
+                                    action: SnackBarAction(
+                                      onPressed: () {},
+                                      label: "Ok",
+                                    ),
+                                  ));
+                                } catch (error) {
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                    content: const Text(
+                                        "Something went wrong. Try again soon."),
+                                    action: SnackBarAction(
+                                      onPressed: () {},
+                                      label: "Ok",
+                                    ),
+                                  ));
+                                }
+                              },
+                              child: const Text("Delete"),
+                              style: TextButton.styleFrom(
+                                primary: Colors.red,
+                              ),
+                            )
+                          ],
+                        );
+                      });
+                },
+                icon: const Icon(Icons.delete)),
             IconButton(
               icon: const Icon(Icons.save),
               tooltip: 'Save',

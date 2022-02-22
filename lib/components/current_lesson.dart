@@ -43,7 +43,7 @@ class _CurrentLessonState extends State<CurrentLesson> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SizedBox(
+          Expanded(
               child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -173,18 +173,14 @@ class _CurrentLessonActionsState extends State<CurrentLessonActions> {
   Widget build(BuildContext context) {
     return Container(
         padding:
-            const EdgeInsets.only(top: 30, bottom: 30, left: 13, right: 13),
-        decoration: const BoxDecoration(
-            color: Colors.blue,
-            // boxShadow: [
-            //   BoxShadow(
-            //       color: Colors.grey[400]!,
-            //       blurRadius: 10,
-            //       offset: const Offset(0, 3))
-            // ],
-            borderRadius: BorderRadius.only(
-                bottomLeft: Radius.elliptical(100, 40),
-                bottomRight: Radius.elliptical(100, 40))),
+            const EdgeInsets.only(top: 20, bottom: 20, left: 13, right: 13),
+        decoration: BoxDecoration(
+          color: Colors.blue,
+          boxShadow: kElevationToShadow[4],
+          // borderRadius: BorderRadius.only(
+          //     bottomLeft: Radius.elliptical(100, 40),
+          //     bottomRight: Radius.elliptical(100, 40))
+        ),
         child: FutureBuilder<List<PassageSchedule>>(
             future: getWebPassages(),
             builder: (context, htmlSnapshot) {
