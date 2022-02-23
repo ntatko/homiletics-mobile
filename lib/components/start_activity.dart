@@ -34,7 +34,10 @@ class StartActivity extends StatelessWidget {
                                 HomileticEditor(homiletic: homiletic)),
                       );
                     },
-                    child: const Text("New Homiletics")),
+                    child: const Text(
+                      "New Homiletics",
+                      textAlign: TextAlign.center,
+                    )),
                 RoundedButton(
                     onClick: () async {
                       LectureNote note = LectureNote();
@@ -44,7 +47,10 @@ class StartActivity extends StatelessWidget {
                           MaterialPageRoute(
                               builder: (context) => NotesEditor(note: note)));
                     },
-                    child: const Text("New Lecture Notes"))
+                    child: const Text(
+                      "New Lecture Notes",
+                      textAlign: TextAlign.center,
+                    ))
               ],
             )
           ],

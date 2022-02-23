@@ -19,6 +19,10 @@ class HelpMenu extends StatelessWidget {
           TextButton(
               onPressed: () {
                 showModalBottomSheet(
+                    shape: const RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.vertical(top: Radius.circular(25.0))),
+                    isScrollControlled: true,
                     context: context,
                     builder: (context) {
                       return const Padding(
