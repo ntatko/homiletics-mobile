@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:homiletics/classes/application.dart';
+import 'package:homiletics/classes/homiletic.dart';
+import 'package:homiletics/pages/homeletic_editor.dart';
 import 'package:homiletics/storage/application_storage.dart';
+import 'package:homiletics/storage/homiletic_storage.dart';
 import 'package:loggy/loggy.dart';
 
 class ApplicationList extends StatelessWidget {
@@ -45,27 +48,41 @@ class ApplicationList extends StatelessWidget {
                           itemCount: filteredDataList.length,
                           itemBuilder: (context, index) {
                             Application? application = filteredDataList[index];
-                            return Container(
-                                width: 170,
-                                margin: const EdgeInsets.only(
-                                    top: 10, left: 10, right: 10, bottom: 20),
-                                padding: const EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                    color: Colors.green[600],
-                                    boxShadow: [
-                                      BoxShadow(
-                                          color: Colors.grey[400]!,
-                                          blurRadius: 10,
-                                          offset: const Offset(0, 3))
-                                    ],
-                                    borderRadius: BorderRadius.circular(12)),
-                                child: Text(
-                                  application.text,
-                                  maxLines: 6,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(
-                                      color: Colors.white, fontSize: 20),
-                                ));
+                            return GestureDetector(
+                                onTapUp: (_) async {
+                                  Homiletic homiletic = await getHomileticById(
+                                      application.homileticsId);
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => HomileticEditor(
+                                              homiletic: homiletic)));
+                                },
+                                child: Container(
+                                    width: 170,
+                                    margin: const EdgeInsets.only(
+                                        top: 10,
+                                        left: 10,
+                                        right: 10,
+                                        bottom: 20),
+                                    padding: const EdgeInsets.all(10),
+                                    decoration: BoxDecoration(
+                                        color: Colors.green[600],
+                                        boxShadow: [
+                                          BoxShadow(
+                                              color: Colors.grey[400]!,
+                                              blurRadius: 10,
+                                              offset: const Offset(0, 3))
+                                        ],
+                                        borderRadius:
+                                            BorderRadius.circular(12)),
+                                    child: Text(
+                                      application.text,
+                                      maxLines: 6,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(
+                                          color: Colors.white, fontSize: 20),
+                                    )));
                           }))
                 ])
               : const SizedBox.shrink(),

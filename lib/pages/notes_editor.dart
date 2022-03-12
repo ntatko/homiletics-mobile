@@ -122,7 +122,7 @@ class _NotesState extends State<NotesEditor> {
           Container(
               margin: const EdgeInsets.all(8),
               child: TextField(
-                keyboardType: TextInputType.text,
+                keyboardType: TextInputType.multiline,
                 textCapitalization: TextCapitalization.sentences,
                 controller: TextEditingController(text: _thisNote?.passage),
                 decoration: const InputDecoration(
