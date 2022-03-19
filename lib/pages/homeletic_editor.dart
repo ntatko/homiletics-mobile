@@ -301,6 +301,7 @@ class _HomileticState extends State<HomileticEditor> {
                           width: 90,
                           padding: const EdgeInsets.only(left: 5, right: 5),
                           child: TextField(
+                              autofocus: true,
                               keyboardType: TextInputType.text,
                               textCapitalization: TextCapitalization.sentences,
                               controller:
@@ -323,6 +324,12 @@ class _HomileticState extends State<HomileticEditor> {
                                 labelText: 'Summary',
                                 border: OutlineInputBorder(),
                               ),
+                              onSubmitted: (_) {
+                                setState(() {
+                                  _summaries.add(
+                                      ContentSummary.blank(_thisHomiletic.id));
+                                });
+                              },
                               maxLines: 4,
                               minLines: 1,
                               onChanged: (String value) async {
@@ -391,6 +398,7 @@ class _HomileticState extends State<HomileticEditor> {
                       SizedBox(
                           width: 75,
                           child: TextField(
+                              autofocus: true,
                               keyboardType: TextInputType.text,
                               textCapitalization: TextCapitalization.sentences,
                               controller:
@@ -409,6 +417,12 @@ class _HomileticState extends State<HomileticEditor> {
                               textCapitalization: TextCapitalization.sentences,
                               controller:
                                   TextEditingController(text: division.title),
+                              onSubmitted: (_) {
+                                setState(() {
+                                  _divisions
+                                      .add(Division.blank(_thisHomiletic.id));
+                                });
+                              },
                               decoration: const InputDecoration(
                                 labelText: 'Division Sentence',
                                 border: OutlineInputBorder(),
@@ -503,6 +517,7 @@ class _HomileticState extends State<HomileticEditor> {
                   width: MediaQuery.of(context).size.width,
                   margin: const EdgeInsets.all(8),
                   child: TextField(
+                      autofocus: true,
                       maxLines: null,
                       keyboardType: TextInputType.text,
                       textCapitalization: TextCapitalization.sentences,
@@ -511,6 +526,12 @@ class _HomileticState extends State<HomileticEditor> {
                         hintText: 'How can I...',
                         border: OutlineInputBorder(),
                       ),
+                      onSubmitted: (_) {
+                        setState(() {
+                          _applications
+                              .add(Application.blank(_thisHomiletic.id));
+                        });
+                      },
                       onChanged: (value) async {
                         await application.updateText(value);
                         await _thisHomiletic.update();
