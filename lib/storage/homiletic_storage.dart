@@ -34,6 +34,14 @@ Future<List<Homiletic>> getAllHomiletics() async {
   return List.generate(maps.length, (index) => Homiletic.fromJson(maps[index]));
 }
 
+Future<Homiletic> getHomileticById(int id) async {
+  final Database db = await database;
+
+  final List<Map<String, dynamic>> maps =
+      await db.query('homiletics', where: 'id = ?', whereArgs: [id]);
+  return Homiletic.fromJson(maps[0]);
+}
+
 Future<void> resetTable() async {
   final Database db = await database;
   await db.execute("DROP TABLE IF EXISTS homiletics ");

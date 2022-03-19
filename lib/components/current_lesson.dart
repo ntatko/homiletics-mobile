@@ -37,65 +37,65 @@ class _CurrentLessonState extends State<CurrentLesson> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        crossAxisAlignment: CrossAxisAlignment.center,
+    return Wrap(
+        direction: Axis.horizontal,
+        alignment: WrapAlignment.spaceEvenly,
+        crossAxisAlignment: WrapCrossAlignment.center,
         children: [
-          Expanded(
+          Padding(
+              padding: const EdgeInsets.only(bottom: 20, top: 10),
               child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text("This week's passage:",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16)),
-              widget.schedules.isEmpty
-                  ? Container(
-                      padding: const EdgeInsets.only(top: 12),
-                      width: 150,
-                      child: const Center(
-                          child: CircularProgressIndicator(
-                        color: Colors.white,
-                      )))
-                  : Container(
-                      padding: const EdgeInsets.only(left: 6, right: 6),
-                      margin: const EdgeInsets.only(top: 5),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        color: Colors.blue[400],
-                      ),
-                      width: 200,
-                      child: DropdownButton(
-                        itemHeight: 65,
-                        borderRadius: BorderRadius.circular(30),
-                        dropdownColor: Colors.blue[400],
-                        iconEnabledColor: Colors.white,
-                        onChanged: (value) {
-                          setState(() {
-                            selectedSchedule = widget.schedules.firstWhere(
-                                (element) => element.reference == value);
-                          });
-                        },
-                        value: selectedSchedule!.reference,
-                        items: widget.schedules.map((schedule) {
-                          return DropdownMenuItem(
-                              value: schedule.reference,
-                              child: SizedBox(
-                                  width: 164,
-                                  child: Text(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Text("This week's passage:",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14)),
+                  widget.schedules.isEmpty
+                      ? Container(
+                          width: 150,
+                          padding: const EdgeInsets.only(top: 12),
+                          child: const Center(
+                              child: CircularProgressIndicator(
+                            color: Colors.white,
+                          )))
+                      : Container(
+                          margin: const EdgeInsets.only(top: 5),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            color: Colors.blue[400],
+                          ),
+                          child: DropdownButton(
+                            itemHeight: 55,
+                            borderRadius: BorderRadius.circular(30),
+                            dropdownColor: Colors.blue[400],
+                            iconEnabledColor: Colors.white,
+                            onChanged: (value) {
+                              setState(() {
+                                selectedSchedule = widget.schedules.firstWhere(
+                                    (element) => element.reference == value);
+                              });
+                            },
+                            value: selectedSchedule!.reference,
+                            items: widget.schedules.map((schedule) {
+                              return DropdownMenuItem(
+                                  value: schedule.reference,
+                                  child: Container(
+                                      child: Text(
                                     schedule.reference,
+                                    textAlign: TextAlign.center,
+                                    textWidthBasis: TextWidthBasis.parent,
                                     style: const TextStyle(
-                                        color: Colors.white, fontSize: 20),
+                                        color: Colors.white, fontSize: 16),
                                   )));
-                        }).toList(),
-                      ))
-            ],
-          )),
+                            }).toList(),
+                          ))
+                ],
+              )),
           Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               RoundedButton(
                   shadow: false,
@@ -134,9 +134,7 @@ class _CurrentLessonState extends State<CurrentLesson> {
                   ))
             ],
           )
-        ],
-      ),
-    );
+        ]);
   }
 }
 
@@ -178,6 +176,7 @@ class _CurrentLessonActionsState extends State<CurrentLessonActions> {
   @override
   Widget build(BuildContext context) {
     return Container(
+        width: MediaQuery.of(context).size.width,
         padding:
             const EdgeInsets.only(top: 20, bottom: 20, left: 13, right: 13),
         decoration: BoxDecoration(

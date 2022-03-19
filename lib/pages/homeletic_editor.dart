@@ -22,52 +22,40 @@ class HomileticEditor extends StatefulWidget {
 }
 
 class _HomileticState extends State<HomileticEditor> {
-  Homiletic? _thisHomiletic;
+  late Homiletic _thisHomiletic;
   List<ContentSummary> _summaries = [];
   List<Division> _divisions = [];
   List<Application> _applications = [];
 
   @override
   void initState() {
+    setState(() {
+      _thisHomiletic = widget.homiletic ?? Homiletic();
+    });
     super.initState();
     prepTheTable();
   }
 
   prepTheTable() async {
-    if (widget.homiletic != null) {
-      List<ContentSummary> summaries =
-          await getSummariesByHomileticId(widget.homiletic?.id);
-      List<Division> divisions =
-          await getDivisionsByHomileticId(widget.homiletic?.id);
-      List<Application> applications =
-          await getApplicationsByHomileticId(widget.homiletic?.id);
-      setState(() {
-        _summaries = summaries;
-        _divisions = divisions;
-        _applications = applications;
-        _thisHomiletic = widget.homiletic;
-      });
-    } else {
-      setState(() {
-        _thisHomiletic = Homiletic();
-        _thisHomiletic?.passage = '';
-      });
-      await _thisHomiletic?.update();
-      setState(() {
-        _summaries.add(ContentSummary.blank(_thisHomiletic?.id ?? -1));
-        for (var element in _summaries) {
-          element.update();
-        }
-        _divisions.add(Division.blank(_thisHomiletic?.id ?? -1));
-        for (var element in _divisions) {
-          element.update();
-        }
-        _applications.add(Application.blank(_thisHomiletic?.id ?? -1));
-        for (var element in _applications) {
-          element.update();
-        }
-      });
-    }
+    await _thisHomiletic.update();
+    List<ContentSummary> savedSummaries =
+        await getSummariesByHomileticId(_thisHomiletic.id);
+    List<Division> savedDivisions =
+        await getDivisionsByHomileticId(_thisHomiletic.id);
+    List<Application> savedApplications =
+        await getApplicationsByHomileticId(_thisHomiletic.id);
+
+    setState(() {
+      _summaries = savedSummaries.isNotEmpty
+          ? savedSummaries
+          : [ContentSummary.blank(_thisHomiletic.id)];
+      _divisions = savedDivisions.isNotEmpty
+          ? savedDivisions
+          : [Division.blank(_thisHomiletic.id)];
+      _applications = savedApplications.isNotEmpty
+          ? savedApplications
+          : [Application.blank(_thisHomiletic.id)];
+    });
   }
 
   List<Widget> buildContentDivisionsList() {
@@ -112,7 +100,7 @@ class _HomileticState extends State<HomileticEditor> {
                     ))
               ])),
               onClick: () {
-                if (_thisHomiletic?.passage == '') {
+                if (_thisHomiletic.passage == '') {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: const Text("Please enter a passage"),
                     action: SnackBarAction(
@@ -122,31 +110,37 @@ class _HomileticState extends State<HomileticEditor> {
                   ));
                 } else {
                   showModalBottomSheet(
+                      shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(25.0))),
                       context: context,
                       builder: (context) {
-                        return Column(children: [
-                          Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 10, right: 10, top: 5, bottom: 3),
-                              child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      _thisHomiletic?.passage ?? '',
-                                      style: const TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    IconButton(
-                                        onPressed: () => Navigator.pop(context),
-                                        icon: const Icon(Icons.close))
-                                  ])),
-                          Expanded(
-                              flex: 1,
-                              child: VerseContainer(
-                                  passage: _thisHomiletic?.passage ?? ''))
-                        ]);
+                        return Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 10, right: 10, top: 5, bottom: 3),
+                                  child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          _thisHomiletic.passage,
+                                          style: const TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        IconButton(
+                                            onPressed: () =>
+                                                Navigator.pop(context),
+                                            icon: const Icon(Icons.close))
+                                      ])),
+                              Expanded(
+                                  flex: 1,
+                                  child: VerseContainer(
+                                      passage: _thisHomiletic.passage))
+                            ]);
                       });
                 }
               },
@@ -187,7 +181,7 @@ class _HomileticState extends State<HomileticEditor> {
                                 TextButton(
                                   onPressed: () async {
                                     try {
-                                      await _thisHomiletic?.delete();
+                                      await _thisHomiletic.delete();
                                       Navigator.pushAndRemoveUntil(
                                           context,
                                           MaterialPageRoute(
@@ -281,12 +275,12 @@ class _HomileticState extends State<HomileticEditor> {
                   keyboardType: TextInputType.text,
                   textCapitalization: TextCapitalization.sentences,
                   controller:
-                      TextEditingController(text: _thisHomiletic?.passage),
+                      TextEditingController(text: _thisHomiletic.passage),
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                   ),
                   onChanged: (String value) async {
-                    await _thisHomiletic?.updatePassage(value);
+                    await _thisHomiletic.updatePassage(value);
                   },
                 )),
             const Divider(),
@@ -307,6 +301,7 @@ class _HomileticState extends State<HomileticEditor> {
                           width: 90,
                           padding: const EdgeInsets.only(left: 5, right: 5),
                           child: TextField(
+                              autofocus: true,
                               keyboardType: TextInputType.text,
                               textCapitalization: TextCapitalization.sentences,
                               controller:
@@ -317,7 +312,7 @@ class _HomileticState extends State<HomileticEditor> {
                               ),
                               onChanged: (String value) async {
                                 await element.updatePassage(value);
-                                await _thisHomiletic?.update();
+                                await _thisHomiletic.update();
                               })),
                       Expanded(
                           child: TextField(
@@ -329,11 +324,17 @@ class _HomileticState extends State<HomileticEditor> {
                                 labelText: 'Summary',
                                 border: OutlineInputBorder(),
                               ),
+                              onSubmitted: (_) {
+                                setState(() {
+                                  _summaries.add(
+                                      ContentSummary.blank(_thisHomiletic.id));
+                                });
+                              },
                               maxLines: 4,
                               minLines: 1,
                               onChanged: (String value) async {
                                 await element.updateText(value);
-                                await _thisHomiletic?.update();
+                                await _thisHomiletic.update();
                               }))
                     ],
                   ));
@@ -365,8 +366,7 @@ class _HomileticState extends State<HomileticEditor> {
                 RoundedButton(
                     onClick: () {
                       setState(() {
-                        _summaries.add(
-                            ContentSummary.blank(_thisHomiletic?.id ?? -1));
+                        _summaries.add(ContentSummary.blank(_thisHomiletic.id));
                       });
                     },
                     child: SizedBox(
@@ -376,7 +376,7 @@ class _HomileticState extends State<HomileticEditor> {
                             Padding(
                                 padding: EdgeInsets.only(left: 0, right: 10),
                                 child: Icon(Icons.add)),
-                            Text('Summary')
+                            Text('Content')
                           ],
                         ))),
               ],
@@ -398,6 +398,7 @@ class _HomileticState extends State<HomileticEditor> {
                       SizedBox(
                           width: 75,
                           child: TextField(
+                              autofocus: true,
                               keyboardType: TextInputType.text,
                               textCapitalization: TextCapitalization.sentences,
                               controller:
@@ -408,7 +409,7 @@ class _HomileticState extends State<HomileticEditor> {
                               ),
                               onChanged: (String value) async {
                                 await _divisions[index].updatePassage(value);
-                                await _thisHomiletic?.update();
+                                await _thisHomiletic.update();
                               })),
                       Expanded(
                           child: TextField(
@@ -416,15 +417,21 @@ class _HomileticState extends State<HomileticEditor> {
                               textCapitalization: TextCapitalization.sentences,
                               controller:
                                   TextEditingController(text: division.title),
+                              onSubmitted: (_) {
+                                setState(() {
+                                  _divisions
+                                      .add(Division.blank(_thisHomiletic.id));
+                                });
+                              },
                               decoration: const InputDecoration(
-                                labelText: 'Division Title',
+                                labelText: 'Division Sentence',
                                 border: OutlineInputBorder(),
                               ),
                               maxLines: 4,
                               minLines: 1,
                               onChanged: (String value) async {
                                 await division.updateText(value);
-                                await _thisHomiletic?.update();
+                                await _thisHomiletic.update();
                               }))
                     ],
                   ));
@@ -454,7 +461,7 @@ class _HomileticState extends State<HomileticEditor> {
               RoundedButton(
                   onClick: () {
                     setState(() {
-                      _divisions.add(Division.blank(_thisHomiletic?.id ?? -1));
+                      _divisions.add(Division.blank(_thisHomiletic.id));
                     });
                   },
                   child: Row(
@@ -476,13 +483,13 @@ class _HomileticState extends State<HomileticEditor> {
                     keyboardType: TextInputType.text,
                     textCapitalization: TextCapitalization.sentences,
                     controller: TextEditingController(
-                        text: _thisHomiletic?.subjectSentence ?? ''),
+                        text: _thisHomiletic.subjectSentence),
                     decoration: const InputDecoration(
                       hintText: 'Summarize: 10 words or fewer',
                       border: OutlineInputBorder(),
                     ),
                     onChanged: (String ss) async {
-                      await _thisHomiletic?.updateSubjectSentence(ss);
+                      await _thisHomiletic.updateSubjectSentence(ss);
                     })),
             const Divider(),
             const Text("Aim",
@@ -491,16 +498,15 @@ class _HomileticState extends State<HomileticEditor> {
                 margin: const EdgeInsets.all(8),
                 child: TextField(
                     maxLines: null,
-                    keyboardType: TextInputType.text,
+                    keyboardType: TextInputType.multiline,
                     textCapitalization: TextCapitalization.sentences,
-                    controller:
-                        TextEditingController(text: _thisHomiletic?.aim ?? ''),
+                    controller: TextEditingController(text: _thisHomiletic.aim),
                     decoration: const InputDecoration(
                       labelText: 'Cause the audience to learn that...',
                       border: OutlineInputBorder(),
                     ),
-                    onChanged: (String ss) async {
-                      await _thisHomiletic?.updateAim(ss);
+                    onChanged: (String aim) async {
+                      await _thisHomiletic.updateAim(aim);
                     })),
             const Divider(),
             const Text("Application Questions",
@@ -511,6 +517,7 @@ class _HomileticState extends State<HomileticEditor> {
                   width: MediaQuery.of(context).size.width,
                   margin: const EdgeInsets.all(8),
                   child: TextField(
+                      autofocus: true,
                       maxLines: null,
                       keyboardType: TextInputType.text,
                       textCapitalization: TextCapitalization.sentences,
@@ -519,9 +526,15 @@ class _HomileticState extends State<HomileticEditor> {
                         hintText: 'How can I...',
                         border: OutlineInputBorder(),
                       ),
+                      onSubmitted: (_) {
+                        setState(() {
+                          _applications
+                              .add(Application.blank(_thisHomiletic.id));
+                        });
+                      },
                       onChanged: (value) async {
                         await application.updateText(value);
-                        await _thisHomiletic?.update();
+                        await _thisHomiletic.update();
                       }));
             }),
             Padding(
@@ -554,8 +567,8 @@ class _HomileticState extends State<HomileticEditor> {
                       RoundedButton(
                           onClick: () {
                             setState(() {
-                              _applications.add(
-                                  Application.blank(_thisHomiletic?.id ?? -1));
+                              _applications
+                                  .add(Application.blank(_thisHomiletic.id));
                             });
                           },
                           child: Row(
