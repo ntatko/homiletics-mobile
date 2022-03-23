@@ -82,14 +82,13 @@ class _CurrentLessonState extends State<CurrentLesson> {
                             items: widget.schedules.map((schedule) {
                               return DropdownMenuItem(
                                   value: schedule.reference,
-                                  child: Container(
-                                      child: Text(
+                                  child: Text(
                                     schedule.reference,
                                     textAlign: TextAlign.center,
                                     textWidthBasis: TextWidthBasis.parent,
                                     style: const TextStyle(
                                         color: Colors.white, fontSize: 16),
-                                  )));
+                                  ));
                             }).toList(),
                           ))
                 ],

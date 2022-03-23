@@ -40,6 +40,11 @@ dependencies:
   string_to_hex: ^0.2.2
   http: ^0.13.4
   url_launcher: ^6.0.12
+  hive: ^2.0.4
+  hive_flutter: ^1.1.0
+  bible: ^1.0.0
+  uuid: ^3.0.6
+  sliding_up_panel: ^2.0.0+1
   # pdf: ^3.7.1
   # path_provider: ^2.0.9
 
@@ -54,6 +59,8 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^1.0.0
   flutter_launcher_icons: "^0.9.2"
+  hive_generator: 1.1.0
+  build_runner: 2.0.3
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
