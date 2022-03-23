@@ -4,6 +4,7 @@ import 'package:homiletics/classes/content_summary.dart';
 import 'package:homiletics/classes/Division.dart';
 import 'package:homiletics/classes/homiletic.dart';
 import 'package:homiletics/classes/translation.dart';
+import 'package:homiletics/common/report_error.dart';
 import 'package:homiletics/common/rounded_button.dart';
 import 'package:homiletics/common/verse_container.dart';
 import 'package:homiletics/components/help_menu.dart';
@@ -209,6 +210,7 @@ class _HomileticState extends State<HomileticEditor> {
                                           label: "Ok",
                                         ),
                                       ));
+                                      sendError(error, "delete homiletics");
                                     }
                                   },
                                   child: const Text("Delete"),
@@ -439,6 +441,7 @@ class _HomileticState extends State<HomileticEditor> {
                                 label: "Ok",
                               ),
                             ));
+                            sendError(error, "Content Summary removal");
                           }
                         }),
                     RoundedButton(
@@ -550,6 +553,7 @@ class _HomileticState extends State<HomileticEditor> {
                                   label: "Ok",
                                 ),
                               ));
+                              sendError(error, "Remove Divisions");
                             }
                           }),
                       RoundedButton(
@@ -670,6 +674,7 @@ class _HomileticState extends State<HomileticEditor> {
                                       label: "Ok",
                                     ),
                                   ));
+                                  sendError(error, "Remove applicatoin");
                                 }
                               }),
                           RoundedButton(

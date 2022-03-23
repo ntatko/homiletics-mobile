@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:homiletics/common/report_error.dart';
 import 'package:homiletics/common/rounded_button.dart';
 import 'package:http/http.dart' as http;
 
@@ -107,6 +108,7 @@ class _FeedbackFormState extends State<FeedbackForm> {
                         label: "Ok",
                       ),
                     ));
+                    sendError(error, "Feedback Submission");
                   }
                 },
               ),

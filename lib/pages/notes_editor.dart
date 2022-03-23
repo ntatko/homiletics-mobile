@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:homiletics/classes/lecture_note.dart';
 import 'package:homiletics/classes/translation.dart';
+import 'package:homiletics/common/report_error.dart';
 import 'package:homiletics/common/rounded_button.dart';
 import 'package:homiletics/common/verse_container.dart';
 import 'package:homiletics/components/help_menu.dart';
@@ -99,6 +100,7 @@ class _NotesState extends State<NotesEditor> {
                                           label: "Ok",
                                         ),
                                       ));
+                                      sendError(error, "notes deletion");
                                     }
                                   },
                                   child: const Text("Delete"),
