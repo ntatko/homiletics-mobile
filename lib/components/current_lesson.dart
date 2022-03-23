@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:homiletics/classes/homiletic.dart';
 import 'package:homiletics/classes/lecture_note.dart';
+import 'package:homiletics/common/report_error.dart';
 import 'package:homiletics/common/rounded_button.dart';
 import 'package:homiletics/pages/homeletic_editor.dart';
 import 'package:homiletics/pages/notes_editor.dart';
@@ -9,6 +10,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:homiletics/classes/passage_schedule.dart';
 import 'package:loggy/loggy.dart';
+import 'package:http_retry/http_retry.dart';
 
 class CurrentLesson extends StatefulWidget {
   final List<PassageSchedule> schedules;
@@ -147,7 +149,7 @@ class LoadingLesson extends StatelessWidget {
 }
 
 Future<List<PassageSchedule>> getWebPassages() async {
-  var client = http.Client();
+  var client = RetryClient(http.Client(), whenError: (_, __) => true);
 
   final response = await client.get(Uri.parse(
       'https://homiletics.cloud.zipidy.org/items/assigned_passages?limit=-1'));
@@ -160,6 +162,7 @@ Future<List<PassageSchedule>> getWebPassages() async {
     schedules.sort((a, b) => a.expires.compareTo(b.expires));
     return schedules;
   } else {
+    sendError(Exception('Failed to load scheduled passages'), "getWebPassages");
     throw Exception('Failed to load scheduled passages');
   }
 }
@@ -188,7 +191,10 @@ class _CurrentLessonActionsState extends State<CurrentLessonActions> {
         child: FutureBuilder<List<PassageSchedule>>(
             future: getWebPassages(),
             builder: (context, htmlSnapshot) {
-              if (htmlSnapshot.hasError) logError("${htmlSnapshot.error}");
+              if (htmlSnapshot.hasError) {
+                sendError(Exception(htmlSnapshot.error), "Fetch passages");
+                logError("${htmlSnapshot.error}");
+              }
 
               if (htmlSnapshot.hasData) {
                 return CurrentLesson(schedules: htmlSnapshot.data!);
