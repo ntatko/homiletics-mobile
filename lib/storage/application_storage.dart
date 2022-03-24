@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:homiletics/classes/application.dart';
+import 'package:homiletics/common/report_error.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -21,16 +22,21 @@ final Future<Database> database = getDatabasesPath().then((String path) {
 });
 
 Future<List<Application>> getApplicationsByHomileticId(int? id) async {
-  final Database db = await database;
+  try {
+    final Database db = await database;
 
-  final List<Map<String, dynamic>> maps = await db
-      .query('applications', where: 'homiletic_id = ?', whereArgs: [id]);
+    final List<Map<String, dynamic>> maps = await db
+        .query('applications', where: 'homiletic_id = ?', whereArgs: [id]);
 
-  if (maps.isEmpty) {
-    return [];
+    if (maps.isEmpty) {
+      return [];
+    }
+    return List.generate(
+        maps.length, (index) => Application.fromJson(maps[index]));
+  } catch (error) {
+    sendError(error, "getApplicationsByHomileticId");
+    throw Exception("Failed to fetch Applications");
   }
-  return List.generate(
-      maps.length, (index) => Application.fromJson(maps[index]));
 }
 
 Future<void> resetApplicationsTable() async {
@@ -46,42 +52,68 @@ Future<void> resetApplicationsTable() async {
 }
 
 Future<int> insertApplication(Application application) async {
-  final Database db = await database;
+  try {
+    final Database db = await database;
 
-  return await db.insert('applications', application.toJson(),
-      conflictAlgorithm: ConflictAlgorithm.replace);
+    return await db.insert('applications', application.toJson(),
+        conflictAlgorithm: ConflictAlgorithm.replace);
+  } catch (error) {
+    sendError(error, "insertApplication");
+    throw Exception("Failed to insert Application");
+  }
 }
 
 Future<void> updateApplication(Application application) async {
-  final Database db = await database;
+  try {
+    final Database db = await database;
 
-  await db.update('applications', application.toJson()..remove('id'),
-      where: 'id = ?', whereArgs: [application.id]);
+    await db.update('applications', application.toJson()..remove('id'),
+        where: 'id = ?', whereArgs: [application.id]);
+  } catch (error) {
+    sendError(error, "updateApplication");
+    throw Exception("Failed to update application");
+  }
 }
 
 Future<void> deleteApplication(Application application) async {
-  final Database db = await database;
+  try {
+    final Database db = await database;
 
-  await db.delete('applications', where: 'id = ?', whereArgs: [application.id]);
+    await db
+        .delete('applications', where: 'id = ?', whereArgs: [application.id]);
+  } catch (error) {
+    sendError(error, "deleteApplication");
+    throw Exception("Failed to delete application");
+  }
 }
 
 Future<List<Application>> deleteApplicationByHomileticId(int id) async {
-  final Database db = await database;
+  try {
+    final Database db = await database;
 
-  List<Application> things = await getApplicationsByHomileticId(id);
+    List<Application> things = await getApplicationsByHomileticId(id);
 
-  await db.delete('applications', where: 'homiletic_id = ?', whereArgs: [id]);
-  return things;
+    await db.delete('applications', where: 'homiletic_id = ?', whereArgs: [id]);
+    return things;
+  } catch (error) {
+    sendError(error, "deleteApplicationByHomileticId");
+    throw Exception("Failed to delete applications by homiletic ID");
+  }
 }
 
 Future<List<Application>> getAllApplications() async {
-  final Database db = await database;
+  try {
+    final Database db = await database;
 
-  final List<Map<String, dynamic>> maps = await db.query('applications');
+    final List<Map<String, dynamic>> maps = await db.query('applications');
 
-  if (maps.isEmpty) {
-    return [];
+    if (maps.isEmpty) {
+      return [];
+    }
+    return List.generate(
+        maps.length, (index) => Application.fromJson(maps[index]));
+  } catch (error) {
+    sendError(error, "getAllApplications");
+    throw Exception("Failed to get all applications");
   }
-  return List.generate(
-      maps.length, (index) => Application.fromJson(maps[index]));
 }

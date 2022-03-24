@@ -7,7 +7,7 @@ import 'dart:io' show Platform;
 Future<void> sendError(Object error, String identifier) async {
   // PackageInfo packageInfo = await PackageInfo.fromPlatform();
   var client = http.Client();
-  http.Response response = await client.post(
+  await client.post(
       Uri.parse('https://homiletics.cloud.zipidy.org/items/app_errors'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',

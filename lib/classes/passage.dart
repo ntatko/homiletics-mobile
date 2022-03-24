@@ -27,7 +27,7 @@ class Passage {
     return Passage(
         chapter: int.parse(key.split(' ')[1].split(':')[0]),
         verse: int.parse(key.split(' ')[1].split(':')[1]),
-        text: value,
+        text: value.replaceAll("<b>", "").replaceAll("</b>", ""),
         book: key.split(' ')[0]);
   }
 }

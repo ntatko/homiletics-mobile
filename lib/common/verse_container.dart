@@ -5,6 +5,7 @@ import 'package:homiletics/classes/passage.dart';
 import 'package:homiletics/classes/translation.dart';
 import 'package:loggy/loggy.dart';
 
+// ignore: must_be_immutable
 class VerseContainer extends StatelessWidget {
   String passage;
   bool show;
