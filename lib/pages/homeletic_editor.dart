@@ -13,7 +13,7 @@ import 'package:homiletics/storage/application_storage.dart';
 import 'package:homiletics/storage/content_summary_storage.dart';
 import 'package:homiletics/storage/division_storage.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-// import 'package:homiletics/storage/pdf_generation.dart';
+import 'package:homiletics/storage/pdf_generation.dart';
 
 class HomileticEditor extends StatefulWidget {
   const HomileticEditor({Key? key, this.homiletic}) : super(key: key);
@@ -90,64 +90,6 @@ class _HomileticState extends State<HomileticEditor> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        // floatingActionButton: SizedBox(
-        //     height: 80,
-        //     child: RoundedButton(
-        //       child: Center(
-        //           child: Row(children: const [
-        //         Icon(Icons.search),
-        //         SizedBox(
-        //             width: 100,
-        //             child: Text(
-        //               "Show passage",
-        //               maxLines: 2,
-        //               textAlign: TextAlign.center,
-        //             ))
-        //       ])),
-        //       onClick: () {
-        //         if (_thisHomiletic.passage == '') {
-        //           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        //             content: const Text("Please enter a passage"),
-        //             action: SnackBarAction(
-        //               onPressed: () {},
-        //               label: "Ok",
-        //             ),
-        //           ));
-        //         } else {
-        //           showModalBottomSheet(
-        //               isScrollControlled: true,
-        //               shape: const RoundedRectangleBorder(
-        //                   borderRadius: BorderRadius.vertical(
-        //                       top: Radius.circular(25.0))),
-        //               context: context,
-        //               builder: (context) {
-        //                 return Column(
-        //                     mainAxisSize: MainAxisSize.min,
-        //                     children: [
-        //                       Padding(
-        //                           padding: const EdgeInsets.only(
-        //                               left: 10, right: 10, top: 5, bottom: 3),
-        //                           child: Row(
-        //                               mainAxisAlignment:
-        //                                   MainAxisAlignment.spaceBetween,
-        //                               children: [
-        //                                 Text(
-        //                                   _thisHomiletic.passage,
-        //                                   style: const TextStyle(
-        //                                       fontSize: 16,
-        //                                       fontWeight: FontWeight.bold),
-        //                                 ),
-        //                                 IconButton(
-        //                                     onPressed: () =>
-        //                                         Navigator.pop(context),
-        //                                     icon: const Icon(Icons.close))
-        //                               ])),
-        //                       VerseContainer(passage: _thisHomiletic.passage)
-        //                     ]);
-        //               });
-        //         }
-        //       },
-        //     )),
         appBar: AppBar(
           title: const Text('Homiletics'),
           leading: IconButton(
@@ -222,29 +164,52 @@ class _HomileticState extends State<HomileticEditor> {
                             );
                           });
                       return;
-                    // case 2:
-                    //   try {
-                    //     await createHomileticsPdf(_thisHomiletic!, _summaries,
-                    //         _divisions, _applications);
-                    //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    //       content: const Text(
-                    //           "PDF created successfully. Look in your files app to find it."),
-                    //       action: SnackBarAction(
-                    //         onPressed: () {},
-                    //         label: "Ok",
-                    //       ),
-                    //     ));
-                    //   } catch (error) {
-                    //     print("error: ${error.toString()}");
-                    //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    //       content: const Text(
-                    //           "Something went wrong creating your PDF. Try again soon."),
-                    //       action: SnackBarAction(
-                    //         onPressed: () {},
-                    //         label: "Ok",
-                    //       ),
-                    //     ));
-                    //   }
+                    case 2:
+                      try {
+                        await shareHomiletic(_thisHomiletic, _summaries,
+                            _divisions, _applications);
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: const Text("PDF shared successfully."),
+                          action: SnackBarAction(
+                            onPressed: () {},
+                            label: "Ok",
+                          ),
+                        ));
+                      } catch (error) {
+                        sendError(error, "Share PDF");
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: const Text(
+                              "Something went wrong sharing your PDF. Try again soon."),
+                          action: SnackBarAction(
+                            onPressed: () {},
+                            label: "Ok",
+                          ),
+                        ));
+                      }
+                      return;
+                    case 3:
+                      try {
+                        await printHomiletic(_thisHomiletic, _summaries,
+                            _divisions, _applications);
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: const Text("PDF printed successfully."),
+                          action: SnackBarAction(
+                            onPressed: () {},
+                            label: "Ok",
+                          ),
+                        ));
+                      } catch (error) {
+                        sendError(error, "PDF print");
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: const Text(
+                              "Something went wrong creating your PDF. Try again soon."),
+                          action: SnackBarAction(
+                            onPressed: () {},
+                            label: "Ok",
+                          ),
+                        ));
+                      }
+                      return;
                   }
                 },
                 icon: const Icon(Icons.menu),
@@ -259,11 +224,20 @@ class _HomileticState extends State<HomileticEditor> {
                             leading: Icon(Icons.delete),
                           ),
                           value: 1),
-                      // const PopupMenuItem(
-                      //     child: ListTile(
-                      //         title: Text("Save as PDF"),
-                      //         leading: Icon(Icons.download)),
-                      //     value: 2)
+                      const PopupMenuItem(
+                        child: ListTile(
+                          leading: Icon(Icons.share),
+                          title: Text('Share'),
+                        ),
+                        value: 2,
+                      ),
+                      const PopupMenuItem(
+                        child: ListTile(
+                          leading: Icon(Icons.print),
+                          title: Text('Print'),
+                        ),
+                        value: 3,
+                      ),
                     ]),
           ],
         ),
@@ -700,7 +674,10 @@ class _HomileticState extends State<HomileticEditor> {
                                 ],
                               )),
                         ])),
-                const HelpMenu()
+                const HelpMenu(),
+                const SizedBox(
+                  height: 150,
+                )
               ],
             ))));
   }

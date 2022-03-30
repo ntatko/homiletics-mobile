@@ -47,8 +47,9 @@ dependencies:
   sliding_up_panel: ^2.0.0+1
   package_info_plus: ^1.4.0
   http_retry: ^0.2.0
-  # pdf: ^3.7.1
-  # path_provider: ^2.0.9
+  pdf: ^3.7.3
+  path_provider: ^2.0.9
+  printing: ^5.7.4
 
 dev_dependencies:
   flutter_test:
@@ -87,6 +88,7 @@ flutter:
   #   - images/a_dot_ham.jpeg
   assets:  
     - assets/fonts/Ubuntu-Regular.ttf
+    - assets/images/icon.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
