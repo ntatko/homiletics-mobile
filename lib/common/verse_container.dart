@@ -4,15 +4,19 @@ import 'package:flutter/services.dart';
 import 'package:homiletics/classes/passage.dart';
 import 'package:homiletics/classes/translation.dart';
 import 'package:loggy/loggy.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 // ignore: must_be_immutable
 class VerseContainer extends StatelessWidget {
   String passage;
-  bool show;
+  PanelController controller;
   String version;
 
   VerseContainer(
-      {Key? key, required this.passage, this.show = true, this.version = 'web'})
+      {Key? key,
+      required this.passage,
+      required this.controller,
+      this.version = 'web'})
       : super(key: key);
 
   @override
@@ -21,7 +25,7 @@ class VerseContainer extends StatelessWidget {
         child: Container(
       padding: const EdgeInsets.only(left: 6, right: 6),
       // height: MediaQuery.of(context).size.height * .7,
-      child: show
+      child: controller.isPanelOpen
           ? FutureBuilder<List<Passage>>(
               future: fetchPassage(
                   passage,
@@ -76,6 +80,7 @@ class VerseContainer extends StatelessWidget {
                                                   text: passage.text
                                                       .replaceAll('\n', '')))
                                               .then((_) {
+                                            controller.close();
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(SnackBar(
                                               content: const Text(
