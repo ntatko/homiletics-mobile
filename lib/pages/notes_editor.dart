@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:homiletics/classes/lecture_note.dart';
 import 'package:homiletics/classes/translation.dart';
 import 'package:homiletics/common/report_error.dart';
-import 'package:homiletics/common/rounded_button.dart';
 import 'package:homiletics/common/verse_container.dart';
 import 'package:homiletics/components/help_menu.dart';
 import 'package:homiletics/pages/home.dart';
@@ -21,6 +20,7 @@ class _NotesState extends State<NotesEditor> {
   late LectureNote _thisNote;
   bool _isTrayOpen = false;
   String _translationVersion = 'web';
+  final PanelController _controller = PanelController();
 
   @override
   void initState() {
@@ -153,9 +153,10 @@ class _NotesState extends State<NotesEditor> {
           ],
         ),
         body: SlidingUpPanel(
+            controller: _controller,
             minHeight: 75,
             // panelSnapping: false,
-            // backdropEnabled: true,
+            backdropEnabled: true,
             parallaxEnabled: false,
             isDraggable: true,
             borderRadius: BorderRadius.circular(15),
@@ -172,11 +173,12 @@ class _NotesState extends State<NotesEditor> {
               }
             },
             onPanelOpened: () {
+              FocusManager.instance.primaryFocus?.unfocus();
               setState(() {
                 _isTrayOpen = true;
               });
             },
-            panel: Column(children: [
+            collapsed: Column(children: [
               Container(
                   padding: const EdgeInsets.only(top: 7),
                   child: Center(
@@ -230,10 +232,22 @@ class _NotesState extends State<NotesEditor> {
                       ),
                     )
                   ])),
-              // ])),
+            ]),
+            panel: Column(children: [
+              Container(
+                  padding: const EdgeInsets.only(top: 7, bottom: 12),
+                  child: Center(
+                    child: Container(
+                      height: 5,
+                      width: 40,
+                      decoration: BoxDecoration(
+                          color: Colors.grey,
+                          borderRadius: BorderRadius.circular(300)),
+                    ),
+                  )),
               VerseContainer(
                   passage: _thisNote.passage,
-                  show: _isTrayOpen,
+                  controller: _controller,
                   version: _translationVersion)
             ]),
             body: Center(
