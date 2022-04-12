@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:homiletics/classes/lecture_note.dart';
-import 'package:homiletics/common/rounded_button.dart';
+import 'package:homiletics/classes/translation.dart';
+import 'package:homiletics/common/report_error.dart';
 import 'package:homiletics/common/verse_container.dart';
+import 'package:homiletics/components/help_menu.dart';
 import 'package:homiletics/pages/home.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class NotesEditor extends StatefulWidget {
   const NotesEditor({Key? key, this.note}) : super(key: key);
@@ -15,6 +18,9 @@ class NotesEditor extends StatefulWidget {
 
 class _NotesState extends State<NotesEditor> {
   late LectureNote _thisNote;
+  bool _isTrayOpen = false;
+  String _translationVersion = 'web';
+  final PanelController _controller = PanelController();
 
   @override
   void initState() {
@@ -32,46 +38,6 @@ class _NotesState extends State<NotesEditor> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        floatingActionButton: SizedBox(
-            width: 180,
-            height: 60,
-            child: RoundedButton(
-                onClick: () {
-                  showModalBottomSheet(
-                      shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.vertical(
-                              top: Radius.circular(25.0))),
-                      context: context,
-                      builder: (context) {
-                        return Column(children: [
-                          Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 10, right: 10, top: 5, bottom: 3),
-                              child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      _thisNote.passage,
-                                      style: const TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    IconButton(
-                                        onPressed: () => Navigator.pop(context),
-                                        icon: const Icon(Icons.close))
-                                  ])),
-                          Expanded(
-                              flex: 1,
-                              child: VerseContainer(passage: _thisNote.passage))
-                        ]);
-                      });
-                },
-                child: Center(
-                    child: Row(children: const [
-                  Icon(Icons.search),
-                  Text("Show passage")
-                ])))),
         appBar: AppBar(
           title: const Text('Homiletics'),
           leading: IconButton(
@@ -134,6 +100,7 @@ class _NotesState extends State<NotesEditor> {
                                           label: "Ok",
                                         ),
                                       ));
+                                      sendError(error, "notes deletion");
                                     }
                                   },
                                   child: const Text("Delete"),
@@ -182,52 +149,130 @@ class _NotesState extends State<NotesEditor> {
                             leading: Icon(Icons.delete),
                           ),
                           value: 1),
-                      // const PopupMenuItem(
-                      //     child: ListTile(
-                      //         title: Text("Save as PDF"),
-                      //         leading: Icon(Icons.download)),
-                      //     value: 2)
                     ]),
           ],
         ),
-        body: Center(
-            child: ListView(padding: const EdgeInsets.all(15), children: [
-          const Text("Passage",
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-          Container(
-              margin: const EdgeInsets.all(8),
-              child: TextField(
+        body: SlidingUpPanel(
+            controller: _controller,
+            minHeight: 75,
+            // panelSnapping: false,
+            backdropEnabled: true,
+            parallaxEnabled: false,
+            isDraggable: true,
+            borderRadius: BorderRadius.circular(15),
+            onPanelClosed: () {
+              setState(() {
+                _isTrayOpen = false;
+              });
+            },
+            onPanelSlide: (height) {
+              if (height > 0 && !_isTrayOpen) {
+                setState(() {
+                  _isTrayOpen = true;
+                });
+              }
+            },
+            onPanelOpened: () {
+              FocusManager.instance.primaryFocus?.unfocus();
+              setState(() {
+                _isTrayOpen = true;
+              });
+            },
+            collapsed: Column(children: [
+              Container(
+                  padding: const EdgeInsets.only(top: 7),
+                  child: Center(
+                    child: Container(
+                      height: 5,
+                      width: 40,
+                      decoration: BoxDecoration(
+                          color: Colors.grey,
+                          borderRadius: BorderRadius.circular(300)),
+                    ),
+                  )),
+              SizedBox(
+                  height: 60,
+                  child: Row(children: [
+                    Container(
+                        width: MediaQuery.of(context).size.width - 100,
+                        margin: const EdgeInsets.all(8),
+                        child: TextField(
+                          keyboardType: TextInputType.text,
+                          textCapitalization: TextCapitalization.sentences,
+                          controller:
+                              TextEditingController(text: _thisNote.passage),
+                          decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                          ),
+                          onChanged: (String value) async {
+                            _thisNote.passage = value;
+                            if (_thisNote.id != -1) await _thisNote.update();
+                          },
+                        )),
+                    SizedBox(
+                      width: 75,
+                      child: DropdownButton(
+                        items: [
+                          ...bibleTranslations
+                              .map((e) => DropdownMenuItem(
+                                    child: Text(
+                                      e.short,
+                                      style: const TextStyle(fontSize: 12),
+                                    ),
+                                    value: e.code,
+                                  ))
+                              .toList()
+                        ],
+                        onChanged: (version) {
+                          setState(() {
+                            _translationVersion = version.toString();
+                          });
+                        },
+                        value: _translationVersion,
+                      ),
+                    )
+                  ])),
+            ]),
+            panel: Column(children: [
+              Container(
+                  padding: const EdgeInsets.only(top: 7, bottom: 12),
+                  child: Center(
+                    child: Container(
+                      height: 5,
+                      width: 40,
+                      decoration: BoxDecoration(
+                          color: Colors.grey,
+                          borderRadius: BorderRadius.circular(300)),
+                    ),
+                  )),
+              VerseContainer(
+                  passage: _thisNote.passage,
+                  controller: _controller,
+                  version: _translationVersion)
+            ]),
+            body: Center(
+                child: ListView(padding: const EdgeInsets.all(15), children: [
+              Container(
+                  margin: const EdgeInsets.only(top: 5, bottom: 10),
+                  child: const Text("Notes",
+                      style: TextStyle(
+                          fontSize: 22, fontWeight: FontWeight.bold))),
+              Expanded(
+                  child: TextField(
                 keyboardType: TextInputType.multiline,
                 textCapitalization: TextCapitalization.sentences,
-                controller: TextEditingController(text: _thisNote.passage),
+                controller: TextEditingController(text: _thisNote.note),
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                 ),
+                maxLines: null,
+                minLines: 6,
                 onChanged: (String value) async {
-                  _thisNote.passage = value;
+                  _thisNote.note = value;
                   if (_thisNote.id != -1) await _thisNote.update();
                 },
               )),
-          const Divider(),
-          Container(
-              margin: const EdgeInsets.only(top: 5, bottom: 10),
-              child: const Text("Notes",
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold))),
-          Expanded(
-              child: TextField(
-            keyboardType: TextInputType.text,
-            textCapitalization: TextCapitalization.sentences,
-            controller: TextEditingController(text: _thisNote.note),
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-            ),
-            maxLines: 30,
-            minLines: null,
-            onChanged: (String value) async {
-              _thisNote.note = value;
-              if (_thisNote.id != -1) await _thisNote.update();
-            },
-          ))
-        ])));
+              const HelpMenu()
+            ]))));
   }
 }

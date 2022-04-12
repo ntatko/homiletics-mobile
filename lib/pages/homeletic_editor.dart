@@ -3,6 +3,8 @@ import 'package:homiletics/classes/application.dart';
 import 'package:homiletics/classes/content_summary.dart';
 import 'package:homiletics/classes/Division.dart';
 import 'package:homiletics/classes/homiletic.dart';
+import 'package:homiletics/classes/translation.dart';
+import 'package:homiletics/common/report_error.dart';
 import 'package:homiletics/common/rounded_button.dart';
 import 'package:homiletics/common/verse_container.dart';
 import 'package:homiletics/components/help_menu.dart';
@@ -10,7 +12,8 @@ import 'package:homiletics/pages/home.dart';
 import 'package:homiletics/storage/application_storage.dart';
 import 'package:homiletics/storage/content_summary_storage.dart';
 import 'package:homiletics/storage/division_storage.dart';
-// import 'package:homiletics/storage/pdf_generation.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:homiletics/storage/pdf_generation.dart';
 
 class HomileticEditor extends StatefulWidget {
   const HomileticEditor({Key? key, this.homiletic}) : super(key: key);
@@ -26,6 +29,9 @@ class _HomileticState extends State<HomileticEditor> {
   List<ContentSummary> _summaries = [];
   List<Division> _divisions = [];
   List<Application> _applications = [];
+  bool _isTrayOpen = false;
+  String _translationVersion = 'web';
+  final PanelController _controller = PanelController();
 
   @override
   void initState() {
@@ -85,66 +91,6 @@ class _HomileticState extends State<HomileticEditor> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        floatingActionButton: SizedBox(
-            height: 80,
-            child: RoundedButton(
-              child: Center(
-                  child: Row(children: const [
-                Icon(Icons.search),
-                SizedBox(
-                    width: 100,
-                    child: Text(
-                      "Show passage",
-                      maxLines: 2,
-                      textAlign: TextAlign.center,
-                    ))
-              ])),
-              onClick: () {
-                if (_thisHomiletic.passage == '') {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: const Text("Please enter a passage"),
-                    action: SnackBarAction(
-                      onPressed: () {},
-                      label: "Ok",
-                    ),
-                  ));
-                } else {
-                  showModalBottomSheet(
-                      shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.vertical(
-                              top: Radius.circular(25.0))),
-                      context: context,
-                      builder: (context) {
-                        return Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 10, right: 10, top: 5, bottom: 3),
-                                  child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          _thisHomiletic.passage,
-                                          style: const TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        IconButton(
-                                            onPressed: () =>
-                                                Navigator.pop(context),
-                                            icon: const Icon(Icons.close))
-                                      ])),
-                              Expanded(
-                                  flex: 1,
-                                  child: VerseContainer(
-                                      passage: _thisHomiletic.passage))
-                            ]);
-                      });
-                }
-              },
-            )),
         appBar: AppBar(
           title: const Text('Homiletics'),
           leading: IconButton(
@@ -207,6 +153,7 @@ class _HomileticState extends State<HomileticEditor> {
                                           label: "Ok",
                                         ),
                                       ));
+                                      sendError(error, "delete homiletics");
                                     }
                                   },
                                   child: const Text("Delete"),
@@ -218,29 +165,52 @@ class _HomileticState extends State<HomileticEditor> {
                             );
                           });
                       return;
-                    // case 2:
-                    //   try {
-                    //     await createHomileticsPdf(_thisHomiletic!, _summaries,
-                    //         _divisions, _applications);
-                    //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    //       content: const Text(
-                    //           "PDF created successfully. Look in your files app to find it."),
-                    //       action: SnackBarAction(
-                    //         onPressed: () {},
-                    //         label: "Ok",
-                    //       ),
-                    //     ));
-                    //   } catch (error) {
-                    //     print("error: ${error.toString()}");
-                    //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    //       content: const Text(
-                    //           "Something went wrong creating your PDF. Try again soon."),
-                    //       action: SnackBarAction(
-                    //         onPressed: () {},
-                    //         label: "Ok",
-                    //       ),
-                    //     ));
-                    //   }
+                    case 2:
+                      try {
+                        await shareHomiletic(_thisHomiletic, _summaries,
+                            _divisions, _applications);
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: const Text("PDF shared successfully."),
+                          action: SnackBarAction(
+                            onPressed: () {},
+                            label: "Ok",
+                          ),
+                        ));
+                      } catch (error) {
+                        sendError(error, "Share PDF");
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: const Text(
+                              "Something went wrong sharing your PDF. Try again soon."),
+                          action: SnackBarAction(
+                            onPressed: () {},
+                            label: "Ok",
+                          ),
+                        ));
+                      }
+                      return;
+                    case 3:
+                      try {
+                        await printHomiletic(_thisHomiletic, _summaries,
+                            _divisions, _applications);
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: const Text("PDF printed successfully."),
+                          action: SnackBarAction(
+                            onPressed: () {},
+                            label: "Ok",
+                          ),
+                        ));
+                      } catch (error) {
+                        sendError(error, "PDF print");
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: const Text(
+                              "Something went wrong creating your PDF. Try again soon."),
+                          action: SnackBarAction(
+                            onPressed: () {},
+                            label: "Ok",
+                          ),
+                        ));
+                      }
+                      return;
                   }
                 },
                 icon: const Icon(Icons.menu),
@@ -255,295 +225,304 @@ class _HomileticState extends State<HomileticEditor> {
                             leading: Icon(Icons.delete),
                           ),
                           value: 1),
-                      // const PopupMenuItem(
-                      //     child: ListTile(
-                      //         title: Text("Save as PDF"),
-                      //         leading: Icon(Icons.download)),
-                      //     value: 2)
+                      const PopupMenuItem(
+                        child: ListTile(
+                          leading: Icon(Icons.share),
+                          title: Text('Share'),
+                        ),
+                        value: 2,
+                      ),
+                      const PopupMenuItem(
+                        child: ListTile(
+                          leading: Icon(Icons.print),
+                          title: Text('Print'),
+                        ),
+                        value: 3,
+                      ),
                     ]),
           ],
         ),
-        body: Center(
-            child: ListView(
-          padding: const EdgeInsets.all(15),
-          children: [
-            const Text("Passage",
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-            Container(
-                margin: const EdgeInsets.all(8),
-                child: TextField(
-                  keyboardType: TextInputType.text,
-                  textCapitalization: TextCapitalization.sentences,
-                  controller:
-                      TextEditingController(text: _thisHomiletic.passage),
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                  ),
-                  onChanged: (String value) async {
-                    await _thisHomiletic.updatePassage(value);
-                  },
-                )),
-            const Divider(),
-            const Text("Content Summaries",
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-            ..._summaries.map((element) {
-              int index = _summaries.indexOf(element);
-              return Container(
-                  margin: const EdgeInsets.all(8),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "${index + 1}.",
-                        style: const TextStyle(fontSize: 20),
-                      ),
-                      Container(
-                          width: 90,
-                          padding: const EdgeInsets.only(left: 5, right: 5),
-                          child: TextField(
-                              autofocus: true,
-                              keyboardType: TextInputType.text,
-                              textCapitalization: TextCapitalization.sentences,
-                              controller:
-                                  TextEditingController(text: element.passage),
-                              decoration: const InputDecoration(
-                                labelText: 'Verses',
-                                border: OutlineInputBorder(),
-                              ),
-                              onChanged: (String value) async {
-                                await element.updatePassage(value);
-                                await _thisHomiletic.update();
-                              })),
-                      Expanded(
-                          child: TextField(
-                              keyboardType: TextInputType.text,
-                              textCapitalization: TextCapitalization.sentences,
-                              controller:
-                                  TextEditingController(text: element.summary),
-                              decoration: const InputDecoration(
-                                labelText: 'Summary',
-                                border: OutlineInputBorder(),
-                              ),
-                              onSubmitted: (_) {
-                                setState(() {
-                                  _summaries.add(
-                                      ContentSummary.blank(_thisHomiletic.id));
-                                });
-                              },
-                              maxLines: 4,
-                              minLines: 1,
-                              onChanged: (String value) async {
-                                await element.updateText(value);
-                                await _thisHomiletic.update();
-                              }))
-                    ],
-                  ));
-            }).toList(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                RoundedButton(
-                    disabled: _summaries.isEmpty,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: const [
-                        Padding(
-                            padding: EdgeInsets.only(left: 10, right: 10),
-                            child: Icon(Icons.remove)),
-                        Text('Remove')
-                      ],
+        body: SlidingUpPanel(
+            controller: _controller,
+            backdropTapClosesPanel: true,
+            minHeight: 75,
+            // panelSnapping: false,
+            backdropEnabled: true,
+            parallaxEnabled: false,
+            isDraggable: true,
+            borderRadius: BorderRadius.circular(15),
+            onPanelClosed: () {
+              setState(() {
+                _isTrayOpen = false;
+              });
+            },
+            onPanelSlide: (height) {
+              if (height > 0 && !_isTrayOpen) {
+                setState(() {
+                  _isTrayOpen = true;
+                });
+              }
+            },
+            onPanelOpened: () {
+              FocusManager.instance.primaryFocus?.unfocus();
+              setState(() {
+                _isTrayOpen = true;
+              });
+            },
+            collapsed: Column(children: [
+              Container(
+                  padding: const EdgeInsets.only(top: 7),
+                  child: Center(
+                    child: Container(
+                      height: 5,
+                      width: 40,
+                      decoration: BoxDecoration(
+                          color: Colors.grey,
+                          borderRadius: BorderRadius.circular(300)),
                     ),
-                    onClick: () async {
-                      try {
-                        await _summaries[_summaries.length - 1].delete();
-                        setState(() {
-                          _summaries.removeLast();
-                        });
-                      } catch (error) {
-                        print("Removing that Content Summary didn't work");
-                      }
-                    }),
-                RoundedButton(
-                    onClick: () {
-                      setState(() {
-                        _summaries.add(ContentSummary.blank(_thisHomiletic.id));
-                      });
-                    },
-                    child: SizedBox(
-                        width: 300,
+                  )),
+              SizedBox(
+                  height: 60,
+                  child: Row(children: [
+                    Container(
+                        width: MediaQuery.of(context).size.width - 100,
+                        margin: const EdgeInsets.all(8),
+                        child: TextField(
+                          keyboardType: TextInputType.text,
+                          textCapitalization: TextCapitalization.sentences,
+                          controller: TextEditingController(
+                              text: _thisHomiletic.passage),
+                          decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                          ),
+                          onChanged: (String value) async {
+                            await _thisHomiletic.updatePassage(value);
+                          },
+                        )),
+                    SizedBox(
+                      width: 75,
+                      child: DropdownButton(
+                        items: [
+                          ...bibleTranslations
+                              .map((e) => DropdownMenuItem(
+                                    child: Text(
+                                      e.short,
+                                      style: const TextStyle(fontSize: 12),
+                                    ),
+                                    value: e.code,
+                                  ))
+                              .toList()
+                        ],
+                        onChanged: (version) {
+                          setState(() {
+                            _translationVersion = version.toString();
+                          });
+                        },
+                        value: _translationVersion,
+                      ),
+                    )
+                  ])),
+            ]),
+            panel: Column(children: [
+              GestureDetector(
+                  onTap: () {
+                    _controller.close();
+                  },
+                  child: Container(
+                      padding: const EdgeInsets.only(top: 7, bottom: 12),
+                      child: Center(
+                        child: Container(
+                          height: 5,
+                          width: 40,
+                          decoration: BoxDecoration(
+                              color: Colors.grey,
+                              borderRadius: BorderRadius.circular(300)),
+                        ),
+                      ))),
+              VerseContainer(
+                  passage: _thisHomiletic.passage,
+                  controller: _controller,
+                  version: _translationVersion)
+            ]),
+            body: SafeArea(
+                child: Center(
+                    child: ListView(
+              padding: const EdgeInsets.all(15),
+              children: [
+                const Text("Content Summaries",
+                    style:
+                        TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+                ..._summaries.map((element) {
+                  int index = _summaries.indexOf(element);
+                  return Container(
+                      margin: const EdgeInsets.all(8),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "${index + 1}.",
+                            style: const TextStyle(fontSize: 20),
+                          ),
+                          Container(
+                              width: 90,
+                              padding: const EdgeInsets.only(left: 5, right: 5),
+                              child: TextField(
+                                  autofocus: true,
+                                  keyboardType: TextInputType.text,
+                                  textCapitalization:
+                                      TextCapitalization.sentences,
+                                  controller: TextEditingController(
+                                      text: element.passage),
+                                  decoration: const InputDecoration(
+                                    labelText: 'Verses',
+                                    border: OutlineInputBorder(),
+                                  ),
+                                  onChanged: (String value) async {
+                                    await element.updatePassage(value);
+                                    await _thisHomiletic.update();
+                                  })),
+                          Expanded(
+                              child: TextField(
+                                  keyboardType: TextInputType.text,
+                                  textCapitalization:
+                                      TextCapitalization.sentences,
+                                  controller: TextEditingController(
+                                      text: element.summary),
+                                  decoration: const InputDecoration(
+                                    labelText: 'Summary',
+                                    border: OutlineInputBorder(),
+                                  ),
+                                  onSubmitted: (_) {
+                                    setState(() {
+                                      _summaries.add(ContentSummary.blank(
+                                          _thisHomiletic.id));
+                                    });
+                                  },
+                                  maxLines: 4,
+                                  minLines: 1,
+                                  onChanged: (String value) async {
+                                    await element.updateText(value);
+                                    await _thisHomiletic.update();
+                                  }))
+                        ],
+                      ));
+                }).toList(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    RoundedButton(
+                        disabled: _summaries.isEmpty,
                         child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: const [
                             Padding(
-                                padding: EdgeInsets.only(left: 0, right: 10),
-                                child: Icon(Icons.add)),
-                            Text('Content')
+                                padding: EdgeInsets.only(left: 10, right: 10),
+                                child: Icon(Icons.remove)),
+                            Text('Remove')
                           ],
-                        ))),
-              ],
-            ),
-            const Divider(),
-            const Text("Divisions",
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-            ..._divisions.map((division) {
-              int index = _divisions.indexOf(division);
-              return Container(
-                  margin: const EdgeInsets.all(8),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "${index + 1}:",
-                        style: const TextStyle(fontSize: 20),
-                      ),
-                      SizedBox(
-                          width: 75,
-                          child: TextField(
-                              autofocus: true,
-                              keyboardType: TextInputType.text,
-                              textCapitalization: TextCapitalization.sentences,
-                              controller:
-                                  TextEditingController(text: division.passage),
-                              decoration: const InputDecoration(
-                                labelText: 'Verses',
-                                border: OutlineInputBorder(),
+                        ),
+                        onClick: () async {
+                          try {
+                            await _summaries[_summaries.length - 1].delete();
+                            setState(() {
+                              _summaries.removeLast();
+                            });
+                          } catch (error) {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: const Text(
+                                  "Removing that Content Summary didn't work"),
+                              action: SnackBarAction(
+                                onPressed: () {},
+                                label: "Ok",
                               ),
-                              onChanged: (String value) async {
-                                await _divisions[index].updatePassage(value);
-                                await _thisHomiletic.update();
-                              })),
-                      Expanded(
-                          child: TextField(
-                              keyboardType: TextInputType.text,
-                              textCapitalization: TextCapitalization.sentences,
-                              controller:
-                                  TextEditingController(text: division.title),
-                              onSubmitted: (_) {
-                                setState(() {
-                                  _divisions
-                                      .add(Division.blank(_thisHomiletic.id));
-                                });
-                              },
-                              decoration: const InputDecoration(
-                                labelText: 'Division Sentence',
-                                border: OutlineInputBorder(),
-                              ),
-                              maxLines: 4,
-                              minLines: 1,
-                              onChanged: (String value) async {
-                                await division.updateText(value);
-                                await _thisHomiletic.update();
-                              }))
-                    ],
-                  ));
-            }),
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              RoundedButton(
-                  disabled: _divisions.isEmpty,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: const [
-                      Padding(
-                          padding: EdgeInsets.only(left: 10, right: 10),
-                          child: Icon(Icons.remove)),
-                      Text('Remove')
-                    ],
-                  ),
-                  onClick: () async {
-                    try {
-                      await _divisions[_divisions.length - 1].delete();
-                      setState(() {
-                        _divisions.removeLast();
-                      });
-                    } catch (error) {
-                      print("Removing that Division didn't work");
-                    }
-                  }),
-              RoundedButton(
-                  onClick: () {
-                    setState(() {
-                      _divisions.add(Division.blank(_thisHomiletic.id));
-                    });
-                  },
-                  child: Row(
-                    children: const [
-                      Padding(
-                          padding: EdgeInsets.only(left: 0, right: 10),
-                          child: Icon(Icons.add)),
-                      Text('Division')
-                    ],
-                  )),
-            ]),
-            const Divider(),
-            const Text("Summary Sentence",
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-            Container(
-                margin: const EdgeInsets.all(8),
-                child: TextField(
-                    maxLines: null,
-                    keyboardType: TextInputType.text,
-                    textCapitalization: TextCapitalization.sentences,
-                    controller: TextEditingController(
-                        text: _thisHomiletic.subjectSentence),
-                    decoration: const InputDecoration(
-                      hintText: 'Summarize: 10 words or fewer',
-                      border: OutlineInputBorder(),
-                    ),
-                    onChanged: (String ss) async {
-                      await _thisHomiletic.updateSubjectSentence(ss);
-                    })),
-            const Divider(),
-            const Text("Aim",
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-            Container(
-                margin: const EdgeInsets.all(8),
-                child: TextField(
-                    maxLines: null,
-                    keyboardType: TextInputType.multiline,
-                    textCapitalization: TextCapitalization.sentences,
-                    controller: TextEditingController(text: _thisHomiletic.aim),
-                    decoration: const InputDecoration(
-                      labelText: 'Cause the audience to learn that...',
-                      border: OutlineInputBorder(),
-                    ),
-                    onChanged: (String aim) async {
-                      await _thisHomiletic.updateAim(aim);
-                    })),
-            const Divider(),
-            const Text("Application Questions",
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-            ..._applications.map((application) {
-              // int index = _applications.indexOf(application);
-              return Container(
-                  width: MediaQuery.of(context).size.width,
-                  margin: const EdgeInsets.all(8),
-                  child: TextField(
-                      autofocus: true,
-                      maxLines: null,
-                      keyboardType: TextInputType.text,
-                      textCapitalization: TextCapitalization.sentences,
-                      controller: TextEditingController(text: application.text),
-                      decoration: const InputDecoration(
-                        hintText: 'How can I...',
-                        border: OutlineInputBorder(),
-                      ),
-                      onSubmitted: (_) {
-                        setState(() {
-                          _applications
-                              .add(Application.blank(_thisHomiletic.id));
-                        });
-                      },
-                      onChanged: (value) async {
-                        await application.updateText(value);
-                        await _thisHomiletic.update();
-                      }));
-            }),
-            Padding(
-                padding: const EdgeInsets.only(bottom: 10),
-                child: Row(
+                            ));
+                            sendError(error, "Content Summary removal");
+                          }
+                        }),
+                    RoundedButton(
+                        onClick: () {
+                          setState(() {
+                            _summaries
+                                .add(ContentSummary.blank(_thisHomiletic.id));
+                          });
+                        },
+                        child: SizedBox(
+                            width: 300,
+                            child: Row(
+                              children: const [
+                                Padding(
+                                    padding:
+                                        EdgeInsets.only(left: 0, right: 10),
+                                    child: Icon(Icons.add)),
+                                Text('Content')
+                              ],
+                            ))),
+                  ],
+                ),
+                const Divider(),
+                const Text("Divisions",
+                    style:
+                        TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+                ..._divisions.map((division) {
+                  int index = _divisions.indexOf(division);
+                  return Container(
+                      margin: const EdgeInsets.all(8),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "${index + 1}:",
+                            style: const TextStyle(fontSize: 20),
+                          ),
+                          SizedBox(
+                              width: 75,
+                              child: TextField(
+                                  autofocus: true,
+                                  keyboardType: TextInputType.text,
+                                  textCapitalization:
+                                      TextCapitalization.sentences,
+                                  controller: TextEditingController(
+                                      text: division.passage),
+                                  decoration: const InputDecoration(
+                                    labelText: 'Verses',
+                                    border: OutlineInputBorder(),
+                                  ),
+                                  onChanged: (String value) async {
+                                    await _divisions[index]
+                                        .updatePassage(value);
+                                    await _thisHomiletic.update();
+                                  })),
+                          Expanded(
+                              child: TextField(
+                                  keyboardType: TextInputType.text,
+                                  textCapitalization:
+                                      TextCapitalization.sentences,
+                                  controller: TextEditingController(
+                                      text: division.title),
+                                  onSubmitted: (_) {
+                                    setState(() {
+                                      _divisions.add(
+                                          Division.blank(_thisHomiletic.id));
+                                    });
+                                  },
+                                  decoration: const InputDecoration(
+                                    labelText: 'Division Sentence',
+                                    border: OutlineInputBorder(),
+                                  ),
+                                  maxLines: 4,
+                                  minLines: 1,
+                                  onChanged: (String value) async {
+                                    await division.updateText(value);
+                                    await _thisHomiletic.update();
+                                  }))
+                        ],
+                      ));
+                }),
+                Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       RoundedButton(
-                          disabled: _applications.isEmpty,
+                          disabled: _divisions.isEmpty,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: const [
@@ -555,20 +534,27 @@ class _HomileticState extends State<HomileticEditor> {
                           ),
                           onClick: () async {
                             try {
-                              await _applications[_applications.length - 1]
-                                  .delete();
+                              await _divisions[_divisions.length - 1].delete();
                               setState(() {
-                                _applications.removeLast();
+                                _divisions.removeLast();
                               });
                             } catch (error) {
-                              print("Removing that Application didn't work");
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                content: const Text(
+                                    "Removing that Division didn't work"),
+                                action: SnackBarAction(
+                                  onPressed: () {},
+                                  label: "Ok",
+                                ),
+                              ));
+                              sendError(error, "Remove Divisions");
                             }
                           }),
                       RoundedButton(
                           onClick: () {
                             setState(() {
-                              _applications
-                                  .add(Application.blank(_thisHomiletic.id));
+                              _divisions.add(Division.blank(_thisHomiletic.id));
                             });
                           },
                           child: Row(
@@ -576,18 +562,144 @@ class _HomileticState extends State<HomileticEditor> {
                               Padding(
                                   padding: EdgeInsets.only(left: 0, right: 10),
                                   child: Icon(Icons.add)),
-                              SizedBox(
-                                  width: 90,
-                                  child: Text(
-                                    'Application',
-                                    maxLines: 1,
-                                    overflow: TextOverflow.fade,
-                                  ))
+                              Text('Division')
                             ],
                           )),
-                    ])),
-            const HelpMenu()
-          ],
-        )));
+                    ]),
+                const Divider(),
+                const Text("Summary Sentence",
+                    style:
+                        TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+                Container(
+                    margin: const EdgeInsets.all(8),
+                    child: TextField(
+                        maxLines: null,
+                        keyboardType: TextInputType.text,
+                        textCapitalization: TextCapitalization.sentences,
+                        controller: TextEditingController(
+                            text: _thisHomiletic.subjectSentence),
+                        decoration: const InputDecoration(
+                          hintText: 'Summarize: 10 words or fewer',
+                          border: OutlineInputBorder(),
+                        ),
+                        onChanged: (String ss) async {
+                          await _thisHomiletic.updateSubjectSentence(ss);
+                        })),
+                const Divider(),
+                const Text("Aim",
+                    style:
+                        TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+                Container(
+                    margin: const EdgeInsets.all(8),
+                    child: TextField(
+                        maxLines: null,
+                        keyboardType: TextInputType.multiline,
+                        textCapitalization: TextCapitalization.sentences,
+                        controller:
+                            TextEditingController(text: _thisHomiletic.aim),
+                        decoration: const InputDecoration(
+                          labelText: 'Cause the audience to learn that...',
+                          border: OutlineInputBorder(),
+                        ),
+                        onChanged: (String aim) async {
+                          await _thisHomiletic.updateAim(aim);
+                        })),
+                const Divider(),
+                const Text("Application Questions",
+                    style:
+                        TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+                ..._applications.map((application) {
+                  // int index = _applications.indexOf(application);
+                  return Container(
+                      width: MediaQuery.of(context).size.width,
+                      margin: const EdgeInsets.all(8),
+                      child: TextField(
+                          autofocus: true,
+                          maxLines: null,
+                          keyboardType: TextInputType.text,
+                          textCapitalization: TextCapitalization.sentences,
+                          controller:
+                              TextEditingController(text: application.text),
+                          decoration: const InputDecoration(
+                            hintText: 'How can I...',
+                            border: OutlineInputBorder(),
+                          ),
+                          onSubmitted: (_) {
+                            setState(() {
+                              _applications
+                                  .add(Application.blank(_thisHomiletic.id));
+                            });
+                          },
+                          onChanged: (value) async {
+                            await application.updateText(value);
+                            await _thisHomiletic.update();
+                          }));
+                }),
+                Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          RoundedButton(
+                              disabled: _applications.isEmpty,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: const [
+                                  Padding(
+                                      padding:
+                                          EdgeInsets.only(left: 10, right: 10),
+                                      child: Icon(Icons.remove)),
+                                  Text('Remove')
+                                ],
+                              ),
+                              onClick: () async {
+                                try {
+                                  await _applications[_applications.length - 1]
+                                      .delete();
+                                  setState(() {
+                                    _applications.removeLast();
+                                  });
+                                } catch (error) {
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                    content: const Text(
+                                        "Removing that Application didn't work"),
+                                    action: SnackBarAction(
+                                      onPressed: () {},
+                                      label: "Ok",
+                                    ),
+                                  ));
+                                  sendError(error, "Remove applicatoin");
+                                }
+                              }),
+                          RoundedButton(
+                              onClick: () {
+                                setState(() {
+                                  _applications.add(
+                                      Application.blank(_thisHomiletic.id));
+                                });
+                              },
+                              child: Row(
+                                children: const [
+                                  Padding(
+                                      padding:
+                                          EdgeInsets.only(left: 0, right: 10),
+                                      child: Icon(Icons.add)),
+                                  SizedBox(
+                                      width: 90,
+                                      child: Text(
+                                        'Application',
+                                        maxLines: 1,
+                                        overflow: TextOverflow.fade,
+                                      ))
+                                ],
+                              )),
+                        ])),
+                const HelpMenu(),
+                SizedBox(
+                  height: 150 + MediaQuery.of(context).viewInsets.bottom,
+                )
+              ],
+            )))));
   }
 }
