@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:homiletics/common/report_error.dart';
-import 'package:homiletics/common/rounded_button.dart';
 import 'package:http/http.dart' as http;
 
 class FeedbackForm extends StatefulWidget {
@@ -19,8 +18,7 @@ class _FeedbackFormState extends State<FeedbackForm> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding:
-            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
@@ -32,9 +30,7 @@ class _FeedbackFormState extends State<FeedbackForm> {
                   'Leave Some Feedback',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
-                IconButton(
-                    onPressed: () => Navigator.pop(context),
-                    icon: const Icon(Icons.close))
+                IconButton(onPressed: () => Navigator.pop(context), icon: const Icon(Icons.close))
               ],
             ),
             const Divider(),
@@ -86,9 +82,9 @@ class _FeedbackFormState extends State<FeedbackForm> {
             ),
             Padding(
               padding: const EdgeInsets.only(bottom: 15, top: 12),
-              child: RoundedButton(
+              child: ElevatedButton(
                 child: const Text("Submit"),
-                onClick: () async {
+                onPressed: () async {
                   try {
                     await submitFeedback(_name, _email, _content);
                     Navigator.pop(context);
@@ -101,8 +97,7 @@ class _FeedbackFormState extends State<FeedbackForm> {
                     ));
                   } catch (error) {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: const Text(
-                          "Feedback submission failed, try again soon."),
+                      content: const Text("Feedback submission failed, try again soon."),
                       action: SnackBarAction(
                         onPressed: () {},
                         label: "Ok",
@@ -124,7 +119,6 @@ Future<void> submitFeedback(String name, String email, String feedback) async {
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
-    body: jsonEncode(
-        <String, String>{'name': name, 'email': email, 'feedback': feedback}),
+    body: jsonEncode(<String, String>{'name': name, 'email': email, 'feedback': feedback}),
   );
 }

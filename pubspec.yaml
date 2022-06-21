@@ -50,6 +50,7 @@ dependencies:
   pdf: ^3.7.3
   path_provider: ^2.0.9
   printing: ^5.7.5
+  matomo: ^1.1.0
 
 dev_dependencies:
   flutter_test:
