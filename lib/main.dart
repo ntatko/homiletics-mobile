@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:homiletics/pages/home.dart';
+import 'package:matomo/matomo.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class MyApp extends TraceableStatelessWidget {
+  MyApp({Key? key}) : super(key: key) {
+    MatomoTracker().initialize(
+      siteId: 4,
+      url: 'https://analytics.cloud.zipidy.org/matomo.php',
+    );
+  }
 
   // This widget is the root of your application.
   @override
@@ -24,6 +30,7 @@ class MyApp extends StatelessWidget {
         // or simply save your changes to "hot reload" in a Flutter IDE).
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
+        useMaterial3: true,
         primarySwatch: Colors.blue,
       ),
       home: const Home(),
