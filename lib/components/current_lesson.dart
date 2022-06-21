@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:homiletics/classes/homiletic.dart';
 import 'package:homiletics/classes/lecture_note.dart';
 import 'package:homiletics/common/report_error.dart';
-import 'package:homiletics/common/rounded_button.dart';
 import 'package:homiletics/pages/homeletic_editor.dart';
 import 'package:homiletics/pages/notes_editor.dart';
 import 'package:http/http.dart' as http;
@@ -11,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:homiletics/classes/passage_schedule.dart';
 import 'package:loggy/loggy.dart';
 import 'package:http_retry/http_retry.dart';
+import 'package:matomo/matomo.dart';
 
 class CurrentLesson extends StatefulWidget {
   final List<PassageSchedule> schedules;
@@ -28,9 +28,8 @@ class _CurrentLessonState extends State<CurrentLesson> {
   void initState() {
     setState(() {
       selectedSchedule = widget.schedules.isNotEmpty
-          ? widget.schedules.firstWhere(
-              (element) => element.expires.compareTo(DateTime.now()) == 1,
-              orElse: () => widget.schedules.last)
+          ? widget.schedules
+              .firstWhere((element) => element.expires.compareTo(DateTime.now()) == 1, orElse: () => widget.schedules.last)
           : null;
     });
 
@@ -39,103 +38,80 @@ class _CurrentLessonState extends State<CurrentLesson> {
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(
-        direction: Axis.horizontal,
-        alignment: WrapAlignment.spaceEvenly,
-        crossAxisAlignment: WrapCrossAlignment.center,
-        children: [
-          Padding(
-              padding: const EdgeInsets.only(bottom: 20, top: 10),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Text("This week's passage:",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14)),
-                  widget.schedules.isEmpty
-                      ? Container(
-                          width: 150,
-                          padding: const EdgeInsets.only(top: 12),
-                          child: const Center(
-                              child: CircularProgressIndicator(
-                            color: Colors.white,
-                          )))
-                      : Container(
-                          margin: const EdgeInsets.only(top: 5),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                            color: Colors.blue[400],
-                          ),
-                          child: DropdownButton(
-                            itemHeight: 55,
-                            borderRadius: BorderRadius.circular(30),
-                            dropdownColor: Colors.blue[400],
-                            iconEnabledColor: Colors.white,
-                            onChanged: (value) {
-                              setState(() {
-                                selectedSchedule = widget.schedules.firstWhere(
-                                    (element) => element.reference == value);
-                              });
-                            },
-                            value: selectedSchedule!.reference,
-                            items: widget.schedules.map((schedule) {
-                              return DropdownMenuItem(
-                                  value: schedule.reference,
-                                  child: Text(
-                                    schedule.reference,
-                                    textAlign: TextAlign.center,
-                                    textWidthBasis: TextWidthBasis.parent,
-                                    style: const TextStyle(
-                                        color: Colors.white, fontSize: 16),
-                                  ));
-                            }).toList(),
-                          ))
-                ],
-              )),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              RoundedButton(
-                  shadow: false,
-                  onClick: widget.schedules.isEmpty
-                      ? () {}
-                      : () {
-                          Homiletic homilet =
-                              Homiletic(passage: selectedSchedule!.reference);
-                          homilet.update();
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      HomileticEditor(homiletic: homilet)));
+    return Padding(
+        padding: const EdgeInsets.only(top: 20, left: 8, right: 8),
+        child: Card(
+            color: Colors.blue[200],
+            child: Container(
+              padding: const EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 10),
+              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                const Text("Current Lesson", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                const SizedBox(height: 20),
+                widget.schedules.isEmpty
+                    ? SizedBox(
+                        width: 200,
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: const [CircularProgressIndicator(), Text(" Loading...")]))
+                    : DropdownButton(
+                        itemHeight: 55,
+                        borderRadius: BorderRadius.circular(30),
+                        dropdownColor: Colors.blue[400],
+                        iconEnabledColor: Colors.white,
+                        onChanged: (value) {
+                          setState(() {
+                            selectedSchedule = widget.schedules.firstWhere((element) => element.reference == value);
+                          });
                         },
-                  child: const Text(
-                    "Start Homiletics",
-                    textAlign: TextAlign.center,
-                  )),
-              RoundedButton(
-                  shadow: false,
-                  onClick: widget.schedules.isEmpty
-                      ? () {}
-                      : () {
-                          LectureNote note =
-                              LectureNote(passage: selectedSchedule!.reference);
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      NotesEditor(note: note)));
-                        },
-                  child: const Text(
-                    "Take notes",
-                    textAlign: TextAlign.center,
-                  ))
-            ],
-          )
-        ]);
+                        value: selectedSchedule!.reference,
+                        items: widget.schedules.map((schedule) {
+                          return DropdownMenuItem(
+                              value: schedule.reference,
+                              child: Text(
+                                schedule.reference,
+                                textAlign: TextAlign.center,
+                                textWidthBasis: TextWidthBasis.parent,
+                                style: const TextStyle(color: Colors.white, fontSize: 16),
+                              ));
+                        }).toList(),
+                      ),
+                const SizedBox(height: 20),
+                Wrap(
+                  alignment: WrapAlignment.start,
+                  spacing: 10,
+                  runSpacing: 10,
+                  children: [
+                    ElevatedButton(
+                        child: const Text("Start Homiletics"),
+                        onPressed: widget.schedules.isNotEmpty
+                            ? () async {
+                                MatomoTracker.trackEvent("homiletics", "start_predefined");
+                                Homiletic homiletic = Homiletic(passage: selectedSchedule!.reference);
+                                await homiletic.update();
+                                Navigator.push(
+                                    context, MaterialPageRoute(builder: (context) => HomileticEditor(homiletic: homiletic)));
+                              }
+                            : null),
+                    ElevatedButton(
+                        child: const Text("Start Lecture Note"),
+                        onPressed: widget.schedules.isNotEmpty
+                            ? () async {
+                                MatomoTracker.trackEvent("lecture_note", "start_predefined");
+                                LectureNote note = LectureNote(passage: selectedSchedule!.reference);
+                                await note.update();
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => NotesEditor(
+                                              note: note,
+                                            )));
+                              }
+                            : null)
+                  ],
+                )
+              ]),
+            )));
   }
 }
 
@@ -151,13 +127,11 @@ class LoadingLesson extends StatelessWidget {
 Future<List<PassageSchedule>> getWebPassages() async {
   var client = RetryClient(http.Client(), whenError: (_, __) => true);
 
-  final response = await client.get(Uri.parse(
-      'https://homiletics.cloud.zipidy.org/items/assigned_passages?limit=-1'));
+  final response = await client.get(Uri.parse('https://homiletics.cloud.zipidy.org/items/assigned_passages?limit=-1'));
 
   if (response.statusCode == 200) {
-    List<PassageSchedule> schedules = List<PassageSchedule>.from(
-        jsonDecode(response.body)['data']
-            .map((x) => PassageSchedule.fromJson(x)));
+    List<PassageSchedule> schedules =
+        List<PassageSchedule>.from(jsonDecode(response.body)['data'].map((x) => PassageSchedule.fromJson(x)));
 
     schedules.sort((a, b) => a.expires.compareTo(b.expires));
     return schedules;
@@ -177,30 +151,19 @@ class CurrentLessonActions extends StatefulWidget {
 class _CurrentLessonActionsState extends State<CurrentLessonActions> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-        width: MediaQuery.of(context).size.width,
-        padding:
-            const EdgeInsets.only(top: 20, bottom: 20, left: 13, right: 13),
-        decoration: BoxDecoration(
-          color: Colors.blue,
-          boxShadow: kElevationToShadow[4],
-          // borderRadius: BorderRadius.only(
-          //     bottomLeft: Radius.elliptical(100, 40),
-          //     bottomRight: Radius.elliptical(100, 40))
-        ),
-        child: FutureBuilder<List<PassageSchedule>>(
-            future: getWebPassages(),
-            builder: (context, htmlSnapshot) {
-              if (htmlSnapshot.hasError) {
-                sendError(Exception(htmlSnapshot.error), "Fetch passages");
-                logError("${htmlSnapshot.error}");
-              }
+    return FutureBuilder<List<PassageSchedule>>(
+        future: getWebPassages(),
+        builder: (context, htmlSnapshot) {
+          if (htmlSnapshot.hasError) {
+            sendError(Exception(htmlSnapshot.error), "Fetch passages");
+            logError("${htmlSnapshot.error}");
+          }
 
-              if (htmlSnapshot.hasData) {
-                return CurrentLesson(schedules: htmlSnapshot.data!);
-              }
+          if (htmlSnapshot.hasData) {
+            return CurrentLesson(schedules: htmlSnapshot.data!);
+          }
 
-              return const LoadingLesson();
-            }));
+          return const LoadingLesson();
+        });
   }
 }

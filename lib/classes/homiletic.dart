@@ -16,19 +16,14 @@ class Homiletic {
   int id;
   DateTime? updatedAt;
 
-  Homiletic(
-      {this.passage = '',
-      this.subjectSentence = '',
-      this.aim = '',
-      this.id = -1,
-      this.updatedAt});
+  Homiletic({this.passage = '', this.subjectSentence = '', this.aim = '', this.id = -1, this.updatedAt});
 
   factory Homiletic.fromJson(Map<String, dynamic> json) {
     return Homiletic(
-        passage: json['passage'],
-        subjectSentence: json['subject_sentence'],
-        aim: json['aim'],
-        id: json['id'],
+        passage: json['passage'].toString(),
+        subjectSentence: json['subject_sentence'].toString(),
+        aim: json['aim'].toString(),
+        id: int.parse(json['id'].toString()),
         updatedAt: DateTime.parse(json['updated_at']));
   }
 
@@ -68,11 +63,6 @@ class Homiletic {
     List<Application> applications = await deleteApplicationByHomileticId(id);
     List<Division> divisions = await deleteDivisionByHomileticId(id);
     await deleteHomiletic(this);
-    return {
-      "summaries": summaries,
-      "applications": applications,
-      "divisions": divisions,
-      "homiletic": this
-    };
+    return {"summaries": summaries, "applications": applications, "divisions": divisions, "homiletic": this};
   }
 }

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:homiletics/classes/application.dart';
-import 'package:homiletics/classes/homiletic.dart';
-import 'package:homiletics/pages/homeletic_editor.dart';
+import 'package:homiletics/common/application_list_item.dart';
+import 'package:homiletics/common/home_header.dart';
+import 'package:homiletics/pages/application_page.dart';
 import 'package:homiletics/storage/application_storage.dart';
-import 'package:homiletics/storage/homiletic_storage.dart';
 import 'package:loggy/loggy.dart';
 
 class ApplicationList extends StatelessWidget {
@@ -11,83 +11,46 @@ class ApplicationList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<Application>>(
-      future: getAllApplications(),
-      builder: (context, snapshot) {
-        if (snapshot.hasError) logError("${snapshot.error}");
+    return Container(
+        margin: const EdgeInsets.only(left: 10, right: 10, top: 20, bottom: 20),
+        child: Card(
+            color: Colors.green[100],
+            child: FutureBuilder<List<Application>>(
+              future: getAllApplications(),
+              builder: (context, snapshot) {
+                if (snapshot.hasError) logError("${snapshot.error}");
 
-        List<Application> filteredDataList = snapshot.data
-                ?.where((application) => application.text != '')
-                .toList()
-                .reversed
-                .toList() ??
-            [];
+                List<Application> filteredDataList =
+                    snapshot.data?.where((application) => application.text != '').toList().reversed.toList() ?? [];
 
-        return AnimatedContainer(
-          height: snapshot.hasData && filteredDataList.isNotEmpty ? 240 : 0,
-          width: MediaQuery.of(context).size.width,
-          padding: const EdgeInsets.only(top: 10),
-          duration: const Duration(milliseconds: 400),
-          child: snapshot.hasData
-              ? Column(children: [
-                  Container(
-                    padding: const EdgeInsets.only(
-                        top: 10, bottom: 10, left: 10, right: 10),
-                    child: Row(
-                      children: const [
-                        Text(
-                          "Application Questions",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                      child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: filteredDataList.length,
-                          itemBuilder: (context, index) {
-                            Application? application = filteredDataList[index];
-                            return GestureDetector(
-                                onTapUp: (_) async {
-                                  Homiletic homiletic = await getHomileticById(
-                                      application.homileticsId);
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => HomileticEditor(
-                                              homiletic: homiletic)));
-                                },
-                                child: Container(
-                                    width: 170,
-                                    margin: const EdgeInsets.only(
-                                        top: 10,
-                                        left: 10,
-                                        right: 10,
-                                        bottom: 20),
-                                    padding: const EdgeInsets.all(10),
-                                    decoration: BoxDecoration(
-                                        color: Colors.green[600],
-                                        boxShadow: [
-                                          BoxShadow(
-                                              color: Colors.grey[400]!,
-                                              blurRadius: 10,
-                                              offset: const Offset(0, 3))
-                                        ],
-                                        borderRadius:
-                                            BorderRadius.circular(12)),
-                                    child: Text(
-                                      application.text,
-                                      maxLines: 6,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(
-                                          color: Colors.white, fontSize: 20),
-                                    )));
-                          }))
-                ])
-              : const SizedBox.shrink(),
-        );
-      },
-    );
+                return Container(
+                  height: snapshot.hasData && filteredDataList.isNotEmpty ? 240 : 0,
+                  width: MediaQuery.of(context).size.width,
+                  padding: const EdgeInsets.only(top: 10),
+                  child: snapshot.hasData
+                      ? Column(children: [
+                          HomeHeader(
+                              title: "Application Questions",
+                              onExpand: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ApplicationPage(applications: filteredDataList)));
+                              }),
+                          Expanded(
+                              child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: filteredDataList.length,
+                                  itemBuilder: (context, index) {
+                                    Application? application = filteredDataList[index];
+                                    return ApplicationListItem(
+                                      application: application,
+                                    );
+                                  }))
+                        ])
+                      : const SizedBox.shrink(),
+                );
+              },
+            )));
   }
 }

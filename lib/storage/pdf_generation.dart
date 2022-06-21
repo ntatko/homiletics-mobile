@@ -25,11 +25,10 @@ Future<pw.Document> createHomileticsPdf(
     (await rootBundle.load('assets/images/icon.png')).buffer.asUint8List(),
   );
 
-  pdf.addPage(pw.Page(
+  pdf.addPage(pw.MultiPage(
       pageFormat: PdfPageFormat.a4,
       build: (pw.Context context) {
-        return pw
-            .Column(crossAxisAlignment: pw.CrossAxisAlignment.start, children: [
+        return [
           pw.Center(
               child: pw.Text(homiletic.passage,
                   style: const pw.TextStyle(fontSize: 30))),
@@ -91,7 +90,7 @@ Future<pw.Document> createHomileticsPdf(
                               style: const pw.TextStyle(color: PdfColors.grey)),
                         ])
                       ])))
-        ]);
+        ];
       }));
 
   return pdf;
