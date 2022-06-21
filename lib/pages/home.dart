@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-// import 'package:homiletics/common/rounded_button.dart';
 import 'package:homiletics/components/application_list.dart';
 import 'package:homiletics/components/current_lesson.dart';
 import 'package:homiletics/components/help_menu.dart';
@@ -51,8 +50,7 @@ class _HomeState extends State<Home> {
       // ),
       body: SafeArea(
           bottom: false,
-          child: Expanded(
-              child: ListView(children: const [
+          child: ListView(children: const [
             CurrentLessonActions(),
             StartActivity(),
             ApplicationList(),
@@ -64,7 +62,7 @@ class _HomeState extends State<Home> {
             //     onClick: () async {
             //       resetScheduleTable();
             //     })
-          ]))),
+          ])),
     );
   }
 }
