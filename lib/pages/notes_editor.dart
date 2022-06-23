@@ -230,8 +230,7 @@ class _NotesState extends State<NotesEditor> {
               Container(
                   margin: const EdgeInsets.only(top: 5, bottom: 10),
                   child: const Text("Notes", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold))),
-              Expanded(
-                  child: TextField(
+              TextField(
                 keyboardType: TextInputType.multiline,
                 textCapitalization: TextCapitalization.sentences,
                 controller: TextEditingController(text: _thisNote.note),
@@ -244,7 +243,7 @@ class _NotesState extends State<NotesEditor> {
                   _thisNote.note = value;
                   if (_thisNote.id != -1) await _thisNote.update();
                 },
-              )),
+              ),
               const HelpMenu()
             ]))));
   }
