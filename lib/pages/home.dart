@@ -22,16 +22,6 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   @override
-  void initState() {
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      systemNavigationBarColor: Colors.blue, // navigation bar color
-      statusBarColor: Colors.blue, // status bar color
-    ));
-
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       // appBar: AppBar(title: const Text('Homiletics')),
