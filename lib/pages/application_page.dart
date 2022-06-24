@@ -6,7 +6,7 @@ import 'package:matomo/matomo.dart';
 class ApplicationPage extends TraceableStatelessWidget {
   final List<Application> applications;
 
-  const ApplicationPage({required this.applications});
+  const ApplicationPage({Key? key, required this.applications}): super(key: key);
 
   @override
   Widget build(BuildContext context) {
