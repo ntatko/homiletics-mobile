@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:homiletics/components/application_list.dart';
 import 'package:homiletics/components/current_lesson.dart';
 import 'package:homiletics/components/help_menu.dart';
