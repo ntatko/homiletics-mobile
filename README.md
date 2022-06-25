@@ -1,6 +1,6 @@
 # homiletics
 
-The Homiletics Mobile App is a mobile application that allows users to create (BSF)[https://www.bsfinternational.org/]-style homiletics.
+The Homiletics Mobile App is a mobile application that allows users to create (BSF)[https://www.bsfinternational.org]-style homiletics.
 
 ## Getting Started
 
@@ -31,7 +31,7 @@ samples, guidance on mobile development, and a full API reference.
 
 ### License
 
-This app is distributed under the (MIT license)[https://en.wikipedia.org/wiki/MIT_License], which means you can copy and do pretty much whatever you like with the code. See the [LICENSE](./LICENSE) file for more information.
+This app is distributed under the [MIT license](https://en.wikipedia.org/wiki/MIT_License), which means you can copy and do pretty much whatever you like with the code. See the [LICENSE](./LICENSE) file for more information.
 
 ### Contributing
 

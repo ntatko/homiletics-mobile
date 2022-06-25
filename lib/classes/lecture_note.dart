@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:homiletics/storage/lecture_note_storage.dart';
 
 class LectureNote {
@@ -26,10 +27,12 @@ class LectureNote {
   }
 
   Future<void> update() async {
-    if (id == -1) {
-      id = await insertLectureNote(this);
-    } else {
-      await updateLectureNote(this);
+    if (!kIsWeb) {
+      if (id == -1) {
+        id = await insertLectureNote(this);
+      } else {
+        await updateLectureNote(this);
+      }
     }
   }
 

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:homiletics/classes/application.dart';
 import 'package:homiletics/classes/content_summary.dart';
@@ -44,14 +45,23 @@ class _HomileticState extends State<HomileticEditor> {
 
   prepTheTable() async {
     await _thisHomiletic.update();
-    List<ContentSummary> savedSummaries = await getSummariesByHomileticId(_thisHomiletic.id);
-    List<Division> savedDivisions = await getDivisionsByHomileticId(_thisHomiletic.id);
-    List<Application> savedApplications = await getApplicationsByHomileticId(_thisHomiletic.id);
+    List<ContentSummary> savedSummaries =
+        await getSummariesByHomileticId(_thisHomiletic.id);
+    List<Division> savedDivisions =
+        await getDivisionsByHomileticId(_thisHomiletic.id);
+    List<Application> savedApplications =
+        await getApplicationsByHomileticId(_thisHomiletic.id);
 
     setState(() {
-      _summaries = savedSummaries.isNotEmpty ? savedSummaries : [ContentSummary.blank(_thisHomiletic.id)];
-      _divisions = savedDivisions.isNotEmpty ? savedDivisions : [Division.blank(_thisHomiletic.id)];
-      _applications = savedApplications.isNotEmpty ? savedApplications : [Application.blank(_thisHomiletic.id)];
+      _summaries = savedSummaries.isNotEmpty
+          ? savedSummaries
+          : [ContentSummary.blank(_thisHomiletic.id)];
+      _divisions = savedDivisions.isNotEmpty
+          ? savedDivisions
+          : [Division.blank(_thisHomiletic.id)];
+      _applications = savedApplications.isNotEmpty
+          ? savedApplications
+          : [Application.blank(_thisHomiletic.id)];
     });
   }
 
@@ -87,7 +97,38 @@ class _HomileticState extends State<HomileticEditor> {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
-              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const Home()), (r) => false);
+              if (kIsWeb) {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) => AlertDialog(
+                    title: const Text('Are you sure?'),
+                    content: const Text('You will lose all your work.'),
+                    actions: [
+                      ElevatedButton(
+                        child: const Text('Cancel'),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                      ElevatedButton(
+                        child: const Text('OK'),
+                        onPressed: () {
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const Home()),
+                              (r) => false);
+                        },
+                      ),
+                    ],
+                  ),
+                );
+              } else {
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => const Home()),
+                    (r) => false);
+              }
             },
           ),
           actions: [
@@ -96,7 +137,9 @@ class _HomileticState extends State<HomileticEditor> {
                   switch (value) {
                     case 0:
                       Navigator.pushAndRemoveUntil(
-                          context, MaterialPageRoute(builder: (context) => const Home()), (r) => false);
+                          context,
+                          MaterialPageRoute(builder: (context) => const Home()),
+                          (r) => false);
                       return;
                     case 1:
                       showDialog(
@@ -107,23 +150,33 @@ class _HomileticState extends State<HomileticEditor> {
                               content: const Text(
                                   "Deleting this Homiletics lesson is permanent and cannot be undone. Are you sure you wish to proceed?"),
                               actions: [
-                                TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
+                                TextButton(
+                                    onPressed: () => Navigator.pop(context),
+                                    child: const Text('Cancel')),
                                 TextButton(
                                   onPressed: () async {
                                     try {
                                       await _thisHomiletic.delete();
                                       Navigator.pushAndRemoveUntil(
-                                          context, MaterialPageRoute(builder: (context) => const Home()), (r) => false);
-                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                        content: const Text("Homiletics Deleted"),
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const Home()),
+                                          (r) => false);
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                        content:
+                                            const Text("Homiletics Deleted"),
                                         action: SnackBarAction(
                                           onPressed: () {},
                                           label: "Ok",
                                         ),
                                       ));
                                     } catch (error) {
-                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                        content: const Text("Something went wrong. Try again soon."),
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                        content: const Text(
+                                            "Something went wrong. Try again soon."),
                                         action: SnackBarAction(
                                           onPressed: () {},
                                           label: "Ok",
@@ -143,7 +196,8 @@ class _HomileticState extends State<HomileticEditor> {
                       return;
                     case 2:
                       try {
-                        await shareHomiletic(_thisHomiletic, _summaries, _divisions, _applications);
+                        await shareHomiletic(_thisHomiletic, _summaries,
+                            _divisions, _applications);
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                           content: const Text("PDF shared successfully."),
                           action: SnackBarAction(
@@ -154,7 +208,8 @@ class _HomileticState extends State<HomileticEditor> {
                       } catch (error) {
                         sendError(error, "Share PDF");
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: const Text("Something went wrong sharing your PDF. Try again soon."),
+                          content: const Text(
+                              "Something went wrong sharing your PDF. Try again soon."),
                           action: SnackBarAction(
                             onPressed: () {},
                             label: "Ok",
@@ -164,7 +219,8 @@ class _HomileticState extends State<HomileticEditor> {
                       return;
                     case 3:
                       try {
-                        await printHomiletic(_thisHomiletic, _summaries, _divisions, _applications);
+                        await printHomiletic(_thisHomiletic, _summaries,
+                            _divisions, _applications);
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                           content: const Text("PDF printed successfully."),
                           action: SnackBarAction(
@@ -175,7 +231,8 @@ class _HomileticState extends State<HomileticEditor> {
                       } catch (error) {
                         sendError(error, "PDF print");
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: const Text("Something went wrong creating your PDF. Try again soon."),
+                          content: const Text(
+                              "Something went wrong creating your PDF. Try again soon."),
                           action: SnackBarAction(
                             onPressed: () {},
                             label: "Ok",
@@ -187,17 +244,22 @@ class _HomileticState extends State<HomileticEditor> {
                 },
                 icon: const Icon(Icons.menu),
                 itemBuilder: (context) => [
-                      const PopupMenuItem(child: ListTile(leading: Icon(Icons.save), title: Text("Save")), value: 0),
-                      const PopupMenuItem(
-                          child: ListTile(
-                            title: Text('Delete'),
-                            leading: Icon(Icons.delete),
-                          ),
-                          value: 1),
+                      if (!kIsWeb)
+                        const PopupMenuItem(
+                            child: ListTile(
+                                leading: Icon(Icons.save), title: Text("Save")),
+                            value: 0),
+                      if (!kIsWeb)
+                        const PopupMenuItem(
+                            child: ListTile(
+                              title: Text('Delete'),
+                              leading: Icon(Icons.delete),
+                            ),
+                            value: 1),
                       const PopupMenuItem(
                         child: ListTile(
                           leading: Icon(Icons.share),
-                          title: Text('Share'),
+                          title: Text(kIsWeb ? 'Save to PDF' : 'Share'),
                         ),
                         value: 2,
                       ),
@@ -245,7 +307,9 @@ class _HomileticState extends State<HomileticEditor> {
                     child: Container(
                       height: 5,
                       width: 40,
-                      decoration: BoxDecoration(color: Colors.grey, borderRadius: BorderRadius.circular(300)),
+                      decoration: BoxDecoration(
+                          color: Colors.grey,
+                          borderRadius: BorderRadius.circular(300)),
                     ),
                   )),
               SizedBox(
@@ -257,7 +321,8 @@ class _HomileticState extends State<HomileticEditor> {
                         child: TextField(
                           keyboardType: TextInputType.text,
                           textCapitalization: TextCapitalization.sentences,
-                          controller: TextEditingController(text: _thisHomiletic.passage),
+                          controller: TextEditingController(
+                              text: _thisHomiletic.passage),
                           decoration: const InputDecoration(
                             border: OutlineInputBorder(),
                           ),
@@ -300,10 +365,15 @@ class _HomileticState extends State<HomileticEditor> {
                         child: Container(
                           height: 5,
                           width: 40,
-                          decoration: BoxDecoration(color: Colors.grey, borderRadius: BorderRadius.circular(300)),
+                          decoration: BoxDecoration(
+                              color: Colors.grey,
+                              borderRadius: BorderRadius.circular(300)),
                         ),
                       ))),
-              VerseContainer(passage: _thisHomiletic.passage, controller: _controller, version: _translationVersion)
+              VerseContainer(
+                  passage: _thisHomiletic.passage,
+                  controller: _controller,
+                  version: _translationVersion)
             ]),
             body: SafeArea(
                 child: Center(
@@ -315,13 +385,16 @@ class _HomileticState extends State<HomileticEditor> {
                     child: Padding(
                         padding: const EdgeInsets.all(8),
                         child: Column(children: [
-                          const Text("Content Summaries", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+                          const Text("Content Summaries",
+                              style: TextStyle(
+                                  fontSize: 22, fontWeight: FontWeight.bold)),
                           ..._summaries.map((element) {
                             int index = _summaries.indexOf(element);
                             return Container(
                                 margin: const EdgeInsets.all(8),
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
                                       "${index + 1}.",
@@ -329,32 +402,40 @@ class _HomileticState extends State<HomileticEditor> {
                                     ),
                                     Container(
                                         width: 90,
-                                        padding: const EdgeInsets.only(left: 5, right: 5),
+                                        padding: const EdgeInsets.only(
+                                            left: 5, right: 5),
                                         child: TextField(
                                             autofocus: true,
                                             keyboardType: TextInputType.text,
-                                            textCapitalization: TextCapitalization.sentences,
-                                            controller: TextEditingController(text: element.passage),
+                                            textCapitalization:
+                                                TextCapitalization.sentences,
+                                            controller: TextEditingController(
+                                                text: element.passage),
                                             decoration: const InputDecoration(
                                               labelText: 'Verses',
                                               border: OutlineInputBorder(),
                                             ),
                                             onChanged: (String value) async {
-                                              await element.updatePassage(value);
+                                              await element
+                                                  .updatePassage(value);
                                               await _thisHomiletic.update();
                                             })),
                                     Expanded(
                                         child: TextField(
                                             keyboardType: TextInputType.text,
-                                            textCapitalization: TextCapitalization.sentences,
-                                            controller: TextEditingController(text: element.summary),
+                                            textCapitalization:
+                                                TextCapitalization.sentences,
+                                            controller: TextEditingController(
+                                                text: element.summary),
                                             decoration: const InputDecoration(
                                               labelText: 'Summary',
                                               border: OutlineInputBorder(),
                                             ),
                                             onSubmitted: (_) {
                                               setState(() {
-                                                _summaries.add(ContentSummary.blank(_thisHomiletic.id));
+                                                _summaries.add(
+                                                    ContentSummary.blank(
+                                                        _thisHomiletic.id));
                                               });
                                             },
                                             maxLines: 4,
@@ -373,39 +454,51 @@ class _HomileticState extends State<HomileticEditor> {
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: const [
-                                      Padding(padding: EdgeInsets.only(left: 10, right: 10), child: Icon(Icons.remove)),
+                                      Padding(
+                                          padding: EdgeInsets.only(
+                                              left: 10, right: 10),
+                                          child: Icon(Icons.remove)),
                                       Text('Remove')
                                     ],
                                   ),
                                   onPressed: _summaries.isNotEmpty
                                       ? () async {
                                           try {
-                                            await _summaries[_summaries.length - 1].delete();
+                                            await _summaries[
+                                                    _summaries.length - 1]
+                                                .delete();
                                             setState(() {
                                               _summaries.removeLast();
                                             });
                                           } catch (error) {
-                                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                              content: const Text("Removing that Content Summary didn't work"),
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(SnackBar(
+                                              content: const Text(
+                                                  "Removing that Content Summary didn't work"),
                                               action: SnackBarAction(
                                                 onPressed: () {},
                                                 label: "Ok",
                                               ),
                                             ));
-                                            sendError(error, "Content Summary removal");
+                                            sendError(error,
+                                                "Content Summary removal");
                                           }
                                         }
                                       : null),
                               ElevatedButton(
                                   onPressed: () {
                                     setState(() {
-                                      _summaries.add(ContentSummary.blank(_thisHomiletic.id));
+                                      _summaries.add(ContentSummary.blank(
+                                          _thisHomiletic.id));
                                     });
                                   },
                                   child: SizedBox(
                                       child: Row(
                                     children: const [
-                                      Padding(padding: EdgeInsets.only(left: 0, right: 10), child: Icon(Icons.add)),
+                                      Padding(
+                                          padding: EdgeInsets.only(
+                                              left: 0, right: 10),
+                                          child: Icon(Icons.add)),
                                       Text('Content')
                                     ],
                                   ))),
@@ -418,13 +511,16 @@ class _HomileticState extends State<HomileticEditor> {
                     child: Padding(
                         padding: const EdgeInsets.all(8),
                         child: Column(children: [
-                          const Text("Divisions", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+                          const Text("Divisions",
+                              style: TextStyle(
+                                  fontSize: 22, fontWeight: FontWeight.bold)),
                           ..._divisions.map((division) {
                             int index = _divisions.indexOf(division);
                             return Container(
                                 margin: const EdgeInsets.all(8),
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
                                       "${index + 1}:",
@@ -435,24 +531,30 @@ class _HomileticState extends State<HomileticEditor> {
                                         child: TextField(
                                             autofocus: true,
                                             keyboardType: TextInputType.text,
-                                            textCapitalization: TextCapitalization.sentences,
-                                            controller: TextEditingController(text: division.passage),
+                                            textCapitalization:
+                                                TextCapitalization.sentences,
+                                            controller: TextEditingController(
+                                                text: division.passage),
                                             decoration: const InputDecoration(
                                               labelText: 'Verses',
                                               border: OutlineInputBorder(),
                                             ),
                                             onChanged: (String value) async {
-                                              await _divisions[index].updatePassage(value);
+                                              await _divisions[index]
+                                                  .updatePassage(value);
                                               await _thisHomiletic.update();
                                             })),
                                     Expanded(
                                         child: TextField(
                                             keyboardType: TextInputType.text,
-                                            textCapitalization: TextCapitalization.sentences,
-                                            controller: TextEditingController(text: division.title),
+                                            textCapitalization:
+                                                TextCapitalization.sentences,
+                                            controller: TextEditingController(
+                                                text: division.title),
                                             onSubmitted: (_) {
                                               setState(() {
-                                                _divisions.add(Division.blank(_thisHomiletic.id));
+                                                _divisions.add(Division.blank(
+                                                    _thisHomiletic.id));
                                               });
                                             },
                                             decoration: const InputDecoration(
@@ -468,47 +570,62 @@ class _HomileticState extends State<HomileticEditor> {
                                   ],
                                 ));
                           }),
-                          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                            ElevatedButton(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: const [
-                                    Padding(padding: EdgeInsets.only(left: 10, right: 10), child: Icon(Icons.remove)),
-                                    Text('Remove')
-                                  ],
-                                ),
-                                onPressed: _divisions.isNotEmpty
-                                    ? () async {
-                                        try {
-                                          await _divisions[_divisions.length - 1].delete();
-                                          setState(() {
-                                            _divisions.removeLast();
-                                          });
-                                        } catch (error) {
-                                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                            content: const Text("Removing that Division didn't work"),
-                                            action: SnackBarAction(
-                                              onPressed: () {},
-                                              label: "Ok",
-                                            ),
-                                          ));
-                                          sendError(error, "Remove Divisions");
-                                        }
-                                      }
-                                    : null),
-                            ElevatedButton(
-                                onPressed: () {
-                                  setState(() {
-                                    _divisions.add(Division.blank(_thisHomiletic.id));
-                                  });
-                                },
-                                child: Row(
-                                  children: const [
-                                    Padding(padding: EdgeInsets.only(left: 0, right: 10), child: Icon(Icons.add)),
-                                    Text('Division')
-                                  ],
-                                )),
-                          ]),
+                          Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                ElevatedButton(
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: const [
+                                        Padding(
+                                            padding: EdgeInsets.only(
+                                                left: 10, right: 10),
+                                            child: Icon(Icons.remove)),
+                                        Text('Remove')
+                                      ],
+                                    ),
+                                    onPressed: _divisions.isNotEmpty
+                                        ? () async {
+                                            try {
+                                              await _divisions[
+                                                      _divisions.length - 1]
+                                                  .delete();
+                                              setState(() {
+                                                _divisions.removeLast();
+                                              });
+                                            } catch (error) {
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(SnackBar(
+                                                content: const Text(
+                                                    "Removing that Division didn't work"),
+                                                action: SnackBarAction(
+                                                  onPressed: () {},
+                                                  label: "Ok",
+                                                ),
+                                              ));
+                                              sendError(
+                                                  error, "Remove Divisions");
+                                            }
+                                          }
+                                        : null),
+                                ElevatedButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        _divisions.add(
+                                            Division.blank(_thisHomiletic.id));
+                                      });
+                                    },
+                                    child: Row(
+                                      children: const [
+                                        Padding(
+                                            padding: EdgeInsets.only(
+                                                left: 0, right: 10),
+                                            child: Icon(Icons.add)),
+                                        Text('Division')
+                                      ],
+                                    )),
+                              ]),
                         ]))),
                 const SizedBox(height: 20),
                 Card(
@@ -516,20 +633,25 @@ class _HomileticState extends State<HomileticEditor> {
                     child: Padding(
                         padding: const EdgeInsets.all(8),
                         child: Column(children: [
-                          const Text("Summary Sentence", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+                          const Text("Summary Sentence",
+                              style: TextStyle(
+                                  fontSize: 22, fontWeight: FontWeight.bold)),
                           Container(
                               margin: const EdgeInsets.all(8),
                               child: TextField(
                                   maxLines: null,
                                   keyboardType: TextInputType.text,
-                                  textCapitalization: TextCapitalization.sentences,
-                                  controller: TextEditingController(text: _thisHomiletic.subjectSentence),
+                                  textCapitalization:
+                                      TextCapitalization.sentences,
+                                  controller: TextEditingController(
+                                      text: _thisHomiletic.subjectSentence),
                                   decoration: const InputDecoration(
                                     hintText: 'Summarize: 10 words or fewer',
                                     border: OutlineInputBorder(),
                                   ),
                                   onChanged: (String ss) async {
-                                    await _thisHomiletic.updateSubjectSentence(ss);
+                                    await _thisHomiletic
+                                        .updateSubjectSentence(ss);
                                   })),
                         ]))),
                 const SizedBox(height: 20),
@@ -538,16 +660,21 @@ class _HomileticState extends State<HomileticEditor> {
                     child: Padding(
                         padding: const EdgeInsets.all(8),
                         child: Column(children: [
-                          const Text("Aim", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+                          const Text("Aim",
+                              style: TextStyle(
+                                  fontSize: 22, fontWeight: FontWeight.bold)),
                           Container(
                               margin: const EdgeInsets.all(8),
                               child: TextField(
                                   maxLines: null,
                                   keyboardType: TextInputType.multiline,
-                                  textCapitalization: TextCapitalization.sentences,
-                                  controller: TextEditingController(text: _thisHomiletic.aim),
+                                  textCapitalization:
+                                      TextCapitalization.sentences,
+                                  controller: TextEditingController(
+                                      text: _thisHomiletic.aim),
                                   decoration: const InputDecoration(
-                                    labelText: 'Cause the audience to learn that...',
+                                    labelText:
+                                        'Cause the audience to learn that...',
                                     border: OutlineInputBorder(),
                                   ),
                                   onChanged: (String aim) async {
@@ -560,7 +687,9 @@ class _HomileticState extends State<HomileticEditor> {
                     child: Padding(
                         padding: const EdgeInsets.all(8),
                         child: Column(children: [
-                          const Text("Application Questions", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+                          const Text("Application Questions",
+                              style: TextStyle(
+                                  fontSize: 22, fontWeight: FontWeight.bold)),
                           ..._applications.map((application) {
                             // int index = _applications.indexOf(application);
                             return Container(
@@ -570,15 +699,18 @@ class _HomileticState extends State<HomileticEditor> {
                                     autofocus: true,
                                     maxLines: null,
                                     keyboardType: TextInputType.text,
-                                    textCapitalization: TextCapitalization.sentences,
-                                    controller: TextEditingController(text: application.text),
+                                    textCapitalization:
+                                        TextCapitalization.sentences,
+                                    controller: TextEditingController(
+                                        text: application.text),
                                     decoration: const InputDecoration(
                                       hintText: 'How can I...',
                                       border: OutlineInputBorder(),
                                     ),
                                     onSubmitted: (_) {
                                       setState(() {
-                                        _applications.add(Application.blank(_thisHomiletic.id));
+                                        _applications.add(Application.blank(
+                                            _thisHomiletic.id));
                                       });
                                     },
                                     onChanged: (value) async {
@@ -588,53 +720,70 @@ class _HomileticState extends State<HomileticEditor> {
                           }),
                           Padding(
                               padding: const EdgeInsets.only(bottom: 10),
-                              child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                                ElevatedButton(
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      children: const [
-                                        Padding(padding: EdgeInsets.only(left: 10, right: 10), child: Icon(Icons.remove)),
-                                        Text('Remove')
-                                      ],
-                                    ),
-                                    onPressed: _applications.isNotEmpty
-                                        ? () async {
-                                            try {
-                                              await _applications[_applications.length - 1].delete();
-                                              setState(() {
-                                                _applications.removeLast();
-                                              });
-                                            } catch (error) {
-                                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                                content: const Text("Removing that Application didn't work"),
-                                                action: SnackBarAction(
-                                                  onPressed: () {},
-                                                  label: "Ok",
-                                                ),
-                                              ));
-                                              sendError(error, "Remove applicatoin");
-                                            }
-                                          }
-                                        : null),
-                                ElevatedButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        _applications.add(Application.blank(_thisHomiletic.id));
-                                      });
-                                    },
-                                    child: Row(
-                                      children: const [
-                                        Padding(padding: EdgeInsets.only(left: 0, right: 10), child: Icon(Icons.add)),
-                                        SizedBox(
-                                            width: 90,
-                                            child: Text(
-                                              'Application',
-                                              maxLines: 1,
-                                              overflow: TextOverflow.fade,
-                                            ))
-                                      ],
-                                    )),
-                              ])),
+                              child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    ElevatedButton(
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: const [
+                                            Padding(
+                                                padding: EdgeInsets.only(
+                                                    left: 10, right: 10),
+                                                child: Icon(Icons.remove)),
+                                            Text('Remove')
+                                          ],
+                                        ),
+                                        onPressed: _applications.isNotEmpty
+                                            ? () async {
+                                                try {
+                                                  await _applications[
+                                                          _applications.length -
+                                                              1]
+                                                      .delete();
+                                                  setState(() {
+                                                    _applications.removeLast();
+                                                  });
+                                                } catch (error) {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(SnackBar(
+                                                    content: const Text(
+                                                        "Removing that Application didn't work"),
+                                                    action: SnackBarAction(
+                                                      onPressed: () {},
+                                                      label: "Ok",
+                                                    ),
+                                                  ));
+                                                  sendError(error,
+                                                      "Remove applicatoin");
+                                                }
+                                              }
+                                            : null),
+                                    ElevatedButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            _applications.add(Application.blank(
+                                                _thisHomiletic.id));
+                                          });
+                                        },
+                                        child: Row(
+                                          children: const [
+                                            Padding(
+                                                padding: EdgeInsets.only(
+                                                    left: 0, right: 10),
+                                                child: Icon(Icons.add)),
+                                            SizedBox(
+                                                width: 90,
+                                                child: Text(
+                                                  'Application',
+                                                  maxLines: 1,
+                                                  overflow: TextOverflow.fade,
+                                                ))
+                                          ],
+                                        )),
+                                  ])),
                         ]))),
                 const HelpMenu(),
                 SizedBox(

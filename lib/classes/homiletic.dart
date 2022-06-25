@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:homiletics/classes/Division.dart';
 import 'package:homiletics/classes/application.dart';
 import 'package:homiletics/classes/content_summary.dart';
@@ -16,7 +17,12 @@ class Homiletic {
   int id;
   DateTime? updatedAt;
 
-  Homiletic({this.passage = '', this.subjectSentence = '', this.aim = '', this.id = -1, this.updatedAt});
+  Homiletic(
+      {this.passage = '',
+      this.subjectSentence = '',
+      this.aim = '',
+      this.id = -1,
+      this.updatedAt});
 
   factory Homiletic.fromJson(Map<String, dynamic> json) {
     return Homiletic(
@@ -36,10 +42,12 @@ class Homiletic {
       };
 
   Future<void> update() async {
-    if (id == -1) {
-      id = await insertHomiletic(this);
-    } else {
-      await updateHomiletic(this);
+    if (!kIsWeb) {
+      if (id == -1) {
+        id = await insertHomiletic(this);
+      } else {
+        await updateHomiletic(this);
+      }
     }
   }
 
@@ -63,6 +71,11 @@ class Homiletic {
     List<Application> applications = await deleteApplicationByHomileticId(id);
     List<Division> divisions = await deleteDivisionByHomileticId(id);
     await deleteHomiletic(this);
-    return {"summaries": summaries, "applications": applications, "divisions": divisions, "homiletic": this};
+    return {
+      "summaries": summaries,
+      "applications": applications,
+      "divisions": divisions,
+      "homiletic": this
+    };
   }
 }

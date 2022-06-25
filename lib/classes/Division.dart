@@ -1,5 +1,6 @@
 // ignore_for_file: file_names
 
+import 'package:flutter/foundation.dart';
 import 'package:homiletics/storage/division_storage.dart';
 
 class Division {
@@ -27,10 +28,12 @@ class Division {
   }
 
   Future<void> update() async {
-    if (id == null) {
-      id = await insertDivision(this);
-    } else {
-      await updateDivision(this);
+    if (!kIsWeb) {
+      if (id == null) {
+        id = await insertDivision(this);
+      } else {
+        await updateDivision(this);
+      }
     }
   }
 

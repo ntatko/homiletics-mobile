@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:homiletics/storage/content_summary_storage.dart';
 
 class ContentSummary {
@@ -28,10 +29,12 @@ class ContentSummary {
   }
 
   Future<void> update() async {
-    if (id == null) {
-      id = await insertSummary(this);
-    } else {
-      await updateSummary(this);
+    if (!kIsWeb) {
+      if (id == null) {
+        id = await insertSummary(this);
+      } else {
+        await updateSummary(this);
+      }
     }
   }
 
