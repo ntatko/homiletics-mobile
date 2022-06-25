@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:homiletics/storage/application_storage.dart';
 
 class Application {
@@ -20,10 +21,12 @@ class Application {
   }
 
   Future<void> update() async {
-    if (id == null) {
-      id = await insertApplication(this);
-    } else {
-      await updateApplication(this);
+    if (!kIsWeb) {
+      if (id == null) {
+        id = await insertApplication(this);
+      } else {
+        await updateApplication(this);
+      }
     }
   }
 
