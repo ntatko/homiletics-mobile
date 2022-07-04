@@ -47,7 +47,7 @@ class _HomeState extends State<Home> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => const SearchPage())),
-                child: SearchBar()),
+                child: const SearchBar()),
             const CurrentLessonActions(),
             const StartActivity(),
             const ApplicationList(),
