@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class SearchBar extends StatelessWidget {
-  void Function()? onTap;
-  void Function(String)? onChanged;
-  void Function(String)? onSubmitted;
-  Icon icon;
-  void Function()? onIconPressed;
-  bool autofocus;
-  bool enabled;
-  SearchBar({
+  final void Function()? onTap;
+  final void Function(String)? onChanged;
+  final Icon icon;
+  final void Function()? onIconPressed;
+  final bool autofocus;
+  final bool enabled;
+  const SearchBar({
     Key? key,
     this.onTap,
     this.onChanged,
@@ -24,7 +24,6 @@ class SearchBar extends StatelessWidget {
       padding: const EdgeInsets.all(20),
       child: TextField(
         enabled: enabled,
-        onSubmitted: onSubmitted,
         onTap: onTap,
         autofocus: autofocus,
         onChanged: onChanged,
@@ -40,7 +39,7 @@ class SearchBar extends StatelessWidget {
                     icon: icon,
                     onPressed: onIconPressed,
                   ),
-            fillColor: Color.fromARGB(255, 206, 231, 255)),
+            fillColor: const Color.fromARGB(255, 206, 231, 255)),
       ),
     );
   }
