@@ -33,7 +33,8 @@ Future<List<Homiletic>> getAllHomiletics() async {
       return [];
     }
 
-    return List.generate(maps.length, (index) => Homiletic.fromJson(maps[index]));
+    return List.generate(
+        maps.length, (index) => Homiletic.fromJson(maps[index]));
   } catch (error) {
     sendError(error, "getAllHomiletics");
     throw Exception("Failed to get all homiletics");
@@ -44,7 +45,8 @@ Future<Homiletic> getHomileticById(int id) async {
   try {
     final Database db = await database;
 
-    final List<Map<String, dynamic>> maps = await db.query('homiletics', where: 'id = ?', whereArgs: [id]);
+    final List<Map<String, dynamic>> maps =
+        await db.query('homiletics', where: 'id = ?', whereArgs: [id]);
     return Homiletic.fromJson(maps[0]);
   } catch (error) {
     sendError(error, "getHomileticById");
@@ -76,7 +78,8 @@ Future<int> insertHomiletic(Homiletic homiletic) async {
     final Database db = await database;
     homiletic.updatedAt = DateTime.now();
 
-    return await db.insert('homiletics', homiletic.toJson()..remove('id'), conflictAlgorithm: ConflictAlgorithm.replace);
+    return await db.insert('homiletics', homiletic.toJson()..remove('id'),
+        conflictAlgorithm: ConflictAlgorithm.replace);
   } catch (error) {
     sendError(error, "insertHomiletic");
     throw Exception("Failed to insert homiletic");
@@ -88,7 +91,8 @@ Future<void> updateHomiletic(Homiletic homiletic) async {
     final Database db = await database;
     homiletic.updatedAt = DateTime.now();
 
-    await db.update('homiletics', homiletic.toJson()..remove('id'), where: 'id = ?', whereArgs: [homiletic.id]);
+    await db.update('homiletics', homiletic.toJson()..remove('id'),
+        where: 'id = ?', whereArgs: [homiletic.id]);
   } catch (error) {
     sendError(error, "updateHomiletic");
     throw Exception("Failed to update homiletic");
@@ -103,5 +107,50 @@ Future<void> deleteHomiletic(Homiletic homiletic) async {
   } catch (error) {
     sendError(error, "deleteHomiletic");
     throw Exception("Failed to delete homiletic");
+  }
+}
+
+Future<List<Homiletic>> getHomileticsByPassageText(String text) async {
+  try {
+    final Database db = await database;
+
+    final List<Map<String, dynamic>> maps = await db
+        .query('homiletics', where: 'passage LIKE ?', whereArgs: ['%$text%']);
+    return List.generate(maps.length, (i) {
+      return Homiletic.fromJson(maps[i]);
+    });
+  } catch (error) {
+    sendError(error, "getHomileticsByText");
+    throw Exception("Failed to get homiletics by text");
+  }
+}
+
+Future<List<Homiletic>> getHomileticsBySummarySentenceText(String text) async {
+  try {
+    final Database db = await database;
+
+    final List<Map<String, dynamic>> maps = await db.query('homiletics',
+        where: 'subject_sentence LIKE ?', whereArgs: ['%$text%']);
+    return List.generate(maps.length, (i) {
+      return Homiletic.fromJson(maps[i]);
+    });
+  } catch (error) {
+    sendError(error, "getHomileticsByText");
+    throw Exception("Failed to get homiletics by text");
+  }
+}
+
+Future<List<Homiletic>> getHomileticsByAimText(String text) async {
+  try {
+    final Database db = await database;
+
+    final List<Map<String, dynamic>> maps = await db
+        .query('homiletics', where: 'aim LIKE ?', whereArgs: ['%$text%']);
+    return List.generate(maps.length, (i) {
+      return Homiletic.fromJson(maps[i]);
+    });
+  } catch (error) {
+    sendError(error, "getHomileticsByText");
+    throw Exception("Failed to get homiletics by text");
   }
 }

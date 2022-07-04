@@ -108,3 +108,21 @@ Future<List<Division>> deleteDivisionByHomileticId(int id) async {
     throw Exception("Failed to delete divisions by homiletics");
   }
 }
+
+Future<List<Division>> getDivisionByText(String text) async {
+  try {
+    final Database db = await database;
+
+    final List<Map<String, dynamic>> maps = await db
+        .query('divisions', where: 'title LIKE ?', whereArgs: ['%$text%']);
+
+    if (maps.isEmpty) {
+      return [];
+    }
+    return List.generate(
+        maps.length, (index) => Division.fromJson(maps[index]));
+  } catch (error) {
+    sendError(error, "getDivisionByText");
+    throw Exception("Failed to get Division By Text");
+  }
+}

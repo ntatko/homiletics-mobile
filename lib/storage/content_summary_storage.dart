@@ -110,3 +110,20 @@ Future<List<ContentSummary>> deleteSummaryByHomileticId(int id) async {
     throw Exception("Failed to delete summaries");
   }
 }
+
+Future<List<ContentSummary>> getSummaryByText(String text) async {
+  try {
+    final Database db = await database;
+
+    final List<Map<String, dynamic>> maps = await db.query('content_summaries',
+        where: 'summary LIKE ?', whereArgs: ['%$text%']);
+    if (maps.isEmpty) {
+      return [];
+    }
+    return List.generate(
+        maps.length, (index) => ContentSummary.fromJson(maps[index]));
+  } catch (error) {
+    sendError(error, "getSummaryByText");
+    throw Exception("Failed to get summaries by text");
+  }
+}

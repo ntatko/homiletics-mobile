@@ -117,3 +117,21 @@ Future<List<Application>> getAllApplications() async {
     throw Exception("Failed to get all applications");
   }
 }
+
+Future<List<Application>> getApplicationsByText(String text) async {
+  try {
+    final Database db = await database;
+
+    final List<Map<String, dynamic>> maps = await db
+        .query('applications', where: 'text LIKE ?', whereArgs: ['%$text%']);
+
+    if (maps.isEmpty) {
+      return [];
+    }
+    return List.generate(
+        maps.length, (index) => Application.fromJson(maps[index]));
+  } catch (error) {
+    sendError(error, "getApplicationsByText");
+    throw Exception("Failed to get applications by text");
+  }
+}

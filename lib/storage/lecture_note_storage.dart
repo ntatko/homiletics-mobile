@@ -94,3 +94,22 @@ Future<void> deleteLectureNote(LectureNote note) async {
     throw Exception("failed to update lecture note");
   }
 }
+
+Future<List<LectureNote>> getLectureNoteByText(String text) async {
+  try {
+    final Database db = await database;
+
+    final List<Map<String, dynamic>> maps = await db
+        .query('lectures', where: 'note LIKE ?', whereArgs: ['%$text%']);
+
+    if (maps.isEmpty) {
+      return [];
+    }
+
+    return List.generate(
+        maps.length, (index) => LectureNote.fromJson(maps[index]));
+  } catch (error) {
+    sendError(error, "getLectureNoteByText");
+    throw Exception("failed to get lecture notes");
+  }
+}
