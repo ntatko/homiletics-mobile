@@ -3,6 +3,9 @@ name: Caprover deployment
 on:
   push:
     branches: [ main ]
+    paths:
+      - lib/**
+
 
 jobs:
   push:
