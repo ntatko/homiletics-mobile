@@ -12,7 +12,10 @@ class User {
   @HiveField(1)
   String preferredVersion;
 
-  User({this.preferredVersion = "web"}) {
+  @HiveField(2)
+  String preferredLanguage;
+
+  User({this.preferredVersion = "web", this.preferredLanguage = "en"}) {
     const uuid = Uuid();
 
     // these are always set automatically & cannot be changed after initialized

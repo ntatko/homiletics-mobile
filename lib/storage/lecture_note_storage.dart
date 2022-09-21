@@ -8,19 +8,39 @@ import 'package:sqflite/sqflite.dart';
 final Future<Database> database = getDatabasesPath().then((String path) {
   return openDatabase(
     join(path, 'lectures.db'),
+    onUpgrade: onUpgrade,
     onCreate: (db, version) {
       return db.execute('''
             CREATE TABLE lectures (
               id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
               note TEXT,
               passage TEXT,
-              time TEXT
+              time TEXT,
+              recording_path TEXT
             )
             ''');
     },
-    version: 1,
+    version: 2,
   );
 });
+
+Future<void> onUpgrade(Database db, int oldVersion, int newVersion) async {
+  for (var version = oldVersion + 1; version <= newVersion; version++) {
+    switch (version) {
+      case 1:
+        {
+          // Version 1 - no changes
+          break;
+        }
+      case 2:
+        {
+          await db
+              .execute('ALTER TABLE lectures ADD COLUMN recording_path TEXT');
+          break;
+        }
+    }
+  }
+}
 
 Future<List<LectureNote>> getLectureNotes() async {
   try {
@@ -49,7 +69,8 @@ Future<void> resetLectureNoteTable() async {
               id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
               note TEXT,
               passage TEXT,
-              time TEXT
+              time TEXT,
+              recording_path TEXT
             )
             ''');
   } catch (error) {

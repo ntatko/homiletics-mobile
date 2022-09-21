@@ -1,9 +1,33 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:homiletics/classes/preferences.dart';
 import 'package:homiletics/pages/home.dart';
 import 'package:matomo/matomo.dart';
+import 'package:path/path.dart' as path;
+import 'package:path_provider/path_provider.dart';
 
 void main() async {
   runApp(MyApp());
+
+  try {
+    // if the /hive directory does not exist, make it
+    Directory appDir = await getApplicationDocumentsDirectory();
+    Directory hiveDir = Directory(path.join(appDir.path, 'hive'));
+
+    // create a hive directory if it does not exist
+    if (!(await hiveDir.exists())) {
+      await hiveDir.create(recursive: true);
+    }
+
+    // configure hive (hive boxes MUST BE OPEN BEFORE UI IS RENDERED)
+    Hive.init(hiveDir.path);
+
+    await Preferences.init();
+  } catch (e) {
+    print(e);
+  }
 }
 
 class MyApp extends TraceableStatelessWidget {

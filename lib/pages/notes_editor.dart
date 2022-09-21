@@ -44,7 +44,10 @@ class _NotesState extends State<NotesEditor> {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
-              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const Home()), (r) => false);
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Home()),
+                  (r) => false);
             },
           ),
           actions: [
@@ -53,7 +56,9 @@ class _NotesState extends State<NotesEditor> {
                   switch (value) {
                     case 0:
                       Navigator.pushAndRemoveUntil(
-                          context, MaterialPageRoute(builder: (context) => const Home()), (r) => false);
+                          context,
+                          MaterialPageRoute(builder: (context) => const Home()),
+                          (r) => false);
                       return;
                     case 1:
                       showDialog(
@@ -64,23 +69,33 @@ class _NotesState extends State<NotesEditor> {
                               content: const Text(
                                   "Deleting this Lecture Note is permanent and cannot be undone. Are you sure you wish to proceed?"),
                               actions: [
-                                TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
+                                TextButton(
+                                    onPressed: () => Navigator.pop(context),
+                                    child: const Text('Cancel')),
                                 TextButton(
                                   onPressed: () async {
                                     try {
                                       await _thisNote.delete();
                                       Navigator.pushAndRemoveUntil(
-                                          context, MaterialPageRoute(builder: (context) => const Home()), (r) => false);
-                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                        content: const Text("Lecture Note Deleted"),
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const Home()),
+                                          (r) => false);
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                        content:
+                                            const Text("Lecture Note Deleted"),
                                         action: SnackBarAction(
                                           onPressed: () {},
                                           label: "Ok",
                                         ),
                                       ));
                                     } catch (error) {
-                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                        content: const Text("Something went wrong. Try again soon."),
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                        content: const Text(
+                                            "Something went wrong. Try again soon."),
                                         action: SnackBarAction(
                                           onPressed: () {},
                                           label: "Ok",
@@ -91,7 +106,7 @@ class _NotesState extends State<NotesEditor> {
                                   },
                                   child: const Text("Delete"),
                                   style: TextButton.styleFrom(
-                                    primary: Colors.red,
+                                    foregroundColor: Colors.red,
                                   ),
                                 )
                               ],
@@ -125,7 +140,10 @@ class _NotesState extends State<NotesEditor> {
                 },
                 icon: const Icon(Icons.menu),
                 itemBuilder: (context) => [
-                      const PopupMenuItem(child: ListTile(leading: Icon(Icons.save), title: Text("Save")), value: 0),
+                      const PopupMenuItem(
+                          child: ListTile(
+                              leading: Icon(Icons.save), title: Text("Save")),
+                          value: 0),
                       const PopupMenuItem(
                           child: ListTile(
                             title: Text('Delete'),
@@ -168,7 +186,9 @@ class _NotesState extends State<NotesEditor> {
                     child: Container(
                       height: 5,
                       width: 40,
-                      decoration: BoxDecoration(color: Colors.grey, borderRadius: BorderRadius.circular(300)),
+                      decoration: BoxDecoration(
+                          color: Colors.grey,
+                          borderRadius: BorderRadius.circular(300)),
                     ),
                   )),
               SizedBox(
@@ -180,7 +200,8 @@ class _NotesState extends State<NotesEditor> {
                         child: TextField(
                           keyboardType: TextInputType.text,
                           textCapitalization: TextCapitalization.sentences,
-                          controller: TextEditingController(text: _thisNote.passage),
+                          controller:
+                              TextEditingController(text: _thisNote.passage),
                           decoration: const InputDecoration(
                             border: OutlineInputBorder(),
                           ),
@@ -193,7 +214,7 @@ class _NotesState extends State<NotesEditor> {
                       width: 75,
                       child: DropdownButton(
                         items: [
-                          ...bibleTranslations
+                          ...Translation.all
                               .map((e) => DropdownMenuItem(
                                     child: Text(
                                       e.short,
@@ -220,16 +241,21 @@ class _NotesState extends State<NotesEditor> {
                     child: Container(
                       height: 5,
                       width: 40,
-                      decoration: BoxDecoration(color: Colors.grey, borderRadius: BorderRadius.circular(300)),
+                      decoration: BoxDecoration(
+                          color: Colors.grey,
+                          borderRadius: BorderRadius.circular(300)),
                     ),
                   )),
-              VerseContainer(passage: _thisNote.passage, controller: _controller, version: _translationVersion)
+              VerseContainer(
+                  passage: _thisNote.passage, translation: Translation.web)
             ]),
             body: Center(
                 child: ListView(padding: const EdgeInsets.all(15), children: [
               Container(
                   margin: const EdgeInsets.only(top: 5, bottom: 10),
-                  child: const Text("Notes", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold))),
+                  child: const Text("Notes",
+                      style: TextStyle(
+                          fontSize: 22, fontWeight: FontWeight.bold))),
               TextField(
                 keyboardType: TextInputType.multiline,
                 textCapitalization: TextCapitalization.sentences,

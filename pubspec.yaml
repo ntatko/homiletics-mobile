@@ -51,6 +51,8 @@ dependencies:
   path_provider: ^2.0.9
   printing: ^5.7.5
   matomo: ^1.1.0
+  split_view: ^3.2.1
+  material_floating_search_bar: ^0.3.7
 
 dev_dependencies:
   flutter_test:

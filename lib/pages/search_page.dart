@@ -3,53 +3,11 @@ import 'package:homiletics/classes/Division.dart';
 import 'package:homiletics/classes/application.dart';
 import 'package:homiletics/classes/content_summary.dart';
 import 'package:homiletics/classes/homiletic.dart';
-import 'package:homiletics/components/search_bar.dart';
 import 'package:homiletics/pages/homeletic_editor.dart';
 import 'package:homiletics/storage/application_storage.dart';
 import 'package:homiletics/storage/content_summary_storage.dart';
 import 'package:homiletics/storage/division_storage.dart';
 import 'package:homiletics/storage/homiletic_storage.dart';
-
-class SearchPage extends StatefulWidget {
-  const SearchPage({Key? key}) : super(key: key);
-
-  @override
-  _SearchPageState createState() => _SearchPageState();
-}
-
-class _SearchPageState extends State<SearchPage> {
-  String _searchString = '';
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        body: SafeArea(
-      child: Column(children: [
-        SearchBar(
-            enabled: true,
-            autofocus: true,
-            icon: const Icon(Icons.chevron_left),
-            onIconPressed: () => Navigator.pop(context),
-            onChanged: (String s) => setState(() {
-                  _searchString = s;
-                })),
-        Expanded(
-            child: _searchString.isEmpty
-                ? const Center(child: Text("Search to find results"))
-                : ListView(
-                    children: [
-                      ContentSearches(searchString: _searchString),
-                      DivisionSearches(searchString: _searchString),
-                      ApplicationSearches(searchString: _searchString),
-                      AimSearches(searchString: _searchString),
-                      SummarySentenceSearches(searchString: _searchString),
-                      PassageSearches(searchString: _searchString),
-                    ],
-                  ))
-      ]),
-    ));
-  }
-}
 
 // ignore: must_be_immutable
 class ContentSearches extends StatelessWidget {

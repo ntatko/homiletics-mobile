@@ -1,7 +1,7 @@
-// ignore_for_file: library_prefixes
+import 'dart:convert';
 
 import 'package:homiletics/classes/translation.dart';
-import 'package:bible/bible.dart' as Bible;
+import 'package:http/http.dart' as http;
 
 class Passage {
   int chapter;
@@ -17,8 +17,8 @@ class Passage {
 
   factory Passage.fromJson(Map<String, dynamic> json) {
     return Passage(
-        chapter: json['chapter'],
-        verse: json['verse'],
+        chapter: int.parse(json['chapter']),
+        verse: int.parse(json['verse']),
         text: json['text'],
         book: json['book_name']);
   }
@@ -32,19 +32,46 @@ class Passage {
   }
 }
 
-Future<List<Passage>> fetchPassage(
+Future<PassageResponse> fetchPassage(
     String reference, Translation? version) async {
-  var passage = await Bible.queryPassage(reference,
-      providerName: version?.source ?? 'bibleapi',
-      version: version?.code ?? 'web');
+  try {
+    var response = await http.get(Uri.parse(
+        'https://homiletics-dart-api.cloud.zipidy.org/passages?passage=$reference&version=${version?.code ?? 'web'}'));
 
-  if (passage != null && passage.verses != null && passage.verses!.isNotEmpty) {
-    return passage.verses!.values.map((value) {
-      String key = passage.verses!.keys
-          .toList()[passage.verses!.values.toList().indexOf(value)];
-      return Passage.fromQuery(key, value!);
-    }).toList();
-  } else {
-    throw Exception('Failed to load scheduled passages');
+    if (response.statusCode == 200) {
+      return PassageResponse.fromJson(jsonDecode(response.body));
+    } else {
+      throw Exception('Failed to load passage');
+    }
+  } catch (e) {
+    throw Exception('Failed to load passage');
+  }
+}
+
+class PassageResponse {
+  final List<Passage> verses;
+  final String reference;
+  final String text;
+  final String versionCode;
+
+  PassageResponse(
+      {required this.verses,
+      required this.reference,
+      required this.text,
+      required this.versionCode});
+
+  factory PassageResponse.fromJson(Map<String, dynamic> json) {
+    try {
+      var list = json['verses'] as List;
+      List<Passage> passages = list.map((i) => Passage.fromJson(i)).toList();
+
+      return PassageResponse(
+          verses: passages,
+          reference: json['reference'].toString(),
+          text: json['text'].toString(),
+          versionCode: json['translation_id'].toString());
+    } catch (error) {
+      throw Exception('Failed to load passage');
+    }
   }
 }
