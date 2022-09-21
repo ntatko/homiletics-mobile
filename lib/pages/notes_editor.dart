@@ -246,8 +246,11 @@ class _NotesState extends State<NotesEditor> {
                           borderRadius: BorderRadius.circular(300)),
                     ),
                   )),
-              VerseContainer(
-                  passage: _thisNote.passage, translation: Translation.web)
+              Container(
+                  padding: const EdgeInsets.only(top: 40),
+                  height: MediaQuery.of(context).size.height * 0.56,
+                  child: VerseContainer(
+                      passage: _thisNote.passage, translation: Translation.web))
             ]),
             body: Center(
                 child: ListView(padding: const EdgeInsets.all(15), children: [
