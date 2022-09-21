@@ -83,32 +83,28 @@ class _HomeState extends State<Home> {
                   ),
                 ],
                 builder: (context, transition) {
-                  return Expanded(
-                      child: Container(
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(16)),
-                          height: MediaQuery.of(context).size.height / 2,
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: _searchString.isEmpty
-                              ? const Center(child: Text("Type to search..."))
-                              : ListView(
-                                  children: [
-                                    const SizedBox(height: 16),
-                                    ContentSearches(
-                                        searchString: _searchString),
-                                    DivisionSearches(
-                                        searchString: _searchString),
-                                    ApplicationSearches(
-                                        searchString: _searchString),
-                                    AimSearches(searchString: _searchString),
-                                    SummarySentenceSearches(
-                                        searchString: _searchString),
-                                    PassageSearches(
-                                        searchString: _searchString),
-                                    const SizedBox(height: 16),
-                                  ],
-                                )));
+                  return Container(
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(16)),
+                      height: MediaQuery.of(context).size.height / 2,
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: _searchString.isEmpty
+                          ? const Center(child: Text("Type to search..."))
+                          : ListView(
+                              children: [
+                                const SizedBox(height: 16),
+                                ContentSearches(searchString: _searchString),
+                                DivisionSearches(searchString: _searchString),
+                                ApplicationSearches(
+                                    searchString: _searchString),
+                                AimSearches(searchString: _searchString),
+                                SummarySentenceSearches(
+                                    searchString: _searchString),
+                                PassageSearches(searchString: _searchString),
+                                const SizedBox(height: 16),
+                              ],
+                            ));
                 },
               )),
             ])));

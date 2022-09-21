@@ -18,7 +18,8 @@ class PastLessons extends StatelessWidget {
 
           return snapshot.hasData
               ? Container(
-                  padding: const EdgeInsets.only(left: 10, right: 10, top: 0, bottom: 10),
+                  padding: const EdgeInsets.only(
+                      left: 10, right: 10, top: 0, bottom: 10),
                   child: DisplayLessons(snapshot.data?.reversed.toList() ?? []))
               : const SizedBox.shrink();
         });
@@ -37,7 +38,7 @@ class DisplayLessons extends StatelessWidget {
             color: Colors.blue[100],
             child: Container(
                 padding: const EdgeInsets.all(10),
-                child: Column(children: [
+                child: Column(mainAxisSize: MainAxisSize.min, children: [
                   Padding(
                       padding: const EdgeInsets.only(bottom: 10),
                       child: HomeHeader(
@@ -45,7 +46,10 @@ class DisplayLessons extends StatelessWidget {
                           onExpand: homiletics.length > 4
                               ? () {
                                   Navigator.push(
-                                      context, MaterialPageRoute(builder: (context) => LessonPage(homiletics: homiletics)));
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => LessonPage(
+                                              homiletics: homiletics)));
                                 }
                               : null)),
                   ...homiletics.map((homiletic) {
