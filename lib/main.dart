@@ -26,7 +26,7 @@ void main() async {
 
     await Preferences.init();
   } catch (e) {
-    print(e);
+    // print(e);
   }
 }
 
