@@ -3,7 +3,6 @@ import 'package:homiletics/classes/homiletic.dart';
 import 'package:homiletics/classes/lecture_note.dart';
 import 'package:homiletics/pages/homeletic_editor.dart';
 import 'package:homiletics/pages/notes_editor.dart';
-import 'package:matomo/matomo.dart';
 
 class StartActivity extends StatefulWidget {
   const StartActivity({Key? key}) : super(key: key);
@@ -75,7 +74,6 @@ class _StartActivityState extends State<StartActivity> {
                                             ElevatedButton(
                                                 child: const Text("Start"),
                                                 onPressed: () async {
-                                                  MatomoTracker.trackEvent("homiletics", "custom_homiletic_start");
                                                   Homiletic homiletic = Homiletic(passage: _homileticTitle);
                                                   await homiletic.update();
                                                   Navigator.push(
@@ -114,7 +112,6 @@ class _StartActivityState extends State<StartActivity> {
                                             ElevatedButton(
                                                 child: const Text("Start"),
                                                 onPressed: () async {
-                                                  MatomoTracker.trackEvent("lecture_note", "custom_note_start");
                                                   LectureNote note = LectureNote(passage: _lectureNoteTitle);
                                                   await note.update();
                                                   Navigator.push(context,

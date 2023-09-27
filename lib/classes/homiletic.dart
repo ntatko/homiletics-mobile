@@ -9,7 +9,7 @@ import 'package:homiletics/storage/homiletic_storage.dart';
 
 /// The bread and butter of the app. The [Homiletic] is a collection of [Division]s, [ContentSummary]s, and [Application]s.
 class Homiletic {
-  /// THe passage refered to by the homiletic.
+  /// The passage referred to by the homiletic.
   String passage;
 
   /// A list of [ContentSummary]s in the homiletic.

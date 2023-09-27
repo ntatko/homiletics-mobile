@@ -17,11 +17,10 @@ import 'package:homiletics/pages/home.dart';
 import 'package:homiletics/storage/application_storage.dart';
 import 'package:homiletics/storage/content_summary_storage.dart';
 import 'package:homiletics/storage/division_storage.dart';
-import 'package:matomo/matomo.dart';
 import 'package:homiletics/storage/pdf_generation.dart';
 import 'package:split_view/split_view.dart';
 
-class HomileticEditor extends TraceableStatefulWidget {
+class HomileticEditor extends StatefulWidget {
   const HomileticEditor({Key? key, this.homiletic}) : super(key: key);
 
   final Homiletic? homiletic;
@@ -126,6 +125,7 @@ class _HomileticState extends State<HomileticEditor> {
     ];
 
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: TextField(
             keyboardType: TextInputType.text,
