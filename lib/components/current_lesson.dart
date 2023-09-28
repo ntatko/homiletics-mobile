@@ -9,8 +9,6 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:homiletics/classes/passage_schedule.dart';
 import 'package:loggy/loggy.dart';
-import 'package:http_retry/http_retry.dart';
-import 'package:matomo/matomo.dart';
 
 class CurrentLesson extends StatefulWidget {
   final List<PassageSchedule> schedules;
@@ -86,7 +84,6 @@ class _CurrentLessonState extends State<CurrentLesson> {
                         child: const Text("Start Homiletics"),
                         onPressed: widget.schedules.isNotEmpty
                             ? () async {
-                                MatomoTracker.trackEvent("homiletics", "start_predefined");
                                 Homiletic homiletic = Homiletic(passage: selectedSchedule!.reference);
                                 await homiletic.update();
                                 Navigator.push(
@@ -97,7 +94,6 @@ class _CurrentLessonState extends State<CurrentLesson> {
                         child: const Text("Start Lecture Note"),
                         onPressed: widget.schedules.isNotEmpty
                             ? () async {
-                                MatomoTracker.trackEvent("lecture_note", "start_predefined");
                                 LectureNote note = LectureNote(passage: selectedSchedule!.reference);
                                 await note.update();
                                 Navigator.push(
@@ -125,7 +121,7 @@ class LoadingLesson extends StatelessWidget {
 }
 
 Future<List<PassageSchedule>> getWebPassages() async {
-  var client = RetryClient(http.Client(), whenError: (_, __) => true);
+  var client = http.Client();
 
   final response = await client.get(Uri.parse('https://homiletics.cloud.zipidy.org/items/assigned_passages?limit=-1'));
 
@@ -136,7 +132,6 @@ Future<List<PassageSchedule>> getWebPassages() async {
     schedules.sort((a, b) => a.expires.compareTo(b.expires));
     return schedules;
   } else {
-    sendError(Exception('Failed to load scheduled passages'), "getWebPassages");
     throw Exception('Failed to load scheduled passages');
   }
 }
@@ -155,7 +150,6 @@ class _CurrentLessonActionsState extends State<CurrentLessonActions> {
         future: getWebPassages(),
         builder: (context, htmlSnapshot) {
           if (htmlSnapshot.hasError) {
-            sendError(Exception(htmlSnapshot.error), "Fetch passages");
             logError("${htmlSnapshot.error}");
           }
 

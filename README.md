@@ -1,12 +1,14 @@
-# homiletics
+# Homiletics
 
 [![Code and Tests](https://github.com/ntatko/homiletics-mobile/actions/workflows/dart.yml/badge.svg)](https://github.com/ntatko/homiletics-mobile/actions/workflows/dart.yml)
 
 The Homiletics Mobile App is a mobile application that allows users to create [BSF-style](https://www.bsfinternational.org) homiletics.
 
-## Getting Started
+## Hey, there's an issue!
 
-This app is 
+Great, thanks for coming all this way to report it! You can open a new issue [here](https://github.com/ntatko/homiletics-mobile/issues/new) or by clicking on the issues tab.
+
+## Getting Started
 
 ### Building
 

@@ -4,11 +4,10 @@ import 'package:homiletics/pages/home.dart';
 import 'package:homiletics/pages/homeletic_editor.dart';
 import 'package:homiletics/storage/homiletic_storage.dart';
 import 'package:loggy/loggy.dart';
-import 'package:matomo/matomo.dart';
 import 'package:string_to_hex/string_to_hex.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
-class HomileticsList extends TraceableStatelessWidget {
+class HomileticsList extends StatelessWidget {
   const HomileticsList({Key? key}) : super(key: key);
 
   @override

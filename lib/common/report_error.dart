@@ -3,13 +3,11 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'dart:io' show Platform;
 
-import 'package:matomo/matomo.dart';
 // import 'package:package_info_plus/package_info_plus.dart';
 
 Future<void> sendError(Object error, String identifier) async {
   // PackageInfo packageInfo = await PackageInfo.fromPlatform();
   var client = http.Client();
-  MatomoTracker.trackEvent('Error: $identifier', error.toString());
   await client.post(Uri.parse('https://homiletics.cloud.zipidy.org/items/app_errors'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',

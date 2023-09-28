@@ -6,7 +6,7 @@ import 'package:homiletics/components/past_lecture_notes.dart';
 import 'package:homiletics/components/past_lessons.dart';
 import 'package:homiletics/components/start_activity.dart';
 import 'package:homiletics/pages/search_page.dart';
-import 'package:material_floating_search_bar/material_floating_search_bar.dart';
+import 'package:material_floating_search_bar_2/material_floating_search_bar_2.dart';
 // import 'package:homiletics/storage/application_storage.dart';
 // import 'package:homiletics/storage/content_summary_storage.dart';
 // import 'package:homiletics/storage/division_storage.dart';

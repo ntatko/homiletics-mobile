@@ -25,7 +25,7 @@ class _PreferencesModalState extends State<PreferencesModal> {
       child: Container(
           padding: const EdgeInsets.all(12),
           child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-            Row(mainAxisAlignment: MainAxisAlignment.start, children: const [
+            const Row(mainAxisAlignment: MainAxisAlignment.start, children: [
               SizedBox(width: 12),
               Icon(Icons.settings),
               SizedBox(width: 12),
@@ -34,9 +34,9 @@ class _PreferencesModalState extends State<PreferencesModal> {
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
             ]),
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const <Widget>[
+              children: <Widget>[
                 Text('Preferred Language:'),
                 Text("English"),
                 // DropdownButton<String>(

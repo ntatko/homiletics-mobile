@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:homiletics/classes/homiletic.dart';
 import 'package:homiletics/common/homiletic_list_item.dart';
-import 'package:matomo/matomo.dart';
 
-class LessonPage extends TraceableStatelessWidget {
+class LessonPage extends StatelessWidget {
   final List<Homiletic> homiletics;
 
   const LessonPage({Key? key, required this.homiletics}) : super(key: key);

@@ -5,10 +5,9 @@ import 'package:homiletics/common/report_error.dart';
 import 'package:homiletics/common/verse_container.dart';
 import 'package:homiletics/components/help_menu.dart';
 import 'package:homiletics/pages/home.dart';
-import 'package:matomo/matomo.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
-class NotesEditor extends TraceableStatefulWidget {
+class NotesEditor extends StatefulWidget {
   const NotesEditor({Key? key, this.note}) : super(key: key);
 
   final LectureNote? note;

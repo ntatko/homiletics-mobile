@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:homiletics/classes/application.dart';
 import 'package:homiletics/common/application_list_item.dart';
-import 'package:matomo/matomo.dart';
 
-class ApplicationPage extends TraceableStatelessWidget {
+class ApplicationPage extends StatelessWidget {
   final List<Application> applications;
 
   const ApplicationPage({Key? key, required this.applications}): super(key: key);

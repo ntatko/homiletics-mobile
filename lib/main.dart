@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:homiletics/classes/preferences.dart';
 import 'package:homiletics/pages/home.dart';
-import 'package:matomo/matomo.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 
@@ -30,13 +29,7 @@ void main() async {
   }
 }
 
-class MyApp extends TraceableStatelessWidget {
-  MyApp({Key? key}) : super(key: key) {
-    MatomoTracker().initialize(
-      siteId: 4,
-      url: 'https://analytics.cloud.zipidy.org/matomo.php',
-    );
-  }
+class MyApp extends StatelessWidget {
 
   // This widget is the root of your application.
   @override
