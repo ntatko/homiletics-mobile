@@ -26,8 +26,39 @@ class ApplicationQuestionsCard extends StatelessWidget {
         child: Padding(
             padding: const EdgeInsets.all(8),
             child: Column(children: [
-              const Text("Application Questions",
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+              Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text("Application Questions",
+                          style: TextStyle(
+                              fontSize: 22, fontWeight: FontWeight.bold)),
+                      IconButton(
+                          icon: const Icon(Icons.info_outline),
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text("Application Questions"),
+                                  content: const Text(
+                                    "These are questions that help the audience apply what they've just heard to their own lives. They should be specific, personal, open-ended, and thought-provoking.",
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: const Text("Close"),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          }),
+                    ]),
+              ),
               ...applications.map((application) {
                 // int index = _applications.indexOf(application);
                 return Container(
@@ -55,72 +86,56 @@ class ApplicationQuestionsCard extends StatelessWidget {
                           await application.updateText(value);
                           await homiletic.update();
                         }));
-              }),
+              }).toList(),
               Padding(
-                  padding: const EdgeInsets.only(bottom: 10),
-                  child: Wrap(
-                      spacing: 20,
-                      runSpacing: 0,
-                      alignment: WrapAlignment.spaceBetween,
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      children: [
-                        ElevatedButton(
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: const [
-                                Padding(
-                                    padding:
-                                        EdgeInsets.only(left: 10, right: 10),
-                                    child: Icon(Icons.remove)),
-                                Text('Remove')
-                              ],
-                            ),
-                            onPressed: applications.isNotEmpty
-                                ? () async {
-                                    try {
-                                      removeApplication();
-                                      // await applications[
-                                      //         applications.length - 1]
-                                      //     .delete();
-                                      // setState(() {
-                                      //   _applications.removeLast();
-                                      // });
-                                    } catch (error) {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(SnackBar(
-                                        content: const Text(
-                                            "Removing that Application didn't work"),
-                                        action: SnackBarAction(
-                                          onPressed: () {},
-                                          label: "Ok",
-                                        ),
-                                      ));
-                                      sendError(error, "Remove application");
-                                    }
-                                  }
-                                : null),
-                        ElevatedButton(
-                            onPressed: () {
-                              addApplication();
-                            },
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: const [
-                                Padding(
-                                    padding:
-                                        EdgeInsets.only(left: 0, right: 10),
-                                    child: Icon(Icons.add)),
-                                SizedBox(
-                                    width: 90,
-                                    child: Text(
-                                      'Application',
-                                      maxLines: 1,
-                                      overflow: TextOverflow.fade,
-                                    ))
-                              ],
-                            )),
-                      ])),
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child:
+                      Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.all(8),
+                        minimumSize: const Size(40, 40),
+                      ),
+                      onPressed: applications.isNotEmpty
+                          ? () async {
+                              try {
+                                removeApplication();
+                              } catch (error) {
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(
+                                  content: const Text(
+                                      "Removing that Application didn't work"),
+                                  action: SnackBarAction(
+                                    onPressed: () {},
+                                    label: "Ok",
+                                  ),
+                                ));
+                                sendError(error, "Remove application");
+                              }
+                            }
+                          : null,
+                      child: const Icon(Icons.delete),
+                    ),
+                    const SizedBox(width: 5),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 0),
+                        minimumSize: const Size(0, 40),
+                      ),
+                      onPressed: () {
+                        addApplication();
+                      },
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.add, size: 20),
+                          const SizedBox(width: 4),
+                          Text('(${applications.length})'),
+                        ],
+                      ),
+                    ),
+                  ])),
             ])));
   }
 }

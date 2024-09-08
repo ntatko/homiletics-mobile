@@ -15,11 +15,17 @@ final Future<Database> database = getDatabasesPath().then((String path) {
               passage TEXT,
               subject_sentence TEXT,
               aim TEXT,
-              updated_at TEXT
+              updated_at TEXT,
+              fcf TEXT DEFAULT ''
             )
             ''');
     },
-    version: 1,
+    version: 2,
+    onUpgrade: (db, oldVersion, newVersion) {
+      if (oldVersion < 2) {
+        db.execute('ALTER TABLE homiletics ADD COLUMN fcf TEXT DEFAULT ""');
+      }
+    },
   );
 });
 
@@ -64,7 +70,8 @@ Future<void> resetTable() async {
               passage TEXT,
               subject_sentence TEXT,
               aim TEXT,
-              updated_at TEXT
+              updated_at TEXT,
+              fcf TEXT DEFAULT ''
             )
             ''');
   } catch (error) {

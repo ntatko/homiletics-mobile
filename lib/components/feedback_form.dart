@@ -18,7 +18,8 @@ class _FeedbackFormState extends State<FeedbackForm> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        padding:
+            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
@@ -30,7 +31,9 @@ class _FeedbackFormState extends State<FeedbackForm> {
                   'Leave Some Feedback',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
-                IconButton(onPressed: () => Navigator.pop(context), icon: const Icon(Icons.close))
+                IconButton(
+                    onPressed: () => Navigator.pop(context),
+                    icon: const Icon(Icons.close))
               ],
             ),
             const Divider(),
@@ -97,7 +100,8 @@ class _FeedbackFormState extends State<FeedbackForm> {
                     ));
                   } catch (error) {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: const Text("Feedback submission failed, try again soon."),
+                      content: const Text(
+                          "Feedback submission failed, try again soon."),
                       action: SnackBarAction(
                         onPressed: () {},
                         label: "Ok",
@@ -115,10 +119,12 @@ class _FeedbackFormState extends State<FeedbackForm> {
 
 Future<void> submitFeedback(String name, String email, String feedback) async {
   await http.post(
-    Uri.parse('https://homiletics.cloud.zipidy.org/items/feedback'),
+    Uri.parse(
+        'https://homiletics-directus.cloud.plodamouse.com/items/homiletics_feedback'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
-    body: jsonEncode(<String, String>{'name': name, 'email': email, 'feedback': feedback}),
+    body: jsonEncode(
+        <String, String>{'name': name, 'email': email, 'feedback': feedback}),
   );
 }

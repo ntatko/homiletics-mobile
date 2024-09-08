@@ -26,19 +26,48 @@ class DivisionsCard extends StatelessWidget {
         child: Padding(
             padding: const EdgeInsets.all(8),
             child: Column(children: [
-              const Text("Divisions",
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+              Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "Divisions",
+                      style:
+                          TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.info_outline),
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text("Divisions"),
+                              content: const Text(
+                                  "Divisions are groupings of verses that are related. There should be at least two and no more than four."),
+                              actions: [
+                                TextButton(
+                                  child: const Text("Close"),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
               ...divisions.map((division) {
-                int index = divisions.indexOf(division);
                 return Container(
                     margin: const EdgeInsets.all(8),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          "${index + 1}:",
-                          style: const TextStyle(fontSize: 20),
-                        ),
                         SizedBox(
                             width: 75,
                             child: TextField(
@@ -53,7 +82,8 @@ class DivisionsCard extends StatelessWidget {
                                   border: OutlineInputBorder(),
                                 ),
                                 onChanged: (String value) async {
-                                  await divisions[index].updatePassage(value);
+                                  await divisions[divisions.indexOf(division)]
+                                      .updatePassage(value);
                                   await homiletic.update();
                                 })),
                         Expanded(
@@ -79,62 +109,58 @@ class DivisionsCard extends StatelessWidget {
                       ],
                     ));
               }),
-              Wrap(
-                  spacing: 20,
-                  runSpacing: 0,
-                  alignment: WrapAlignment.spaceBetween,
-                  crossAxisAlignment: WrapCrossAlignment.center,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     ElevatedButton(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: const [
-                            Padding(
-                                padding: EdgeInsets.only(left: 10, right: 10),
-                                child: Icon(Icons.remove)),
-                            Text('Remove')
-                          ],
-                        ),
-                        onPressed: divisions.isNotEmpty
-                            ? () async {
-                                try {
-                                  await removeDivision();
-                                  // await _divisions[_divisions.length - 1].delete();
-                                  // setState(() {
-                                  //   _divisions.removeLast();
-                                  // });
-                                } catch (error) {
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(SnackBar(
-                                    content: const Text(
-                                        "Removing that Division didn't work"),
-                                    action: SnackBarAction(
-                                      onPressed: () {},
-                                      label: "Ok",
-                                    ),
-                                  ));
-                                  sendError(error, "Remove Divisions");
-                                }
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.all(8),
+                        minimumSize: const Size(40, 40),
+                      ),
+                      onPressed: divisions.isNotEmpty
+                          ? () async {
+                              try {
+                                await removeDivision();
+                              } catch (error) {
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(
+                                  content: const Text(
+                                      "Removing that Division didn't work"),
+                                  action: SnackBarAction(
+                                    onPressed: () {},
+                                    label: "Ok",
+                                  ),
+                                ));
+                                sendError(error, "Remove Divisions");
                               }
-                            : null),
+                            }
+                          : null,
+                      child: const Icon(Icons.delete),
+                    ),
+                    const SizedBox(width: 5),
                     ElevatedButton(
-                        onPressed: () {
-                          addDivision();
-                          // setState(() {
-                          //   _divisions.add(Division.blank(_thisHomiletic.id));
-                          // });
-                        },
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: const [
-                            Padding(
-                                padding: EdgeInsets.only(left: 0, right: 10),
-                                child: Icon(Icons.add)),
-                            Text('Division')
-                          ],
-                        )),
-                  ]),
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 0),
+                        minimumSize: const Size(0, 40),
+                      ),
+                      onPressed: () {
+                        addDivision();
+                      },
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.add, size: 20),
+                          const SizedBox(width: 4),
+                          Text('(${divisions.length})'),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ])));
   }
 }

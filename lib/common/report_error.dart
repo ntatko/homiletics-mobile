@@ -8,10 +8,14 @@ import 'dart:io' show Platform;
 Future<void> sendError(Object error, String identifier) async {
   // PackageInfo packageInfo = await PackageInfo.fromPlatform();
   var client = http.Client();
-  await client.post(Uri.parse('https://homiletics.cloud.zipidy.org/items/app_errors'),
+  await client.post(
+      Uri.parse(
+          'https://homiletics-directus.cloud.plodamouse.com//items/app_error'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: jsonEncode(
-          <String, String>{'phone_os': Platform.operatingSystem, 'message': "$identifier - ${error.toString()}"}));
+      body: jsonEncode(<String, String>{
+        'phone_os': Platform.operatingSystem,
+        'error': "$identifier - ${error.toString()}"
+      }));
 }

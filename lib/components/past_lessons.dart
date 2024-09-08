@@ -18,8 +18,8 @@ class PastLessons extends StatelessWidget {
 
           return snapshot.hasData
               ? Container(
-                  padding: const EdgeInsets.only(
-                      left: 10, right: 10, top: 0, bottom: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   child: DisplayLessons(snapshot.data?.reversed.toList() ?? []))
               : const SizedBox.shrink();
         });
@@ -36,26 +36,35 @@ class DisplayLessons extends StatelessWidget {
     return homiletics.isNotEmpty
         ? Card(
             color: Colors.blue[100],
-            child: Container(
-                padding: const EdgeInsets.all(10),
-                child: Column(mainAxisSize: MainAxisSize.min, children: [
-                  Padding(
-                      padding: const EdgeInsets.only(bottom: 10),
-                      child: HomeHeader(
-                          title: "Past Homiletics",
-                          onExpand: homiletics.length > 4
-                              ? () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => LessonPage(
-                                              homiletics: homiletics)));
-                                }
-                              : null)),
-                  ...homiletics.map((homiletic) {
-                    return HomileticListItem(homiletic: homiletic);
-                  }).toList()
-                ])))
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  HomeHeader(
+                    title: "Past Homiletics",
+                    onExpand: homiletics.length > 4
+                        ? () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    LessonPage(homiletics: homiletics),
+                              ),
+                            );
+                          }
+                        : null,
+                  ),
+                  const SizedBox(height: 2),
+                  ...homiletics.take(6).map((homiletic) {
+                    return HomileticListItem(
+                      homiletic: homiletic,
+                    );
+                  }).toList(),
+                ],
+              ),
+            ),
+          )
         : const SizedBox.shrink();
   }
 }
