@@ -26,8 +26,8 @@ class HelpMenu extends StatelessWidget {
                     context: context,
                     builder: (context) {
                       return const Padding(
-                        child: FeedbackForm(),
                         padding: EdgeInsets.all(12),
+                        child: FeedbackForm(),
                       );
                     });
               },

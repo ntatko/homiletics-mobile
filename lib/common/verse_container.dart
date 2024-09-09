@@ -15,10 +15,10 @@ class VerseContainer extends StatefulWidget {
       : super(key: key);
 
   @override
-  _VerseContainerState createState() => _VerseContainerState();
+  VerseContainerState createState() => VerseContainerState();
 }
 
-class _VerseContainerState extends State<VerseContainer> {
+class VerseContainerState extends State<VerseContainer> {
   @override
   void didUpdateWidget(covariant VerseContainer oldWidget) {
     super.didUpdateWidget(oldWidget);

@@ -8,7 +8,7 @@ import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 
 void main() async {
-  runApp(MyApp());
+  runApp(const MyApp());
 
   try {
     // if the /hive directory does not exist, make it
@@ -30,6 +30,8 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {

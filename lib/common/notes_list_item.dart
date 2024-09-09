@@ -16,7 +16,10 @@ class NotesListItem extends StatelessWidget {
         // height: 80,
         child: GestureDetector(
             onTapUp: (_) {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => NotesEditor(note: note)));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => NotesEditor(note: note)));
             },
             child: Card(
               surfaceTintColor: Colors.orange,
@@ -25,13 +28,18 @@ class NotesListItem extends StatelessWidget {
                 Container(
                     padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
-                      color: Color(StringToHex.toColor(
-                          note.passage.padLeft(3).toLowerCase().replaceAll(RegExp(r'[^\w\s]+'), '').substring(0, 3))),
+                      color: Color(StringToHex.toColor(note.passage
+                          .padLeft(3)
+                          .toLowerCase()
+                          .replaceAll(RegExp(r'[^\w\s]+'), '')
+                          .substring(0, 3))),
                     ),
                     child: Center(
                       child: Text(
-                        note.passage.replaceAll(RegExp(r'\s'), '').padRight(3).substring(0, 3),
-                        textScaleFactor: 1.0,
+                        note.passage
+                            .replaceAll(RegExp(r'\s'), '')
+                            .padRight(3)
+                            .substring(0, 3),
                         style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -45,8 +53,11 @@ class NotesListItem extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Text(note.passage, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 17)),
-                        Text(timeago.format(note.time ?? DateTime.now(), locale: 'en_short')),
+                        Text(note.passage,
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 17)),
+                        Text(timeago.format(note.time ?? DateTime.now(),
+                            locale: 'en_short')),
                       ],
                     ))
               ]),

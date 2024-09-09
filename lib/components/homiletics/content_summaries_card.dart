@@ -18,10 +18,10 @@ class ContentSummariesCard extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _ContentSummariesCardState createState() => _ContentSummariesCardState();
+  ContentSummariesCardState createState() => ContentSummariesCardState();
 }
 
-class _ContentSummariesCardState extends State<ContentSummariesCard> {
+class ContentSummariesCardState extends State<ContentSummariesCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
