@@ -13,8 +13,38 @@ class AimCard extends StatelessWidget {
         child: Padding(
             padding: const EdgeInsets.all(8),
             child: Column(children: [
-              const Text("Aim",
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text("Aim",
+                      style:
+                          TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+                  IconButton(
+                    icon: const Icon(Icons.info_outline),
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text("Aim"),
+                            content: const Text(
+                              "The Aim is the key point, the one main takeaway truth you want yourself or an audience to walk away with. It may be derivable from the FCF, and will likely influence the Application Questions.",
+                            ),
+                            actions: [
+                              TextButton(
+                                child: const Text("Close"),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                  ),
+                ],
+              ),
               Container(
                   margin: const EdgeInsets.all(8),
                   child: TextField(

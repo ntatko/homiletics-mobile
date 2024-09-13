@@ -1,23 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:homiletics/classes/homiletic.dart';
 
-class SummarySentenceCard extends StatelessWidget {
+class FcfCard extends StatelessWidget {
   final Homiletic homiletic;
 
-  const SummarySentenceCard({Key? key, required this.homiletic})
-      : super(key: key);
+  const FcfCard({Key? key, required this.homiletic}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Card(
-        color: Colors.yellow[100],
+        color: const Color.fromARGB(255, 196, 255, 241),
         child: Padding(
             padding: const EdgeInsets.all(8),
             child: Column(children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text("Summary Sentence",
+                  const Text("FCF",
                       style:
                           TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
                   IconButton(
@@ -27,9 +26,9 @@ class SummarySentenceCard extends StatelessWidget {
                         context: context,
                         builder: (BuildContext context) {
                           return AlertDialog(
-                            title: const Text("Summary Sentence"),
+                            title: const Text("FCF"),
                             content: const Text(
-                                "The Summary Sentence is a concise, memorable statement that encapsulates the most relevant facts. A good way of thinking of it is the 2am test: if someone were to wake you up at 2am and ask you what the sermon was about, what would you say? You'd say the Summary Sentence.\nIt should be 10 words or fewer. If you're feeling frisky, you can try to make an alliteration."),
+                                "The FCF (Fallen Condition Focus) is the part of humanity that is the most illustrated or referenced in the passage. It is the condition that the audience is in, the reason that the audience needs to be saved."),
                             actions: [
                               TextButton(
                                 child: const Text("Close"),
@@ -51,14 +50,13 @@ class SummarySentenceCard extends StatelessWidget {
                       maxLines: null,
                       keyboardType: TextInputType.text,
                       textCapitalization: TextCapitalization.sentences,
-                      controller: TextEditingController(
-                          text: homiletic.subjectSentence),
+                      controller: TextEditingController(text: homiletic.fcf),
                       decoration: const InputDecoration(
-                        hintText: 'Summarize: 10 words or fewer',
+                        hintText: 'Fallen/Frail/Feeble/Fickle',
                         border: OutlineInputBorder(),
                       ),
                       onChanged: (String ss) async {
-                        await homiletic.updateSubjectSentence(ss);
+                        await homiletic.updateFcf(ss);
                       })),
             ])));
   }

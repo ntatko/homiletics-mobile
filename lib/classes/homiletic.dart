@@ -33,21 +33,28 @@ class Homiletic {
   /// The time that the homiletic was last updated.
   DateTime? updatedAt;
 
-  Homiletic(
-      {this.passage = '',
-      this.subjectSentence = '',
-      this.aim = '',
-      this.id = -1,
-      this.updatedAt});
+  /// The fcf field of the homiletic.
+  String fcf;
+
+  Homiletic({
+    this.passage = '',
+    this.subjectSentence = '',
+    this.aim = '',
+    this.id = -1,
+    this.updatedAt,
+    this.fcf = '', // Add this line
+  });
 
   /// Creates a new [Homiletic] from a JSON map.
   factory Homiletic.fromJson(Map<String, dynamic> json) {
     return Homiletic(
-        passage: json['passage'].toString(),
-        subjectSentence: json['subject_sentence'].toString(),
-        aim: json['aim'].toString(),
-        id: int.parse(json['id'].toString()),
-        updatedAt: DateTime.parse(json['updated_at']));
+      passage: json['passage'].toString(),
+      subjectSentence: json['subject_sentence'].toString(),
+      aim: json['aim'].toString(),
+      id: int.parse(json['id'].toString()),
+      updatedAt: DateTime.parse(json['updated_at']),
+      fcf: json['fcf'].toString(), // Add this line
+    );
   }
 
   /// Returns a map representation of the homiletic.
@@ -56,7 +63,8 @@ class Homiletic {
         "subject_sentence": subjectSentence,
         "aim": aim,
         "id": id,
-        "updated_at": updatedAt?.toIso8601String() ?? ''
+        "updated_at": updatedAt?.toIso8601String() ?? '',
+        "fcf": fcf, // Add this line
       };
 
   /// Updates the homiletic in the database with whatever is in this object.
@@ -85,6 +93,12 @@ class Homiletic {
   /// Updates the [subjectSentence] of the homiletic.
   Future<void> updateSubjectSentence(String text) async {
     subjectSentence = text;
+    await update();
+  }
+
+  /// Updates the [fcf] of the homiletic.
+  Future<void> updateFcf(String text) async {
+    fcf = text;
     await update();
   }
 

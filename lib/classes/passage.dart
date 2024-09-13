@@ -36,7 +36,7 @@ Future<PassageResponse> fetchPassage(
     String reference, Translation? version) async {
   try {
     var response = await http.get(Uri.parse(
-        'https://homiletics-dart-api.cloud.zipidy.org/passages?passage=$reference&version=${version?.code ?? 'web'}'));
+        'https://homiletics-api.cloud.plodamouse.com/passages?passage=$reference&version=${version?.code ?? 'web'}'));
 
     if (response.statusCode == 200) {
       return PassageResponse.fromJson(jsonDecode(response.body));

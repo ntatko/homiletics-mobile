@@ -6,17 +6,22 @@ import 'package:timeago/timeago.dart' as timeago;
 
 class HomileticListItem extends StatelessWidget {
   final Homiletic homiletic;
-  const HomileticListItem({Key? key, required this.homiletic}) : super(key: key);
+  const HomileticListItem({Key? key, required this.homiletic})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
         key: Key("${homiletic.id}"),
-        margin: const EdgeInsets.only(top: 5, bottom: 5),
+        margin: const EdgeInsets.only(top: 5),
         // height: 80,
         child: GestureDetector(
             onTapUp: (_) {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => HomileticEditor(homiletic: homiletic)));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          HomileticEditor(homiletic: homiletic)));
             },
             child: Card(
               surfaceTintColor: Colors.blue,
@@ -25,28 +30,37 @@ class HomileticListItem extends StatelessWidget {
                 Container(
                     padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
-                      color: Color(StringToHex.toColor(
-                          homiletic.passage.padLeft(3).toLowerCase().replaceAll(RegExp(r'[^\w\s]+'), '').substring(0, 3))),
+                      color: Color(StringToHex.toColor(homiletic.passage
+                          .padLeft(3)
+                          .toLowerCase()
+                          .replaceAll(RegExp(r'[^\w\s]+'), '')
+                          .substring(0, 3))),
                     ),
                     child: Center(
                       child: Text(
-                        homiletic.passage.replaceAll(RegExp(r'\s'), '').padRight(3).substring(0, 3),
-                        textScaleFactor: 1.0,
+                        homiletic.passage
+                            .replaceAll(RegExp(r'\s'), '')
+                            .padRight(3)
+                            .substring(0, 3),
                         style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
-                          fontSize: 22,
+                          fontSize: 14,
                         ),
                       ),
                     )),
                 Padding(
-                    padding: const EdgeInsets.only(left: 20),
+                    padding: const EdgeInsets.only(left: 15),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Text(homiletic.passage, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 17)),
-                        Text(timeago.format(homiletic.updatedAt ?? DateTime.now(), locale: 'en_short')),
+                        Text(homiletic.passage,
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 17)),
+                        Text(timeago.format(
+                            homiletic.updatedAt ?? DateTime.now(),
+                            locale: 'en_short')),
                       ],
                     ))
               ]),

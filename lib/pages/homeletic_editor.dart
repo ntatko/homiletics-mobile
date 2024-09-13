@@ -11,6 +11,7 @@ import 'package:homiletics/components/homiletics/aim_card.dart';
 import 'package:homiletics/components/homiletics/application_questions_card.dart';
 import 'package:homiletics/components/homiletics/content_summaries_card.dart';
 import 'package:homiletics/components/homiletics/divisions_card.dart';
+import 'package:homiletics/components/homiletics/fcf_card.dart';
 import 'package:homiletics/components/homiletics/summary_sentence_card.dart';
 import 'package:homiletics/components/preferences_modal.dart';
 import 'package:homiletics/pages/home.dart';
@@ -34,14 +35,22 @@ class _HomileticState extends State<HomileticEditor> {
   List<ContentSummary> _summaries = [];
   List<Division> _divisions = [];
   List<Application> _applications = [];
+  late TextEditingController _fcfController;
 
   @override
   void initState() {
+    super.initState();
     setState(() {
       _thisHomiletic = widget.homiletic ?? Homiletic();
     });
-    super.initState();
+    _fcfController = TextEditingController(text: _thisHomiletic.fcf);
     prepTheTable();
+  }
+
+  @override
+  void dispose() {
+    _fcfController.dispose();
+    super.dispose();
   }
 
   prepTheTable() async {
@@ -101,6 +110,8 @@ class _HomileticState extends State<HomileticEditor> {
               }),
           const SizedBox(height: 20),
           SummarySentenceCard(homiletic: _thisHomiletic),
+          const SizedBox(height: 20),
+          FcfCard(homiletic: _thisHomiletic),
           const SizedBox(height: 20),
           AimCard(homiletic: _thisHomiletic),
           const SizedBox(height: 20),
@@ -229,10 +240,10 @@ class _HomileticState extends State<HomileticEditor> {
                                       sendError(error, "delete homiletics");
                                     }
                                   },
-                                  child: const Text("Delete"),
                                   style: TextButton.styleFrom(
                                     foregroundColor: Colors.red,
                                   ),
+                                  child: const Text("Delete"),
                                 )
                               ],
                             );
@@ -294,37 +305,40 @@ class _HomileticState extends State<HomileticEditor> {
                 itemBuilder: (context) => [
                       if (!kIsWeb)
                         const PopupMenuItem(
-                            child: ListTile(
-                                leading: Icon(Icons.save), title: Text("Save")),
-                            value: 0),
+                          value: 0,
+                          child: ListTile(
+                              leading: Icon(Icons.save), title: Text("Save")),
+                        ),
                       if (!kIsWeb)
                         const PopupMenuItem(
-                            child: ListTile(
-                              title: Text('Delete'),
-                              leading: Icon(Icons.delete),
-                            ),
-                            value: 1),
+                          value: 1,
+                          child: ListTile(
+                            title: Text('Delete'),
+                            leading: Icon(Icons.delete),
+                          ),
+                        ),
                       const PopupMenuItem(
+                        value: 2,
                         child: ListTile(
                           leading: Icon(Icons.share),
                           title: Text(kIsWeb ? 'Save to PDF' : 'Share'),
                         ),
-                        value: 2,
                       ),
                       const PopupMenuItem(
+                        value: 3,
                         child: ListTile(
                           leading: Icon(Icons.print),
                           title: Text('Print'),
                         ),
-                        value: 3,
                       ),
                       if (!kIsWeb)
                         const PopupMenuItem(
-                            child: ListTile(
-                              title: Text('Preferences'),
-                              leading: Icon(Icons.settings),
-                            ),
-                            value: 4),
+                          value: 4,
+                          child: ListTile(
+                            title: Text('Preferences'),
+                            leading: Icon(Icons.settings),
+                          ),
+                        ),
                     ]),
           ],
         ),

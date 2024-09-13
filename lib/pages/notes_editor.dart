@@ -75,13 +75,15 @@ class _NotesState extends State<NotesEditor> {
                                   onPressed: () async {
                                     try {
                                       await _thisNote.delete();
+                                      if (!mounted) return;
+                                      final navigatorContext = context;
                                       Navigator.pushAndRemoveUntil(
-                                          context,
+                                          navigatorContext,
                                           MaterialPageRoute(
                                               builder: (context) =>
                                                   const Home()),
                                           (r) => false);
-                                      ScaffoldMessenger.of(context)
+                                      ScaffoldMessenger.of(navigatorContext)
                                           .showSnackBar(SnackBar(
                                         content:
                                             const Text("Lecture Note Deleted"),
@@ -103,10 +105,10 @@ class _NotesState extends State<NotesEditor> {
                                       sendError(error, "notes deletion");
                                     }
                                   },
-                                  child: const Text("Delete"),
                                   style: TextButton.styleFrom(
                                     foregroundColor: Colors.red,
                                   ),
+                                  child: const Text("Delete"),
                                 )
                               ],
                             );
@@ -140,15 +142,17 @@ class _NotesState extends State<NotesEditor> {
                 icon: const Icon(Icons.menu),
                 itemBuilder: (context) => [
                       const PopupMenuItem(
-                          child: ListTile(
-                              leading: Icon(Icons.save), title: Text("Save")),
-                          value: 0),
+                        value: 0,
+                        child: ListTile(
+                            leading: Icon(Icons.save), title: Text("Save")),
+                      ),
                       const PopupMenuItem(
-                          child: ListTile(
-                            title: Text('Delete'),
-                            leading: Icon(Icons.delete),
-                          ),
-                          value: 1),
+                        value: 1,
+                        child: ListTile(
+                          title: Text('Delete'),
+                          leading: Icon(Icons.delete),
+                        ),
+                      ),
                     ]),
           ],
         ),
@@ -215,11 +219,11 @@ class _NotesState extends State<NotesEditor> {
                         items: [
                           ...Translation.all
                               .map((e) => DropdownMenuItem(
+                                    value: e.code,
                                     child: Text(
                                       e.short,
                                       style: const TextStyle(fontSize: 12),
                                     ),
-                                    value: e.code,
                                   ))
                               .toList()
                         ],

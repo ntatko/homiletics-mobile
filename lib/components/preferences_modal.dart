@@ -6,10 +6,10 @@ import 'package:homiletics/classes/translation.dart';
 class PreferencesModal extends StatefulWidget {
   const PreferencesModal({Key? key}) : super(key: key);
   @override
-  _PreferencesModalState createState() => _PreferencesModalState();
+  PreferencesModalState createState() => PreferencesModalState();
 }
 
-class _PreferencesModalState extends State<PreferencesModal> {
+class PreferencesModalState extends State<PreferencesModal> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
