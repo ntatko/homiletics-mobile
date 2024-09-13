@@ -34,12 +34,23 @@ Future<pw.Document> createHomileticsPdf(
                   style: const pw.TextStyle(fontSize: 30))),
           pw.Divider(),
           pw.Text("Content List:", style: titleStyle),
-          pw.Table(children: [
+          pw.Table(columnWidths: {
+            0: const pw.FixedColumnWidth(
+                20), // Set fixed width for the first column
+            1: const pw.FixedColumnWidth(
+                50), // Adjust other column widths as needed
+            2: const pw.FlexColumnWidth(3),
+          }, children: [
             ...summaries
                 .map((summary) => pw.TableRow(children: [
-                      pw.Text("${summaries.indexOf(summary) + 1}.",
-                          style: defaultStyle),
-                      pw.Text(summary.passage, style: defaultStyle),
+                      pw.Container(
+                        width: 20,
+                        child: pw.Text("${summaries.indexOf(summary) + 1}.",
+                            style: defaultStyle),
+                      ),
+                      pw.Container(
+                          width: 50,
+                          child: pw.Text(summary.passage, style: defaultStyle)),
                       pw.Text(summary.summary, style: defaultStyle)
                     ]))
                 .toList()
@@ -47,10 +58,17 @@ Future<pw.Document> createHomileticsPdf(
           pw.SizedBox(height: 15),
           if (divisions.isNotEmpty) ...[
             pw.Text("Divisions:", style: titleStyle),
-            pw.Table(children: [
+            pw.Table(columnWidths: {
+              0: const pw.FixedColumnWidth(
+                  40), // Set fixed width for the first column
+              2: const pw.FlexColumnWidth(3),
+            }, children: [
               ...divisions
                   .map((division) => pw.TableRow(children: [
-                        pw.Text(division.passage),
+                        pw.Container(
+                          width: 40,
+                          child: pw.Text(division.passage),
+                        ),
                         pw.Text(division.title)
                       ]))
                   .toList()
