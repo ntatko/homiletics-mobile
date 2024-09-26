@@ -22,7 +22,9 @@ class ApplicationQuestionsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-        color: Colors.grey[200],
+        color: MediaQuery.of(context).platformBrightness == Brightness.light
+            ? Colors.grey[200]
+            : Colors.blueGrey[900],
         child: Padding(
             padding: const EdgeInsets.all(8),
             child: Column(children: [

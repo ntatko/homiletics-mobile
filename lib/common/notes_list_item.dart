@@ -12,8 +12,7 @@ class NotesListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         key: Key("${note.id}"),
-        margin: const EdgeInsets.only(top: 5, bottom: 5),
-        // height: 80,
+        margin: const EdgeInsets.only(top: 5),
         child: GestureDetector(
             onTapUp: (_) {
               Navigator.push(
@@ -43,12 +42,12 @@ class NotesListItem extends StatelessWidget {
                         style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
-                          fontSize: 22,
+                          fontSize: 14,
                         ),
                       ),
                     )),
                 Padding(
-                    padding: const EdgeInsets.only(left: 20),
+                    padding: const EdgeInsets.only(left: 15),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,

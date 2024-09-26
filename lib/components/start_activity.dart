@@ -19,7 +19,9 @@ class _StartActivityState extends State<StartActivity> {
     return Container(
       padding: const EdgeInsets.only(top: 20, left: 8, right: 8),
       child: Card(
-        color: Colors.blueGrey[100],
+        color: Theme.of(context).brightness == Brightness.dark
+            ? Colors.blueGrey[900]
+            : Colors.blueGrey[100],
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: Column(

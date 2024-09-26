@@ -14,17 +14,24 @@ class ApplicationList extends StatelessWidget {
     return Container(
         margin: const EdgeInsets.only(left: 10, right: 10, top: 20, bottom: 20),
         child: Card(
-            color: Colors.green[100],
+            color: Theme.of(context).brightness == Brightness.dark
+                ? Colors.green[900]
+                : Colors.green[100],
             child: FutureBuilder<List<Application>>(
               future: getAllApplications(),
               builder: (context, snapshot) {
                 if (snapshot.hasError) logError("${snapshot.error}");
 
-                List<Application> filteredDataList =
-                    snapshot.data?.where((application) => application.text != '').toList().reversed.toList() ?? [];
+                List<Application> filteredDataList = snapshot.data
+                        ?.where((application) => application.text != '')
+                        .toList()
+                        .reversed
+                        .toList() ??
+                    [];
 
                 return Container(
-                  height: snapshot.hasData && filteredDataList.isNotEmpty ? 240 : 0,
+                  height:
+                      snapshot.hasData && filteredDataList.isNotEmpty ? 240 : 0,
                   width: MediaQuery.of(context).size.width,
                   padding: const EdgeInsets.only(top: 10),
                   child: snapshot.hasData
@@ -35,14 +42,16 @@ class ApplicationList extends StatelessWidget {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => ApplicationPage(applications: filteredDataList)));
+                                        builder: (context) => ApplicationPage(
+                                            applications: filteredDataList)));
                               }),
                           Expanded(
                               child: ListView.builder(
                                   scrollDirection: Axis.horizontal,
                                   itemCount: filteredDataList.length,
                                   itemBuilder: (context, index) {
-                                    Application? application = filteredDataList[index];
+                                    Application? application =
+                                        filteredDataList[index];
                                     return ApplicationListItem(
                                       application: application,
                                     );

@@ -19,14 +19,18 @@ class PastLectureNotes extends StatelessWidget {
 
         return snapshot.hasData && notes.isNotEmpty
             ? Container(
-                padding: const EdgeInsets.only(left: 10, right: 10, top: 20, bottom: 10),
+                padding: const EdgeInsets.only(
+                    left: 10, right: 10, top: 20, bottom: 10),
                 child: Card(
-                    color: Colors.orange[100],
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Colors.blueGrey[900]
+                        : Colors.blueGrey[100],
                     child: Padding(
                         padding: const EdgeInsets.all(10),
                         child: Column(
                           children: [
-                            const HomeHeader(title: "Past Notes", onExpand: null),
+                            const HomeHeader(
+                                title: "Past Notes", onExpand: null),
                             ...notes.map((note) {
                               return NotesListItem(note: note);
                             })
