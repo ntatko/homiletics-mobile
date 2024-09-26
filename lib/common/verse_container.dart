@@ -20,7 +20,6 @@ class VerseContainer extends StatefulWidget {
 
 class VerseContainerState extends State<VerseContainer> {
   double _fontSize = 18.0;
-  double _baseScaleFactor = 1.0;
 
   @override
   void didUpdateWidget(covariant VerseContainer oldWidget) {
@@ -32,7 +31,6 @@ class VerseContainerState extends State<VerseContainer> {
   void _adjustFontSize(double delta) {
     setState(() {
       _fontSize = (_fontSize + delta).clamp(12.0, 24.0);
-      _baseScaleFactor = _fontSize / 18.0;
     });
   }
 
@@ -50,9 +48,12 @@ class VerseContainerState extends State<VerseContainer> {
               ? FocusScope(
                   autofocus: true,
                   child: Focus(
-                      onKey: (node, event) {
-                        if (event is RawKeyDownEvent) {
-                          if (event.isMetaPressed || event.isControlPressed) {
+                      onKeyEvent: (node, event) {
+                        if (event is KeyDownEvent) {
+                          if (event.physicalKey ==
+                                  PhysicalKeyboardKey.metaLeft ||
+                              event.physicalKey ==
+                                  PhysicalKeyboardKey.metaRight) {
                             if (event.logicalKey == LogicalKeyboardKey.equal) {
                               _adjustFontSize(1);
                               return KeyEventResult.handled;
