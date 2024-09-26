@@ -9,7 +9,9 @@ class AimCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-        color: Colors.red[100],
+        color: MediaQuery.of(context).platformBrightness == Brightness.light
+            ? Colors.red[100]
+            : Colors.blueGrey[900],
         child: Padding(
             padding: const EdgeInsets.all(8),
             child: Column(children: [

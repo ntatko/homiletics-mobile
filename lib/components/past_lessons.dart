@@ -35,7 +35,9 @@ class DisplayLessons extends StatelessWidget {
   Widget build(BuildContext context) {
     return homiletics.isNotEmpty
         ? Card(
-            color: Colors.blue[100],
+            color: Theme.of(context).brightness == Brightness.dark
+                ? Colors.blueGrey[900]
+                : Colors.blueGrey[100],
             child: Padding(
               padding: const EdgeInsets.all(8),
               child: Column(

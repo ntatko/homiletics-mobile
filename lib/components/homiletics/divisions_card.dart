@@ -22,7 +22,9 @@ class DivisionsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-        color: Colors.green[100],
+        color: MediaQuery.of(context).platformBrightness == Brightness.light
+            ? Colors.green[100]
+            : Colors.blueGrey[900],
         child: Padding(
             padding: const EdgeInsets.all(8),
             child: Column(children: [

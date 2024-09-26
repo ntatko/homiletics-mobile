@@ -157,12 +157,19 @@ class _NotesState extends State<NotesEditor> {
           ],
         ),
         body: SlidingUpPanel(
+            backdropColor:
+                MediaQuery.of(context).platformBrightness == Brightness.dark
+                    ? Colors.white
+                    : Colors.white,
             controller: _controller,
             minHeight: 75,
             // panelSnapping: false,
             backdropEnabled: true,
             parallaxEnabled: false,
             isDraggable: true,
+            color: MediaQuery.of(context).platformBrightness == Brightness.dark
+                ? Colors.black
+                : Colors.white,
             borderRadius: BorderRadius.circular(15),
             onPanelClosed: () {
               setState(() {

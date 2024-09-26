@@ -50,6 +50,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         useMaterial3: true,
         primarySwatch: Colors.blue,
+        brightness: MediaQuery.of(context).platformBrightness,
       ),
       home: const Home(),
     );

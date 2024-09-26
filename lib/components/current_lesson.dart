@@ -67,26 +67,35 @@ class _CurrentLessonState extends State<CurrentLesson> {
           padding:
               const EdgeInsets.only(left: 16, right: 16, top: 20, bottom: 10),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
-                "Current Lessons",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              DropdownButton<String>(
-                value: _selectedStudy,
-                hint: const Text("Filter by study"),
-                onChanged: _filterSchedules,
-                items: [
-                  const DropdownMenuItem<String>(
-                    value: null,
-                    child: Text("All studies"),
-                  ),
-                  ..._uniqueStudies.map((study) => DropdownMenuItem<String>(
-                        value: study,
-                        child: Text(study),
-                      )),
-                ],
+              Expanded(
+                child: Wrap(
+                  alignment: WrapAlignment.spaceBetween,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    const Text(
+                      "Current Lessons",
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    DropdownButton<String>(
+                      value: _selectedStudy,
+                      hint: const Text("Filter by study"),
+                      onChanged: _filterSchedules,
+                      items: [
+                        const DropdownMenuItem<String>(
+                          value: null,
+                          child: Text("All studies"),
+                        ),
+                        ..._uniqueStudies
+                            .map((study) => DropdownMenuItem<String>(
+                                  value: study,
+                                  child: Text(study),
+                                )),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ],
           ),

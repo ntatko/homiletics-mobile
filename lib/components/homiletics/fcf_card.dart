@@ -9,7 +9,9 @@ class FcfCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-        color: const Color.fromARGB(255, 196, 255, 241),
+        color: MediaQuery.of(context).platformBrightness == Brightness.light
+            ? const Color.fromARGB(255, 196, 255, 241)
+            : Colors.blueGrey[900],
         child: Padding(
             padding: const EdgeInsets.all(8),
             child: Column(children: [
