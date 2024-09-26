@@ -80,6 +80,11 @@ Future<pw.Document> createHomileticsPdf(
             pw.Text(homiletic.subjectSentence),
             pw.SizedBox(height: 15),
           ],
+          if (homiletic.fcf != '') ...[
+            pw.Text("F.C.F.", style: titleStyle),
+            pw.Text(homiletic.fcf),
+            pw.SizedBox(height: 15),
+          ],
           if (homiletic.aim != '') ...[
             pw.Text("AIM:", style: titleStyle),
             pw.Text("Cause the audience to learn that ${homiletic.aim}"),
