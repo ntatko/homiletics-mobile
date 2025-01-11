@@ -136,7 +136,7 @@ class _HomileticState extends State<HomileticEditor> {
     ];
 
     return Scaffold(
-        resizeToAvoidBottomInset: false,
+        // resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: TextField(
             keyboardType: TextInputType.text,
@@ -342,20 +342,21 @@ class _HomileticState extends State<HomileticEditor> {
                     ]),
           ],
         ),
-        body: OrientationBuilder(
-            builder: (context, orientation) => SafeArea(
-                  bottom: false,
-                  child: SplitView(
-                      indicator: SplitIndicator(
+        body: SafeArea(
+            child: OrientationBuilder(
+                builder: (context, orientation) => SafeArea(
+                      bottom: false,
+                      child: SplitView(
+                          indicator: SplitIndicator(
+                              viewMode: orientation != Orientation.landscape
+                                  ? SplitViewMode.Vertical
+                                  : SplitViewMode.Horizontal),
                           viewMode: orientation != Orientation.landscape
                               ? SplitViewMode.Vertical
-                              : SplitViewMode.Horizontal),
-                      viewMode: orientation != Orientation.landscape
-                          ? SplitViewMode.Vertical
-                          : SplitViewMode.Horizontal,
-                      children: orientation != Orientation.landscape
-                          ? splitChildren
-                          : splitChildren.reversed.toList()),
-                )));
+                              : SplitViewMode.Horizontal,
+                          children: orientation != Orientation.landscape
+                              ? splitChildren
+                              : splitChildren.reversed.toList()),
+                    ))));
   }
 }
