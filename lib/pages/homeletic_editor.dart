@@ -4,7 +4,7 @@ import 'package:homiletics/classes/application.dart';
 import 'package:homiletics/classes/content_summary.dart';
 import 'package:homiletics/classes/Division.dart';
 import 'package:homiletics/classes/homiletic.dart';
-import 'package:homiletics/classes/translation.dart';
+import 'package:homiletics/classes/preferences.dart';
 import 'package:homiletics/common/report_error.dart';
 import 'package:homiletics/common/verse_container.dart';
 import 'package:homiletics/components/homiletics/aim_card.dart';
@@ -36,15 +36,35 @@ class _HomileticState extends State<HomileticEditor> {
   List<Division> _divisions = [];
   List<Application> _applications = [];
   late TextEditingController _fcfController;
+  String _translationVersion = 'web';
+  final GlobalKey<VerseContainerState> _verseContainerKey =
+      GlobalKey<VerseContainerState>();
 
   @override
   void initState() {
     super.initState();
     setState(() {
       _thisHomiletic = widget.homiletic ?? Homiletic();
+      _translationVersion = Preferences.preferredVersion;
     });
     _fcfController = TextEditingController(text: _thisHomiletic.fcf);
     prepTheTable();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Check if translation preference has changed and reload if needed
+    final currentTranslation = Preferences.preferredVersion;
+    if (currentTranslation != _translationVersion) {
+      setState(() {
+        _translationVersion = currentTranslation;
+      });
+      // Reload the verse container with new translation
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _verseContainerKey.currentState?.reloadPassage();
+      });
+    }
   }
 
   @override
@@ -132,7 +152,9 @@ class _HomileticState extends State<HomileticEditor> {
         ],
       ),
       VerseContainer(
-          passage: _thisHomiletic.passage, translation: Translation.web)
+          key: _verseContainerKey,
+          passage: _thisHomiletic.passage,
+          translation: Preferences.translation)
     ];
 
     return Scaffold(
@@ -298,7 +320,16 @@ class _HomileticState extends State<HomileticEditor> {
                     case 4:
                       showDialog(
                           context: context,
-                          builder: ((context) => const PreferencesModal()));
+                          builder: ((context) => PreferencesModal(
+                                onTranslationChanged: () {
+                                  // Reload the verse container when translation changes
+                                  WidgetsBinding.instance
+                                      .addPostFrameCallback((_) {
+                                    _verseContainerKey.currentState
+                                        ?.reloadPassage();
+                                  });
+                                },
+                              )));
                   }
                 },
                 icon: const Icon(Icons.menu),
