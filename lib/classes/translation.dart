@@ -26,15 +26,50 @@ class Translation {
   static Translation esv =
       Translation('English Standard Version', 'ESV', 'esv', 'esvapi');
 
+  // Popular modern translations
+  static Translation niv =
+      Translation('New International Version', 'NIV', 'niv', 'biblegateway');
+  static Translation nasb = Translation(
+      'New American Standard Bible', 'NASB', 'nasb', 'biblegateway');
+  static Translation nlt =
+      Translation('New Living Translation', 'NLT', 'nlt', 'biblegateway');
+  static Translation nkjv =
+      Translation('New King James Version', 'NKJV', 'nkjv', 'biblegateway');
+  static Translation nrsv = Translation(
+      'New Revised Standard Version', 'NRSV', 'nrsv', 'biblegateway');
+  static Translation msg =
+      Translation('The Message', 'MSG', 'msg', 'biblegateway');
+  static Translation amp =
+      Translation('Amplified Bible', 'AMP', 'amp', 'biblegateway');
+  static Translation csb =
+      Translation('Christian Standard Bible', 'CSB', 'csb', 'biblegateway');
+  static Translation cev =
+      Translation('Contemporary English Version', 'CEV', 'cev', 'biblegateway');
+  static Translation ncv =
+      Translation('New Century Version', 'NCV', 'ncv', 'biblegateway');
+
   /// Returns a list of all translations
   static List<Translation> get all => [
-        bbe,
+        // Popular modern translations first
+        niv,
+        esv,
+        nasb,
+        nlt,
+        nkjv,
+        csb,
+        nrsv,
         kjv,
+        // Other translations
         web,
+        bbe,
         oebCw,
         oebUs,
+        msg,
+        amp,
+        cev,
+        ncv,
+        // Commented out ones
         // net,
         // asv,
-        // esv,
       ];
 }

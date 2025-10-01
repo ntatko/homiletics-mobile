@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:homiletics/classes/lecture_note.dart';
+import 'package:homiletics/classes/preferences.dart';
 import 'package:homiletics/classes/translation.dart';
 import 'package:homiletics/common/report_error.dart';
 import 'package:homiletics/common/verse_container.dart';
@@ -21,6 +22,8 @@ class _NotesState extends State<NotesEditor> {
   bool _isTrayOpen = false;
   String _translationVersion = 'web';
   final PanelController _controller = PanelController();
+  final GlobalKey<VerseContainerState> _verseContainerKey =
+      GlobalKey<VerseContainerState>();
 
   @override
   void initState() {
@@ -28,9 +31,26 @@ class _NotesState extends State<NotesEditor> {
     prepTheTable();
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Check if translation preference has changed and reload if needed
+    final currentTranslation = Preferences.preferredVersion;
+    if (currentTranslation != _translationVersion) {
+      setState(() {
+        _translationVersion = currentTranslation;
+      });
+      // Reload the verse container with new translation
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _verseContainerKey.currentState?.reloadPassage();
+      });
+    }
+  }
+
   prepTheTable() async {
     setState(() {
       _thisNote = widget.note ?? LectureNote();
+      _translationVersion = Preferences.preferredVersion;
     });
     await _thisNote.update();
   }
@@ -260,7 +280,9 @@ class _NotesState extends State<NotesEditor> {
                   padding: const EdgeInsets.only(top: 40),
                   height: MediaQuery.of(context).size.height * 0.56,
                   child: VerseContainer(
-                      passage: _thisNote.passage, translation: Translation.web))
+                      key: _verseContainerKey,
+                      passage: _thisNote.passage,
+                      translation: Preferences.translation))
             ]),
             body: Center(
                 child: ListView(padding: const EdgeInsets.all(15), children: [

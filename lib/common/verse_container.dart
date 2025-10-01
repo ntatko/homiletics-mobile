@@ -1,10 +1,7 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:homiletics/classes/passage.dart';
 import 'package:homiletics/classes/preferences.dart';
 import 'package:homiletics/classes/translation.dart';
-import 'package:homiletics/common/report_error.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 // ignore: must_be_immutable
 class VerseContainer extends StatefulWidget {
@@ -18,180 +15,186 @@ class VerseContainer extends StatefulWidget {
   VerseContainerState createState() => VerseContainerState();
 }
 
+/// Maps translation codes to Bible Gateway version codes
+String _getBibleGatewayVersion(Translation translation) {
+  switch (translation.code) {
+    // Popular modern translations
+    case 'niv':
+      return 'NIV';
+    case 'esv':
+      return 'ESV';
+    case 'nasb':
+      return 'NASB';
+    case 'nlt':
+      return 'NLT';
+    case 'nkjv':
+      return 'NKJV';
+    case 'csb':
+      return 'CSB';
+    case 'nrsv':
+      return 'NRSV';
+    case 'kjv':
+      return 'KJV';
+    case 'msg':
+      return 'MSG';
+    case 'amp':
+      return 'AMP';
+    case 'cev':
+      return 'CEV';
+    case 'ncv':
+      return 'NCV';
+    // Other translations
+    case 'web':
+      return 'WEB';
+    case 'bbe':
+      return 'BBE';
+    case 'oeb-cw':
+    case 'oeb-us':
+      return 'OEB';
+    case 'net':
+      return 'NET';
+    case 'asv':
+      return 'ASV';
+    default:
+      return 'NIV'; // Default fallback
+  }
+}
+
+/// Creates a Bible Gateway URL for the given passage and translation
+String _createBibleGatewayUrl(String passage, Translation translation) {
+  final encodedPassage = Uri.encodeComponent(passage);
+  final version = _getBibleGatewayVersion(translation);
+  return 'https://www.biblegateway.com/passage/?search=$encodedPassage&version=$version&interface=print';
+}
+
 class VerseContainerState extends State<VerseContainer> {
-  double _fontSize = 18.0;
+  late final WebViewController _controller;
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeWebView();
+  }
 
   @override
   void didUpdateWidget(covariant VerseContainer oldWidget) {
     super.didUpdateWidget(oldWidget);
-
-    setState(() {});
+    if (oldWidget.passage != widget.passage ||
+        oldWidget.translation != widget.translation) {
+      _loadPassage();
+    }
   }
 
-  void _adjustFontSize(double delta) {
-    setState(() {
-      _fontSize = (_fontSize + delta).clamp(12.0, 24.0);
+  void _initializeWebView() {
+    _controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onPageStarted: (String url) {
+            setState(() {
+              _isLoading = true;
+            });
+          },
+          onPageFinished: (String url) {
+            setState(() {
+              _isLoading = false;
+            });
+            // Apply dark mode styling if needed
+            _applyDarkModeStyling();
+          },
+        ),
+      );
+    _loadPassage();
+  }
+
+  void _applyDarkModeStyling() {
+    final isDarkMode =
+        MediaQuery.of(context).platformBrightness == Brightness.dark;
+    if (isDarkMode) {
+      _controller.runJavaScript('''
+        // Create a style element for dark mode
+        var style = document.createElement('style');
+        style.innerHTML = `
+          body {
+            background-color: #1a1a1a !important;
+            color: #e0e0e0 !important;
+          }
+          /* Target all text elements */
+          p, div, span, td, th, li {
+            color: #e0e0e0 !important;
+            background-color: transparent !important;
+          }
+          /* Target all heading elements more aggressively */
+          h1, h2, h3, h4, h5, h6, 
+          h1 *, h2 *, h3 *, h4 *, h5 *, h6 *,
+          .passage-title, .passage-title *,
+          .reference, .passage-reference,
+          .reference *, .passage-reference * {
+            color: #ffffff !important;
+            background-color: transparent !important;
+          }
+          /* Target Bible Gateway specific elements */
+          .passage-text, .passage, .text, .verse, .chapter,
+          .passage-text *, .passage *, .text *, .verse *, .chapter * {
+            color: #e0e0e0 !important;
+            background-color: transparent !important;
+          }
+          /* Style verse numbers */
+          .verse-num, .verse-number, .verse-num *, .verse-number * {
+            color: #b0b0b0 !important;
+          }
+          /* Remove any white backgrounds from all elements */
+          *, *::before, *::after {
+            background-color: transparent !important;
+          }
+          /* Override any existing color styles */
+          [style*="color"] {
+            color: #e0e0e0 !important;
+          }
+          /* Style links */
+          a, a * {
+            color: #4a9eff !important;
+          }
+          a:visited, a:visited * {
+            color: #8a4aff !important;
+          }
+        `;
+        document.head.appendChild(style);
+      ''');
+    }
+  }
+
+  void _loadPassage() {
+    final translation = widget.translation ?? Preferences.translation;
+    final url = _createBibleGatewayUrl(widget.passage, translation);
+    _controller.loadRequest(Uri.parse(url));
+    // Apply dark mode styling after a short delay to ensure page is loaded
+    Future.delayed(const Duration(milliseconds: 500), () {
+      _applyDarkModeStyling();
     });
+  }
+
+  /// Public method to reload the passage with current preferences
+  void reloadPassage() {
+    _loadPassage();
+  }
+
+  /// Public method to apply dark mode styling
+  void applyDarkMode() {
+    _applyDarkModeStyling();
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<PassageResponse>(
-        future: fetchPassage(widget.passage, Preferences.translation),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            sendError("${snapshot.error}", 'PassageContainer');
-            return const Center(child: Text("An error occurred"));
-          }
-
-          return snapshot.hasData
-              ? FocusScope(
-                  autofocus: true,
-                  child: Focus(
-                      onKeyEvent: (node, event) {
-                        if (event is KeyDownEvent) {
-                          if (event.physicalKey ==
-                                  PhysicalKeyboardKey.metaLeft ||
-                              event.physicalKey ==
-                                  PhysicalKeyboardKey.metaRight) {
-                            if (event.logicalKey == LogicalKeyboardKey.equal) {
-                              _adjustFontSize(1);
-                              return KeyEventResult.handled;
-                            } else if (event.logicalKey ==
-                                LogicalKeyboardKey.minus) {
-                              _adjustFontSize(-1);
-                              return KeyEventResult.handled;
-                            }
-                          }
-                        }
-                        return KeyEventResult.ignored;
-                      },
-                      child: Scrollbar(
-                          child: SingleChildScrollView(
-                              child: Padding(
-                                  padding: const EdgeInsets.all(10),
-                                  child:
-                                      SelectableText.rich(TextSpan(children: [
-                                    TextSpan(
-                                        text: "${snapshot.data!.reference}\n\n",
-                                        style: TextStyle(
-                                            fontSize: 20,
-                                            color: MediaQuery.of(context)
-                                                        .platformBrightness ==
-                                                    Brightness.light
-                                                ? Colors.black
-                                                : Colors.white)),
-                                    TextSpan(
-                                        text:
-                                            "${snapshot.data!.verses[0].chapter.toString()}: ",
-                                        style: TextStyle(
-                                            color: MediaQuery.of(context)
-                                                        .platformBrightness ==
-                                                    Brightness.light
-                                                ? Colors.black
-                                                : Colors.white,
-                                            fontSize: _fontSize,
-                                            fontWeight: FontWeight.bold)),
-                                    ...snapshot.data!.verses.fold(
-                                        [],
-                                        (List t, Passage passage) => [
-                                              ...t,
-                                              if (snapshot.data!.verses
-                                                          .indexOf(passage) >=
-                                                      1 &&
-                                                  snapshot
-                                                          .data!
-                                                          .verses[snapshot
-                                                                  .data!.verses
-                                                                  .indexOf(
-                                                                      passage) -
-                                                              1]
-                                                          .chapter !=
-                                                      passage.chapter)
-                                                TextSpan(
-                                                    text:
-                                                        "${passage.chapter.toString()}: ",
-                                                    style: TextStyle(
-                                                        color: MediaQuery.of(
-                                                                        context)
-                                                                    .platformBrightness ==
-                                                                Brightness.light
-                                                            ? Colors.black
-                                                            : Colors.white,
-                                                        fontSize: 18,
-                                                        fontWeight:
-                                                            FontWeight.bold)),
-                                              TextSpan(
-                                                text:
-                                                    "${passage.verse.toString()} ",
-                                                style: TextStyle(
-                                                    color: MediaQuery.of(
-                                                                    context)
-                                                                .platformBrightness ==
-                                                            Brightness.light
-                                                        ? Colors.grey[700]
-                                                        : Colors.grey[400],
-                                                    fontSize: 12),
-                                              ),
-                                              TextSpan(
-                                                  recognizer:
-                                                      DoubleTapGestureRecognizer()
-                                                        ..onDoubleTap = () {
-                                                          Clipboard.setData(ClipboardData(
-                                                                  text: passage
-                                                                      .text
-                                                                      .replaceAll(
-                                                                          '\n',
-                                                                          '')))
-                                                              .then((_) {
-                                                            ScaffoldMessenger
-                                                                    .of(context)
-                                                                .showSnackBar(
-                                                                    SnackBar(
-                                                              content: const Text(
-                                                                  "Verse copied to clipboard"),
-                                                              action:
-                                                                  SnackBarAction(
-                                                                onPressed:
-                                                                    () {},
-                                                                label: "Ok",
-                                                              ),
-                                                            ));
-                                                          });
-                                                        },
-                                                  text:
-                                                      "${passage.text.replaceAll('\n', '')}\n\n",
-                                                  style: TextStyle(
-                                                    color: MediaQuery.of(
-                                                                    context)
-                                                                .platformBrightness ==
-                                                            Brightness.light
-                                                        ? Colors.black
-                                                        : Colors.white,
-                                                    fontSize: _fontSize,
-                                                  )),
-                                            ]).toList(),
-                                    TextSpan(
-                                        text:
-                                            "(${Preferences.translation.name})\n",
-                                        style: TextStyle(
-                                            color: MediaQuery.of(context)
-                                                        .platformBrightness ==
-                                                    Brightness.light
-                                                ? Colors.grey
-                                                : Colors.grey[400],
-                                            fontSize: 16)),
-                                    TextSpan(
-                                        text: Preferences.translation ==
-                                                Translation.esv
-                                            ? """
-Scripture quotations are from the ESV® Bible (The Holy Bible, English Standard Version®), copyright © 2001 by Crossway, a publishing ministry of Good News Publishers. Used by permission. All rights reserved. The ESV text may not be quoted in any publication made available to the public by a Creative Commons license. The ESV may not be translated into any other language.
-Users may not copy or download more than 500 verses of the ESV Bible or more than one half of any book of the ESV Bible.\n\n"""
-                                            : "\n",
-                                        style: const TextStyle(
-                                            color: Colors.grey, fontSize: 12)),
-                                  ])))))))
-              : const Center(child: CircularProgressIndicator());
-        });
+    return Stack(
+      children: [
+        WebViewWidget(controller: _controller),
+        if (_isLoading)
+          const Center(
+            child: CircularProgressIndicator(),
+          ),
+      ],
+    );
   }
 }

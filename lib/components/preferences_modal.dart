@@ -4,7 +4,10 @@ import 'package:homiletics/classes/preferences.dart';
 import 'package:homiletics/classes/translation.dart';
 
 class PreferencesModal extends StatefulWidget {
-  const PreferencesModal({Key? key}) : super(key: key);
+  final VoidCallback? onTranslationChanged;
+
+  const PreferencesModal({Key? key, this.onTranslationChanged})
+      : super(key: key);
   @override
   PreferencesModalState createState() => PreferencesModalState();
 }
@@ -69,6 +72,8 @@ class PreferencesModalState extends State<PreferencesModal> {
                   Preferences.preferredVersion =
                       selected ?? Translation.web.code;
                   setState(() {});
+                  // Notify parent widget that translation has changed
+                  widget.onTranslationChanged?.call();
                 },
               ),
             ]),
