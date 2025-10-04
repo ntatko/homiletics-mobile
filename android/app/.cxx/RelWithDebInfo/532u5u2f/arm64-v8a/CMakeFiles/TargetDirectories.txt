@@ -1,0 +1,2 @@
+/Users/ntatko/Documents/programming/bsf/homiletics/homiletics-mobile/android/app/.cxx/RelWithDebInfo/532u5u2f/arm64-v8a/CMakeFiles/edit_cache.dir
+/Users/ntatko/Documents/programming/bsf/homiletics/homiletics-mobile/android/app/.cxx/RelWithDebInfo/532u5u2f/arm64-v8a/CMakeFiles/rebuild_cache.dir

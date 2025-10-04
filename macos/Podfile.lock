@@ -12,6 +12,9 @@ PODS:
     - FlutterMacOS
   - url_launcher_macos (0.0.1):
     - FlutterMacOS
+  - webview_flutter_wkwebview (0.0.1):
+    - Flutter
+    - FlutterMacOS
 
 DEPENDENCIES:
   - FlutterMacOS (from `Flutter/ephemeral`)
@@ -20,6 +23,7 @@ DEPENDENCIES:
   - printing (from `Flutter/ephemeral/.symlinks/plugins/printing/macos`)
   - sqflite (from `Flutter/ephemeral/.symlinks/plugins/sqflite/darwin`)
   - url_launcher_macos (from `Flutter/ephemeral/.symlinks/plugins/url_launcher_macos/macos`)
+  - webview_flutter_wkwebview (from `Flutter/ephemeral/.symlinks/plugins/webview_flutter_wkwebview/darwin`)
 
 EXTERNAL SOURCES:
   FlutterMacOS:
@@ -34,6 +38,8 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/sqflite/darwin
   url_launcher_macos:
     :path: Flutter/ephemeral/.symlinks/plugins/url_launcher_macos/macos
+  webview_flutter_wkwebview:
+    :path: Flutter/ephemeral/.symlinks/plugins/webview_flutter_wkwebview/darwin
 
 SPEC CHECKSUMS:
   FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
@@ -42,7 +48,8 @@ SPEC CHECKSUMS:
   printing: 1dd6a1fce2209ec240698e2439a4adbb9b427637
   sqflite: 673a0e54cc04b7d6dba8d24fb8095b31c3a99eec
   url_launcher_macos: c82c93949963e55b228a30115bd219499a6fe404
+  webview_flutter_wkwebview: a4af96a051138e28e29f60101d094683b9f82188
 
 PODFILE CHECKSUM: ce7dbe26c78bfc7ba46736094c1e2d25982870fa
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.16.2
