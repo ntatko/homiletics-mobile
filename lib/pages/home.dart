@@ -6,7 +6,6 @@ import 'package:homiletics/components/past_lecture_notes.dart';
 import 'package:homiletics/components/past_lessons.dart';
 import 'package:homiletics/components/start_activity.dart';
 import 'package:homiletics/pages/search_page.dart';
-import 'package:material_floating_search_bar_2/material_floating_search_bar_2.dart';
 // import 'package:homiletics/storage/application_storage.dart';
 // import 'package:homiletics/storage/content_summary_storage.dart';
 // import 'package:homiletics/storage/division_storage.dart';
@@ -23,11 +22,12 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   String _searchString = '';
+  final TextEditingController _searchController = TextEditingController();
+  final FocusNode _searchFocusNode = FocusNode();
+  bool _showSearchResults = false;
 
   @override
   Widget build(BuildContext context) {
-    final isPortrait =
-        MediaQuery.of(context).orientation == Orientation.portrait;
     return Scaffold(
         // appBar: AppBar(title: const Text('Homiletics')),
         // bottomNavigationBar: BottomAppBar(
@@ -47,7 +47,7 @@ class _HomeState extends State<Home> {
             bottom: false,
             child: Stack(children: [
               ListView(children: const [
-                SizedBox(height: 50),
+                SizedBox(height: 100),
                 CurrentLessonActions(),
                 StartActivity(),
                 ApplicationList(),
@@ -60,53 +60,130 @@ class _HomeState extends State<Home> {
                 //       resetScheduleTable();
                 //     })
               ]),
+              // Simple Search Input Box
               Positioned(
-                  child: FloatingSearchBar(
-                hint: "Search...",
-                scrollPadding: const EdgeInsets.only(top: 16, bottom: 56),
-                transitionDuration: const Duration(milliseconds: 800),
-                transitionCurve: Curves.easeInOut,
-                physics: const BouncingScrollPhysics(),
-                axisAlignment: isPortrait ? 0.0 : -1.0,
-                openAxisAlignment: 0.0,
-                width: isPortrait ? 600 : 500,
-                debounceDelay: const Duration(milliseconds: 500),
-                onQueryChanged: (query) {
-                  setState(() {
-                    _searchString = query;
-                  });
-                },
-                transition: CircularFloatingSearchBarTransition(),
-                actions: [
-                  FloatingSearchBarAction.searchToClear(
-                    showIfClosed: false,
-                  ),
-                ],
-                builder: (context, transition) {
-                  return Container(
+                top: 16,
+                left: 16,
+                right: 16,
+                child: Column(
+                  children: [
+                    Container(
                       decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(16)),
-                      height: MediaQuery.of(context).size.height / 2,
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: _searchString.isEmpty
-                          ? const Center(child: Text("Type to search..."))
-                          : ListView(
-                              children: [
-                                const SizedBox(height: 16),
-                                ContentSearches(searchString: _searchString),
-                                DivisionSearches(searchString: _searchString),
-                                ApplicationSearches(
-                                    searchString: _searchString),
-                                AimSearches(searchString: _searchString),
-                                SummarySentenceSearches(
-                                    searchString: _searchString),
-                                PassageSearches(searchString: _searchString),
-                                const SizedBox(height: 16),
-                              ],
-                            ));
-                },
-              )),
+                        color: Theme.of(context).cardColor,
+                        borderRadius: BorderRadius.circular(28),
+                        border: Border.all(
+                          color:
+                              Theme.of(context).dividerColor.withOpacity(0.5),
+                          width: 1.5,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            blurRadius: 8,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: TextField(
+                        controller: _searchController,
+                        focusNode: _searchFocusNode,
+                        style: TextStyle(
+                          color: Theme.of(context).textTheme.bodyLarge?.color,
+                        ),
+                        onChanged: (value) {
+                          setState(() {
+                            _searchString = value;
+                            _showSearchResults = value.isNotEmpty;
+                          });
+                        },
+                        onTap: () {
+                          setState(() {
+                            _showSearchResults = _searchString.isNotEmpty;
+                          });
+                        },
+                        decoration: InputDecoration(
+                          hintText: "Search...",
+                          hintStyle: TextStyle(
+                            color: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.color
+                                ?.withOpacity(0.6),
+                          ),
+                          prefixIcon: Icon(
+                            Icons.search,
+                            color: Theme.of(context).iconTheme.color,
+                          ),
+                          suffixIcon: _searchString.isNotEmpty
+                              ? IconButton(
+                                  icon: Icon(
+                                    Icons.clear,
+                                    color: Theme.of(context).iconTheme.color,
+                                  ),
+                                  onPressed: () {
+                                    _searchController.clear();
+                                    setState(() {
+                                      _searchString = '';
+                                      _showSearchResults = false;
+                                    });
+                                    _searchFocusNode.unfocus();
+                                  },
+                                )
+                              : null,
+                          border: InputBorder.none,
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 20,
+                            vertical: 16,
+                          ),
+                        ),
+                      ),
+                    ),
+                    // Search Results Container
+                    if (_showSearchResults)
+                      Container(
+                        margin: const EdgeInsets.only(top: 8),
+                        constraints: BoxConstraints(
+                          maxHeight: MediaQuery.of(context).size.height * 0.5,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).cardColor,
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.1),
+                              blurRadius: 12,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(16),
+                          child: ListView(
+                            shrinkWrap: true,
+                            children: [
+                              const SizedBox(height: 16),
+                              ContentSearches(searchString: _searchString),
+                              DivisionSearches(searchString: _searchString),
+                              ApplicationSearches(searchString: _searchString),
+                              AimSearches(searchString: _searchString),
+                              SummarySentenceSearches(
+                                  searchString: _searchString),
+                              PassageSearches(searchString: _searchString),
+                              const SizedBox(height: 16),
+                            ],
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
             ])));
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    _searchFocusNode.dispose();
+    super.dispose();
   }
 }
