@@ -373,21 +373,27 @@ class _HomileticState extends State<HomileticEditor> {
                     ]),
           ],
         ),
-        body: SafeArea(
-            child: OrientationBuilder(
-                builder: (context, orientation) => SafeArea(
-                      bottom: false,
-                      child: SplitView(
-                          indicator: SplitIndicator(
-                              viewMode: orientation != Orientation.landscape
-                                  ? SplitViewMode.Vertical
-                                  : SplitViewMode.Horizontal),
-                          viewMode: orientation != Orientation.landscape
-                              ? SplitViewMode.Vertical
-                              : SplitViewMode.Horizontal,
-                          children: orientation != Orientation.landscape
-                              ? splitChildren
-                              : splitChildren.reversed.toList()),
-                    ))));
+        body: LayoutBuilder(
+            builder: (context, constraints) {
+              // Use screen size to determine orientation, not available space
+              // This prevents keyboard opening from triggering layout changes
+              final screenSize = MediaQuery.sizeOf(context);
+              final isLandscape = screenSize.width > screenSize.height;
+              
+              return SafeArea(
+                bottom: false,
+                child: SplitView(
+                    indicator: SplitIndicator(
+                        viewMode: isLandscape
+                            ? SplitViewMode.Horizontal
+                            : SplitViewMode.Vertical),
+                    viewMode: isLandscape
+                        ? SplitViewMode.Horizontal
+                        : SplitViewMode.Vertical,
+                    children: isLandscape
+                        ? splitChildren.reversed.toList()
+                        : splitChildren),
+              );
+            }));
   }
 }
