@@ -14,12 +14,15 @@ Future<pw.Document> createHomileticsPdf(
     List<Application> applications) async {
   final pdf = pw.Document();
 
-  final font = await rootBundle.load("assets/fonts/Ubuntu-Regular.ttf");
-  final regularTtf = pw.Font.ttf(font);
+  // Load regular and bold fonts to ensure all characters are properly embedded
+  final regularFont = await rootBundle.load("assets/fonts/Ubuntu-Regular.ttf");
+  final boldFont = await rootBundle.load("assets/fonts/Ubuntu-Bold.ttf");
+  final regularTtf = pw.Font.ttf(regularFont);
+  final boldTtf = pw.Font.ttf(boldFont);
 
   final pw.TextStyle defaultStyle = pw.TextStyle(font: regularTtf);
   final pw.TextStyle titleStyle = pw.TextStyle(
-      font: regularTtf, fontWeight: pw.FontWeight.bold, fontSize: 20);
+      font: boldTtf, fontSize: 20);
 
   final profileImage = pw.MemoryImage(
     (await rootBundle.load('assets/images/icon.png')).buffer.asUint8List(),
@@ -31,7 +34,7 @@ Future<pw.Document> createHomileticsPdf(
         return [
           pw.Center(
               child: pw.Text(homiletic.passage,
-                  style: const pw.TextStyle(fontSize: 30))),
+                  style: pw.TextStyle(font: regularTtf, fontSize: 30))),
           pw.Divider(),
           pw.Text("Content List:", style: titleStyle),
           pw.Table(columnWidths: {
@@ -67,9 +70,9 @@ Future<pw.Document> createHomileticsPdf(
                   .map((division) => pw.TableRow(children: [
                         pw.Container(
                           width: 40,
-                          child: pw.Text(division.passage),
+                          child: pw.Text(division.passage, style: defaultStyle),
                         ),
-                        pw.Text(division.title)
+                        pw.Text(division.title, style: defaultStyle)
                       ]))
                   .toList()
             ]),
@@ -77,41 +80,43 @@ Future<pw.Document> createHomileticsPdf(
           ],
           if (homiletic.subjectSentence != '') ...[
             pw.Text("Summary Sentence", style: titleStyle),
-            pw.Text(homiletic.subjectSentence),
+            pw.Text(homiletic.subjectSentence, style: defaultStyle),
             pw.SizedBox(height: 15),
           ],
           if (homiletic.fcf != '') ...[
             pw.Text("F.C.F.", style: titleStyle),
-            pw.Text(homiletic.fcf),
+            pw.Text(homiletic.fcf, style: defaultStyle),
             pw.SizedBox(height: 15),
           ],
           if (homiletic.aim != '') ...[
             pw.Text("AIM:", style: titleStyle),
-            pw.Text("Cause the audience to learn that ${homiletic.aim}"),
+            pw.Text("Cause the audience to learn that ${homiletic.aim}", style: defaultStyle),
             pw.SizedBox(height: 15),
           ],
           if (applications.isNotEmpty) ...[
             pw.Text("Applications:", style: titleStyle),
             ...applications
-                .map((application) => pw.Text(application.text))
+                .map((application) => pw.Text(application.text, style: defaultStyle))
                 .toList(),
             pw.SizedBox(height: 15),
           ],
           pw.Center(
               child: pw.Container(
                   margin: const pw.EdgeInsets.only(top: 15),
-                  width: 300,
                   child: pw.Row(
-                      mainAxisAlignment: pw.MainAxisAlignment.spaceEvenly,
+                      mainAxisAlignment: pw.MainAxisAlignment.center,
                       children: [
                         pw.Image(profileImage, height: 30),
-                        pw.Column(children: [
-                          pw.Text(
-                              'Copyright (c) ${DateTime.now().year} 13one.org',
-                              style: const pw.TextStyle(color: PdfColors.grey)),
-                          pw.Text('All rights reserved',
-                              style: const pw.TextStyle(color: PdfColors.grey)),
-                        ])
+                        pw.SizedBox(width: 10),
+                        pw.Text(
+                            'made with ',
+                            style: pw.TextStyle(font: regularTtf, color: PdfColors.grey)),
+                        pw.UrlLink(
+                          destination: 'https://homiletics.app',
+                          child: pw.Text(
+                              'homiletics.app',
+                              style: pw.TextStyle(font: regularTtf, color: PdfColors.blue)),
+                        ),
                       ])))
         ];
       }));
