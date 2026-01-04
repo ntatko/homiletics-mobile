@@ -72,13 +72,14 @@ class _HomeState extends State<Home> {
                         color: Theme.of(context).cardColor,
                         borderRadius: BorderRadius.circular(28),
                         border: Border.all(
-                          color:
-                              Theme.of(context).dividerColor.withOpacity(0.5),
+                          color: Theme.of(context)
+                              .dividerColor
+                              .withValues(alpha: 0.5),
                           width: 1.5,
                         ),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
+                            color: Colors.black.withValues(alpha: 0.1),
                             blurRadius: 8,
                             offset: const Offset(0, 2),
                           ),
@@ -108,7 +109,7 @@ class _HomeState extends State<Home> {
                                 .textTheme
                                 .bodyMedium
                                 ?.color
-                                ?.withOpacity(0.6),
+                                ?.withValues(alpha: 0.6),
                           ),
                           prefixIcon: Icon(
                             Icons.search,
@@ -150,7 +151,7 @@ class _HomeState extends State<Home> {
                           borderRadius: BorderRadius.circular(16),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
+                              color: Colors.black.withValues(alpha: 0.1),
                               blurRadius: 12,
                               offset: const Offset(0, 4),
                             ),
