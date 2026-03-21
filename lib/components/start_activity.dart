@@ -16,12 +16,12 @@ class _StartActivityState extends State<StartActivity> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Container(
       padding: const EdgeInsets.only(top: 20, left: 8, right: 8),
       child: Card(
-        color: Theme.of(context).brightness == Brightness.dark
-            ? Colors.blueGrey[900]
-            : Colors.blueGrey[100],
+        color: colorScheme.surfaceContainerHigh,
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: Column(
@@ -44,12 +44,11 @@ class _StartActivityState extends State<StartActivity> {
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20),
-                    borderSide: BorderSide(color: Colors.grey.shade400),
+                    borderSide: BorderSide(color: colorScheme.outlineVariant),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20),
-                    borderSide:
-                        BorderSide(color: Theme.of(context).primaryColor),
+                    borderSide: BorderSide(color: colorScheme.primary),
                   ),
                 ),
               ),

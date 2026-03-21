@@ -2,8 +2,12 @@ import 'dart:async';
 
 import 'package:homiletics/classes/application.dart';
 import 'package:homiletics/common/report_error.dart';
+import 'package:homiletics/storage/sync_push_for_homiletic.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:uuid/uuid.dart';
+
+const _appUuid = Uuid();
 
 final Future<Database> database = getDatabasesPath().then((String path) {
   return openDatabase(
@@ -13,11 +17,26 @@ final Future<Database> database = getDatabasesPath().then((String path) {
             CREATE TABLE applications (
               id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
               text TEXT,
-              homiletic_id INTEGER
+              homiletic_id INTEGER,
+              uuid TEXT
             )
             ''');
     },
-    version: 1,
+    version: 2,
+    onUpgrade: (db, oldVersion, newVersion) async {
+      if (oldVersion < 2) {
+        await db.execute('ALTER TABLE applications ADD COLUMN uuid TEXT');
+        final rows = await db.query('applications');
+        for (final row in rows) {
+          await db.update(
+            'applications',
+            {'uuid': _appUuid.v4()},
+            where: 'id = ?',
+            whereArgs: [row['id']],
+          );
+        }
+      }
+    },
   );
 });
 
@@ -46,7 +65,8 @@ Future<void> resetApplicationsTable() async {
             CREATE TABLE applications (
               id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
               text TEXT,
-              homiletic_id INTEGER
+              homiletic_id INTEGER,
+              uuid TEXT
             )
             ''');
 }
@@ -54,9 +74,14 @@ Future<void> resetApplicationsTable() async {
 Future<int> insertApplication(Application application) async {
   try {
     final Database db = await database;
+    if (application.uuid == null || application.uuid!.trim().isEmpty) {
+      application.uuid = _appUuid.v4();
+    }
 
-    return await db.insert('applications', application.toJson(),
+    final id = await db.insert('applications', application.toJson(),
         conflictAlgorithm: ConflictAlgorithm.replace);
+    await triggerSyncPushForHomileticId(application.homileticsId);
+    return id;
   } catch (error) {
     sendError(error, "insertApplication");
     throw Exception("Failed to insert Application");
@@ -69,6 +94,7 @@ Future<void> updateApplication(Application application) async {
 
     await db.update('applications', application.toJson()..remove('id'),
         where: 'id = ?', whereArgs: [application.id]);
+    await triggerSyncPushForHomileticId(application.homileticsId);
   } catch (error) {
     sendError(error, "updateApplication");
     throw Exception("Failed to update application");
@@ -81,6 +107,7 @@ Future<void> deleteApplication(Application application) async {
 
     await db
         .delete('applications', where: 'id = ?', whereArgs: [application.id]);
+    await triggerSyncPushForHomileticId(application.homileticsId);
   } catch (error) {
     sendError(error, "deleteApplication");
     throw Exception("Failed to delete application");

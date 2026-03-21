@@ -2,8 +2,12 @@ import 'dart:async';
 
 import 'package:homiletics/classes/Division.dart';
 import 'package:homiletics/common/report_error.dart';
+import 'package:homiletics/storage/sync_push_for_homiletic.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:uuid/uuid.dart';
+
+const _uuid = Uuid();
 
 final Future<Database> database = getDatabasesPath().then((String path) {
   return openDatabase(
@@ -15,11 +19,26 @@ final Future<Database> database = getDatabasesPath().then((String path) {
               title TEXT,
               passage TEXT,
               sort INTEGER,
-              homiletic_id INTEGER
+              homiletic_id INTEGER,
+              uuid TEXT
             )
             ''');
     },
-    version: 1,
+    version: 2,
+    onUpgrade: (db, oldVersion, newVersion) async {
+      if (oldVersion < 2) {
+        await db.execute('ALTER TABLE divisions ADD COLUMN uuid TEXT');
+        final rows = await db.query('divisions');
+        for (final row in rows) {
+          await db.update(
+            'divisions',
+            {'uuid': _uuid.v4()},
+            where: 'id = ?',
+            whereArgs: [row['id']],
+          );
+        }
+      }
+    },
   );
 });
 
@@ -51,7 +70,8 @@ Future<void> resetDivisionsTable() async {
               title TEXT,
               passage TEXT,
               sort INTEGER,
-              homiletic_id INTEGER
+              homiletic_id INTEGER,
+              uuid TEXT
             )
             ''');
   } catch (error) {
@@ -63,9 +83,14 @@ Future<void> resetDivisionsTable() async {
 Future<int> insertDivision(Division division) async {
   try {
     final Database db = await database;
+    if (division.uuid == null || division.uuid!.trim().isEmpty) {
+      division.uuid = _uuid.v4();
+    }
 
-    return await db.insert('divisions', division.toJson(),
+    final id = await db.insert('divisions', division.toJson(),
         conflictAlgorithm: ConflictAlgorithm.replace);
+    await triggerSyncPushForHomileticId(division.homileticId);
+    return id;
   } catch (error) {
     sendError(error, "insertDivision");
     throw Exception("Failed to insert division");
@@ -78,6 +103,7 @@ Future<void> updateDivision(Division division) async {
 
     await db.update('divisions', division.toJson()..remove('id'),
         where: 'id = ?', whereArgs: [division.id]);
+    await triggerSyncPushForHomileticId(division.homileticId);
   } catch (error) {
     sendError(error, "updateDivision");
     throw Exception("Failed to update division");
@@ -89,6 +115,7 @@ Future<void> deleteDivision(Division division) async {
     final Database db = await database;
 
     await db.delete('divisions', where: 'id = ?', whereArgs: [division.id]);
+    await triggerSyncPushForHomileticId(division.homileticId);
   } catch (error) {
     sendError(error, "deleteDivision");
     throw Exception("Failed to delete division");

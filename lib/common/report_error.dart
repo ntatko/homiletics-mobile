@@ -9,8 +9,7 @@ Future<void> sendError(Object error, String identifier) async {
   // PackageInfo packageInfo = await PackageInfo.fromPlatform();
   var client = http.Client();
   await client.post(
-      Uri.parse(
-          'https://homiletics-directus.cloud.plodamouse.com//items/app_error'),
+      Uri.parse('https://api.homiletics.app/errors'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

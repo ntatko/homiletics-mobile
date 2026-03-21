@@ -1,9 +1,13 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:homiletics/classes/preferences.dart';
 import 'package:homiletics/pages/home.dart';
+import 'package:homiletics/services/realtime_sync_client.dart';
+import 'package:homiletics/services/sync_service.dart';
+import 'package:homiletics/sync_trigger.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 
@@ -24,6 +28,11 @@ void main() async {
     Hive.init(hiveDir.path);
 
     await Preferences.init();
+    onSyncDataChanged = () {
+      unawaited(SyncService.instance.schedulePush());
+    };
+    SyncService.instance.pullIfSignedIn();
+    RealtimeSyncClient.instance.start();
   } catch (e) {
     // print(e);
   }
@@ -35,23 +44,27 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    final lightScheme = ColorScheme.fromSeed(
+      seedColor: const Color(0xFF2F8F6B),
+      brightness: Brightness.light,
+    );
+    final darkScheme = ColorScheme.fromSeed(
+      seedColor: const Color(0xFF2F8F6B),
+      brightness: Brightness.dark,
+    );
+
     return MaterialApp(
       title: 'Homiletics',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
         useMaterial3: true,
-        primarySwatch: Colors.blue,
-        brightness: MediaQuery.of(context).platformBrightness,
+        colorScheme: lightScheme,
       ),
+      darkTheme: ThemeData(
+        useMaterial3: true,
+        colorScheme: darkScheme,
+      ),
+      themeMode: ThemeMode.system,
       home: const Home(),
     );
   }

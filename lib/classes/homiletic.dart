@@ -27,33 +27,44 @@ class Homiletic {
   /// A list of [Application]s in the homiletic.
   List<Application>? applications;
 
-  /// The id of the homiletic.
+  /// The id of the homiletic (local DB id; may change after sync).
   int id;
+
+  /// Stable cross-device id for sync and locking. Generated on create if null.
+  String? uuid;
 
   /// The time that the homiletic was last updated.
   DateTime? updatedAt;
 
   /// The fcf field of the homiletic.
   String fcf;
+  Future<void> _pendingWrite = Future<void>.value();
 
   Homiletic({
     this.passage = '',
     this.subjectSentence = '',
     this.aim = '',
     this.id = -1,
+    this.uuid,
     this.updatedAt,
-    this.fcf = '', // Add this line
+    this.fcf = '',
   });
 
   /// Creates a new [Homiletic] from a JSON map.
   factory Homiletic.fromJson(Map<String, dynamic> json) {
+    final updatedAtRaw = json['updated_at'];
     return Homiletic(
       passage: json['passage'].toString(),
       subjectSentence: json['subject_sentence'].toString(),
       aim: json['aim'].toString(),
       id: int.parse(json['id'].toString()),
-      updatedAt: DateTime.parse(json['updated_at']),
-      fcf: json['fcf'].toString(), // Add this line
+      uuid: json['uuid']?.toString().trim().isNotEmpty == true
+          ? json['uuid'].toString().trim()
+          : null,
+      updatedAt: updatedAtRaw != null && updatedAtRaw.toString().isNotEmpty
+          ? DateTime.tryParse(updatedAtRaw.toString())
+          : null,
+      fcf: json['fcf']?.toString() ?? '',
     );
   }
 
@@ -63,19 +74,22 @@ class Homiletic {
         "subject_sentence": subjectSentence,
         "aim": aim,
         "id": id,
+        "uuid": uuid ?? '',
         "updated_at": updatedAt?.toIso8601String() ?? '',
-        "fcf": fcf, // Add this line
+        "fcf": fcf,
       };
 
   /// Updates the homiletic in the database with whatever is in this object.
   Future<void> update() async {
-    if (!kIsWeb) {
+    if (kIsWeb) return;
+    _pendingWrite = _pendingWrite.catchError((_) {}).then((_) async {
       if (id == -1) {
         id = await insertHomiletic(this);
       } else {
         await updateHomiletic(this);
       }
-    }
+    });
+    await _pendingWrite;
   }
 
   /// Updates the [passage] of the homiletic.

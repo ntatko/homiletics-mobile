@@ -14,7 +14,6 @@ class HomileticListItem extends StatelessWidget {
     return Container(
         key: Key("${homiletic.id}"),
         margin: const EdgeInsets.only(top: 5),
-        // height: 80,
         child: GestureDetector(
             onTapUp: (_) {
               Navigator.push(
@@ -49,20 +48,22 @@ class HomileticListItem extends StatelessWidget {
                         ),
                       ),
                     )),
-                Padding(
-                    padding: const EdgeInsets.only(left: 15),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Text(homiletic.passage,
-                            style: const TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 17)),
-                        Text(timeago.format(
-                            homiletic.updatedAt ?? DateTime.now(),
-                            locale: 'en_short')),
-                      ],
-                    ))
+                Expanded(
+                  child: Padding(
+                      padding: const EdgeInsets.only(left: 15),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Text(homiletic.passage,
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 17)),
+                          Text(timeago.format(
+                              homiletic.updatedAt ?? DateTime.now(),
+                              locale: 'en_short')),
+                        ],
+                      )),
+                ),
               ]),
             )));
   }

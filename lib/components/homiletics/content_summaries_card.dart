@@ -8,6 +8,8 @@ class ContentSummariesCard extends StatefulWidget {
   final Homiletic homiletic;
   final void Function() addContentSummary;
   final void Function() removeContentSummary;
+  final Future<void> Function(List<ContentSummary> reordered)
+      reorderContentSummaries;
 
   const ContentSummariesCard({
     Key? key,
@@ -15,6 +17,7 @@ class ContentSummariesCard extends StatefulWidget {
     required this.homiletic,
     required this.addContentSummary,
     required this.removeContentSummary,
+    required this.reorderContentSummaries,
   }) : super(key: key);
 
   @override
@@ -22,6 +25,70 @@ class ContentSummariesCard extends StatefulWidget {
 }
 
 class ContentSummariesCardState extends State<ContentSummariesCard> {
+  Future<void> _showReorderModal() async {
+    final workingList = List<ContentSummary>.from(widget.contentSummaries);
+    final result = await showDialog<List<ContentSummary>>(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setDialogState) {
+            return AlertDialog(
+              title: const Text('Reorder Content Summaries'),
+              content: SizedBox(
+                width: 500,
+                height: 420,
+                child: ReorderableListView.builder(
+                  itemCount: workingList.length,
+                  onReorder: (oldIndex, newIndex) {
+                    setDialogState(() {
+                      if (newIndex > oldIndex) {
+                        newIndex -= 1;
+                      }
+                      final moved = workingList.removeAt(oldIndex);
+                      workingList.insert(newIndex, moved);
+                    });
+                  },
+                  itemBuilder: (context, index) {
+                    final summary = workingList[index];
+                    final label = summary.summary.trim().isNotEmpty
+                        ? summary.summary.trim()
+                        : '(Empty summary)';
+                    final verses = summary.passage.trim();
+                    return ListTile(
+                      key: ValueKey(summary.id ?? 'summary-$index'),
+                      leading: const Icon(Icons.drag_indicator),
+                      title: Text(
+                        label,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      subtitle: verses.isNotEmpty ? Text(verses) : null,
+                    );
+                  },
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text('Cancel'),
+                ),
+                ElevatedButton(
+                  onPressed: () => Navigator.of(context).pop(workingList),
+                  child: const Text('Save Order'),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+
+    if (result == null) return;
+    await widget.reorderContentSummaries(result);
+    if (!mounted) return;
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -124,6 +191,25 @@ class ContentSummariesCardState extends State<ContentSummariesCard> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 0),
+                      minimumSize: const Size(0, 40),
+                    ),
+                    onPressed: widget.contentSummaries.length > 1
+                        ? _showReorderModal
+                        : null,
+                    child: const Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.reorder, size: 20),
+                        SizedBox(width: 4),
+                        Text('Reorder'),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 5),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.all(8),

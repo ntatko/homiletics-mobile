@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:homiletics/classes/homiletic.dart';
 import 'package:homiletics/classes/lecture_note.dart';
 import 'package:homiletics/pages/homeletic_editor.dart';
@@ -7,6 +8,8 @@ import 'package:homiletics/pages/notes_editor.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:homiletics/classes/passage_schedule.dart';
+import 'package:homiletics/storage/homiletic_storage.dart';
+import 'package:homiletics/storage/lecture_note_storage.dart';
 import 'package:loggy/loggy.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -58,42 +61,144 @@ class _CurrentLessonState extends State<CurrentLesson> {
     });
   }
 
+  /// [true] = open existing, [false] = create new, [null] = cancelled.
+  Future<bool?> _askOpenExistingOrNew({
+    required String passage,
+    required String itemLabel,
+  }) {
+    return showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text('You already have $itemLabel for this passage'),
+        content: Text(passage),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('Create new'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text('Open existing'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _openHomiletics(PassageSchedule schedule) async {
+    if (kIsWeb) {
+      final homiletic = Homiletic(passage: schedule.passage);
+      await homiletic.update();
+      if (!mounted) return;
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => HomileticEditor(homiletic: homiletic),
+      ));
+      return;
+    }
+
+    final existing = await getHomileticForPassageIfExists(schedule.passage);
+    if (!mounted) return;
+
+    if (existing != null) {
+      final openExisting = await _askOpenExistingOrNew(
+        passage: schedule.passage,
+        itemLabel: 'homiletics',
+      );
+      if (!mounted || openExisting == null) return;
+      if (openExisting) {
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => HomileticEditor(homiletic: existing),
+        ));
+        return;
+      }
+    }
+
+    final homiletic = Homiletic(passage: schedule.passage);
+    await homiletic.update();
+    if (!mounted) return;
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => HomileticEditor(homiletic: homiletic),
+    ));
+  }
+
+  Future<void> _openLectureNote(PassageSchedule schedule) async {
+    if (kIsWeb) {
+      final note = LectureNote(passage: schedule.passage);
+      await note.update();
+      if (!mounted) return;
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => NotesEditor(note: note),
+      ));
+      return;
+    }
+
+    final existing = await getLectureNoteForPassageIfExists(schedule.passage);
+    if (!mounted) return;
+
+    if (existing != null) {
+      final openExisting = await _askOpenExistingOrNew(
+        passage: schedule.passage,
+        itemLabel: 'a lecture note',
+      );
+      if (!mounted || openExisting == null) return;
+      if (openExisting) {
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => NotesEditor(note: existing),
+        ));
+        return;
+      }
+    }
+
+    final note = LectureNote(passage: schedule.passage);
+    await note.update();
+    if (!mounted) return;
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => NotesEditor(note: note),
+    ));
+  }
+
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isWideLayout = screenWidth >= 900;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding:
               const EdgeInsets.only(left: 16, right: 16, top: 20, bottom: 10),
-          child: Row(
+          child: Wrap(
+            alignment: WrapAlignment.spaceBetween,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            runSpacing: 8,
+            spacing: 12,
             children: [
-              Expanded(
-                child: Wrap(
-                  alignment: WrapAlignment.spaceBetween,
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  children: [
-                    const Text(
-                      "Current Lessons",
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              const Text(
+                "Current Lessons",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                width: isWideLayout ? 280 : screenWidth - 44,
+                child: DropdownButton<String>(
+                  value: _selectedStudy,
+                  isExpanded: true,
+                  hint: const Text("Filter by study"),
+                  onChanged: _filterSchedules,
+                  items: [
+                    const DropdownMenuItem<String>(
+                      value: null,
+                      child: Text("All studies"),
                     ),
-                    DropdownButton<String>(
-                      value: _selectedStudy,
-                      hint: const Text("Filter by study"),
-                      onChanged: _filterSchedules,
-                      items: [
-                        const DropdownMenuItem<String>(
-                          value: null,
-                          child: Text("All studies"),
-                        ),
-                        ..._uniqueStudies
-                            .map((study) => DropdownMenuItem<String>(
-                                  value: study,
-                                  child: Text(study),
-                                )),
-                      ],
-                    ),
+                    ..._uniqueStudies
+                        .map((study) => DropdownMenuItem<String>(
+                              value: study,
+                              child: Text(study),
+                            )),
                   ],
                 ),
               ),
@@ -146,28 +251,11 @@ class _CurrentLessonState extends State<CurrentLesson> {
               runSpacing: 8,
               children: [
                 ElevatedButton(
-                  onPressed: () async {
-                    Homiletic homiletic = Homiletic(passage: schedule.passage);
-                    await homiletic.update();
-                    if (mounted) {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) =>
-                            HomileticEditor(homiletic: homiletic),
-                      ));
-                    }
-                  },
+                  onPressed: () => _openHomiletics(schedule),
                   child: const Text("Homiletics"),
                 ),
                 ElevatedButton(
-                  onPressed: () async {
-                    LectureNote note = LectureNote(passage: schedule.passage);
-                    await note.update();
-                    if (mounted) {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => NotesEditor(note: note),
-                      ));
-                    }
-                  },
+                  onPressed: () => _openLectureNote(schedule),
                   child: const Text("Lecture Note"),
                 ),
               ],
@@ -208,7 +296,7 @@ Future<List<PassageSchedule>> getWebPassages() async {
   var client = http.Client();
 
   final response = await client.get(Uri.parse(
-      'https://homiletics-directus.cloud.plodamouse.com/items/suggested_passages?limit=-1'));
+      'https://api.homiletics.app/suggested-passages'));
 
   if (response.statusCode == 200) {
     List<PassageSchedule> schedules = List<PassageSchedule>.from(

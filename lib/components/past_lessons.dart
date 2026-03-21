@@ -3,16 +3,45 @@ import 'package:homiletics/classes/homiletic.dart';
 import 'package:homiletics/common/home_header.dart';
 import 'package:homiletics/common/homiletic_list_item.dart';
 import 'package:homiletics/pages/lesson_page.dart';
+import 'package:homiletics/services/sync_service.dart';
 import 'package:homiletics/storage/homiletic_storage.dart';
 import 'package:loggy/loggy.dart';
 
-class PastLessons extends StatelessWidget {
+/// Refetches from SQLite whenever [SyncService] notifies (pull, push, remote ops).
+class PastLessons extends StatefulWidget {
   const PastLessons({Key? key}) : super(key: key);
+
+  @override
+  State<PastLessons> createState() => _PastLessonsState();
+}
+
+class _PastLessonsState extends State<PastLessons> {
+  late Future<List<Homiletic>> _homileticsFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _homileticsFuture = getAllHomiletics();
+    SyncService.instance.addListener(_onSyncChanged);
+  }
+
+  @override
+  void dispose() {
+    SyncService.instance.removeListener(_onSyncChanged);
+    super.dispose();
+  }
+
+  void _onSyncChanged() {
+    if (!mounted) return;
+    setState(() {
+      _homileticsFuture = getAllHomiletics();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<Homiletic>>(
-        future: getAllHomiletics(),
+        future: _homileticsFuture,
         builder: (context, snapshot) {
           if (snapshot.hasError) logError('${snapshot.error}');
 

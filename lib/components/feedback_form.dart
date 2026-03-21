@@ -119,8 +119,7 @@ class _FeedbackFormState extends State<FeedbackForm> {
 
 Future<void> submitFeedback(String name, String email, String feedback) async {
   await http.post(
-    Uri.parse(
-        'https://homiletics-directus.cloud.plodamouse.com/items/homiletics_feedback'),
+    Uri.parse('https://api.homiletics.app/feedback'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:homiletics/classes/lecture_note.dart';
+import 'package:homiletics/common/passage_match.dart';
 import 'package:homiletics/common/report_error.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -132,5 +133,28 @@ Future<List<LectureNote>> getLectureNoteByText(String text) async {
   } catch (error) {
     sendError(error, "getLectureNoteByText");
     throw Exception("failed to get lecture notes");
+  }
+}
+
+/// Most recently updated lecture note whose passage matches [passage] (normalized), or null.
+Future<LectureNote?> getLectureNoteForPassageIfExists(String passage) async {
+  try {
+    final target = normalizePassageRef(passage);
+    final all = await getLectureNotes();
+    LectureNote? best;
+    for (final n in all) {
+      if (normalizePassageRef(n.passage) != target) continue;
+      if (best == null) {
+        best = n;
+        continue;
+      }
+      final a = n.time ?? DateTime.fromMillisecondsSinceEpoch(0);
+      final b = best.time ?? DateTime.fromMillisecondsSinceEpoch(0);
+      if (a.isAfter(b)) best = n;
+    }
+    return best;
+  } catch (error) {
+    sendError(error, "getLectureNoteForPassageIfExists");
+    return null;
   }
 }

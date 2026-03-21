@@ -1,9 +1,14 @@
 import 'dart:async';
 
 import 'package:homiletics/classes/homiletic.dart';
+import 'package:homiletics/common/passage_match.dart';
 import 'package:homiletics/common/report_error.dart';
+import 'package:homiletics/sync_trigger.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:uuid/uuid.dart';
+
+const _uuid = Uuid();
 
 final Future<Database> database = getDatabasesPath().then((String path) {
   return openDatabase(
@@ -12,6 +17,7 @@ final Future<Database> database = getDatabasesPath().then((String path) {
       return db.execute('''
             CREATE TABLE homiletics (
               id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+              uuid TEXT,
               passage TEXT,
               subject_sentence TEXT,
               aim TEXT,
@@ -20,10 +26,14 @@ final Future<Database> database = getDatabasesPath().then((String path) {
             )
             ''');
     },
-    version: 2,
-    onUpgrade: (db, oldVersion, newVersion) {
+    version: 3,
+    onUpgrade: (db, oldVersion, newVersion) async {
       if (oldVersion < 2) {
-        db.execute('ALTER TABLE homiletics ADD COLUMN fcf TEXT DEFAULT ""');
+        await db
+            .execute('ALTER TABLE homiletics ADD COLUMN fcf TEXT DEFAULT ""');
+      }
+      if (oldVersion < 3) {
+        await db.execute('ALTER TABLE homiletics ADD COLUMN uuid TEXT');
       }
     },
   );
@@ -47,6 +57,34 @@ Future<List<Homiletic>> getAllHomiletics() async {
   }
 }
 
+Future<List<Homiletic>> ensureAllHomileticsHaveUuids() async {
+  try {
+    final db = await database;
+    final homiletics = await getAllHomiletics();
+    var changed = false;
+    for (final homiletic in homiletics) {
+      if (homiletic.uuid != null && homiletic.uuid!.trim().isNotEmpty) {
+        continue;
+      }
+      homiletic.uuid = _uuid.v4();
+      await db.update(
+        'homiletics',
+        {'uuid': homiletic.uuid},
+        where: 'id = ?',
+        whereArgs: [homiletic.id],
+      );
+      changed = true;
+    }
+    if (changed) {
+      triggerSyncPush();
+    }
+    return homiletics;
+  } catch (error) {
+    sendError(error, "ensureAllHomileticsHaveUuids");
+    throw Exception("Failed to ensure homiletic UUIDs");
+  }
+}
+
 Future<Homiletic> getHomileticById(int id) async {
   try {
     final Database db = await database;
@@ -60,6 +98,22 @@ Future<Homiletic> getHomileticById(int id) async {
   }
 }
 
+Future<Homiletic?> getHomileticByUuid(String uuid) async {
+  try {
+    final Database db = await database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      'homiletics',
+      where: 'uuid = ?',
+      whereArgs: [uuid],
+    );
+    if (maps.isEmpty) return null;
+    return Homiletic.fromJson(maps[0]);
+  } catch (error) {
+    sendError(error, "getHomileticByUuid");
+    return null;
+  }
+}
+
 Future<void> resetTable() async {
   try {
     final Database db = await database;
@@ -67,6 +121,7 @@ Future<void> resetTable() async {
     await db.execute('''
             CREATE TABLE homiletics (
               id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+              uuid TEXT,
               passage TEXT,
               subject_sentence TEXT,
               aim TEXT,
@@ -84,9 +139,14 @@ Future<int> insertHomiletic(Homiletic homiletic) async {
   try {
     final Database db = await database;
     homiletic.updatedAt = DateTime.now();
+    if (homiletic.uuid == null || homiletic.uuid!.isEmpty) {
+      homiletic.uuid = _uuid.v4();
+    }
 
-    return await db.insert('homiletics', homiletic.toJson()..remove('id'),
+    final id = await db.insert('homiletics', homiletic.toJson()..remove('id'),
         conflictAlgorithm: ConflictAlgorithm.replace);
+    triggerSyncPush(homileticUuid: homiletic.uuid);
+    return id;
   } catch (error) {
     sendError(error, "insertHomiletic");
     throw Exception("Failed to insert homiletic");
@@ -97,9 +157,13 @@ Future<void> updateHomiletic(Homiletic homiletic) async {
   try {
     final Database db = await database;
     homiletic.updatedAt = DateTime.now();
+    if (homiletic.uuid == null || homiletic.uuid!.isEmpty) {
+      homiletic.uuid = _uuid.v4();
+    }
 
     await db.update('homiletics', homiletic.toJson()..remove('id'),
         where: 'id = ?', whereArgs: [homiletic.id]);
+    triggerSyncPush(homileticUuid: homiletic.uuid);
   } catch (error) {
     sendError(error, "updateHomiletic");
     throw Exception("Failed to update homiletic");
@@ -109,8 +173,14 @@ Future<void> updateHomiletic(Homiletic homiletic) async {
 Future<void> deleteHomiletic(Homiletic homiletic) async {
   try {
     final Database db = await database;
+    final u = homiletic.uuid?.trim();
 
     await db.delete('homiletics', where: 'id = ?', whereArgs: [homiletic.id]);
+    if (u != null && u.isNotEmpty) {
+      triggerSyncPush(homileticUuid: u, removed: true);
+    } else {
+      triggerSyncPush();
+    }
   } catch (error) {
     sendError(error, "deleteHomiletic");
     throw Exception("Failed to delete homiletic");
@@ -129,6 +199,29 @@ Future<List<Homiletic>> getHomileticsByPassageText(String text) async {
   } catch (error) {
     sendError(error, "getHomileticsByText");
     throw Exception("Failed to get homiletics by text");
+  }
+}
+
+/// Most recently updated homiletic whose passage matches [passage] (normalized), or null.
+Future<Homiletic?> getHomileticForPassageIfExists(String passage) async {
+  try {
+    final target = normalizePassageRef(passage);
+    final all = await getAllHomiletics();
+    Homiletic? best;
+    for (final h in all) {
+      if (normalizePassageRef(h.passage) != target) continue;
+      if (best == null) {
+        best = h;
+        continue;
+      }
+      final a = h.updatedAt ?? DateTime.fromMillisecondsSinceEpoch(0);
+      final b = best.updatedAt ?? DateTime.fromMillisecondsSinceEpoch(0);
+      if (a.isAfter(b)) best = h;
+    }
+    return best;
+  } catch (error) {
+    sendError(error, "getHomileticForPassageIfExists");
+    return null;
   }
 }
 

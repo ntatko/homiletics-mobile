@@ -12,6 +12,8 @@ class ApplicationListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return GestureDetector(
         onTapUp: (_) async {
           Homiletic homiletic =
@@ -24,10 +26,7 @@ class ApplicationListItem extends StatelessWidget {
         child: SizedBox(
             width: 180,
             child: Card(
-                color: MediaQuery.of(context).platformBrightness ==
-                        Brightness.light
-                    ? Colors.green[300]
-                    : Colors.green[800],
+                color: colorScheme.secondaryContainer,
                 margin: const EdgeInsets.only(
                     top: 10, left: 10, right: 10, bottom: 20),
                 // decoration: BoxDecoration(
@@ -45,7 +44,10 @@ class ApplicationListItem extends StatelessWidget {
                       application.text,
                       maxLines: 6,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(fontSize: 20),
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: colorScheme.onSecondaryContainer,
+                      ),
                     )))));
   }
 }

@@ -11,12 +11,12 @@ class ApplicationList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Container(
         margin: const EdgeInsets.only(left: 10, right: 10, top: 20, bottom: 20),
         child: Card(
-            color: Theme.of(context).brightness == Brightness.dark
-                ? Colors.green[900]
-                : Colors.green[100],
+            color: colorScheme.primaryContainer,
             child: FutureBuilder<List<Application>>(
               future: getAllApplications(),
               builder: (context, snapshot) {

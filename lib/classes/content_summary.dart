@@ -14,38 +14,53 @@ class ContentSummary {
   /// The id of the Homiletic with which this [ContentSummary] associates to.
   int homileticId;
 
+  /// Stable id for operational sync (cross-device).
+  String? uuid;
+
+  /// Relative sort order within a homiletic.
+  int? sort;
+  Future<void> _pendingWrite = Future<void>.value();
+
   ContentSummary(
       {this.summary = '',
       this.passage = '',
       this.id,
+      this.sort,
+      this.uuid,
       required this.homileticId});
 
   /// Convert this [ContentSummary] to a [Map].
   Map<String, dynamic> toJson() => {
         "summary": summary,
         "passage": passage,
+        "sort": sort,
         "homiletic_id": homileticId,
-        "id": id
+        "id": id,
+        "uuid": uuid,
       };
 
   /// Create a new [ContentSummary] from a [Map].
   factory ContentSummary.fromJson(Map<String, dynamic> json) {
     return ContentSummary(
-        summary: json['summary'],
-        passage: json['passage'],
+        summary: json['summary'] ?? '',
+        passage: json['passage'] ?? '',
+        sort: json['sort'] as int?,
         homileticId: json['homiletic_id'],
-        id: json['id']);
+        id: json['id'],
+        uuid: json['uuid']?.toString());
   }
 
   /// Update the database with the contents of this [ContentSummary].
   Future<void> update() async {
-    if (!kIsWeb) {
+    if (kIsWeb) return;
+    _pendingWrite = _pendingWrite.catchError((_) {}).then((_) async {
       if (id == null) {
         id = await insertSummary(this);
       } else {
         await updateSummary(this);
       }
-    }
+    });
+    await _pendingWrite;
   }
 
   /// Update the [passage] of this [ContentSummary].

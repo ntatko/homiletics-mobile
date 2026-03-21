@@ -2,13 +2,41 @@ import 'package:flutter/material.dart';
 import 'package:homiletics/classes/homiletic.dart';
 import 'package:homiletics/pages/home.dart';
 import 'package:homiletics/pages/homeletic_editor.dart';
+import 'package:homiletics/services/sync_service.dart';
 import 'package:homiletics/storage/homiletic_storage.dart';
 import 'package:loggy/loggy.dart';
 import 'package:string_to_hex/string_to_hex.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
-class HomileticsList extends StatelessWidget {
+class HomileticsList extends StatefulWidget {
   const HomileticsList({Key? key}) : super(key: key);
+
+  @override
+  State<HomileticsList> createState() => _HomileticsListState();
+}
+
+class _HomileticsListState extends State<HomileticsList> {
+  late Future<List<Homiletic>> _homileticsFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _homileticsFuture = getAllHomiletics();
+    SyncService.instance.addListener(_onSyncChanged);
+  }
+
+  @override
+  void dispose() {
+    SyncService.instance.removeListener(_onSyncChanged);
+    super.dispose();
+  }
+
+  void _onSyncChanged() {
+    if (!mounted) return;
+    setState(() {
+      _homileticsFuture = getAllHomiletics();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +52,7 @@ class HomileticsList extends StatelessWidget {
               ),
             ),
             body: FutureBuilder<List<Homiletic>>(
-              future: getAllHomiletics(),
+              future: _homileticsFuture,
               builder: (context, snapshot) {
                 if (snapshot.hasError) logError('${snapshot.error}');
 

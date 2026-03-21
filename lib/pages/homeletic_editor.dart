@@ -1,3 +1,5 @@
+import 'dart:developer' as developer;
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:homiletics/classes/application.dart';
@@ -39,15 +41,28 @@ class _HomileticState extends State<HomileticEditor> {
   String _translationVersion = 'web';
   final GlobalKey<VerseContainerState> _verseContainerKey =
       GlobalKey<VerseContainerState>();
+  int _buildCount = 0;
+
+  void _editorLog(String message, {Object? error, StackTrace? stackTrace}) {
+    developer.log(
+      message,
+      name: 'homiletics.editor',
+      error: error,
+      stackTrace: stackTrace,
+    );
+    debugPrint('[homiletics.editor] $message${error != null ? ' | $error' : ''}');
+  }
 
   @override
   void initState() {
     super.initState();
-    setState(() {
-      _thisHomiletic = widget.homiletic ?? Homiletic();
-      _translationVersion = Preferences.preferredVersion;
-    });
+    _thisHomiletic = widget.homiletic ?? Homiletic();
+    _translationVersion = Preferences.preferredVersion;
     _fcfController = TextEditingController(text: _thisHomiletic.fcf);
+    _editorLog(
+      'initState: id=${_thisHomiletic.id} uuid=${_thisHomiletic.uuid ?? "(new)"} '
+      'passage="${_thisHomiletic.passage}"',
+    );
     prepTheTable();
   }
 
@@ -57,6 +72,10 @@ class _HomileticState extends State<HomileticEditor> {
     // Check if translation preference has changed and reload if needed
     final currentTranslation = Preferences.preferredVersion;
     if (currentTranslation != _translationVersion) {
+      _editorLog(
+        'didChangeDependencies: translation changed '
+        '$_translationVersion -> $currentTranslation',
+      );
       setState(() {
         _translationVersion = currentTranslation;
       });
@@ -69,18 +88,37 @@ class _HomileticState extends State<HomileticEditor> {
 
   @override
   void dispose() {
+    _editorLog('dispose: id=${_thisHomiletic.id} uuid=${_thisHomiletic.uuid}');
     _fcfController.dispose();
     super.dispose();
   }
 
   prepTheTable() async {
+    final startedAt = DateTime.now();
+    _editorLog('prepTheTable: start');
     await _thisHomiletic.update();
+    _editorLog('prepTheTable: homiletic updated id=${_thisHomiletic.id}');
     List<ContentSummary> savedSummaries =
         await getSummariesByHomileticId(_thisHomiletic.id);
+    if (savedSummaries.length > 200) {
+      _editorLog(
+        'prepTheTable: detected suspicious summary count '
+        '${savedSummaries.length}, deduping',
+      );
+      savedSummaries =
+          await dedupeSummariesByHomileticId(_thisHomiletic.id);
+      _editorLog(
+        'prepTheTable: dedupe complete, summaries=${savedSummaries.length}',
+      );
+    }
     List<Division> savedDivisions =
         await getDivisionsByHomileticId(_thisHomiletic.id);
     List<Application> savedApplications =
         await getApplicationsByHomileticId(_thisHomiletic.id);
+    _editorLog(
+      'prepTheTable: loaded summaries=${savedSummaries.length} '
+      'divisions=${savedDivisions.length} applications=${savedApplications.length}',
+    );
 
     setState(() {
       _summaries = savedSummaries.isNotEmpty
@@ -93,10 +131,19 @@ class _HomileticState extends State<HomileticEditor> {
           ? savedApplications
           : [Application.blank(_thisHomiletic.id)];
     });
+    final elapsedMs = DateTime.now().difference(startedAt).inMilliseconds;
+    _editorLog('prepTheTable: setState complete (${elapsedMs}ms)');
   }
 
   @override
   Widget build(BuildContext context) {
+    _buildCount++;
+    if (_buildCount <= 5 || _buildCount % 20 == 0) {
+      _editorLog(
+        'build#$_buildCount: summaries=${_summaries.length} '
+        'divisions=${_divisions.length} applications=${_applications.length}',
+      );
+    }
     List<Widget> splitChildren = [
       ListView(
         padding: const EdgeInsets.all(5),
@@ -105,13 +152,23 @@ class _HomileticState extends State<HomileticEditor> {
               contentSummaries: _summaries,
               homiletic: _thisHomiletic,
               addContentSummary: () {
-                _summaries.add(ContentSummary.blank(_thisHomiletic.id));
+                _summaries.add(
+                  ContentSummary.blank(_thisHomiletic.id)
+                    ..sort = _summaries.length,
+                );
               },
               removeContentSummary: () async {
                 await _summaries[_summaries.length - 1].delete();
                 setState(() {
                   _summaries.removeLast();
                 });
+                await updateSummarySortOrder(_thisHomiletic.id, _summaries);
+              },
+              reorderContentSummaries: (reordered) async {
+                setState(() {
+                  _summaries = reordered;
+                });
+                await updateSummarySortOrder(_thisHomiletic.id, _summaries);
               }),
           const SizedBox(height: 20),
           DivisionsCard(
