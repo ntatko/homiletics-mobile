@@ -208,7 +208,7 @@ Future<List<PassageSchedule>> getWebPassages() async {
   var client = http.Client();
 
   final response = await client.get(Uri.parse(
-      'https://homiletics-directus.cloud.plodamouse.com/items/suggested_passages?limit=-1'));
+      'https://api.homiletics.app/suggested-passages'));
 
   if (response.statusCode == 200) {
     List<PassageSchedule> schedules = List<PassageSchedule>.from(
