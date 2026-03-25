@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:homiletics/classes/application.dart';
 import 'package:homiletics/common/report_error.dart';
+import 'package:homiletics/storage/homiletic_storage.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -116,6 +117,29 @@ Future<List<Application>> getAllApplications() async {
     sendError(error, "getAllApplications");
     throw Exception("Failed to get all applications");
   }
+}
+
+/// Like [getAllApplications] but sets [Application.homileticPassage] for each row
+/// (homiletics live in a separate DB, so this does one lookup per distinct homiletic id).
+Future<List<Application>> getAllApplicationsWithPassages() async {
+  final apps = await getAllApplications();
+  if (apps.isEmpty) return apps;
+
+  final ids = apps.map((a) => a.homileticsId).toSet();
+  final passageById = <int, String>{};
+  for (final id in ids) {
+    try {
+      final h = await getHomileticById(id);
+      passageById[id] = h.passage.trim();
+    } catch (_) {
+      passageById[id] = '';
+    }
+  }
+  for (final a in apps) {
+    final p = passageById[a.homileticsId];
+    a.homileticPassage = (p != null && p.isNotEmpty) ? p : null;
+  }
+  return apps;
 }
 
 Future<List<Application>> getApplicationsByText(String text) async {
