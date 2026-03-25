@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:homiletics/classes/homiletic.dart';
+import 'package:homiletics/common/passage_reference.dart';
 import 'package:homiletics/common/report_error.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -114,6 +115,30 @@ Future<void> deleteHomiletic(Homiletic homiletic) async {
   } catch (error) {
     sendError(error, "deleteHomiletic");
     throw Exception("Failed to delete homiletic");
+  }
+}
+
+/// Homiletics whose [passage] matches [passage] after [normalizePassageReference],
+/// newest [Homiletic.updatedAt] first.
+Future<List<Homiletic>> getHomileticsMatchingPassageReference(String passage) async {
+  try {
+    final String key = normalizePassageReference(passage);
+    if (key.isEmpty) {
+      return [];
+    }
+    final List<Homiletic> all = await getAllHomiletics();
+    final List<Homiletic> matches = all
+        .where((Homiletic h) => normalizePassageReference(h.passage) == key)
+        .toList();
+    matches.sort((Homiletic a, Homiletic b) {
+      final DateTime ta = a.updatedAt ?? DateTime.fromMillisecondsSinceEpoch(0);
+      final DateTime tb = b.updatedAt ?? DateTime.fromMillisecondsSinceEpoch(0);
+      return tb.compareTo(ta);
+    });
+    return matches;
+  } catch (error) {
+    sendError(error, "getHomileticsMatchingPassageReference");
+    throw Exception("Failed to get homiletics by passage reference");
   }
 }
 

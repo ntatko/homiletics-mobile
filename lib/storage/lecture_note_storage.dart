@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:homiletics/classes/lecture_note.dart';
+import 'package:homiletics/common/passage_reference.dart';
 import 'package:homiletics/common/report_error.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -113,6 +114,30 @@ Future<void> deleteLectureNote(LectureNote note) async {
   } catch (error) {
     sendError(error, "deleteLectureNote");
     throw Exception("failed to update lecture note");
+  }
+}
+
+/// Lecture notes whose [passage] matches [passage] after [normalizePassageReference],
+/// newest [LectureNote.time] first.
+Future<List<LectureNote>> getLectureNotesMatchingPassageReference(String passage) async {
+  try {
+    final String key = normalizePassageReference(passage);
+    if (key.isEmpty) {
+      return [];
+    }
+    final List<LectureNote> all = await getLectureNotes();
+    final List<LectureNote> matches = all
+        .where((LectureNote n) => normalizePassageReference(n.passage) == key)
+        .toList();
+    matches.sort((LectureNote a, LectureNote b) {
+      final DateTime ta = a.time ?? DateTime.fromMillisecondsSinceEpoch(0);
+      final DateTime tb = b.time ?? DateTime.fromMillisecondsSinceEpoch(0);
+      return tb.compareTo(ta);
+    });
+    return matches;
+  } catch (error) {
+    sendError(error, "getLectureNotesMatchingPassageReference");
+    throw Exception("failed to get lecture notes by passage reference");
   }
 }
 
