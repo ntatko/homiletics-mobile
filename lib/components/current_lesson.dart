@@ -1,10 +1,9 @@
-import 'dart:convert';
-
 import 'package:homiletics/classes/homiletic.dart';
 import 'package:homiletics/classes/lecture_note.dart';
 import 'package:homiletics/pages/homeletic_editor.dart';
 import 'package:homiletics/pages/notes_editor.dart';
-import 'package:http/http.dart' as http;
+import 'package:homiletics/services/suggested_passages_repository.dart';
+import 'package:homiletics/utils/study_launch_uri.dart';
 import 'package:flutter/material.dart';
 import 'package:homiletics/classes/passage_schedule.dart';
 import 'package:loggy/loggy.dart';
@@ -32,6 +31,34 @@ class _CurrentLessonState extends State<CurrentLesson> {
       viewportFraction: 0.85,
       initialPage: _getInitialPage(),
     );
+  }
+
+  @override
+  void didUpdateWidget(CurrentLesson oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (!_sameScheduleList(oldWidget.schedules, widget.schedules)) {
+      _selectedStudy = null;
+      _filteredSchedules = widget.schedules;
+      _pageController.dispose();
+      _pageController = PageController(
+        viewportFraction: 0.85,
+        initialPage: _getInitialPage(),
+      );
+    }
+  }
+
+  bool _sameScheduleList(
+      List<PassageSchedule> a, List<PassageSchedule> b) {
+    if (a.length != b.length) return false;
+    for (var i = 0; i < a.length; i++) {
+      if (a[i].passage != b[i].passage ||
+          a[i].rollout != b[i].rollout ||
+          a[i].lesson != b[i].lesson ||
+          a[i].study != b[i].study) {
+        return false;
+      }
+    }
+    return true;
   }
 
   int _getInitialPage() {
@@ -176,8 +203,7 @@ class _CurrentLessonState extends State<CurrentLesson> {
               alignment: Alignment.centerRight,
               child: TextButton(
                 onPressed: () async {
-                  final url = Uri.parse("https://${schedule.study}");
-                  await launchUrl(url);
+                  await launchUrl(studyLaunchUri(schedule.study));
                 },
                 child: Text(schedule.study),
               ),
@@ -204,24 +230,6 @@ class LoadingLesson extends StatelessWidget {
   }
 }
 
-Future<List<PassageSchedule>> getWebPassages() async {
-  var client = http.Client();
-
-  final response = await client.get(Uri.parse(
-      'https://homiletics-directus.cloud.plodamouse.com/items/suggested_passages?limit=-1'));
-
-  if (response.statusCode == 200) {
-    List<PassageSchedule> schedules = List<PassageSchedule>.from(
-        jsonDecode(response.body)['data']
-            .map((x) => PassageSchedule.fromJson(x)));
-
-    schedules.sort((a, b) => a.rollout.compareTo(b.rollout));
-    return schedules;
-  } else {
-    throw Exception('Failed to load scheduled passages');
-  }
-}
-
 class CurrentLessonActions extends StatefulWidget {
   const CurrentLessonActions({Key? key}) : super(key: key);
 
@@ -230,20 +238,37 @@ class CurrentLessonActions extends StatefulWidget {
 }
 
 class _CurrentLessonActionsState extends State<CurrentLessonActions> {
+  List<PassageSchedule> _schedules = [];
+  bool _waitingForFirstPayload = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    await SuggestedPassagesRepository.loadWithCallback(
+      onData: (schedules) {
+        if (!mounted) return;
+        setState(() {
+          _schedules = schedules;
+          _waitingForFirstPayload = false;
+        });
+      },
+      onError: (e, st) {
+        logError('$e\n$st');
+        if (!mounted) return;
+        setState(() => _waitingForFirstPayload = false);
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<PassageSchedule>>(
-        future: getWebPassages(),
-        builder: (context, htmlSnapshot) {
-          if (htmlSnapshot.hasError) {
-            logError("${htmlSnapshot.error}");
-          }
-
-          if (htmlSnapshot.hasData) {
-            return CurrentLesson(schedules: htmlSnapshot.data!);
-          }
-
-          return const LoadingLesson();
-        });
+    if (_waitingForFirstPayload && _schedules.isEmpty) {
+      return const LoadingLesson();
+    }
+    return CurrentLesson(schedules: _schedules);
   }
 }
