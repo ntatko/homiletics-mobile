@@ -6,6 +6,9 @@ class Application {
   int homileticsId;
   int? id;
 
+  /// Passage from the linked homiletic (UI only; set by [getAllApplicationsWithPassages]).
+  String? homileticPassage;
+
   Application({this.text = '', required this.homileticsId, this.id});
 
   factory Application.fromJson(Map<String, dynamic> json) {

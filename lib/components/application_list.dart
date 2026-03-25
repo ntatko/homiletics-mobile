@@ -9,6 +9,9 @@ import 'package:loggy/loggy.dart';
 class ApplicationList extends StatelessWidget {
   const ApplicationList({Key? key}) : super(key: key);
 
+  /// Vertical space for the horizontal carousel only (cards fill this; no [Expanded] gap).
+  static const double _carouselStripHeight = 124;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -18,7 +21,7 @@ class ApplicationList extends StatelessWidget {
                 ? Colors.green[900]
                 : Colors.green[100],
             child: FutureBuilder<List<Application>>(
-              future: getAllApplications(),
+              future: getAllApplicationsWithPassages(),
               builder: (context, snapshot) {
                 if (snapshot.hasError) logError("${snapshot.error}");
 
@@ -29,35 +32,45 @@ class ApplicationList extends StatelessWidget {
                         .toList() ??
                     [];
 
-                return Container(
-                  height:
-                      snapshot.hasData && filteredDataList.isNotEmpty ? 240 : 0,
-                  width: MediaQuery.of(context).size.width,
-                  padding: const EdgeInsets.only(top: 10),
-                  child: snapshot.hasData
-                      ? Column(children: [
-                          HomeHeader(
-                              title: "Application Questions",
-                              onExpand: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => ApplicationPage(
-                                            applications: filteredDataList)));
-                              }),
-                          Expanded(
-                              child: ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: filteredDataList.length,
-                                  itemBuilder: (context, index) {
-                                    Application? application =
-                                        filteredDataList[index];
-                                    return ApplicationListItem(
-                                      application: application,
-                                    );
-                                  }))
-                        ])
-                      : const SizedBox.shrink(),
+                if (!snapshot.hasData || filteredDataList.isEmpty) {
+                  return const SizedBox.shrink();
+                }
+
+                return Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      HomeHeader(
+                        title: "Application Questions",
+                        onExpand: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ApplicationPage(
+                                applications: filteredDataList,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                      SizedBox(
+                        height: _carouselStripHeight,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          padding: const EdgeInsets.symmetric(horizontal: 4),
+                          itemCount: filteredDataList.length,
+                          itemBuilder: (context, index) {
+                            return ApplicationListItem(
+                              application: filteredDataList[index],
+                              carouselStripHeight: _carouselStripHeight,
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
                 );
               },
             )));
