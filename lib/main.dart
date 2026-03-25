@@ -4,11 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:homiletics/classes/preferences.dart';
 import 'package:homiletics/pages/home.dart';
+import 'package:homiletics/services/suggested_passages_repository.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 
 void main() async {
-  runApp(const MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
 
   try {
     // if the /hive directory does not exist, make it
@@ -20,13 +21,16 @@ void main() async {
       await hiveDir.create(recursive: true);
     }
 
-    // configure hive (hive boxes MUST BE OPEN BEFORE UI IS RENDERED)
+    // Hive must be initialized and boxes opened before runApp — UI reads Hive on first frame.
     Hive.init(hiveDir.path);
 
     await Preferences.init();
+    await SuggestedPassagesRepository.init();
   } catch (e) {
     // print(e);
   }
+
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
