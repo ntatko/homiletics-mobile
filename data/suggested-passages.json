@@ -1,0 +1,502 @@
+{
+  "data": [
+    {
+      "passage": "John 19",
+      "study": "bsfinternational.org/john",
+      "lesson": "BSF John #26",
+      "rollout": "2024-04-01T12:00:00Z"
+    },
+    {
+      "passage": "John 20",
+      "study": "bsfinternational.org/john",
+      "lesson": "BSF John #27",
+      "rollout": "2024-04-08T12:00:00Z"
+    },
+    {
+      "passage": "John 21",
+      "study": "bsfinternational.org/john",
+      "lesson": "BSF John #28",
+      "rollout": "2024-04-15T12:00:00Z"
+    },
+    {
+      "passage": "Exodus 1",
+      "study": "13one.org/exodus",
+      "lesson": "The Exodus #1",
+      "rollout": "2024-05-13T12:00:00Z"
+    },
+    {
+      "passage": "Exodus 2",
+      "study": "13one.org/exodus",
+      "lesson": "The Exodus #2",
+      "rollout": "2024-05-20T12:00:00Z"
+    },
+    {
+      "passage": "Exodus 3:1-4:17",
+      "study": "13one.org/exodus",
+      "lesson": "The Exodus #3",
+      "rollout": "2024-06-03T12:00:00Z"
+    },
+    {
+      "passage": "Exodus 4:18-6:12",
+      "study": "13one.org/exodus",
+      "lesson": "The Exodus #4",
+      "rollout": "2024-06-10T12:00:00Z"
+    },
+    {
+      "passage": "Exodus 6:13-7:13",
+      "study": "13one.org/exodus",
+      "lesson": "The Exodus #5",
+      "rollout": "2024-06-17T12:00:00Z"
+    },
+    {
+      "passage": "Exodus 7:14-8:19",
+      "study": "13one.org/exodus",
+      "lesson": "The Exodus #6",
+      "rollout": "2024-06-24T12:00:00Z"
+    },
+    {
+      "passage": "Exodus 8:20-9:12",
+      "study": "13one.org/exodus",
+      "lesson": "The Exodus #7",
+      "rollout": "2024-07-01T12:00:00Z"
+    },
+    {
+      "passage": "Exodus 9:13-10:29",
+      "study": "13one.org/exodus",
+      "lesson": "The Exodus #8",
+      "rollout": "2024-07-15T12:00:00Z"
+    },
+    {
+      "passage": "Exodus 11:1-13:16",
+      "study": "13one.org/exodus",
+      "lesson": "The Exodus #9",
+      "rollout": "2024-07-22T12:00:00Z"
+    },
+    {
+      "passage": "Exodus 13:17-15:21",
+      "study": "13one.org/exodus",
+      "lesson": "The Exodus #10",
+      "rollout": "2024-07-29T12:00:00Z"
+    },
+    {
+      "passage": "Exodus 15:22-17:7",
+      "study": "13one.org/exodus",
+      "lesson": "The Exodus #11",
+      "rollout": "2024-08-05T12:00:00Z"
+    },
+    {
+      "passage": "Exodus 17:8-18:27",
+      "study": "13one.org/exodus",
+      "lesson": "The Exodus #12",
+      "rollout": "2024-08-12T12:00:00Z"
+    },
+    {
+      "passage": "Exodus 19:1-23:33",
+      "study": "13one.org/exodus",
+      "lesson": "The Exodus #13",
+      "rollout": "2024-08-19T12:00:00Z"
+    },
+    {
+      "passage": "Exodus 24",
+      "study": "13one.org/exodus",
+      "lesson": "The Exodus #14",
+      "rollout": "2024-08-26T12:00:00Z"
+    },
+    {
+      "passage": "Revelation 1",
+      "study": "bsfinternational.org/revelation",
+      "lesson": "BSF Revelation #3",
+      "rollout": "2024-09-30T12:00:00Z"
+    },
+    {
+      "passage": "Revelation 2:1-11",
+      "study": "bsfinternational.org/revelation",
+      "lesson": "BSF Revelation #4",
+      "rollout": "2024-10-07T12:00:00Z"
+    },
+    {
+      "passage": "Revelation 2:12-3:6",
+      "study": "bsfinternational.org/revelation",
+      "lesson": "BSF Revelation #5",
+      "rollout": "2024-10-14T12:00:00Z"
+    },
+    {
+      "passage": "Revelation 3:7-22",
+      "study": "bsfinternational.org/revelation",
+      "lesson": "BSF Revelation #6",
+      "rollout": "2024-10-21T12:00:00Z"
+    },
+    {
+      "passage": "Acts 2; Romans 11; Ephesians 4",
+      "study": "bsfinternational.org/revelation",
+      "lesson": "BSF Revelation #7",
+      "rollout": "2024-10-28T12:00:00Z"
+    },
+    {
+      "passage": "Daniel 1-2;6-7",
+      "study": "bsfinternational.org/revelation",
+      "lesson": "BSF Revelation #8",
+      "rollout": "2024-11-04T12:00:00Z"
+    },
+    {
+      "passage": "Revelation 4",
+      "study": "bsfinternational.org/revelation",
+      "lesson": "BSF Revelation #9",
+      "rollout": "2024-11-11T12:00:00Z"
+    },
+    {
+      "passage": "Revelation 5",
+      "study": "bsfinternational.org/revelation",
+      "lesson": "BSF Revelation #10",
+      "rollout": "2024-11-18T12:00:00Z"
+    },
+    {
+      "passage": "Joel; 2 Peter 3",
+      "study": "bsfinternational.org/revelation",
+      "lesson": "BSF Revelation #11",
+      "rollout": "2024-11-25T12:00:00Z"
+    },
+    {
+      "passage": "Revelation 6",
+      "study": "bsfinternational.org/revelation",
+      "lesson": "BSF Revelation #12",
+      "rollout": "2024-12-09T12:00:00Z"
+    },
+    {
+      "passage": "Revelation 7",
+      "study": "bsfinternational.org/revelation",
+      "lesson": "BSF Revelation #13",
+      "rollout": "2024-12-16T12:00:00Z"
+    },
+    {
+      "passage": "Revelation 8-9",
+      "study": "bsfinternational.org/revelation",
+      "lesson": "BSF Revelation #14",
+      "rollout": "2025-01-06T12:00:00Z"
+    },
+    {
+      "passage": "Revelation 10-11",
+      "study": "bsfinternational.org/revelation",
+      "lesson": "BSF Revelation #15",
+      "rollout": "2025-01-13T12:00:00Z"
+    },
+    {
+      "passage": "Revelation 12",
+      "study": "bsfinternational.org/revelation",
+      "lesson": "BSF Revelation #16",
+      "rollout": "2025-01-20T12:00:00Z"
+    },
+    {
+      "passage": "Revelation 13",
+      "study": "bsfinternational.org/revelation",
+      "lesson": "BSF Revelation #17",
+      "rollout": "2025-01-27T12:00:00Z"
+    },
+    {
+      "passage": "Revelation 14",
+      "study": "bsfinternational.org/revelation",
+      "lesson": "BSF Revelation #19",
+      "rollout": "2025-02-10T12:00:00Z"
+    },
+    {
+      "passage": "Revelation 15-16",
+      "study": "bsfinternational.org/revelation",
+      "lesson": "BSF Revelation #20",
+      "rollout": "2025-02-17T12:00:00Z"
+    },
+    {
+      "passage": "Revelation 17",
+      "study": "bsfinternational.org/revelation",
+      "lesson": "BSF Revelation #22",
+      "rollout": "2025-03-03T12:00:00Z"
+    },
+    {
+      "passage": "Revelation 18",
+      "study": "bsfinternational.org/revelation",
+      "lesson": "BSF Revelation #23",
+      "rollout": "2025-03-10T12:00:00Z"
+    },
+    {
+      "passage": "Revelation 19",
+      "study": "bsfinternational.org/revelation",
+      "lesson": "BSF Revelation #24",
+      "rollout": "2025-03-17T12:00:00Z"
+    },
+    {
+      "passage": "Revelation 20:1-10",
+      "study": "bsfinternational.org/revelation",
+      "lesson": "BSF Revelation #25",
+      "rollout": "2025-03-24T12:00:00Z"
+    },
+    {
+      "passage": "Revelation 20:11-21:8",
+      "study": "bsfinternational.org/revelation",
+      "lesson": "BSF Revelation #26",
+      "rollout": "2025-03-31T12:00:00Z"
+    },
+    {
+      "passage": "Revelation 21:9-22:5",
+      "study": "bsfinternational.org/revelation",
+      "lesson": "BSF Revelation #27",
+      "rollout": "2025-04-07T12:00:00Z"
+    },
+    {
+      "passage": "Revelation 22:6-21",
+      "study": "bsfinternational.org/revelation",
+      "lesson": "BSF Revelation #29",
+      "rollout": "2025-04-28T12:00:00Z"
+    },
+    {
+      "passage": "1 Chronicles 28-29",
+      "study": "https://13one.org/psalms-of-the-sons-of-korah",
+      "lesson": "13one | Summer 2025",
+      "rollout": "2025-05-12T12:00:00Z"
+    },
+    {
+      "passage": "Psalm 49",
+      "study": "https://13one.org/psalms-of-the-sons-of-korah",
+      "lesson": "13one | Summer 2025",
+      "rollout": "2025-05-19T12:00:00Z"
+    },
+    {
+      "passage": "Psalm 84",
+      "study": "https://13one.org/psalms-of-the-sons-of-korah",
+      "lesson": "13one | Summer 2025",
+      "rollout": "2025-06-02T12:00:00Z"
+    },
+    {
+      "passage": "Psalm 87",
+      "study": "https://13one.org/psalms-of-the-sons-of-korah",
+      "lesson": "13one | Summer 2025",
+      "rollout": "2025-06-09T12:00:00Z"
+    },
+    {
+      "passage": "Psalm 46",
+      "study": "https://13one.org/psalms-of-the-sons-of-korah",
+      "lesson": "13one | Summer 2025",
+      "rollout": "2025-06-16T12:00:00Z"
+    },
+    {
+      "passage": "Psalm 85",
+      "study": "https://13one.org/psalms-of-the-sons-of-korah",
+      "lesson": "13one | Summer 2025",
+      "rollout": "2025-06-23T12:00:00Z"
+    },
+    {
+      "passage": "Psalm 47",
+      "study": "https://13one.org/psalms-of-the-sons-of-korah",
+      "lesson": "13one | Summer 2025",
+      "rollout": "2025-06-30T12:00:00Z"
+    },
+    {
+      "passage": "Psalm 89",
+      "study": "https://13one.org/psalms-of-the-sons-of-korah",
+      "lesson": "13one | Summer 2025",
+      "rollout": "2025-07-14T12:00:00Z"
+    },
+    {
+      "passage": "Psalm 88",
+      "study": "https://13one.org/psalms-of-the-sons-of-korah",
+      "lesson": "13one | Summer 2025",
+      "rollout": "2025-07-21T12:00:00Z"
+    },
+    {
+      "passage": "Psalm 86",
+      "study": "https://13one.org/psalms-of-the-sons-of-korah",
+      "lesson": "13one | Summer 2025",
+      "rollout": "2025-07-28T12:00:00Z"
+    },
+    {
+      "passage": "Psalm 42-43",
+      "study": "https://13one.org/psalms-of-the-sons-of-korah",
+      "lesson": "13one | Summer 2025",
+      "rollout": "2025-08-04T12:00:00Z"
+    },
+    {
+      "passage": "Psalm 48",
+      "study": "https://13one.org/psalms-of-the-sons-of-korah",
+      "lesson": "13one | Summer 2025",
+      "rollout": "2025-08-11T12:00:00Z"
+    },
+    {
+      "passage": "Psalm 44",
+      "study": "https://13one.org/psalms-of-the-sons-of-korah",
+      "lesson": "13one | Summer 2025",
+      "rollout": "2025-08-18T12:00:00Z"
+    },
+    {
+      "passage": "Psalm 45",
+      "study": "https://13one.org/psalms-of-the-sons-of-korah",
+      "lesson": "13one | Summer 2025",
+      "rollout": "2025-08-25T12:00:00Z"
+    },
+    {
+      "passage": "Ezekiel 1-2",
+      "study": "bsfinternational.org/exile-and-return/",
+      "lesson": "BSF Exile #1",
+      "rollout": "2025-09-08T12:00:00Z"
+    },
+    {
+      "passage": "Ezekiel 36:16-37:28",
+      "study": "bsfinternational.org/exile-and-return/",
+      "lesson": "BSF Exile #2",
+      "rollout": "2025-09-15T12:00:00Z"
+    },
+    {
+      "passage": "Daniel 1-2",
+      "study": "bsfinternational.org/exile-and-return/",
+      "lesson": "BSF Exile #3",
+      "rollout": "2025-09-22T12:00:00Z"
+    },
+    {
+      "passage": "Daniel 3-4",
+      "study": "bsfinternational.org/exile-and-return/",
+      "lesson": "BSF Exile #4",
+      "rollout": "2025-09-29T12:00:00Z"
+    },
+    {
+      "passage": "Daniel 5-6",
+      "study": "bsfinternational.org/exile-and-return/",
+      "lesson": "BSF Exile #5",
+      "rollout": "2025-10-06T12:00:00Z"
+    },
+    {
+      "passage": "Daniel 7-8",
+      "study": "bsfinternational.org/exile-and-return/",
+      "lesson": "BSF Exile #6",
+      "rollout": "2025-10-13T12:00:00Z"
+    },
+    {
+      "passage": "Daniel 9",
+      "study": "bsfinternational.org/exile-and-return/",
+      "lesson": "BSF Exile #7",
+      "rollout": "2025-10-20T12:00:00Z"
+    },
+    {
+      "passage": "Daniel 10:1-12:13",
+      "study": "bsfinternational.org/exile-and-return/",
+      "lesson": "BSF Exile #8",
+      "rollout": "2025-11-03T12:00:00Z"
+    },
+    {
+      "passage": "Ezra 1-2",
+      "study": "bsfinternational.org/exile-and-return/",
+      "lesson": "BSF Exile #9",
+      "rollout": "2025-11-10T12:00:00Z"
+    },
+    {
+      "passage": "Ezra 3:1-6:22",
+      "study": "bsfinternational.org/exile-and-return/",
+      "lesson": "BSF Exile #10",
+      "rollout": "2025-11-17T12:00:00Z"
+    },
+    {
+      "passage": "Ezra 7-8",
+      "study": "bsfinternational.org/exile-and-return/",
+      "lesson": "BSF Exile #11",
+      "rollout": "2025-11-24T12:00:00Z"
+    },
+    {
+      "passage": "Ezra 9-10",
+      "study": "bsfinternational.org/exile-and-return/",
+      "lesson": "BSF Exile #12",
+      "rollout": "2025-12-08T12:00:00Z"
+    },
+    {
+      "passage": "Esther 1-2",
+      "study": "bsfinternational.org/exile-and-return/",
+      "lesson": "BSF Exile #13",
+      "rollout": "2025-12-15T12:00:00Z"
+    },
+    {
+      "passage": "Esther 3:1-7:10",
+      "study": "bsfinternational.org/exile-and-return/",
+      "lesson": "BSF Exile #14",
+      "rollout": "2026-01-12T12:00:00Z"
+    },
+    {
+      "passage": "Esther 8:1-10:3",
+      "study": "bsfinternational.org/exile-and-return/",
+      "lesson": "BSF Exile #15",
+      "rollout": "2026-01-19T12:00:00Z"
+    },
+    {
+      "passage": "Haggai 1-2",
+      "study": "bsfinternational.org/exile-and-return/",
+      "lesson": "BSF Exile #16",
+      "rollout": "2026-01-26T12:00:00Z"
+    },
+    {
+      "passage": "Zechariah 1:1-6",
+      "study": "bsfinternational.org/exile-and-return/",
+      "lesson": "BSF Exile #17",
+      "rollout": "2026-02-02T12:00:00Z"
+    },
+    {
+      "passage": "Zechariah 1:7-4:14",
+      "study": "bsfinternational.org/exile-and-return/",
+      "lesson": "BSF Exile #18",
+      "rollout": "2026-02-09T12:00:00Z"
+    },
+    {
+      "passage": "Zechariah 5-6",
+      "study": "bsfinternational.org/exile-and-return/",
+      "lesson": "BSF Exile #19",
+      "rollout": "2026-02-16T12:00:00Z"
+    },
+    {
+      "passage": "Zechariah 7-8",
+      "study": "bsfinternational.org/exile-and-return/",
+      "lesson": "BSF Exile #20",
+      "rollout": "2026-02-23T12:00:00Z"
+    },
+    {
+      "passage": "Zechariah 9:1-11:17",
+      "study": "bsfinternational.org/exile-and-return/",
+      "lesson": "BSF Exile #21",
+      "rollout": "2026-03-02T12:00:00Z"
+    },
+    {
+      "passage": "Zechariah 12:1-14:21",
+      "study": "bsfinternational.org/exile-and-return/",
+      "lesson": "BSF Exile #22",
+      "rollout": "2026-03-09T12:00:00Z"
+    },
+    {
+      "passage": "Nehemiah 1:1-3:32",
+      "study": "bsfinternational.org/exile-and-return/",
+      "lesson": "BSF Exile #23",
+      "rollout": "2026-03-16T12:00:00Z"
+    },
+    {
+      "passage": "Nehemiah 4:1-6:14",
+      "study": "bsfinternational.org/exile-and-return/",
+      "lesson": "BSF Exile #24",
+      "rollout": "2026-03-23T12:00:00Z"
+    },
+    {
+      "passage": "Nehemiah 6:15-8:18",
+      "study": "bsfinternational.org/exile-and-return/",
+      "lesson": "BSF Exile #25",
+      "rollout": "2026-03-30T12:00:00Z"
+    },
+    {
+      "passage": "Nehemiah 9-10",
+      "study": "bsfinternational.org/exile-and-return/",
+      "lesson": "BSF Exile #26",
+      "rollout": "2026-04-13T12:00:00Z"
+    },
+    {
+      "passage": "Nehemiah 11:1-13:31",
+      "study": "bsfinternational.org/exile-and-return/",
+      "lesson": "BSF Exile #27",
+      "rollout": "2026-04-20T12:00:00Z"
+    },
+    {
+      "passage": "Malachi 1:1-4:6",
+      "study": "bsfinternational.org/exile-and-return/",
+      "lesson": "BSF Exile #28",
+      "rollout": "2026-04-27T12:00:00Z"
+    }
+  ]
+}
