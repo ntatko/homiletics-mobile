@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:homiletics/classes/homiletic.dart';
-import 'package:homiletics/classes/lecture_note.dart';
-import 'package:homiletics/pages/homeletic_editor.dart';
-import 'package:homiletics/pages/notes_editor.dart';
+import 'package:homiletics/common/start_passage_item_flow.dart';
 
 class StartActivity extends StatefulWidget {
   const StartActivity({Key? key}) : super(key: key);
@@ -61,17 +58,10 @@ class _StartActivityState extends State<StartActivity> {
                 children: [
                   ElevatedButton(
                     onPressed: _passageReference.isNotEmpty
-                        ? () async {
-                            Homiletic homiletic =
-                                Homiletic(passage: _passageReference);
-                            await homiletic.update();
-                            Navigator.push(
+                        ? () => startHomileticForPassage(
                               context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      HomileticEditor(homiletic: homiletic)),
-                            );
-                          }
+                              _passageReference,
+                            )
                         : null,
                     child: const Text(
                       "Homiletics",
@@ -80,17 +70,10 @@ class _StartActivityState extends State<StartActivity> {
                   ),
                   ElevatedButton(
                     onPressed: _passageReference.isNotEmpty
-                        ? () async {
-                            LectureNote note =
-                                LectureNote(passage: _passageReference);
-                            await note.update();
-                            Navigator.push(
+                        ? () => startLectureNoteForPassage(
                               context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      NotesEditor(note: note)),
-                            );
-                          }
+                              _passageReference,
+                            )
                         : null,
                     child: const Text(
                       "Lecture Notes",

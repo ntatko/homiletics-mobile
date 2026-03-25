@@ -1,7 +1,4 @@
-import 'package:homiletics/classes/homiletic.dart';
-import 'package:homiletics/classes/lecture_note.dart';
-import 'package:homiletics/pages/homeletic_editor.dart';
-import 'package:homiletics/pages/notes_editor.dart';
+import 'package:homiletics/common/start_passage_item_flow.dart';
 import 'package:homiletics/services/suggested_passages_repository.dart';
 import 'package:homiletics/utils/study_launch_uri.dart';
 import 'package:flutter/material.dart';
@@ -173,28 +170,17 @@ class _CurrentLessonState extends State<CurrentLesson> {
               runSpacing: 8,
               children: [
                 ElevatedButton(
-                  onPressed: () async {
-                    Homiletic homiletic = Homiletic(passage: schedule.passage);
-                    await homiletic.update();
-                    if (mounted) {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) =>
-                            HomileticEditor(homiletic: homiletic),
-                      ));
-                    }
-                  },
+                  onPressed: () => startHomileticForPassage(
+                        context,
+                        schedule.passage,
+                      ),
                   child: const Text("Homiletics"),
                 ),
                 ElevatedButton(
-                  onPressed: () async {
-                    LectureNote note = LectureNote(passage: schedule.passage);
-                    await note.update();
-                    if (mounted) {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => NotesEditor(note: note),
-                      ));
-                    }
-                  },
+                  onPressed: () => startLectureNoteForPassage(
+                        context,
+                        schedule.passage,
+                      ),
                   child: const Text("Lecture Note"),
                 ),
               ],
