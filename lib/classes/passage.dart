@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:homiletics/classes/translation.dart';
+import 'package:homiletics/config/api_config.dart';
 import 'package:http/http.dart' as http;
 
 class Passage {
@@ -36,7 +37,7 @@ Future<PassageResponse> fetchPassage(
     String reference, Translation? version) async {
   try {
     var response = await http.get(Uri.parse(
-        'https://homiletics-api.cloud.plodamouse.com/passages?passage=$reference&version=${version?.code ?? 'web'}'));
+        '$kHomileticsApiBase/passages?passage=$reference&version=${version?.code ?? 'web'}'));
 
     if (response.statusCode == 200) {
       return PassageResponse.fromJson(jsonDecode(response.body));
