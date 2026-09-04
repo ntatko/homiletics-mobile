@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:homiletics/common/other_study_menu_button.dart';
 import 'package:homiletics/common/start_passage_item_flow.dart';
 
 class StartActivity extends StatefulWidget {
@@ -68,17 +69,9 @@ class _StartActivityState extends State<StartActivity> {
                       textAlign: TextAlign.center,
                     ),
                   ),
-                  ElevatedButton(
-                    onPressed: _passageReference.isNotEmpty
-                        ? () => startLectureNoteForPassage(
-                              context,
-                              _passageReference,
-                            )
-                        : null,
-                    child: const Text(
-                      "Lecture Notes",
-                      textAlign: TextAlign.center,
-                    ),
+                  OtherStudyMenuButton(
+                    passage: _passageReference,
+                    enabled: _passageReference.isNotEmpty,
                   ),
                 ],
               ),
