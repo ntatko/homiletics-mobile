@@ -16,7 +16,7 @@ class VerseContainer extends StatefulWidget {
 }
 
 /// Maps translation codes to Bible Gateway version codes
-String _getBibleGatewayVersion(Translation translation) {
+String getBibleGatewayVersion(Translation translation) {
   switch (translation.code) {
     // Popular modern translations
     case 'niv':
@@ -63,7 +63,7 @@ String _getBibleGatewayVersion(Translation translation) {
 /// Creates a Bible Gateway URL for the given passage and translation
 String _createBibleGatewayUrl(String passage, Translation translation) {
   final encodedPassage = Uri.encodeComponent(passage);
-  final version = _getBibleGatewayVersion(translation);
+  final version = getBibleGatewayVersion(translation);
   return 'https://www.biblegateway.com/passage/?search=$encodedPassage&version=$version&interface=print';
 }
 
