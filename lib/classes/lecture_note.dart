@@ -17,12 +17,22 @@ class LectureNote {
   /// The path to the recording of the lecture.
   String? recordingPath;
 
+  /// The transcribed text of the recording, if any.
+  String? transcript;
+
+  /// [transcript] cleaned up into readable paragraphs by the on-device
+  /// language model. The raw [transcript] is kept alongside it since a small
+  /// model can occasionally drop or garble a sentence.
+  String? formattedTranscript;
+
   LectureNote(
       {this.id = -1,
       this.note = '',
       this.passage = '',
       this.time,
-      this.recordingPath});
+      this.recordingPath,
+      this.transcript,
+      this.formattedTranscript});
 
   /// Creates a new [LectureNote] from a JSON map.
   factory LectureNote.fromJson(Map<String, dynamic> json) {
@@ -31,7 +41,9 @@ class LectureNote {
         note: json['note'],
         passage: json['passage'],
         time: DateTime.parse(json['time']),
-        recordingPath: json['recording_path']);
+        recordingPath: json['recording_path'],
+        transcript: json['transcript'],
+        formattedTranscript: json['formatted_transcript']);
   }
 
   /// Returns a map representation of the lecture note.
@@ -41,7 +53,9 @@ class LectureNote {
       "passage": passage,
       "note": note,
       "time": time?.toIso8601String() ?? '',
-      "recording_path": recordingPath
+      "recording_path": recordingPath,
+      "transcript": transcript,
+      "formatted_transcript": formattedTranscript
     };
   }
 
@@ -71,6 +85,23 @@ class LectureNote {
   Future<void> updateRecordingPath(String? updateRecordingPath) async {
     if (updateRecordingPath != null && updateRecordingPath != '') {
       recordingPath = updateRecordingPath;
+    }
+    await update();
+  }
+
+  /// Updates the transcript in the database with the parameter of this function.
+  Future<void> updateTranscript(String? updateTranscript) async {
+    if (updateTranscript != null && updateTranscript != '') {
+      transcript = updateTranscript;
+    }
+    await update();
+  }
+
+  /// Updates the formatted transcript in the database with the parameter of
+  /// this function.
+  Future<void> updateFormattedTranscript(String? updateFormatted) async {
+    if (updateFormatted != null && updateFormatted != '') {
+      formattedTranscript = updateFormatted;
     }
     await update();
   }

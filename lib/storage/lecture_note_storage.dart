@@ -17,11 +17,13 @@ final Future<Database> database = getDatabasesPath().then((String path) {
               note TEXT,
               passage TEXT,
               time TEXT,
-              recording_path TEXT
+              recording_path TEXT,
+              transcript TEXT,
+              formatted_transcript TEXT
             )
             ''');
     },
-    version: 2,
+    version: 4,
   );
 });
 
@@ -37,6 +39,17 @@ Future<void> onUpgrade(Database db, int oldVersion, int newVersion) async {
         {
           await db
               .execute('ALTER TABLE lectures ADD COLUMN recording_path TEXT');
+          break;
+        }
+      case 3:
+        {
+          await db.execute('ALTER TABLE lectures ADD COLUMN transcript TEXT');
+          break;
+        }
+      case 4:
+        {
+          await db.execute(
+              'ALTER TABLE lectures ADD COLUMN formatted_transcript TEXT');
           break;
         }
     }
@@ -71,7 +84,9 @@ Future<void> resetLectureNoteTable() async {
               note TEXT,
               passage TEXT,
               time TEXT,
-              recording_path TEXT
+              recording_path TEXT,
+              transcript TEXT,
+              formatted_transcript TEXT
             )
             ''');
   } catch (error) {
@@ -157,5 +172,27 @@ Future<List<LectureNote>> getLectureNoteByText(String text) async {
   } catch (error) {
     sendError(error, "getLectureNoteByText");
     throw Exception("failed to get lecture notes");
+  }
+}
+
+/// Lecture notes whose [note] or [transcript] contains [text].
+Future<List<LectureNote>> getLectureNotesByText(String text) async {
+  try {
+    final Database db = await database;
+
+    final String like = '%$text%';
+    final List<Map<String, dynamic>> maps = await db.query('lectures',
+        where: 'note LIKE ? OR transcript LIKE ? OR formatted_transcript LIKE ?',
+        whereArgs: [like, like, like]);
+
+    if (maps.isEmpty) {
+      return [];
+    }
+
+    return List.generate(
+        maps.length, (index) => LectureNote.fromJson(maps[index]));
+  } catch (error) {
+    sendError(error, "getLectureNotesByText");
+    throw Exception("failed to get lecture notes by text");
   }
 }

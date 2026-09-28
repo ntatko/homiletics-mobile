@@ -1,3 +1,4 @@
+import 'package:homiletics/common/other_study_menu_button.dart';
 import 'package:homiletics/common/start_passage_item_flow.dart';
 import 'package:homiletics/services/suggested_passages_repository.dart';
 import 'package:homiletics/utils/study_launch_uri.dart';
@@ -125,7 +126,7 @@ class _CurrentLessonState extends State<CurrentLesson> {
           ),
         ),
         SizedBox(
-          height: 164, // Reduced height
+          height: 200, // room for the button row to wrap to two lines with 3 buttons
           child: PageView.builder(
             controller: _pageController,
             itemCount: _filteredSchedules.length,
@@ -176,22 +177,18 @@ class _CurrentLessonState extends State<CurrentLesson> {
                       ),
                   child: const Text("Homiletics"),
                 ),
-                ElevatedButton(
-                  onPressed: () => startLectureNoteForPassage(
-                        context,
-                        schedule.passage,
-                      ),
-                  child: const Text("Lecture Note"),
-                ),
+                OtherStudyMenuButton(passage: schedule.passage),
               ],
             ),
-            Align(
-              alignment: Alignment.centerRight,
-              child: TextButton(
-                onPressed: () async {
-                  await launchUrl(studyLaunchUri(schedule.study));
-                },
-                child: Text(schedule.study),
+            Expanded(
+              child: Align(
+                alignment: Alignment.bottomLeft,
+                child: TextButton(
+                  onPressed: () async {
+                    await launchUrl(studyLaunchUri(schedule.study));
+                  },
+                  child: Text(schedule.study),
+                ),
               ),
             ),
           ],

@@ -15,10 +15,10 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 2.7.0+26
+version: 2.7.0+36
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=3.7.0 <4.0.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -52,6 +52,15 @@ dependencies:
   # material_floating_search_bar_2: 0.5.0  # Removed - using simple text input instead
   path: ^1.9.0
   webview_flutter: ^4.4.2
+  whisper_ggml: ^2.6.0
+  record: ^6.0.0
+  audioplayers: ^6.7.1
+  # On-device LLM that formats lecture transcripts where Apple's Foundation
+  # Models aren't available. Pinned below 1.x, which needs a newer Dart SDK.
+  flutter_gemma: ^0.16.5
+  flutter_quill: 11.5.0
+  flutter_localizations:
+    sdk: flutter
 
 dev_dependencies:
   flutter_test:
@@ -65,7 +74,7 @@ dev_dependencies:
   flutter_lints: ^2.0.3
   flutter_launcher_icons: ^0.13.1
   hive_generator: ^2.0.1
-  build_runner: 2.4.6
+  build_runner: ^2.4.13
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

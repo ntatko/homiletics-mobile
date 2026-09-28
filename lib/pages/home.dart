@@ -6,6 +6,7 @@ import 'package:homiletics/components/current_lesson.dart';
 import 'package:homiletics/components/help_menu.dart';
 import 'package:homiletics/components/past_lecture_notes.dart';
 import 'package:homiletics/components/past_lessons.dart';
+import 'package:homiletics/components/past_word_studies.dart';
 import 'package:homiletics/components/start_activity.dart';
 import 'package:homiletics/pages/search_page.dart';
 import 'package:homiletics/pages/settings_page.dart';
@@ -79,6 +80,7 @@ class _HomeState extends State<Home> {
                       ApplicationList(),
                       PastLessons(),
                       PastLectureNotes(),
+                      PastWordStudies(),
                       HelpMenu(),
                     ],
                   ),
@@ -210,6 +212,10 @@ class _HomeState extends State<Home> {
                                   SummarySentenceSearches(
                                       searchString: _searchString),
                                   PassageSearches(searchString: _searchString),
+                                  LectureNoteSearches(
+                                      searchString: _searchString),
+                                  WordStudySearches(
+                                      searchString: _searchString),
                                   const SizedBox(height: 16),
                                 ],
                               ),
