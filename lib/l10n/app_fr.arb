@@ -1,0 +1,779 @@
+{
+  "@@locale": "fr",
+  "prefsTitle": "Préférences",
+  "prefsAppLanguage": "Langue préférée",
+  "prefsBibleVersion": "Version de la Bible préférée",
+  "bibleNewTestamentOnly": "Nouveau Testament uniquement",
+  "appTitle": "Homiletics",
+  "commonCancel": "Annuler",
+  "commonOk": "OK",
+  "commonDelete": "Supprimer",
+  "commonDone": "Terminé",
+  "commonSave": "Enregistrer",
+  "commonClose": "Fermer",
+  "commonRetry": "Réessayer",
+  "commonSomethingWentWrong": "Une erreur s’est produite. Réessayez plus tard.",
+  "languageSystemDefault": "Langue du téléphone",
+  "stepContent": "Contenu",
+  "stepDivisions": "Divisions",
+  "stepSummary": "Phrase de résumé",
+  "stepFcf": "FCF",
+  "stepAim": "Objectif",
+  "stepApplication": "Application",
+  "stepShortContent": "Contenu",
+  "stepShortDivisions": "Diviser",
+  "stepShortSummary": "Résumé",
+  "stepShortFcf": "FCF",
+  "stepShortAim": "Objectif",
+  "stepShortApplication": "Appliquer",
+  "commonShare": "Partager",
+  "commonPrint": "Imprimer",
+  "commonPreferences": "Préférences",
+  "commonUntitled": "Sans titre",
+  "homeSearchIntro": "Recherchez dans vos homilétiques, divisions, applications, notes d’exposé et études de mots.",
+  "homeSearchFieldHint": "Leçons, passages, notes…",
+  "homeSearchTooltip": "Rechercher",
+  "homeCloseSearch": "Fermer la recherche",
+  "homeAllStudies": "Toutes les études",
+  "homeFilterByStudy": "Filtrer par étude",
+  "homeOpenStudySite": "Ouvrir le site de l’étude",
+  "homeThisWeek": "Cette semaine",
+  "homeEarlier": "Précédemment",
+  "homeComingUp": "À venir",
+  "homeWeekOverline": "{when} · {lesson}",
+  "@homeWeekOverline": {
+    "description": "Overline on a passage card: the week label (This week / Earlier / Coming up) followed by the lesson name from the study schedule. Shown in upper case on one line.",
+    "placeholders": {
+      "when": {
+        "type": "String"
+      },
+      "lesson": {
+        "type": "String"
+      }
+    }
+  },
+  "homeStartHomiletics": "Commencer l’homilétique",
+  "homeContinueHomiletics": "Continuer l’homilétique",
+  "homeOpenHomiletics": "Ouvrir l’homilétique",
+  "homeLoadingPassages": "Chargement des passages suggérés…",
+  "homeContinue": "Reprendre",
+  "homeSeeAll": "Tout voir",
+  "homeLivingItOut": "Mettre en pratique",
+  "homeKindTileHomiletic": "H",
+  "homeKindTileWordStudy": "M",
+  "homeProgressNoneDone": "Aucune étape terminée",
+  "homeProgressDone": "Terminé : {steps}",
+  "@homeProgressDone": {
+    "description": "Screen-reader label for the homiletic step progress bar; {steps} is a comma-separated list of completed step names.",
+    "placeholders": {
+      "steps": {
+        "type": "String"
+      }
+    }
+  },
+  "homePageOf": "Page {page} sur {count}",
+  "@homePageOf": {
+    "description": "Screen-reader label for the dots under the swipeable passage cards.",
+    "placeholders": {
+      "page": {
+        "type": "int"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homePageFraction": "{page} / {count}",
+  "@homePageFraction": {
+    "description": "Compact page indicator under the passage cards when there are too many pages for dots, e.g. '3 / 12'.",
+    "placeholders": {
+      "page": {
+        "type": "int"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "studiesTitle": "Vos études",
+  "studiesTabHomiletics": "Homilétiques",
+  "studiesTabLectures": "Exposés",
+  "studiesTabWordStudies": "Études de mots",
+  "studiesNoHomiletics": "Aucune homilétique pour l’instant.",
+  "studiesNoLectureNotes": "Aucune note d’exposé pour l’instant.",
+  "studiesNoWordStudies": "Aucune étude de mot pour l’instant.",
+  "studiesNoApplications": "Aucune question d’application pour l’instant.",
+  "studiesProgressNotStarted": "Pas commencé",
+  "studiesProgressAll": "Les {total} étapes",
+  "@studiesProgressAll": {
+    "description": "Homiletic progress summary when every step is done, e.g. 'All 6 steps'. Short.",
+    "placeholders": {
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "studiesProgressSome": "{done} étapes sur {total}",
+  "@studiesProgressSome": {
+    "description": "Homiletic progress summary, e.g. '2 of 6 steps'. Short.",
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "studiesHomileticSubtitle": "Homilétique · {progress} · {time}",
+  "@studiesHomileticSubtitle": {
+    "description": "Subtitle of a homiletic in a study list: kind, progress (e.g. '2 of 6 steps') and relative time (e.g. '3 days ago'). One line.",
+    "placeholders": {
+      "progress": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "studiesHomileticSubtitleNoProgress": "Homilétique · {time}",
+  "@studiesHomileticSubtitleNoProgress": {
+    "description": "Subtitle of a homiletic in a study list while its progress loads; {time} is a relative time like '3 days ago'.",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "studiesLectureTitle": "Exposé sur {passage}",
+  "@studiesLectureTitle": {
+    "description": "Title of a lecture note in a study list; {passage} is a Bible reference like 'John 3:1-21'.",
+    "placeholders": {
+      "passage": {
+        "type": "String"
+      }
+    }
+  },
+  "studiesLectureUntitled": "Exposé",
+  "studiesLectureSubtitle": "Notes d’exposé · {time}",
+  "@studiesLectureSubtitle": {
+    "description": "Subtitle of a lecture note in a study list; {time} is a relative time like '3 days ago'.",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "studiesWordStudyUntitled": "Étude de mot",
+  "studiesWordStudySubtitle": "Étude de mot · {time}",
+  "@studiesWordStudySubtitle": {
+    "description": "Subtitle of a word study in a study list; {time} is a relative time like '3 days ago'.",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "studiesWordStudySubtitleWithPassage": "Étude de mot · {passage} · {time}",
+  "@studiesWordStudySubtitleWithPassage": {
+    "description": "Subtitle of a word study in a study list; {passage} is a Bible reference, {time} a relative time like '3 days ago'.",
+    "placeholders": {
+      "passage": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "searchHint": "Rechercher",
+  "searchSectionContentSummaries": "Résumés du contenu",
+  "searchSectionDivisions": "Divisions",
+  "searchSectionApplications": "Applications",
+  "searchSectionAims": "Objectifs",
+  "searchSectionSummarySentences": "Phrases de résumé",
+  "searchSectionPassages": "Passages des homilétiques",
+  "searchSectionLectureNotes": "Notes d’exposé",
+  "searchSectionWordStudies": "Études de mots",
+  "searchOpenFailed": "Impossible d’ouvrir ce résultat. Il a peut-être été supprimé.",
+  "settingsTitle": "Paramètres",
+  "settingsSectionLanguage": "Langue",
+  "settingsAppLanguage": "Langue de l’application",
+  "settingsSectionReading": "Lecture",
+  "settingsSectionModels": "Modèles sur l’appareil",
+  "settingsSectionHelp": "Aide",
+  "settingsCopyright": "Copyright (C) {year} 13one.org · Tous droits réservés",
+  "@settingsCopyright": {
+    "description": "Copyright line at the bottom of the settings page. Keep '13one.org' unchanged.",
+    "placeholders": {
+      "year": {
+        "type": "String"
+      }
+    }
+  },
+  "helpRequestFeedback": "Demander de l’aide / donner votre avis",
+  "helpCopyright": "Copyright (C) {year} 13one.org",
+  "@helpCopyright": {
+    "description": "Copyright line at the foot of the home screen. Keep '13one.org' unchanged.",
+    "placeholders": {
+      "year": {
+        "type": "String"
+      }
+    }
+  },
+  "helpAllRightsReserved": "Tous droits réservés",
+  "feedbackTitle": "Donnez-nous votre avis",
+  "feedbackPublicNotice": "Votre message est publié sous forme de ticket public sur GitHub : n’importe qui sur Internet peut le lire. N’y mettez pas de mot de passe ni d’autres informations privées. Votre adresse e-mail est partiellement masquée sur GitHub ; nous pouvons conserver l’adresse complète sur nos serveurs uniquement pour vous recontacter.",
+  "feedbackTypeGeneral": "Aide ou avis",
+  "feedbackTypeTranslation": "Traduction fautive",
+  "feedbackTranslationHint": "Indiquez-nous les mots qui semblent incorrects et ce qu’ils devraient dire. Nous joindrons la langue de votre application et votre traduction de la Bible.",
+  "feedbackNameLabel": "Nom",
+  "feedbackEmailLabel": "E-mail (facultatif)",
+  "feedbackContentLabel": "Votre avis",
+  "feedbackSubmit": "Envoyer",
+  "feedbackEmpty": "Veuillez d’abord écrire votre message.",
+  "feedbackSubmittedIssue": "Envoyé. Vous pouvez ouvrir le ticket sur GitHub à tout moment pour ajouter des commentaires (connexion facultative).",
+  "feedbackOpenIssue": "Ouvrir",
+  "feedbackSubmitted": "Votre avis a bien été envoyé",
+  "feedbackBadRequest": "Impossible d’envoyer cette demande. Vérifiez votre message et réessayez.",
+  "feedbackServerUnreachableTitle": "Impossible de joindre le serveur",
+  "feedbackServerUnreachableBody": "Ouvrez plutôt GitHub dans votre navigateur pour envoyer ce signalement. Il faudra peut-être vous y connecter pour créer le ticket.",
+  "feedbackNotNow": "Pas maintenant",
+  "feedbackOpenGitHub": "Ouvrir GitHub",
+  "feedbackBrowserFailed": "Impossible d’ouvrir le navigateur.",
+  "startHomiletics": "Homilétique",
+  "startLecture": "Exposé",
+  "startWordStudy": "Étude de mot",
+  "startPassageHint": "Étudier un autre passage…",
+  "startClear": "Effacer",
+  "startOtherStudy": "Autre étude",
+  "startMenuLectureNote": "Notes d’exposé",
+  "startMenuWordStudy": "Étude de mot",
+  "startDuplicateHomileticTitle": "Vous avez déjà une homilétique pour ce passage ?",
+  "startDuplicateHomileticMany": "{passage}\n\nVous avez {count} homilétiques pour ce passage ; la plus récente va s’ouvrir.",
+  "@startDuplicateHomileticMany": {
+    "description": "Body of the duplicate-homiletic dialog when there are several; {passage} is a Bible reference. 'Edit existing' opens the most recent.",
+    "placeholders": {
+      "passage": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "startDuplicateLectureTitle": "Vous avez déjà des notes d’exposé pour ce passage ?",
+  "startDuplicateLectureMany": "{passage}\n\nVous avez {count} notes d’exposé pour ce passage ; les plus récentes vont s’ouvrir.",
+  "@startDuplicateLectureMany": {
+    "description": "Body of the duplicate-lecture-notes dialog when there are several; {passage} is a Bible reference.",
+    "placeholders": {
+      "passage": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "startDuplicateWordStudyTitle": "Vous avez déjà une étude de mot pour ce passage ?",
+  "startDuplicateWordStudyMany": "{passage}\n\nVous avez {count} études de mots pour ce passage ; la plus récente va s’ouvrir.",
+  "@startDuplicateWordStudyMany": {
+    "description": "Body of the duplicate-word-study dialog when there are several; {passage} is a Bible reference.",
+    "placeholders": {
+      "passage": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "startCreateNew": "Créer une nouvelle",
+  "startEditExisting": "Modifier l’existante",
+  "homileticHeaderLabel": "Homilétique · Passage",
+  "homileticItemName": "homilétique",
+  "homileticDeletedMessage": "Homilétique supprimée",
+  "homileticLoadError": "Une erreur s’est produite lors du chargement de cette leçon.",
+  "homileticPdfShared": "PDF partagé avec succès.",
+  "homileticPdfShareFailed": "Une erreur s’est produite lors du partage de votre PDF. Réessayez plus tard.",
+  "homileticPdfPrinted": "PDF imprimé avec succès.",
+  "homileticPdfPrintFailed": "Une erreur s’est produite lors de la création de votre PDF. Réessayez plus tard.",
+  "homileticCompleteTitle": "Les six étapes sont faites",
+  "homileticCompleteMessage": "Imprimez-la pour le cours ou partagez-la avec votre groupe.",
+  "homileticContentEmptySummary": "Versets + résumé",
+  "homileticDivisionsEmptySummary": "2 à 4 groupes",
+  "homileticSummaryEmptySummary": "≤ 10 mots",
+  "homileticFcfEmptySummary": "Condition humaine déchue",
+  "homileticAimEmptySummary": "Le message principal",
+  "homileticApplicationEmptySummary": "Comment puis-je…",
+  "homileticStepStatusDone": "terminé",
+  "homileticStepStatusToDo": "à faire",
+  "homileticStepCollapseLabel": "{title}, réduire",
+  "@homileticStepCollapseLabel": {
+    "description": "Screen-reader label of an open step's header; tapping it closes the step.",
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Divisions"
+      }
+    }
+  },
+  "homileticStepHelpLabel": "À propos : {title}",
+  "@homileticStepHelpLabel": {
+    "description": "Tooltip and screen-reader label of the '?' button that explains a homiletic step.",
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Divisions"
+      }
+    }
+  },
+  "homileticVersesLabel": "Versets",
+  "homileticVersesHint": "v.",
+  "homileticAddButtonLabel": "+ {label}",
+  "@homileticAddButtonLabel": {
+    "description": "Text of the dashed add button under a list step; {label} is e.g. 'Add summary'. Keep the plus sign unless your language puts it elsewhere.",
+    "placeholders": {
+      "label": {
+        "type": "String",
+        "example": "Add summary"
+      }
+    }
+  },
+  "homileticRemoveRowMessage": "Ce que vous avez écrit ici sera supprimé.",
+  "homileticRemoveRowConfirm": "Retirer",
+  "homileticContentSummaryHint": "Résumé…",
+  "homileticAddContentSummary": "Ajouter un résumé",
+  "homileticRemoveContentSummaryTooltip": "Retirer le résumé du contenu",
+  "homileticRemoveContentSummaryTitle": "Retirer ce résumé du contenu ?",
+  "homileticRemoveContentSummaryFailed": "Impossible de retirer ce résumé du contenu",
+  "homileticDivisionHint": "Phrase de la division…",
+  "homileticAddDivision": "Ajouter une division",
+  "homileticRemoveDivisionTooltip": "Retirer la division",
+  "homileticRemoveDivisionTitle": "Retirer cette division ?",
+  "homileticRemoveDivisionFailed": "Impossible de retirer cette division",
+  "homileticApplicationHint": "Comment puis-je…",
+  "homileticAddApplication": "Ajouter une question",
+  "homileticRemoveApplicationTooltip": "Retirer la question d’application",
+  "homileticRemoveApplicationTitle": "Retirer cette question d’application ?",
+  "homileticRemoveApplicationFailed": "Impossible de retirer cette application",
+  "homileticSummaryHint": "Résumez en 10 mots au plus",
+  "homileticFcfHint": "Déchu/Fragile/Faible/Fautif",
+  "homileticAimHint": "Amener l’auditoire à comprendre que…",
+  "homileticContentHelpTitle": "Résumés du contenu",
+  "homileticContentHelpText": "Un résumé du contenu résume une section de la Bible. Ce n’est pas forcément une phrase ; il peut aussi compter plusieurs phrases. Il doit résumer, avec vos propres mots, le contenu du passage.\nVous devriez avoir au moins 10 résumés du contenu, mais pas plus de 20. En général, selon la longueur du passage, vous le découperez en parties de taille à peu près égale pour arriver à 10 à 20 résumés. Ainsi, si votre passage compte 30 versets, visez en moyenne 3 versets par résumé du contenu.",
+  "homileticDivisionsHelpText": "Les divisions sont des groupes de versets liés entre eux. Il en faut au moins deux et pas plus de quatre.",
+  "homileticSummaryHelpTitle": "Phrase de résumé",
+  "homileticSummaryHelpText": "La phrase de résumé est une déclaration concise et facile à retenir qui rassemble les faits les plus importants. Pensez au « test de 2 heures du matin » : si quelqu’un vous réveillait à 2 heures du matin pour vous demander de quoi parlait la prédication, que répondriez-vous ? Vous diriez la phrase de résumé.\nElle doit compter 10 mots au plus. Si vous êtes d’humeur créative, essayez de faire une allitération.",
+  "homileticFcfHelpText": "Le FCF (Fallen Condition Focus, « focus sur la condition déchue ») est l’aspect de la condition humaine le plus illustré ou évoqué dans le passage. C’est la condition dans laquelle se trouve l’auditoire, la raison pour laquelle il a besoin d’être sauvé.",
+  "homileticAimHelpText": "L’objectif est le point clé, la vérité principale que vous voulez retenir vous-même ou faire retenir à l’auditoire. Il peut découler du FCF et influencera sans doute les questions d’application.",
+  "homileticApplicationHelpTitle": "Questions d’application",
+  "homileticApplicationHelpText": "Ce sont des questions qui aident l’auditoire à appliquer à sa propre vie ce qu’il vient d’entendre. Elles doivent être précises, personnelles, ouvertes et faire réfléchir.",
+  "homileticSummaryCount": "{count, plural, one{{count} résumé} other{{count} résumés}}",
+  "@homileticSummaryCount": {
+    "description": "Shown on the collapsed Content step: how many content summaries are written.",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "homileticDivisionCount": "{count, plural, one{{count} division} other{{count} divisions}}",
+  "@homileticDivisionCount": {
+    "description": "Shown on the collapsed Divisions step: how many divisions are written.",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "homileticQuestionCount": "{count, plural, one{{count} question} other{{count} questions}}",
+  "@homileticQuestionCount": {
+    "description": "Shown on the collapsed Application step: how many application questions are written.",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "homileticStepTileLabel": "{title}, {status}",
+  "@homileticStepTileLabel": {
+    "description": "Screen-reader label of a collapsed step in compact layout. {status} is 'done' or 'to do'.",
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Aim"
+      },
+      "status": {
+        "type": "String",
+        "example": "done"
+      }
+    }
+  },
+  "homileticStepTileLabelWithSummary": "{title}, {status}, {summary}",
+  "@homileticStepTileLabelWithSummary": {
+    "description": "Screen-reader label of a collapsed step. {status} is 'done' or 'to do'; {summary} is the short text on the right (e.g. '3 summaries' or the user's text).",
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Content"
+      },
+      "status": {
+        "type": "String",
+        "example": "done"
+      },
+      "summary": {
+        "type": "String",
+        "example": "3 summaries"
+      }
+    }
+  },
+  "lectureItemName": "note d’exposé",
+  "lectureDeleted": "Note d’exposé supprimée",
+  "lecturePassageHint": "Passage",
+  "lectureHeaderLabel": "Exposé · Passage",
+  "lectureNotesPlaceholder": "Notes",
+  "lectureToolbarBold": "Gras",
+  "lectureToolbarItalic": "Italique",
+  "lectureToolbarBulletedList": "Liste à puces",
+  "lectureToolbarNumberedList": "Liste numérotée",
+  "lectureReplaceTitle": "Remplacer l’enregistrement existant ?",
+  "lectureReplaceMessage": "L’ancien audio et sa transcription seront supprimés.",
+  "lectureReplaceConfirm": "Remplacer",
+  "lectureMicPermissionRequired": "L’autorisation du micro est nécessaire pour enregistrer.",
+  "lectureNotificationTitle": "Enregistrement de l’exposé",
+  "lectureNotificationContent": "{appName} enregistre l’audio",
+  "@lectureNotificationContent": {
+    "description": "Text of the Android ongoing notification shown while recording.",
+    "placeholders": {
+      "appName": {
+        "type": "String",
+        "example": "Homiletics"
+      }
+    }
+  },
+  "lectureStartFailed": "Impossible de démarrer l’enregistrement. Le micro est peut-être utilisé par une autre application.",
+  "lectureTranscriptionModelTitle": "Télécharger le modèle de transcription hors ligne ?",
+  "lectureTranscriptionModelMessage": "Un téléchargement unique d’environ 140 Mo permet de transcrire automatiquement vos enregistrements et d’y faire des recherches. Vous pouvez passer cette étape et le télécharger plus tard depuis les Paramètres.",
+  "lectureNotNow": "Pas maintenant",
+  "lectureDownload": "Télécharger",
+  "lectureModelDownloadFailed": "Une erreur s’est produite lors du téléchargement du modèle. Vous pouvez réessayer depuis les Paramètres.",
+  "lectureRecordingFileNotFound": "Le fichier d’enregistrement est introuvable.",
+  "lectureTranscriptionEmpty": "La transcription n’a produit aucun texte.",
+  "lectureFormattingModelTitle": "Télécharger le modèle de mise en forme ?",
+  "lectureFormattingModelMessage": "Un téléchargement unique de {size} permet de mettre les transcriptions au propre en paragraphes lisibles, entièrement sur votre appareil. Wi-Fi recommandé. Vous pouvez aussi le faire plus tard depuis les Paramètres.",
+  "@lectureFormattingModelMessage": {
+    "description": "Body of the formatting-model download dialog. {size} is the approximate download size.",
+    "placeholders": {
+      "size": {
+        "type": "String",
+        "example": "~1.6GB"
+      }
+    }
+  },
+  "lectureFormattingModelMissing": "Le modèle de mise en forme n’est pas téléchargé.",
+  "lectureFormattingFailed": "Impossible de mettre en forme la transcription.",
+  "lecturePlaybackFailed": "Impossible de lire l’enregistrement.",
+  "lectureDownloadingModel": "Téléchargement du modèle {percent} %",
+  "@lectureDownloadingModel": {
+    "description": "Progress line on the recording bar while a model downloads. Keep short (~30 chars).",
+    "placeholders": {
+      "percent": {
+        "type": "String",
+        "example": "42"
+      }
+    }
+  },
+  "lectureTranscribingProgress": "Transcription {percent} %",
+  "@lectureTranscribingProgress": {
+    "description": "Progress line on the recording bar while the recording is transcribed. Keep short (~30 chars).",
+    "placeholders": {
+      "percent": {
+        "type": "int",
+        "example": "42"
+      }
+    }
+  },
+  "lectureFormattingProgress": "Mise en forme {done}/{total}",
+  "@lectureFormattingProgress": {
+    "description": "Progress line while the transcript is formatted, in chunks done/total. Keep short (~30 chars).",
+    "placeholders": {
+      "done": {
+        "type": "int",
+        "example": "3"
+      },
+      "total": {
+        "type": "int",
+        "example": "8"
+      }
+    }
+  },
+  "lectureFormattingIndeterminate": "Mise en forme de la transcription…",
+  "lectureRecordingSemantics": "Enregistrement, {time}",
+  "@lectureRecordingSemantics": {
+    "description": "Screen-reader label for the live recording clock. {time} is elapsed mm:ss.",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "example": "14:02"
+      }
+    }
+  },
+  "lectureRecordingSubtitle": "Enregistrement · continue écran éteint",
+  "lectureStopRecording": "Arrêter l’enregistrement",
+  "lectureRecordLecture": "Enregistrer l’exposé",
+  "lectureRecordIdleSubtitle": "Continue d’enregistrer écran éteint",
+  "lecturePause": "Pause",
+  "lecturePlayRecording": "Écouter l’enregistrement",
+  "lectureRecordAgain": "Réenregistrer",
+  "lectureNotTranscribedYet": "Pas encore transcrit",
+  "lectureTranscribe": "Transcrire",
+  "lectureTimeMark": "+ Repère",
+  "lectureTranscriptEmptyRecording": "L’exposé sera transcrit sur ce téléphone une fois l’enregistrement arrêté.",
+  "lectureTranscriptEmptyPending": "La transcription apparaîtra ici dès qu’elle sera prête.",
+  "lectureTranscriptEmptyNotTranscribed": "Transcrivez l’enregistrement pour le lire et y faire des recherches ici.",
+  "lectureTranscriptEmptyNoRecording": "Enregistrez l’exposé : il sera transcrit sur ce téléphone une fois l’enregistrement arrêté.",
+  "lectureTranscribing": "Transcription…",
+  "lectureNoTranscriptYet": "Pas encore de transcription",
+  "lectureFormatted": "Mis en forme",
+  "lectureRaw": "Brut",
+  "lectureFormatTranscript": "Mettre en forme",
+  "lectureTabMyNotes": "Mes notes",
+  "lectureTabTranscript": "Transcription",
+  "modelTranscriptionTitle": "Modèle de transcription hors ligne",
+  "modelTranscriptionEnglishNeeded": "Modèle anglais, nécessaire pour {language}",
+  "@modelTranscriptionEnglishNeeded": {
+    "description": "Settings card detail: this is the English-only speech-to-text model, and it is the one the current app language uses.",
+    "placeholders": {
+      "language": {
+        "type": "String",
+        "example": "English"
+      }
+    }
+  },
+  "modelTranscriptionEnglishNotNeeded": "Modèle anglais, inutile pour {language}",
+  "@modelTranscriptionEnglishNotNeeded": {
+    "description": "Settings card detail: this is the English-only speech-to-text model, which the current app language does not use (it can be deleted to save space).",
+    "placeholders": {
+      "language": {
+        "type": "String",
+        "example": "Español"
+      }
+    }
+  },
+  "modelTranscriptionMultilingualNeeded": "Modèle multilingue, nécessaire pour {language}",
+  "@modelTranscriptionMultilingualNeeded": {
+    "description": "Settings card detail: this is the multilingual speech-to-text model, and it is the one the current app language uses.",
+    "placeholders": {
+      "language": {
+        "type": "String",
+        "example": "Español"
+      }
+    }
+  },
+  "modelTranscriptionMultilingualNotNeeded": "Modèle multilingue, inutile pour {language}",
+  "@modelTranscriptionMultilingualNotNeeded": {
+    "description": "Settings card detail: this is the multilingual speech-to-text model, which the current app language does not use (it can be deleted to save space).",
+    "placeholders": {
+      "language": {
+        "type": "String",
+        "example": "English"
+      }
+    }
+  },
+  "modelFormattingTitle": "Modèle de mise en forme des transcriptions",
+  "modelAppleIntelligenceStatus": "Utilise Apple Intelligence (aucun téléchargement nécessaire)",
+  "modelStatusChecking": "Vérification…",
+  "modelStatusNotDownloaded": "Non téléchargé ({size})",
+  "@modelStatusNotDownloaded": {
+    "description": "Model card status when the model is not downloaded; size is the approximate download size.",
+    "placeholders": {
+      "size": {
+        "type": "String",
+        "example": "~140MB"
+      }
+    }
+  },
+  "modelStatusDownloading": "Téléchargement… {percent} %",
+  "@modelStatusDownloading": {
+    "description": "Model card status while the model downloads.",
+    "placeholders": {
+      "percent": {
+        "type": "String",
+        "example": "42"
+      }
+    }
+  },
+  "modelStatusDownloaded": "Téléchargé",
+  "modelStatusDownloadedSize": "Téléchargé ({megabytes} Mo)",
+  "@modelStatusDownloadedSize": {
+    "description": "Model card status when the model is downloaded, with its size on the device in megabytes.",
+    "placeholders": {
+      "megabytes": {
+        "type": "String",
+        "example": "142"
+      }
+    }
+  },
+  "modelDownload": "Télécharger",
+  "modelDelete": "Supprimer",
+  "modelDownloadFailed": "Une erreur s’est produite lors du téléchargement du modèle. Réessayez plus tard.",
+  "modelDeleteFailed": "Une erreur s’est produite lors de la suppression du modèle.",
+  "pdfOverlineHomiletics": "HOMILÉTIQUE",
+  "pdfOverlineWordStudy": "ÉTUDE DE MOT",
+  "pdfUntitledPassage": "Passage sans titre",
+  "pdfUntitledWord": "Mot sans titre",
+  "pdfHomileticLabel": "Homilétique · {passage}",
+  "@pdfHomileticLabel": {
+    "description": "Document title and running page footer of a printed homiletic handout. 'Homiletics' is the app name / method name.",
+    "placeholders": {
+      "passage": {
+        "type": "String",
+        "example": "Revelation 2:1–11"
+      }
+    }
+  },
+  "pdfWordStudyLabel": "Étude de mot · {word}",
+  "@pdfWordStudyLabel": {
+    "description": "Document title and running page footer of a printed word-study handout with no passage.",
+    "placeholders": {
+      "word": {
+        "type": "String",
+        "example": "Lampstand"
+      }
+    }
+  },
+  "pdfWordStudyLabelWithPassage": "Étude de mot · {word} · {passage}",
+  "@pdfWordStudyLabelWithPassage": {
+    "description": "Document title and running page footer of a printed word-study handout: the word studied and the Bible passage it comes from.",
+    "placeholders": {
+      "word": {
+        "type": "String",
+        "example": "Lampstand"
+      },
+      "passage": {
+        "type": "String",
+        "example": "Revelation 2:1–7"
+      }
+    }
+  },
+  "pdfPageOf": "page {current} sur {total}",
+  "@pdfPageOf": {
+    "description": "Page number in the footer of a printed handout (lowercase in English).",
+    "placeholders": {
+      "current": {
+        "type": "int",
+        "example": "1"
+      },
+      "total": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "pdfFcfCaption": "Focus sur la condition déchue",
+  "pdfAimLeadIn": "Amener l’auditoire à comprendre que ",
+  "pdfEmptyHomiletic": "Rien n’a encore été écrit pour ce passage.",
+  "pdfEmptyWordStudy": "Rien n’a encore été écrit pour cette étude de mot.",
+  "pdfWordStudyDefinition": "Définition",
+  "pdfWordStudyOtherUsage": "Autres emplois",
+  "pdfWordStudyContextualMeaning": "Sens dans le contexte",
+  "pdfWordStudyDeeperMeaning": "Sens approfondi",
+  "pdfWordStudyApplication": "Application",
+  "editorSaveAndClose": "Enregistrer et fermer",
+  "editorDeleteConfirmTitle": "Êtes-vous sûr ?",
+  "editorDeleteConfirmMessage": "La suppression de cette {itemName} est définitive et irréversible. Voulez-vous vraiment continuer ?",
+  "@editorDeleteConfirmMessage": {
+    "description": "Body of the delete confirmation dialog in a study editor.",
+    "placeholders": {
+      "itemName": {
+        "type": "String",
+        "example": "Word Study",
+        "description": "Name of the kind of study being deleted, e.g. 'Word Study' or 'Lecture Note' (already localized)."
+      }
+    }
+  },
+  "editorPassageLabel": "Passage",
+  "editorAddPassageHint": "Ajouter un passage",
+  "editorBack": "Retour",
+  "editorMoreOptions": "Plus d’options",
+  "editorChangeTranslation": "Changer de traduction",
+  "editorStudyCompleteMessage": "Imprimez-la pour le cours ou partagez-la avec votre groupe.",
+  "wordStudyItemName": "étude de mot",
+  "wordStudyDeleted": "Étude de mot supprimée",
+  "wordStudyHeaderLabel": "Étude de mot · Passage",
+  "wordStudyPdfShared": "PDF partagé avec succès.",
+  "wordStudyPdfShareFailed": "Une erreur s’est produite lors du partage de votre PDF. Réessayez plus tard.",
+  "wordStudyPdfPrinted": "PDF imprimé avec succès.",
+  "wordStudyPdfPrintFailed": "Une erreur s’est produite lors de la création de votre PDF. Réessayez plus tard.",
+  "wordStudyWordTitle": "Mot",
+  "wordStudyWordHelp": "Le mot précis ou la courte expression que vous étudiez. Une fois saisi, les sections Définition et Autres emplois pourront vous proposer du contenu.",
+  "wordStudyWordHint": "Ajouter un mot",
+  "wordStudyEnterWordFirst": "Saisissez d’abord un mot ci-dessus.",
+  "wordStudyDefinitionTitle": "Définition",
+  "wordStudyDefinitionHelp": "Que signifie ce mot, en termes simples ? Touchez « + » pour obtenir des définitions tirées d’un dictionnaire, ou écrivez la vôtre.",
+  "wordStudyDefinitionHelpNoSuggest": "Que signifie ce mot, en termes simples ? Écrivez votre propre définition.",
+  "wordStudyDefinitionHint": "Que signifie-t-il, en termes simples ?",
+  "wordStudySuggestDefinition": "Suggérer une définition",
+  "wordStudyDefinitionsFor": "Définitions de « {word} »",
+  "@wordStudyDefinitionsFor": {
+    "description": "Title of the sheet listing dictionary definitions.",
+    "placeholders": {
+      "word": {
+        "type": "String",
+        "example": "grace",
+        "description": "The word being studied, as typed by the user."
+      }
+    }
+  },
+  "wordStudyDefinitionsTapToUse": "Touchez-en une pour l’utiliser.",
+  "wordStudyDefinitionsLoadError": "Impossible de charger les définitions. Réessayez plus tard.",
+  "wordStudyNoDefinitions": "Aucune définition trouvée pour ce mot.",
+  "wordStudyReplaceDefinitionTitle": "Remplacer votre définition ?",
+  "wordStudyReplaceDefinitionMessage": "Vous avez déjà écrit une définition. Voulez-vous la remplacer par la suggestion, ou ajouter la suggestion en dessous ?",
+  "wordStudyAddBelow": "Ajouter en dessous",
+  "wordStudyReplace": "Remplacer",
+  "wordStudyOtherUsageTitle": "Autres emplois",
+  "wordStudyOtherUsageHelp": "Où ailleurs ce mot ou cette notion apparaît-il dans les Écritures ? Touchez « + » pour chercher sur Bible Gateway et ajouter les références trouvées, ou écrivez les vôtres.",
+  "wordStudyOtherUsageHint": "Où apparaît-il ailleurs dans les Écritures ?",
+  "wordStudyFindOtherUsages": "Trouver d’autres emplois",
+  "wordStudyOtherUsageSheetTitle": "Autres passages où apparaît « {word} »",
+  "@wordStudyOtherUsageSheetTitle": {
+    "description": "Title of the Bible search sheet for other usages of the word.",
+    "placeholders": {
+      "word": {
+        "type": "String",
+        "example": "grace",
+        "description": "The word being studied, as typed by the user."
+      }
+    }
+  },
+  "wordStudyOtherUsageAdded": "Ajoutées",
+  "wordStudyOtherUsageInstructions": "Touchez un résultat ci-dessous pour ajouter sa référence.",
+  "wordStudyOtherUsageAddResult": "+ Ajouter",
+  "wordStudyContextualMeaningTitle": "Sens dans le contexte",
+  "wordStudyContextualMeaningHelp": "Quel sens l’auteur voulait-il donner à ce mot ici, dans ce passage ? Tenez compte des versets qui l’entourent, et pas seulement du mot isolé.",
+  "wordStudyContextualMeaningHint": "Que signifie-t-il ici, dans ce passage ?",
+  "wordStudyDeeperMeaningTitle": "Sens approfondi",
+  "wordStudyDeeperMeaningHelp": "Une idée tirée de la langue originale, d’un commentaire ou d’une autre étude qui apporte de la profondeur au-delà de la définition de base ? Comment le reste des Écritures l’éclaire-t-il ? Une concordance Strong ou Blue Letter Bible peuvent vous aider ici.",
+  "wordStudyDeeperMeaningHint": "Comment le reste des Écritures l’éclaire-t-il ?",
+  "wordStudyApplicationTitle": "Application",
+  "wordStudyApplicationHelp": "Comment cette vérité doit-elle façonner votre vie ? Soyez précis, personnel et concret.",
+  "wordStudyApplicationHint": "Qu’allez-vous en faire ?",
+  "wordStudyDoneTitle": "Étude de mot terminée",
+  "wordStudySectionHelpSemantics": "{title}, à propos de cette section",
+  "@wordStudySectionHelpSemantics": {
+    "description": "Screen reader label for a section title that opens its help text.",
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Definition",
+        "description": "The section's title."
+      }
+    }
+  }
+}

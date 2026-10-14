@@ -1,0 +1,779 @@
+{
+  "@@locale": "zh",
+  "prefsTitle": "偏好设置",
+  "prefsAppLanguage": "首选语言",
+  "prefsBibleVersion": "首选圣经译本",
+  "bibleNewTestamentOnly": "仅含新约",
+  "appTitle": "Homiletics",
+  "commonCancel": "取消",
+  "commonOk": "好",
+  "commonDelete": "删除",
+  "commonDone": "完成",
+  "commonSave": "保存",
+  "commonClose": "关闭",
+  "commonRetry": "重试",
+  "commonSomethingWentWrong": "出了点问题，请稍后再试。",
+  "languageSystemDefault": "跟随手机语言",
+  "stepContent": "内容摘要",
+  "stepDivisions": "段落划分",
+  "stepSummary": "总结句",
+  "stepFcf": "FCF",
+  "stepAim": "目标",
+  "stepApplication": "应用",
+  "stepShortContent": "内容",
+  "stepShortDivisions": "分段",
+  "stepShortSummary": "总结",
+  "stepShortFcf": "FCF",
+  "stepShortAim": "目标",
+  "stepShortApplication": "应用",
+  "commonShare": "分享",
+  "commonPrint": "打印",
+  "commonPreferences": "偏好设置",
+  "commonUntitled": "未命名",
+  "homeSearchIntro": "搜索你的讲道大纲、段落划分、应用问题、讲课笔记和字词研究。",
+  "homeSearchFieldHint": "搜索课程、经文、笔记…",
+  "homeSearchTooltip": "搜索",
+  "homeCloseSearch": "关闭搜索",
+  "homeAllStudies": "全部查经课程",
+  "homeFilterByStudy": "按查经课程筛选",
+  "homeOpenStudySite": "打开查经课程网站",
+  "homeThisWeek": "本周",
+  "homeEarlier": "之前",
+  "homeComingUp": "即将开始",
+  "homeWeekOverline": "{when} · {lesson}",
+  "@homeWeekOverline": {
+    "description": "Overline on a passage card: the week label (This week / Earlier / Coming up) followed by the lesson name from the study schedule. Shown in upper case on one line.",
+    "placeholders": {
+      "when": {
+        "type": "String"
+      },
+      "lesson": {
+        "type": "String"
+      }
+    }
+  },
+  "homeStartHomiletics": "开始写讲道大纲",
+  "homeContinueHomiletics": "继续写讲道大纲",
+  "homeOpenHomiletics": "打开讲道大纲",
+  "homeLoadingPassages": "正在加载推荐经文…",
+  "homeContinue": "继续",
+  "homeSeeAll": "查看全部",
+  "homeLivingItOut": "活出真道",
+  "homeKindTileHomiletic": "讲",
+  "homeKindTileWordStudy": "词",
+  "homeProgressNoneDone": "尚未完成任何步骤",
+  "homeProgressDone": "已完成：{steps}",
+  "@homeProgressDone": {
+    "description": "Screen-reader label for the homiletic step progress bar; {steps} is a comma-separated list of completed step names.",
+    "placeholders": {
+      "steps": {
+        "type": "String"
+      }
+    }
+  },
+  "homePageOf": "第{page}页，共{count}页",
+  "@homePageOf": {
+    "description": "Screen-reader label for the dots under the swipeable passage cards.",
+    "placeholders": {
+      "page": {
+        "type": "int"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homePageFraction": "{page} / {count}",
+  "@homePageFraction": {
+    "description": "Compact page indicator under the passage cards when there are too many pages for dots, e.g. '3 / 12'.",
+    "placeholders": {
+      "page": {
+        "type": "int"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "studiesTitle": "我的查经",
+  "studiesTabHomiletics": "讲道大纲",
+  "studiesTabLectures": "讲课",
+  "studiesTabWordStudies": "字词研究",
+  "studiesNoHomiletics": "还没有讲道大纲。",
+  "studiesNoLectureNotes": "还没有讲课笔记。",
+  "studiesNoWordStudies": "还没有字词研究。",
+  "studiesNoApplications": "还没有应用问题。",
+  "studiesProgressNotStarted": "未开始",
+  "studiesProgressAll": "全部{total}步",
+  "@studiesProgressAll": {
+    "description": "Homiletic progress summary when every step is done, e.g. 'All 6 steps'. Short.",
+    "placeholders": {
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "studiesProgressSome": "{done}/{total}步",
+  "@studiesProgressSome": {
+    "description": "Homiletic progress summary, e.g. '2 of 6 steps'. Short.",
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "studiesHomileticSubtitle": "讲道大纲 · {progress} · {time}",
+  "@studiesHomileticSubtitle": {
+    "description": "Subtitle of a homiletic in a study list: kind, progress (e.g. '2 of 6 steps') and relative time (e.g. '3 days ago'). One line.",
+    "placeholders": {
+      "progress": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "studiesHomileticSubtitleNoProgress": "讲道大纲 · {time}",
+  "@studiesHomileticSubtitleNoProgress": {
+    "description": "Subtitle of a homiletic in a study list while its progress loads; {time} is a relative time like '3 days ago'.",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "studiesLectureTitle": "{passage}讲课",
+  "@studiesLectureTitle": {
+    "description": "Title of a lecture note in a study list; {passage} is a Bible reference like 'John 3:1-21'.",
+    "placeholders": {
+      "passage": {
+        "type": "String"
+      }
+    }
+  },
+  "studiesLectureUntitled": "讲课",
+  "studiesLectureSubtitle": "讲课笔记 · {time}",
+  "@studiesLectureSubtitle": {
+    "description": "Subtitle of a lecture note in a study list; {time} is a relative time like '3 days ago'.",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "studiesWordStudyUntitled": "字词研究",
+  "studiesWordStudySubtitle": "字词研究 · {time}",
+  "@studiesWordStudySubtitle": {
+    "description": "Subtitle of a word study in a study list; {time} is a relative time like '3 days ago'.",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "studiesWordStudySubtitleWithPassage": "字词研究 · {passage} · {time}",
+  "@studiesWordStudySubtitleWithPassage": {
+    "description": "Subtitle of a word study in a study list; {passage} is a Bible reference, {time} a relative time like '3 days ago'.",
+    "placeholders": {
+      "passage": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "searchHint": "搜索",
+  "searchSectionContentSummaries": "内容摘要",
+  "searchSectionDivisions": "段落划分",
+  "searchSectionApplications": "应用问题",
+  "searchSectionAims": "目标",
+  "searchSectionSummarySentences": "总结句",
+  "searchSectionPassages": "讲道大纲经文",
+  "searchSectionLectureNotes": "讲课笔记",
+  "searchSectionWordStudies": "字词研究",
+  "searchOpenFailed": "无法打开该结果，它可能已被删除。",
+  "settingsTitle": "设置",
+  "settingsSectionLanguage": "语言",
+  "settingsAppLanguage": "应用语言",
+  "settingsSectionReading": "阅读",
+  "settingsSectionModels": "设备端模型",
+  "settingsSectionHelp": "帮助",
+  "settingsCopyright": "版权所有 (C) {year} 13one.org · 保留所有权利",
+  "@settingsCopyright": {
+    "description": "Copyright line at the bottom of the settings page. Keep '13one.org' unchanged.",
+    "placeholders": {
+      "year": {
+        "type": "String"
+      }
+    }
+  },
+  "helpRequestFeedback": "寻求帮助 / 提供反馈",
+  "helpCopyright": "版权所有 (C) {year} 13one.org",
+  "@helpCopyright": {
+    "description": "Copyright line at the foot of the home screen. Keep '13one.org' unchanged.",
+    "placeholders": {
+      "year": {
+        "type": "String"
+      }
+    }
+  },
+  "helpAllRightsReserved": "保留所有权利",
+  "feedbackTitle": "提供反馈",
+  "feedbackPublicNotice": "你的反馈会作为公开的 GitHub issue 提交，互联网上的任何人都能看到。请勿包含密码或其他私人信息。你的电子邮箱在 GitHub 上会被部分隐藏；我们可能仅为跟进联系而在服务器上保留完整地址。",
+  "feedbackTypeGeneral": "帮助或反馈",
+  "feedbackTypeTranslation": "翻译问题",
+  "feedbackTranslationHint": "请告诉我们哪些文字有误，以及应该怎么写。我们会附上你的应用语言和圣经译本。",
+  "feedbackNameLabel": "姓名",
+  "feedbackEmailLabel": "电子邮箱（选填）",
+  "feedbackContentLabel": "反馈内容",
+  "feedbackSubmit": "提交",
+  "feedbackEmpty": "请先输入反馈内容。",
+  "feedbackSubmittedIssue": "已提交。你可以随时在 GitHub 上打开该 issue 添加评论（可不登录）。",
+  "feedbackOpenIssue": "打开",
+  "feedbackSubmitted": "反馈提交成功",
+  "feedbackBadRequest": "无法提交该请求。请检查你的留言后重试。",
+  "feedbackServerUnreachableTitle": "无法连接服务器",
+  "feedbackServerUnreachableBody": "请改为在浏览器中打开 GitHub 提交此报告。你可能需要先在那里登录才能提交 issue。",
+  "feedbackNotNow": "以后再说",
+  "feedbackOpenGitHub": "打开 GitHub",
+  "feedbackBrowserFailed": "无法打开浏览器。",
+  "startHomiletics": "讲道大纲",
+  "startLecture": "讲课",
+  "startWordStudy": "字词研究",
+  "startPassageHint": "查考其他经文…",
+  "startClear": "清除",
+  "startOtherStudy": "其他查经",
+  "startMenuLectureNote": "讲课笔记",
+  "startMenuWordStudy": "字词研究",
+  "startDuplicateHomileticTitle": "这段经文已有讲道大纲？",
+  "startDuplicateHomileticMany": "{passage}\n\n这段经文你已有{count}份讲道大纲，将打开最近的一份。",
+  "@startDuplicateHomileticMany": {
+    "description": "Body of the duplicate-homiletic dialog when there are several; {passage} is a Bible reference. 'Edit existing' opens the most recent.",
+    "placeholders": {
+      "passage": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "startDuplicateLectureTitle": "这段经文已有讲课笔记？",
+  "startDuplicateLectureMany": "{passage}\n\n这段经文你已有{count}份讲课笔记，将打开最近的一份。",
+  "@startDuplicateLectureMany": {
+    "description": "Body of the duplicate-lecture-notes dialog when there are several; {passage} is a Bible reference.",
+    "placeholders": {
+      "passage": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "startDuplicateWordStudyTitle": "这段经文已有字词研究？",
+  "startDuplicateWordStudyMany": "{passage}\n\n这段经文你已有{count}份字词研究，将打开最近的一份。",
+  "@startDuplicateWordStudyMany": {
+    "description": "Body of the duplicate-word-study dialog when there are several; {passage} is a Bible reference.",
+    "placeholders": {
+      "passage": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "startCreateNew": "新建",
+  "startEditExisting": "编辑现有的",
+  "homileticHeaderLabel": "讲道大纲 · 经文",
+  "homileticItemName": "讲道大纲",
+  "homileticDeletedMessage": "讲道大纲已删除",
+  "homileticLoadError": "加载这份讲道大纲时出了问题。",
+  "homileticPdfShared": "PDF 分享成功。",
+  "homileticPdfShareFailed": "分享 PDF 时出了问题，请稍后再试。",
+  "homileticPdfPrinted": "PDF 打印成功。",
+  "homileticPdfPrintFailed": "生成 PDF 时出了问题，请稍后再试。",
+  "homileticCompleteTitle": "六个步骤全部完成",
+  "homileticCompleteMessage": "打印出来带去课堂，或分享给你的小组。",
+  "homileticContentEmptySummary": "经节 + 摘要",
+  "homileticDivisionsEmptySummary": "分成2–4段",
+  "homileticSummaryEmptySummary": "≤ 20字",
+  "homileticFcfEmptySummary": "堕落景况焦点",
+  "homileticAimEmptySummary": "最主要的收获",
+  "homileticApplicationEmptySummary": "我该如何…",
+  "homileticStepStatusDone": "已完成",
+  "homileticStepStatusToDo": "待完成",
+  "homileticStepCollapseLabel": "{title}，收起",
+  "@homileticStepCollapseLabel": {
+    "description": "Screen-reader label of an open step's header; tapping it closes the step.",
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Divisions"
+      }
+    }
+  },
+  "homileticStepHelpLabel": "关于{title}",
+  "@homileticStepHelpLabel": {
+    "description": "Tooltip and screen-reader label of the '?' button that explains a homiletic step.",
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Divisions"
+      }
+    }
+  },
+  "homileticVersesLabel": "经节",
+  "homileticVersesHint": "节",
+  "homileticAddButtonLabel": "+ {label}",
+  "@homileticAddButtonLabel": {
+    "description": "Text of the dashed add button under a list step; {label} is e.g. 'Add summary'. Keep the plus sign unless your language puts it elsewhere.",
+    "placeholders": {
+      "label": {
+        "type": "String",
+        "example": "Add summary"
+      }
+    }
+  },
+  "homileticRemoveRowMessage": "你在这里写的内容将被删除。",
+  "homileticRemoveRowConfirm": "移除",
+  "homileticContentSummaryHint": "摘要…",
+  "homileticAddContentSummary": "添加摘要",
+  "homileticRemoveContentSummaryTooltip": "移除内容摘要",
+  "homileticRemoveContentSummaryTitle": "移除这条内容摘要？",
+  "homileticRemoveContentSummaryFailed": "未能移除该内容摘要",
+  "homileticDivisionHint": "段落句…",
+  "homileticAddDivision": "添加段落",
+  "homileticRemoveDivisionTooltip": "移除段落",
+  "homileticRemoveDivisionTitle": "移除这个段落？",
+  "homileticRemoveDivisionFailed": "未能移除该段落",
+  "homileticApplicationHint": "我该如何…",
+  "homileticAddApplication": "添加问题",
+  "homileticRemoveApplicationTooltip": "移除应用问题",
+  "homileticRemoveApplicationTitle": "移除这个应用问题？",
+  "homileticRemoveApplicationFailed": "未能移除该应用问题",
+  "homileticSummaryHint": "总结：不超过20个字",
+  "homileticFcfHint": "堕落/软弱/无力/善变",
+  "homileticAimHint": "使听众明白…",
+  "homileticContentHelpTitle": "内容摘要",
+  "homileticContentHelpText": "内容摘要是对一段圣经经文的概括。它不一定是一个完整的句子，也可以不止一句。它应当用你自己的话，概括这段经文的内容。\n内容摘要至少要写10条，但不超过20条。一般来说，可根据经文的长短，把经文分成大小差不多的几块，以达到10–20条的目标。例如，如果你的经文有30节，我会尽量让每条内容摘要平均涵盖3节。",
+  "homileticDivisionsHelpText": "段落划分是把彼此相关的经节归为一组。至少要分成两段，最多不超过四段。",
+  "homileticSummaryHelpTitle": "总结句",
+  "homileticSummaryHelpText": "总结句是一句简洁、好记的话，概括了最关键的内容。可以用“凌晨两点测试”来想：如果有人在凌晨两点把你叫醒，问你这篇讲道讲的是什么，你会怎么回答？你的回答就是总结句。\n它应当不超过20个字。如果你有兴致，还可以试着让它押韵或对仗。",
+  "homileticFcfHelpText": "FCF（堕落景况焦点）是这段经文最多描绘或提到的人性层面。它是听众所处的光景，也是听众需要被拯救的原因。",
+  "homileticAimHelpText": "目标是核心要点，是你希望自己或听众带走的那一个最主要的真理。它可以从FCF推导出来，也很可能会影响应用问题。",
+  "homileticApplicationHelpTitle": "应用问题",
+  "homileticApplicationHelpText": "这些问题帮助听众把刚听到的内容应用到自己的生活中。问题应当具体、贴近个人、开放式，并且发人深省。",
+  "homileticSummaryCount": "{count, plural, other{{count}条摘要}}",
+  "@homileticSummaryCount": {
+    "description": "Shown on the collapsed Content step: how many content summaries are written.",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "homileticDivisionCount": "{count, plural, other{{count}个段落}}",
+  "@homileticDivisionCount": {
+    "description": "Shown on the collapsed Divisions step: how many divisions are written.",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "homileticQuestionCount": "{count, plural, other{{count}个问题}}",
+  "@homileticQuestionCount": {
+    "description": "Shown on the collapsed Application step: how many application questions are written.",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "homileticStepTileLabel": "{title}，{status}",
+  "@homileticStepTileLabel": {
+    "description": "Screen-reader label of a collapsed step in compact layout. {status} is 'done' or 'to do'.",
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Aim"
+      },
+      "status": {
+        "type": "String",
+        "example": "done"
+      }
+    }
+  },
+  "homileticStepTileLabelWithSummary": "{title}，{status}，{summary}",
+  "@homileticStepTileLabelWithSummary": {
+    "description": "Screen-reader label of a collapsed step. {status} is 'done' or 'to do'; {summary} is the short text on the right (e.g. '3 summaries' or the user's text).",
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Content"
+      },
+      "status": {
+        "type": "String",
+        "example": "done"
+      },
+      "summary": {
+        "type": "String",
+        "example": "3 summaries"
+      }
+    }
+  },
+  "lectureItemName": "讲课笔记",
+  "lectureDeleted": "讲课笔记已删除",
+  "lecturePassageHint": "经文",
+  "lectureHeaderLabel": "讲课 · 经文",
+  "lectureNotesPlaceholder": "笔记",
+  "lectureToolbarBold": "粗体",
+  "lectureToolbarItalic": "斜体",
+  "lectureToolbarBulletedList": "项目符号列表",
+  "lectureToolbarNumberedList": "编号列表",
+  "lectureReplaceTitle": "替换现有录音？",
+  "lectureReplaceMessage": "旧的音频和转录文字将被删除。",
+  "lectureReplaceConfirm": "替换",
+  "lectureMicPermissionRequired": "需要麦克风权限才能录音。",
+  "lectureNotificationTitle": "正在录制讲课",
+  "lectureNotificationContent": "{appName}正在录音",
+  "@lectureNotificationContent": {
+    "description": "Text of the Android ongoing notification shown while recording.",
+    "placeholders": {
+      "appName": {
+        "type": "String",
+        "example": "Homiletics"
+      }
+    }
+  },
+  "lectureStartFailed": "无法开始录音。麦克风可能正被其他应用使用。",
+  "lectureTranscriptionModelTitle": "下载离线转录模型？",
+  "lectureTranscriptionModelMessage": "一次性下载约140MB后，你的录音就能自动转成文字并可供搜索。你也可以先跳过，以后在“设置”中下载。",
+  "lectureNotNow": "以后再说",
+  "lectureDownload": "下载",
+  "lectureModelDownloadFailed": "下载模型时出了问题。你可以在“设置”中重试。",
+  "lectureRecordingFileNotFound": "找不到录音文件。",
+  "lectureTranscriptionEmpty": "转录没有生成任何文字。",
+  "lectureFormattingModelTitle": "下载转录排版模型？",
+  "lectureFormattingModelMessage": "一次性下载{size}后，转录文字就能整理成易读的段落，全程在你的设备上完成。建议使用 Wi-Fi。你也可以以后在“设置”中进行。",
+  "@lectureFormattingModelMessage": {
+    "description": "Body of the formatting-model download dialog. {size} is the approximate download size.",
+    "placeholders": {
+      "size": {
+        "type": "String",
+        "example": "~1.6GB"
+      }
+    }
+  },
+  "lectureFormattingModelMissing": "尚未下载排版模型。",
+  "lectureFormattingFailed": "无法整理转录文字。",
+  "lecturePlaybackFailed": "无法播放录音。",
+  "lectureDownloadingModel": "正在下载模型 {percent}%",
+  "@lectureDownloadingModel": {
+    "description": "Progress line on the recording bar while a model downloads. Keep short (~30 chars).",
+    "placeholders": {
+      "percent": {
+        "type": "String",
+        "example": "42"
+      }
+    }
+  },
+  "lectureTranscribingProgress": "正在转录 {percent}%",
+  "@lectureTranscribingProgress": {
+    "description": "Progress line on the recording bar while the recording is transcribed. Keep short (~30 chars).",
+    "placeholders": {
+      "percent": {
+        "type": "int",
+        "example": "42"
+      }
+    }
+  },
+  "lectureFormattingProgress": "正在整理转录 {done}/{total}",
+  "@lectureFormattingProgress": {
+    "description": "Progress line while the transcript is formatted, in chunks done/total. Keep short (~30 chars).",
+    "placeholders": {
+      "done": {
+        "type": "int",
+        "example": "3"
+      },
+      "total": {
+        "type": "int",
+        "example": "8"
+      }
+    }
+  },
+  "lectureFormattingIndeterminate": "正在整理转录…",
+  "lectureRecordingSemantics": "正在录音，{time}",
+  "@lectureRecordingSemantics": {
+    "description": "Screen-reader label for the live recording clock. {time} is elapsed mm:ss.",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "example": "14:02"
+      }
+    }
+  },
+  "lectureRecordingSubtitle": "录音中 · 关闭屏幕也会继续",
+  "lectureStopRecording": "停止录音",
+  "lectureRecordLecture": "录制讲课",
+  "lectureRecordIdleSubtitle": "关闭屏幕也能继续录音",
+  "lecturePause": "暂停",
+  "lecturePlayRecording": "播放录音",
+  "lectureRecordAgain": "重新录制",
+  "lectureNotTranscribedYet": "尚未转录",
+  "lectureTranscribe": "转录",
+  "lectureTimeMark": "+ 时间标记",
+  "lectureTranscriptEmptyRecording": "停止录音后，讲课内容会在这部手机上转成文字。",
+  "lectureTranscriptEmptyPending": "转录文字准备好后会显示在这里。",
+  "lectureTranscriptEmptyNotTranscribed": "转录这段录音后，就能在这里阅读和搜索。",
+  "lectureTranscriptEmptyNoRecording": "录下讲课，停止后会在这部手机上转成文字。",
+  "lectureTranscribing": "正在转录…",
+  "lectureNoTranscriptYet": "还没有转录文字",
+  "lectureFormatted": "已整理",
+  "lectureRaw": "原文",
+  "lectureFormatTranscript": "整理转录文字",
+  "lectureTabMyNotes": "我的笔记",
+  "lectureTabTranscript": "转录文字",
+  "modelTranscriptionTitle": "离线转录模型",
+  "modelTranscriptionEnglishNeeded": "英语模型，{language}需要",
+  "@modelTranscriptionEnglishNeeded": {
+    "description": "Settings card detail: this is the English-only speech-to-text model, and it is the one the current app language uses.",
+    "placeholders": {
+      "language": {
+        "type": "String",
+        "example": "English"
+      }
+    }
+  },
+  "modelTranscriptionEnglishNotNeeded": "英语模型，{language}不需要",
+  "@modelTranscriptionEnglishNotNeeded": {
+    "description": "Settings card detail: this is the English-only speech-to-text model, which the current app language does not use (it can be deleted to save space).",
+    "placeholders": {
+      "language": {
+        "type": "String",
+        "example": "Español"
+      }
+    }
+  },
+  "modelTranscriptionMultilingualNeeded": "多语言模型，{language}需要",
+  "@modelTranscriptionMultilingualNeeded": {
+    "description": "Settings card detail: this is the multilingual speech-to-text model, and it is the one the current app language uses.",
+    "placeholders": {
+      "language": {
+        "type": "String",
+        "example": "Español"
+      }
+    }
+  },
+  "modelTranscriptionMultilingualNotNeeded": "多语言模型，{language}不需要",
+  "@modelTranscriptionMultilingualNotNeeded": {
+    "description": "Settings card detail: this is the multilingual speech-to-text model, which the current app language does not use (it can be deleted to save space).",
+    "placeholders": {
+      "language": {
+        "type": "String",
+        "example": "English"
+      }
+    }
+  },
+  "modelFormattingTitle": "转录排版模型",
+  "modelAppleIntelligenceStatus": "正在使用 Apple Intelligence（无需下载）",
+  "modelStatusChecking": "正在检查…",
+  "modelStatusNotDownloaded": "未下载（{size}）",
+  "@modelStatusNotDownloaded": {
+    "description": "Model card status when the model is not downloaded; size is the approximate download size.",
+    "placeholders": {
+      "size": {
+        "type": "String",
+        "example": "~140MB"
+      }
+    }
+  },
+  "modelStatusDownloading": "正在下载… {percent}%",
+  "@modelStatusDownloading": {
+    "description": "Model card status while the model downloads.",
+    "placeholders": {
+      "percent": {
+        "type": "String",
+        "example": "42"
+      }
+    }
+  },
+  "modelStatusDownloaded": "已下载",
+  "modelStatusDownloadedSize": "已下载（{megabytes}MB）",
+  "@modelStatusDownloadedSize": {
+    "description": "Model card status when the model is downloaded, with its size on the device in megabytes.",
+    "placeholders": {
+      "megabytes": {
+        "type": "String",
+        "example": "142"
+      }
+    }
+  },
+  "modelDownload": "下载",
+  "modelDelete": "删除",
+  "modelDownloadFailed": "下载模型时出了问题，请稍后再试。",
+  "modelDeleteFailed": "删除模型时出了问题。",
+  "pdfOverlineHomiletics": "讲道大纲",
+  "pdfOverlineWordStudy": "字词研究",
+  "pdfUntitledPassage": "未命名经文",
+  "pdfUntitledWord": "未命名字词",
+  "pdfHomileticLabel": "讲道大纲 · {passage}",
+  "@pdfHomileticLabel": {
+    "description": "Document title and running page footer of a printed homiletic handout. 'Homiletics' is the app name / method name.",
+    "placeholders": {
+      "passage": {
+        "type": "String",
+        "example": "Revelation 2:1–11"
+      }
+    }
+  },
+  "pdfWordStudyLabel": "字词研究 · {word}",
+  "@pdfWordStudyLabel": {
+    "description": "Document title and running page footer of a printed word-study handout with no passage.",
+    "placeholders": {
+      "word": {
+        "type": "String",
+        "example": "Lampstand"
+      }
+    }
+  },
+  "pdfWordStudyLabelWithPassage": "字词研究 · {word} · {passage}",
+  "@pdfWordStudyLabelWithPassage": {
+    "description": "Document title and running page footer of a printed word-study handout: the word studied and the Bible passage it comes from.",
+    "placeholders": {
+      "word": {
+        "type": "String",
+        "example": "Lampstand"
+      },
+      "passage": {
+        "type": "String",
+        "example": "Revelation 2:1–7"
+      }
+    }
+  },
+  "pdfPageOf": "第{current}页，共{total}页",
+  "@pdfPageOf": {
+    "description": "Page number in the footer of a printed handout (lowercase in English).",
+    "placeholders": {
+      "current": {
+        "type": "int",
+        "example": "1"
+      },
+      "total": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "pdfFcfCaption": "堕落景况焦点",
+  "pdfAimLeadIn": "使听众明白：",
+  "pdfEmptyHomiletic": "这段经文还没有写任何内容。",
+  "pdfEmptyWordStudy": "这份字词研究还没有写任何内容。",
+  "pdfWordStudyDefinition": "定义",
+  "pdfWordStudyOtherUsage": "其他用法",
+  "pdfWordStudyContextualMeaning": "上下文含义",
+  "pdfWordStudyDeeperMeaning": "深层含义",
+  "pdfWordStudyApplication": "应用",
+  "editorSaveAndClose": "保存并关闭",
+  "editorDeleteConfirmTitle": "确定吗？",
+  "editorDeleteConfirmMessage": "删除这份{itemName}后将无法恢复。确定要继续吗？",
+  "@editorDeleteConfirmMessage": {
+    "description": "Body of the delete confirmation dialog in a study editor.",
+    "placeholders": {
+      "itemName": {
+        "type": "String",
+        "example": "Word Study",
+        "description": "Name of the kind of study being deleted, e.g. 'Word Study' or 'Lecture Note' (already localized)."
+      }
+    }
+  },
+  "editorPassageLabel": "经文",
+  "editorAddPassageHint": "添加经文",
+  "editorBack": "返回",
+  "editorMoreOptions": "更多选项",
+  "editorChangeTranslation": "更换译本",
+  "editorStudyCompleteMessage": "打印出来带去课堂，或分享给你的小组。",
+  "wordStudyItemName": "字词研究",
+  "wordStudyDeleted": "字词研究已删除",
+  "wordStudyHeaderLabel": "字词研究 · 经文",
+  "wordStudyPdfShared": "PDF 分享成功。",
+  "wordStudyPdfShareFailed": "分享 PDF 时出了问题，请稍后再试。",
+  "wordStudyPdfPrinted": "PDF 打印成功。",
+  "wordStudyPdfPrintFailed": "生成 PDF 时出了问题，请稍后再试。",
+  "wordStudyWordTitle": "字词",
+  "wordStudyWordHelp": "你要研究的具体字词或短语。输入后，“定义”和“其他用法”可以为你推荐内容。",
+  "wordStudyWordHint": "添加字词",
+  "wordStudyEnterWordFirst": "请先在上方输入字词。",
+  "wordStudyDefinitionTitle": "定义",
+  "wordStudyDefinitionHelp": "这个字词用浅白的话说是什么意思？点按“+”可查看从词典中找到的候选定义，也可以自己写。",
+  "wordStudyDefinitionHelpNoSuggest": "这个字词用浅白的话说是什么意思？请自己写下来。",
+  "wordStudyDefinitionHint": "用浅白的话说，它是什么意思？",
+  "wordStudySuggestDefinition": "推荐定义",
+  "wordStudyDefinitionsFor": "“{word}”的定义",
+  "@wordStudyDefinitionsFor": {
+    "description": "Title of the sheet listing dictionary definitions.",
+    "placeholders": {
+      "word": {
+        "type": "String",
+        "example": "grace",
+        "description": "The word being studied, as typed by the user."
+      }
+    }
+  },
+  "wordStudyDefinitionsTapToUse": "点按一项即可使用。",
+  "wordStudyDefinitionsLoadError": "无法加载定义，请稍后再试。",
+  "wordStudyNoDefinitions": "没有找到这个字词的定义。",
+  "wordStudyReplaceDefinitionTitle": "替换你的定义？",
+  "wordStudyReplaceDefinitionMessage": "你已经写了定义。要用推荐内容替换它，还是把推荐内容添加在下方？",
+  "wordStudyAddBelow": "添加在下方",
+  "wordStudyReplace": "替换",
+  "wordStudyOtherUsageTitle": "其他用法",
+  "wordStudyOtherUsageHelp": "这个字词或概念在圣经的其他什么地方出现？点按“+”可在 Bible Gateway 上搜索并添加你找到的经文出处，也可以自己写。",
+  "wordStudyOtherUsageHint": "它在圣经的其他什么地方出现？",
+  "wordStudyFindOtherUsages": "查找其他用法",
+  "wordStudyOtherUsageSheetTitle": "“{word}”还出现在哪里",
+  "@wordStudyOtherUsageSheetTitle": {
+    "description": "Title of the Bible search sheet for other usages of the word.",
+    "placeholders": {
+      "word": {
+        "type": "String",
+        "example": "grace",
+        "description": "The word being studied, as typed by the user."
+      }
+    }
+  },
+  "wordStudyOtherUsageAdded": "已添加",
+  "wordStudyOtherUsageInstructions": "点按下方结果即可添加其经文出处。",
+  "wordStudyOtherUsageAddResult": "+ 添加",
+  "wordStudyContextualMeaningTitle": "上下文含义",
+  "wordStudyContextualMeaningHelp": "作者在这段经文中用这个字词想表达什么意思？请参考前后的经节，而不只看这个字词本身。",
+  "wordStudyContextualMeaningHint": "它在这段经文中是什么意思？",
+  "wordStudyDeeperMeaningTitle": "深层含义",
+  "wordStudyDeeperMeaningHelp": "原文、注释书或其他研读资料中，有没有超越基本定义、带来更深理解的见解？圣经其他部分如何塑造它的含义？Strong's 经文汇编或 Blue Letter Bible 会有帮助。",
+  "wordStudyDeeperMeaningHint": "圣经其他部分如何塑造它的含义？",
+  "wordStudyApplicationTitle": "应用",
+  "wordStudyApplicationHelp": "这个真理应当如何塑造你的生活？要具体、贴近个人、切实可行。",
+  "wordStudyApplicationHint": "你会怎样活出来？",
+  "wordStudyDoneTitle": "字词研究已完成",
+  "wordStudySectionHelpSemantics": "{title}，关于此部分",
+  "@wordStudySectionHelpSemantics": {
+    "description": "Screen reader label for a section title that opens its help text.",
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Definition",
+        "description": "The section's title."
+      }
+    }
+  }
+}
