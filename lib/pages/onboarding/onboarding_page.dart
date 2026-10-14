@@ -243,8 +243,15 @@ class _Slide extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AppColors c = AppColors.of(context);
+    // On wide portrait screens (tablets) the illustration sits centered
+    // above the text, so center the text under it too.
+    final double width = MediaQuery.sizeOf(context).width;
+    final bool centerText =
+        width >= 600 && width <= MediaQuery.sizeOf(context).height;
+    final TextAlign align = centerText ? TextAlign.center : TextAlign.start;
     final Widget text = Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment:
+          centerText ? CrossAxisAlignment.center : CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
         Overline(overline, color: c.accent),
@@ -252,11 +259,13 @@ class _Slide extends StatelessWidget {
         Semantics(
           header: true,
           child: Text(title,
+              textAlign: align,
               style: AppText.display.copyWith(fontSize: 28, color: c.ink)),
         ),
         for (final String paragraph in body) ...[
           const SizedBox(height: 12),
           Text(paragraph,
+              textAlign: align,
               style: AppText.body.copyWith(fontSize: 16, color: c.ink)),
         ],
         if (footer != null) ...[

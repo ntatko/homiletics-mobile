@@ -99,6 +99,8 @@ class PassageSplitScaffold extends StatefulWidget {
 }
 
 class _PassageSplitScaffoldState extends State<PassageSplitScaffold> {
+  static const double _maxStudyWidth = 760;
+
   late final TextEditingController _passageController;
   final FocusNode _passageFocusNode = FocusNode();
 
@@ -265,8 +267,18 @@ class _PassageSplitScaffoldState extends State<PassageSplitScaffold> {
           destructive: true),
     ];
 
-    final Widget studyPane =
-        KeyedSubtree(key: _studyPaneKey, child: widget.child);
+    // On desktops and wide tablets the editor would otherwise stretch to
+    // 1000+ px; keep it at a comfortable reading width beside the verses.
+    final Widget studyPane = KeyedSubtree(
+      key: _studyPaneKey,
+      child: Align(
+        alignment: Alignment.topCenter,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: _maxStudyWidth),
+          child: widget.child,
+        ),
+      ),
+    );
     final Widget versePane =
         KeyedSubtree(key: _versePanelKey, child: _buildVersePanel(c));
 
