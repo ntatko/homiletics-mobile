@@ -446,8 +446,9 @@ class _WeekCard extends StatelessWidget {
   }
 }
 
-/// "Homiletics — 2 of 6 steps" over the step bar, for the latest homiletic
-/// on [passage]. Tapping it opens (or starts) that homiletic.
+/// The homiletic step bar plus the card's main action — "Start
+/// homiletics" / "Continue homiletics" — for the latest homiletic on
+/// [passage]. The button opens (or starts) that homiletic.
 class _HomileticProgressRow extends StatelessWidget {
   final String passage;
 
@@ -463,16 +464,11 @@ class _HomileticProgressRow extends StatelessWidget {
         final Set<StudyStep>? done = snapshot.data;
         final bool loading =
             snapshot.connectionState != ConnectionState.done && done == null;
-        final String status = loading ? '' : describeProgress(done);
-        return Semantics(
-          button: true,
-          label: 'Homiletics. $status',
-          excludeSemantics: true,
-          child: InkWell(
-            onTap: () => startHomileticForPassage(context, passage),
-            borderRadius: BorderRadius.circular(AppRadius.control),
-            child: _ProgressRowContent(status: status, done: done ?? const {}),
-          ),
+        return _ProgressRowContent(
+          status: loading ? '' : describeProgress(done),
+          done: done ?? const {},
+          started: done != null,
+          onPressed: () => startHomileticForPassage(context, passage),
         );
       },
     );
@@ -483,32 +479,55 @@ class _ProgressRowContent extends StatelessWidget {
   final String status;
   final Set<StudyStep> done;
 
-  const _ProgressRowContent({required this.status, required this.done});
+  /// Whether a homiletic exists for this passage yet.
+  final bool started;
+
+  /// Null while only measuring the card's height.
+  final VoidCallback? onPressed;
+
+  const _ProgressRowContent({
+    required this.status,
+    required this.done,
+    this.started = false,
+    this.onPressed,
+  });
 
   @override
   Widget build(BuildContext context) {
     final AppColors c = AppColors.of(context);
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Row(
+    final bool finished = done.length == StudyStep.values.length;
+    final String label = !started
+        ? 'Start homiletics'
+        : finished
+            ? 'Open homiletics'
+            : 'Continue homiletics';
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        StepProgressBar(done: done),
+        const SizedBox(height: 12),
+        FilledButton(
+          onPressed: onPressed ?? () {},
+          style: FilledButton.styleFrom(minimumSize: const Size(0, 48)),
+          child: Row(
             children: [
+              const Icon(Icons.edit_note_rounded, size: 20),
+              const SizedBox(width: 10),
               Expanded(
-                child: Text('Homiletics',
-                    style: _progressText.copyWith(
-                        fontWeight: FontWeight.w600, color: c.ink)),
+                child:
+                    Text(label, maxLines: 1, overflow: TextOverflow.ellipsis),
               ),
-              Text(status, style: _progressText.copyWith(color: c.muted)),
-              Icon(Icons.chevron_right_rounded, size: 18, color: c.muted),
+              if (started)
+                Text(status,
+                    style: _progressText.copyWith(
+                        color: c.onAccent.withValues(alpha: 0.85))),
+              const SizedBox(width: 2),
+              const Icon(Icons.chevron_right_rounded, size: 20),
             ],
           ),
-          const SizedBox(height: 7),
-          StepProgressBar(done: done),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
