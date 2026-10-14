@@ -481,7 +481,7 @@ class VerseContainerState extends State<VerseContainer> {
         document.body.classList.toggle('homiletics-verse-tap', $verseTap);
         if ($verseTap && !window.homileticsVerseTap) {
           window.homileticsVerseTap = true;
-          var pattern = new RegExp('$_verseClassPattern');
+          var pattern = new RegExp(${jsonEncode(_verseClassPattern)});
           document.addEventListener('click', function (e) {
             if (!document.body.classList.contains('homiletics-verse-tap')) {
               return;
