@@ -322,6 +322,22 @@ class Translation {
     }
   }
 
+  /// A translation with an offline text to use instead of [translation]
+  /// where Bible Gateway can't be shown (Windows): the first one in the
+  /// same language (and Chinese script), else the World English Bible.
+  static Translation offlineFallbackFor(Translation translation) {
+    if (translation.languageCode != 'en') {
+      for (final Translation t in all) {
+        if (t.offlineAvailable &&
+            t.languageCode == translation.languageCode &&
+            t.scriptCode == translation.scriptCode) {
+          return t;
+        }
+      }
+    }
+    return web;
+  }
+
   /// The translation for a stored [code]: the matching one, or the default
   /// for [language] when nothing (or an unknown code) is stored.
   static Translation resolve(String? code, Language language) {

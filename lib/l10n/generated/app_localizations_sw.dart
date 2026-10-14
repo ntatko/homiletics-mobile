@@ -1330,4 +1330,25 @@ class AppLocalizationsSw extends AppLocalizations {
   String bibleVerseTapLabel(String verse) {
     return 'Anza muhtasari kwenye mstari $verse';
   }
+
+  @override
+  String bibleWebUnavailableTitle(String translation) {
+    return 'Soma $translation kwenye kivinjari';
+  }
+
+  @override
+  String get bibleWebUnavailableMessage =>
+      'Kwenye Windows, programu haiwezi kuonyesha vifungu vya Bible Gateway ndani ya programu. Fungua kifungu hiki kwenye kivinjari chako, au badilisha kwenda tafsiri inayosomwa kutoka kwenye kifaa chako.';
+
+  @override
+  String get bibleOpenInBrowser => 'Fungua kwenye kivinjari';
+
+  @override
+  String bibleUseOfflineTranslation(String translation) {
+    return 'Tumia tafsiri isiyohitaji mtandao ($translation)';
+  }
+
+  @override
+  String get wordStudyOtherUsageOpenedInBrowser =>
+      'Matokeo yamefunguliwa kwenye kivinjari chako. Andika au bandika hapa marejeo unayotaka kuhifadhi.';
 }

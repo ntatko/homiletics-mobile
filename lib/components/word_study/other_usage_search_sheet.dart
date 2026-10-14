@@ -9,6 +9,7 @@ import 'package:homiletics/common/web_view_scroll.dart';
 import 'package:homiletics/l10n/l10n.dart';
 import 'package:homiletics/theme/app_theme.dart';
 import 'package:homiletics/theme/widgets.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 /// Shows a bottom sheet with Bible Gateway search results for [word].
@@ -16,12 +17,30 @@ import 'package:webview_flutter/webview_flutter.dart';
 /// reference text (e.g. "Ephesians 2:8-9") -- the sheet never reads or
 /// stores the verse body text itself, only the citation the user picks.
 /// Stays open so multiple references can be picked; dismissed via "Done".
+///
+/// Where there's no web view (Windows) the search opens in the browser
+/// instead and the user types the references in themselves.
 Future<void> showOtherUsageSearchSheet(
   BuildContext context, {
   required String word,
   required Translation translation,
   required void Function(String reference) onReferenceSelected,
-}) {
+}) async {
+  if (!webViewSupported) {
+    final ScaffoldMessengerState? messenger =
+        ScaffoldMessenger.maybeOf(context);
+    final String opened = context.l10n.wordStudyOtherUsageOpenedInBrowser;
+    final String failed = context.l10n.commonSomethingWentWrong;
+    bool ok = false;
+    try {
+      ok = await launchUrl(_searchUrl(word, translation),
+          mode: LaunchMode.externalApplication);
+    } catch (_) {
+      ok = false;
+    }
+    messenger?.showSnackBar(SnackBar(content: Text(ok ? opened : failed)));
+    return;
+  }
   return showModalBottomSheet<void>(
     context: context,
     isScrollControlled: true,
@@ -35,6 +54,14 @@ Future<void> showOtherUsageSearchSheet(
     ),
   );
 }
+
+/// Bible Gateway's search for [word] in [translation].
+Uri _searchUrl(String word, Translation translation) =>
+    Uri.parse('https://www.biblegateway.com/quicksearch/')
+        .replace(queryParameters: {
+      'search': word.trim(),
+      'version': getBibleGatewayVersion(translation),
+    });
 
 String _hex(Color c) =>
     '#${(c.toARGB32() & 0xFFFFFF).toRadixString(16).padLeft(6, '0')}';
@@ -176,12 +203,7 @@ class _OtherUsageSearchSheetState extends State<_OtherUsageSearchSheet> {
   @override
   void initState() {
     super.initState();
-    final version = getBibleGatewayVersion(widget.translation);
-    final url = Uri.parse('https://www.biblegateway.com/quicksearch/')
-        .replace(queryParameters: {
-      'search': widget.word.trim(),
-      'version': version,
-    });
+    final url = _searchUrl(widget.word, widget.translation);
 
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)

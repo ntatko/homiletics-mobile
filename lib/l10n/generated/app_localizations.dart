@@ -2337,6 +2337,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Start a summary at verse {verse}'**
   String bibleVerseTapLabel(String verse);
+
+  /// Windows only: verse panel title when the chosen translation is only available from Bible Gateway, which can't be shown inside the app on Windows.
+  ///
+  /// In en, this message translates to:
+  /// **'Read {translation} in your browser'**
+  String bibleWebUnavailableTitle(String translation);
+
+  /// Windows only: verse panel message explaining that Bible Gateway passages open in the web browser, or the user can switch to an offline translation.
+  ///
+  /// In en, this message translates to:
+  /// **'On Windows the app can\'t show Bible Gateway passages inside the app. Open this passage in your browser, or switch to a translation that\'s read from your device.'**
+  String get bibleWebUnavailableMessage;
+
+  /// Windows only: button in the verse panel that opens the passage on Bible Gateway in the web browser.
+  ///
+  /// In en, this message translates to:
+  /// **'Open in browser'**
+  String get bibleOpenInBrowser;
+
+  /// Windows only: button in the verse panel that switches the Bible translation to one that can be read offline in the app.
+  ///
+  /// In en, this message translates to:
+  /// **'Use an offline translation ({translation})'**
+  String bibleUseOfflineTranslation(String translation);
+
+  /// Windows only: snackbar after the 'other usage' Bible Gateway search was opened in the web browser (it can't be shown in the app there); the user types or pastes references into the field themselves.
+  ///
+  /// In en, this message translates to:
+  /// **'Search results opened in your browser. Type or paste the references you want to keep here.'**
+  String get wordStudyOtherUsageOpenedInBrowser;
 }
 
 class _AppLocalizationsDelegate
