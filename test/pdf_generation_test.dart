@@ -6,6 +6,7 @@ import 'package:homiletics/classes/Division.dart';
 import 'package:homiletics/classes/application.dart';
 import 'package:homiletics/classes/content_summary.dart';
 import 'package:homiletics/classes/homiletic.dart';
+import 'package:homiletics/classes/word_study.dart';
 import 'package:homiletics/storage/pdf_generation.dart';
 import 'package:pdf/pdf.dart';
 
@@ -21,6 +22,16 @@ void main() {
     });
   });
 
+  /// Writes [bytes] to PDF_PREVIEW_DIR/[name] when that is set.
+  Future<Uint8List> preview(Uint8List bytes, String? name) async {
+    final String? dir = Platform.environment['PDF_PREVIEW_DIR'];
+    if (dir != null && name != null) {
+      await Directory(dir).create(recursive: true);
+      await File('$dir/$name').writeAsBytes(bytes);
+    }
+    return bytes;
+  }
+
   Future<Uint8List> render(
     Homiletic h,
     List<ContentSummary> s,
@@ -29,15 +40,21 @@ void main() {
     PdfPageFormat format = PdfPageFormat.letter,
     String? previewName,
   }) async {
-    final Uint8List bytes =
+    return preview(
         await buildHomileticsDocument(h, s, d, a, fonts: fonts, format: format)
-            .save();
-    final String? dir = Platform.environment['PDF_PREVIEW_DIR'];
-    if (dir != null && previewName != null) {
-      await Directory(dir).create(recursive: true);
-      await File('$dir/$previewName').writeAsBytes(bytes);
-    }
-    return bytes;
+            .save(),
+        previewName);
+  }
+
+  Future<Uint8List> renderWordStudy(
+    WordStudy study, {
+    PdfPageFormat format = PdfPageFormat.letter,
+    String? previewName,
+  }) async {
+    return preview(
+        await buildWordStudyDocument(study, fonts: fonts, format: format)
+            .save(),
+        previewName);
   }
 
   int pageCount(Uint8List bytes) => RegExp(r'/Type\s*/Page[^s]')
@@ -160,5 +177,72 @@ void main() {
     expect(pieces.join().replaceAll(RegExp(r'\s'), ''),
         text.replaceAll(RegExp(r'\s'), ''));
     expect(splitForPages('short'), ['short']);
+  });
+
+  test('builds the Lampstand word study handout', () async {
+    final WordStudy study = WordStudy(
+      word: 'Lampstand',
+      passage: 'Revelation 2:1–7',
+      updatedAt: DateTime(2026, 10, 13, 9, 30),
+      definition: 'A stand that holds up an oil lamp so its light reaches the '
+          'whole room; in the tabernacle, the seven-branched golden stand '
+          'that lit the Holy Place.',
+      otherUsage: 'Matthew 5:15\nHebrews 9:2\n\nRevelation 11:4',
+      contextualMeaning: 'Jesus Himself explains the image: “the seven '
+          'lampstands are the seven churches” (1:20). Ephesus is a lampstand '
+          '— a church whose purpose is to hold up the light of Christ in its '
+          'city. To have the lampstand removed (2:5) is to cease to be a '
+          'church at all, however busy it remains.',
+      deeperMeaning: 'The Greek λυχνία (luchnia) is the stand, not the lamp '
+          '(λύχνος) itself: the church does not produce the light, it bears '
+          'it. The image reaches back to the menorah of Exodus 25 and to '
+          'Zechariah 4, where the lampstand burns by the Spirit — “not by '
+          'might, nor by power.”\n\nChrist walks among the lampstands (2:1), '
+          'tending them as a priest tends the lamps of the Holy Place.',
+      application: 'My church’s orthodoxy and hard work matter, but they are '
+          'not the light. This week I will ask where love for Christ has '
+          'cooled in me, and return to the “first works” of prayer and '
+          'delight in Him before I take on anything new.',
+    );
+
+    final Uint8List letter =
+        await renderWordStudy(study, previewName: 'word_study_sample.pdf');
+    expect(String.fromCharCodes(letter.sublist(0, 5)), '%PDF-');
+    expect(pageCount(letter), 1);
+
+    final Uint8List a4 = await renderWordStudy(study,
+        format: PdfPageFormat.a4, previewName: 'word_study_sample_a4.pdf');
+    expect(pageCount(a4), 1);
+  });
+
+  test('word study: empty and very long input', () async {
+    final Uint8List empty =
+        await renderWordStudy(WordStudy(), previewName: 'word_study_empty.pdf');
+    expect(pageCount(empty), 1);
+
+    final Uint8List onlyWord = await renderWordStudy(
+        WordStudy(word: 'Hesed', passage: '   '),
+        previewName: 'word_study_word_only.pdf');
+    expect(pageCount(onlyWord), 1);
+
+    const String paragraph = 'The lampstand bears a light it did not make; '
+        'its whole worth lies in holding that light up where others can see '
+        'it, and in staying near the One who trims and fills it. ';
+    final WordStudy long = WordStudy(
+      word: 'Lampstand',
+      passage: 'Revelation 2:1–7',
+      updatedAt: DateTime(2026, 10, 13),
+      definition: paragraph * 12,
+      otherUsage: [
+        for (int i = 1; i <= 60; i++)
+          'Exodus 25:${i % 40 + 1} — the golden lampstand, verse $i'
+      ].join('\n'),
+      contextualMeaning: '${paragraph * 20}\n\n${paragraph * 8}',
+      deeperMeaning: 'λυχνία ' * 400,
+      application: 'x' * 4000, // one unbreakable "word"
+    );
+    final Uint8List bytes =
+        await renderWordStudy(long, previewName: 'word_study_long.pdf');
+    expect(pageCount(bytes), greaterThan(4));
   });
 }

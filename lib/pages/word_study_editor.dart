@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:homiletics/classes/word_study.dart';
 import 'package:homiletics/classes/preferences.dart';
+import 'package:homiletics/common/report_error.dart';
 import 'package:homiletics/common/study_data_builder.dart';
 import 'package:homiletics/components/editor/passage_split_scaffold.dart';
 import 'package:homiletics/components/help_menu.dart';
@@ -8,7 +9,9 @@ import 'package:homiletics/components/word_study/definition_card.dart';
 import 'package:homiletics/components/word_study/other_usage_card.dart';
 import 'package:homiletics/components/word_study/word_hero_card.dart';
 import 'package:homiletics/components/word_study/word_study_section_card.dart';
+import 'package:homiletics/storage/pdf_generation.dart';
 import 'package:homiletics/theme/app_theme.dart';
+import 'package:homiletics/theme/widgets.dart';
 
 class WordStudyEditor extends StatefulWidget {
   const WordStudyEditor({Key? key, this.study}) : super(key: key);
@@ -49,6 +52,7 @@ class _WordStudyEditorState extends State<WordStudyEditor> {
         TextEditingController(text: _thisStudy.application);
     _passage = ValueNotifier<String>(_thisStudy.passage);
     _wordFocusNode.addListener(_onWordFocusChange);
+    FocusManager.instance.addListener(_onFocusMoved);
     // Only a brand-new study needs saving up front; re-saving an existing
     // one would bump its updated time just for being opened.
     if (_thisStudy.id == -1) _thisStudy.update();
@@ -92,8 +96,54 @@ class _WordStudyEditorState extends State<WordStudyEditor> {
         null;
   }
 
+  /// Fields save straight to the model, so re-check whether the study is
+  /// finished (for the Print / Share card) whenever focus moves on.
+  void _onFocusMoved() {
+    if (mounted) setState(() {});
+  }
+
+  bool get _isFinished => [
+        _wordController,
+        _definitionController,
+        _otherUsageController,
+        _contextualMeaningController,
+        _deeperMeaningController,
+        _applicationController,
+      ].every((c) => c.text.trim().isNotEmpty);
+
+  Future<void> _runPdfAction(Future<void> Function() action, String success,
+      String failure, String errorIdentifier) async {
+    final ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
+    try {
+      await action();
+      messenger.showSnackBar(SnackBar(
+        content: Text(success),
+        action: SnackBarAction(onPressed: () {}, label: "Ok"),
+      ));
+    } catch (error) {
+      sendError(error, errorIdentifier);
+      messenger.showSnackBar(SnackBar(
+        content: Text(failure),
+        action: SnackBarAction(onPressed: () {}, label: "Ok"),
+      ));
+    }
+  }
+
+  Future<void> _share() => _runPdfAction(
+      () => shareWordStudy(_thisStudy),
+      "PDF shared successfully.",
+      "Something went wrong sharing your PDF. Try again soon.",
+      "Share word study PDF");
+
+  Future<void> _print() => _runPdfAction(
+      () => printWordStudy(_thisStudy),
+      "PDF printed successfully.",
+      "Something went wrong creating your PDF. Try again soon.",
+      "Print word study PDF");
+
   @override
   void dispose() {
+    FocusManager.instance.removeListener(_onFocusMoved);
     _wordFocusNode.removeListener(_onWordFocusChange);
     _wordFocusNode.dispose();
     _passage.dispose();
@@ -122,6 +172,12 @@ class _WordStudyEditorState extends State<WordStudyEditor> {
       headerLabel: 'Word study · Passage',
       versePanelFirst: true,
       verseWeight: 0.22,
+      extraActions: [
+        EditorMenuAction(
+            icon: Icons.ios_share_rounded, title: 'Share', onSelected: _share),
+        EditorMenuAction(
+            icon: Icons.print_outlined, title: 'Print', onSelected: _print),
+      ],
       child: ListView(
         padding: const EdgeInsets.fromLTRB(12, 4, 12, 16),
         children: [
@@ -189,6 +245,14 @@ class _WordStudyEditorState extends State<WordStudyEditor> {
             onChanged: _thisStudy.updateApplication,
             step: StudyStep.aim,
           ),
+          if (_isFinished) ...[
+            const SizedBox(height: 10),
+            StudyCompleteCard(
+              title: 'Word study done',
+              onPrint: _print,
+              onShare: _share,
+            ),
+          ],
           const SizedBox(height: 12),
           const HelpMenu(),
         ],

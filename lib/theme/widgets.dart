@@ -191,3 +191,69 @@ class SectionHeader extends StatelessWidget {
     );
   }
 }
+
+/// Shown at the end of a study once every step/section has content:
+/// a short note plus Print and Share buttons.
+class StudyCompleteCard extends StatelessWidget {
+  final String title;
+  final String message;
+  final VoidCallback onPrint;
+  final VoidCallback onShare;
+
+  const StudyCompleteCard({
+    Key? key,
+    required this.title,
+    required this.onPrint,
+    required this.onShare,
+    this.message = 'Print it for class, or share it with your group.',
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final AppColors c = AppColors.of(context);
+    return Material(
+      color: c.accentTint,
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppRadius.card)),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(18, 16, 18, 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(children: [
+              Icon(Icons.check_circle_rounded, color: c.accent, size: 22),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(title,
+                    style: AppText.title.copyWith(color: c.ink, fontSize: 19)),
+              ),
+            ]),
+            const SizedBox(height: 4),
+            Text(message, style: AppText.body.copyWith(color: c.muted)),
+            const SizedBox(height: 14),
+            Row(children: [
+              Expanded(
+                child: FilledButton.icon(
+                  onPressed: onPrint,
+                  icon: const Icon(Icons.print_outlined, size: 18),
+                  label: const Text('Print'),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: OutlinedButton.icon(
+                  onPressed: onShare,
+                  icon: const Icon(Icons.ios_share_rounded, size: 18),
+                  label: const Text('Share'),
+                  style: OutlinedButton.styleFrom(
+                      backgroundColor: c.surface,
+                      side: BorderSide(color: c.lineStrong)),
+                ),
+              ),
+            ]),
+          ],
+        ),
+      ),
+    );
+  }
+}

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:homiletics/theme/app_theme.dart';
 import 'package:homiletics/classes/preferences.dart';
@@ -12,7 +14,16 @@ class VerseContainer extends StatefulWidget {
   /// [Preferences.translation] is used.
   final Translation? translation;
 
-  const VerseContainer({Key? key, required this.passage, this.translation})
+  /// Called when the translation button at the top of the passage is
+  /// tapped. The button is drawn inside the page so it scrolls away with
+  /// the text; without this callback it isn't shown.
+  final VoidCallback? onTranslationTap;
+
+  const VerseContainer(
+      {Key? key,
+      required this.passage,
+      this.translation,
+      this.onTranslationTap})
       : super(key: key);
 
   @override
@@ -127,6 +138,23 @@ String _readingCss(AppColors c) => """
     color: ${_hex(c.muted)} !important;
   }
   a, a * { color: ${_hex(c.accent)} !important; }
+  #homiletics-reader-header {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px; padding: 12px 0 6px;
+    font-family: -apple-system, 'Roboto', sans-serif !important;
+  }
+  #homiletics-reader-header .label {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.08em;
+    text-transform: uppercase; color: ${_hex(c.muted)} !important;
+  }
+  #homiletics-reader-header button {
+    display: inline-flex; align-items: center; gap: 2px;
+    height: 30px; padding: 0 10px; border-radius: 8px;
+    border: 1px solid ${_hex(c.line)} !important;
+    background: transparent !important; color: ${_hex(c.ink)} !important;
+    font: 500 12px -apple-system, 'Roboto', sans-serif;
+  }
+  #homiletics-reader-header svg { width: 16px; height: 16px; }
   #homiletics-reader, .passage-text, .passage-content,
   .passage-content > div { margin-top: 0 !important; padding-top: 0 !important; }
   .passage-content > div > :first-child { margin-top: 4px !important; }
@@ -144,6 +172,9 @@ class VerseContainerState extends State<VerseContainer> {
 
   /// URL most recently requested, used to skip redundant reloads.
   String? _loadedUrl;
+
+  /// Translation of the page being shown, for the in-page header.
+  Translation _loadedTranslation = Preferences.translation;
 
   @override
   void initState() {
@@ -176,6 +207,12 @@ class VerseContainerState extends State<VerseContainer> {
   void _initializeWebView() {
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..addJavaScriptChannel('HomileticsReader',
+          onMessageReceived: (JavaScriptMessage message) {
+        if (message.message == 'translation') {
+          widget.onTranslationTap?.call();
+        }
+      })
       ..setNavigationDelegate(
         NavigationDelegate(
           onNavigationRequest: _onNavigationRequest,
@@ -230,6 +267,10 @@ class VerseContainerState extends State<VerseContainer> {
   /// calls replace the style instead of stacking copies.
   Future<void> _applyReadingStyle() async {
     final css = _readingCss(_colors).replaceAll('`', '');
+    final Translation translation = _loadedTranslation;
+    final String showHeader = jsonEncode(widget.onTranslationTap != null);
+    final String translationName = jsonEncode(translation.name);
+    final String translationShort = jsonEncode(translation.short);
     final script = '''
       (function() {
         var style = document.getElementById('$_readingStyleId');
@@ -253,6 +294,25 @@ class VerseContainerState extends State<VerseContainer> {
             function (el) { if (el !== keep) el.remove(); });
           document.body.appendChild(reader);
         }
+        var reader = document.getElementById('homiletics-reader');
+        if (reader && $showHeader) {
+          var header = document.getElementById('homiletics-reader-header');
+          if (!header) {
+            header = document.createElement('div');
+            header.id = 'homiletics-reader-header';
+            header.innerHTML = '<span class="label"></span>' +
+              '<button type="button" aria-label="Change translation">' +
+              '<span class="short"></span>' +
+              '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
+              'stroke-width="2" stroke-linecap="round" aria-hidden="true">' +
+              '<path d="M7 10l5 5 5-5"/></svg></button>';
+            header.querySelector('button').addEventListener('click',
+              function () { HomileticsReader.postMessage('translation'); });
+            reader.insertBefore(header, reader.firstChild);
+          }
+          header.querySelector('.label').textContent = $translationName;
+          header.querySelector('.short').textContent = $translationShort;
+        }
       })();
     ''';
     try {
@@ -268,6 +328,7 @@ class VerseContainerState extends State<VerseContainer> {
     final url = _createBibleGatewayUrl(widget.passage, translation);
     if (!force && url == _loadedUrl) return;
     _loadedUrl = url;
+    _loadedTranslation = translation;
     _controller.loadRequest(Uri.parse(url));
   }
 

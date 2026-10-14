@@ -217,37 +217,12 @@ class _PassageSplitScaffoldState extends State<PassageSplitScaffold> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(18, 10, 10, 2),
-              child: Row(children: [
-                Expanded(child: Overline(translation.name)),
-                Semantics(
-                  button: true,
-                  label: 'Change translation',
-                  child: OutlinedButton(
-                    onPressed: _openPreferences,
-                    style: OutlinedButton.styleFrom(
-                      minimumSize: const Size(0, 30),
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      side: BorderSide(color: c.line),
-                      textStyle: AppText.caption
-                          .copyWith(fontWeight: FontWeight.w500, fontSize: 12),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8)),
-                    ),
-                    child: Row(mainAxisSize: MainAxisSize.min, children: [
-                      Text(translation.short),
-                      const Icon(Icons.expand_more_rounded, size: 16),
-                    ]),
-                  ),
-                ),
-              ]),
-            ),
             Expanded(
               child: VerseContainer(
                   key: _versePaneKey,
                   passage: _versePassage,
-                  translation: translation),
+                  translation: translation,
+                  onTranslationTap: _openPreferences),
             ),
           ],
         ),

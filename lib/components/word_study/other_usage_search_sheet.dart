@@ -1,3 +1,5 @@
+import 'package:flutter/gestures.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:homiletics/classes/translation.dart';
 import 'package:homiletics/common/verse_container.dart';
@@ -176,7 +178,16 @@ class _OtherUsageSearchSheetState extends State<_OtherUsageSearchSheet> {
               Expanded(
                 child: Stack(
                   children: [
-                    WebViewWidget(controller: _controller),
+                    WebViewWidget(
+                      controller: _controller,
+                      // Claim drags right away; otherwise the bottom
+                      // sheet's own drag-to-dismiss wins every vertical
+                      // swipe and the results can't be scrolled.
+                      gestureRecognizers: {
+                        Factory<OneSequenceGestureRecognizer>(
+                            () => EagerGestureRecognizer()),
+                      },
+                    ),
                     if (_isLoading)
                       const Center(child: CircularProgressIndicator()),
                   ],

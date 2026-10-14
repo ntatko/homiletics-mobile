@@ -17,6 +17,7 @@ import 'package:homiletics/storage/content_summary_storage.dart';
 import 'package:homiletics/storage/division_storage.dart';
 import 'package:homiletics/storage/pdf_generation.dart';
 import 'package:homiletics/theme/app_theme.dart';
+import 'package:homiletics/theme/widgets.dart';
 import 'package:homiletics/theme/homiletics_widgets.dart';
 
 class HomileticEditor extends StatefulWidget {
@@ -34,8 +35,9 @@ class _HomileticState extends State<HomileticEditor> {
   List<Division> _divisions = [];
   List<Application> _applications = [];
 
-  /// The open step of the accordion, if any.
-  StudyStep? _expanded;
+  /// The steps currently open; any number can be open at once (e.g.
+  /// Content stays open for reference while writing Divisions).
+  final Set<StudyStep> _expanded = {};
 
   /// Set once the user opens or closes a step, so finishing the load
   /// doesn't override their choice.
@@ -49,13 +51,22 @@ class _HomileticState extends State<HomileticEditor> {
   void initState() {
     super.initState();
     _thisHomiletic = widget.homiletic ?? Homiletic();
+    FocusManager.instance.addListener(_onFocusMoved);
     prepTheTable();
   }
 
   @override
   void dispose() {
+    FocusManager.instance.removeListener(_onFocusMoved);
     notifyStudyDataChanged();
     super.dispose();
+  }
+
+  /// Fields save straight to the model without rebuilding this page, so
+  /// refresh step summaries / done badges / the finished card whenever the
+  /// user moves on from a field.
+  void _onFocusMoved() {
+    if (mounted) setState(() {});
   }
 
   Future<void> prepTheTable() async {
@@ -83,8 +94,11 @@ class _HomileticState extends State<HomileticEditor> {
             ? savedApplications
             : [Application.blank(_thisHomiletic.id)];
         if (!_userChoseStep) {
-          _expanded =
+          final StudyStep? firstOpen =
               StudyStep.values.where((step) => !_isDone(step)).firstOrNull;
+          _expanded
+            ..clear()
+            ..addAll([if (firstOpen != null) firstOpen]);
         }
       });
     } catch (error) {
@@ -172,15 +186,20 @@ class _HomileticState extends State<HomileticEditor> {
     }
   }
 
-  /// Opens [step] (closing the open one), or closes it if it's open, and
-  /// scrolls the opened card into view.
+  /// Opens [step], or closes it if it's open, and scrolls an opened card
+  /// into view. Other open steps stay open.
   void _toggle(StudyStep step) {
     FocusScope.of(context).unfocus();
+    final bool opening = !_expanded.contains(step);
     setState(() {
       _userChoseStep = true;
-      _expanded = _expanded == step ? null : step;
+      if (opening) {
+        _expanded.add(step);
+      } else {
+        _expanded.remove(step);
+      }
     });
-    if (_expanded == null) return;
+    if (!opening) return;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final BuildContext? stepContext = _stepKeys[step]?.currentContext;
       if (stepContext == null || !stepContext.mounted) return;
@@ -255,7 +274,7 @@ class _HomileticState extends State<HomileticEditor> {
   }
 
   Widget _buildStep(StudyStep step, {bool compact = false}) {
-    if (_expanded == step) {
+    if (_expanded.contains(step)) {
       final (String helpTitle, String helpText) = _helpFor(step);
       return ExpandedStepCard(
         key: _stepKeys[step],
@@ -280,8 +299,8 @@ class _HomileticState extends State<HomileticEditor> {
 
   List<Widget> _buildSteps() {
     // Aim and Application share a row while both are closed.
-    final bool pairLast =
-        _expanded != StudyStep.aim && _expanded != StudyStep.application;
+    final bool pairLast = !_expanded.contains(StudyStep.aim) &&
+        !_expanded.contains(StudyStep.application);
     final List<Widget> steps = [
       for (final StudyStep step in StudyStep.values)
         if (!pairLast ||
@@ -294,6 +313,16 @@ class _HomileticState extends State<HomileticEditor> {
           Expanded(child: _buildStep(StudyStep.application, compact: true)),
         ]),
     ];
+    if (StudyStep.values.every(_isDone)) {
+      steps.add(Padding(
+        padding: const EdgeInsets.only(top: 8),
+        child: StudyCompleteCard(
+          title: 'All six steps done',
+          onPrint: _print,
+          onShare: _share,
+        ),
+      ));
+    }
     return [
       for (int i = 0; i < steps.length; i++) ...[
         if (i > 0) const SizedBox(height: 8),
@@ -326,6 +355,20 @@ class _HomileticState extends State<HomileticEditor> {
     }
   }
 
+  Future<void> _share() => _runPdfAction(
+      () =>
+          shareHomiletic(_thisHomiletic, _summaries, _divisions, _applications),
+      "PDF shared successfully.",
+      "Something went wrong sharing your PDF. Try again soon.",
+      "Share PDF");
+
+  Future<void> _print() => _runPdfAction(
+      () =>
+          printHomiletic(_thisHomiletic, _summaries, _divisions, _applications),
+      "PDF printed successfully.",
+      "Something went wrong creating your PDF. Try again soon.",
+      "PDF print");
+
   @override
   Widget build(BuildContext context) {
     return PassageSplitScaffold(
@@ -338,25 +381,9 @@ class _HomileticState extends State<HomileticEditor> {
       onDelete: _thisHomiletic.delete,
       extraActions: [
         EditorMenuAction(
-          icon: Icons.share,
-          title: 'Share',
-          onSelected: () => _runPdfAction(
-              () => shareHomiletic(
-                  _thisHomiletic, _summaries, _divisions, _applications),
-              "PDF shared successfully.",
-              "Something went wrong sharing your PDF. Try again soon.",
-              "Share PDF"),
-        ),
+            icon: Icons.ios_share_rounded, title: 'Share', onSelected: _share),
         EditorMenuAction(
-          icon: Icons.print,
-          title: 'Print',
-          onSelected: () => _runPdfAction(
-              () => printHomiletic(
-                  _thisHomiletic, _summaries, _divisions, _applications),
-              "PDF printed successfully.",
-              "Something went wrong creating your PDF. Try again soon.",
-              "PDF print"),
-        ),
+            icon: Icons.print_outlined, title: 'Print', onSelected: _print),
       ],
       child: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(12, 0, 12, 24),
