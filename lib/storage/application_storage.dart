@@ -26,8 +26,8 @@ Future<List<Application>> getApplicationsByHomileticId(int? id) async {
   try {
     final Database db = await database;
 
-    final List<Map<String, dynamic>> maps = await db
-        .query('applications', where: 'homiletic_id = ?', whereArgs: [id]);
+    final List<Map<String, dynamic>> maps = await db.query('applications',
+        where: 'homiletic_id = ?', whereArgs: [id], orderBy: 'id');
 
     if (maps.isEmpty) {
       return [];
@@ -38,18 +38,6 @@ Future<List<Application>> getApplicationsByHomileticId(int? id) async {
     sendError(error, "getApplicationsByHomileticId");
     throw Exception("Failed to fetch Applications");
   }
-}
-
-Future<void> resetApplicationsTable() async {
-  final Database db = await database;
-  await db.execute("DROP TABLE IF EXISTS applications ");
-  await db.execute('''
-            CREATE TABLE applications (
-              id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-              text TEXT,
-              homiletic_id INTEGER
-            )
-            ''');
 }
 
 Future<int> insertApplication(Application application) async {
@@ -88,14 +76,11 @@ Future<void> deleteApplication(Application application) async {
   }
 }
 
-Future<List<Application>> deleteApplicationByHomileticId(int id) async {
+Future<void> deleteApplicationByHomileticId(int id) async {
   try {
     final Database db = await database;
 
-    List<Application> things = await getApplicationsByHomileticId(id);
-
     await db.delete('applications', where: 'homiletic_id = ?', whereArgs: [id]);
-    return things;
   } catch (error) {
     sendError(error, "deleteApplicationByHomileticId");
     throw Exception("Failed to delete applications by homiletic ID");

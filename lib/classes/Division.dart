@@ -1,9 +1,10 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/foundation.dart';
+import 'package:homiletics/classes/serialized_save.dart';
 import 'package:homiletics/storage/division_storage.dart';
 
-class Division {
+class Division with SerializedSave {
   /// The title of the division.
   String title;
 
@@ -26,10 +27,16 @@ class Division {
         "id": id
       };
 
+  Map<String, dynamic> _contentJson() => toJson()..remove('id');
+
   /// Creates a new [Division] from a JSON map.
   factory Division.fromJson(Map<String, dynamic> json) {
-    return Division(json['homiletic_id'],
-        title: json['title'], passage: json['passage'], id: json['id']);
+    final Division division = Division(json['homiletic_id'] as int? ?? -1,
+        title: json['title'] as String? ?? '',
+        passage: json['passage'] as String? ?? '',
+        id: json['id'] as int?);
+    division.rememberSaved(division._contentJson());
+    return division;
   }
 
   /// Creates a blank [Division] with the given [homileticId].
@@ -38,14 +45,19 @@ class Division {
   }
 
   /// Updates the division in the database with whatever is in this object.
-  Future<void> update() async {
-    if (!kIsWeb) {
+  /// Concurrent calls run one after another, and calls after [delete] do
+  /// nothing.
+  Future<void> update() {
+    return serializeSave(() async {
+      if (kIsWeb) return;
+      final Map<String, dynamic> state = _contentJson();
       if (id == null) {
         id = await insertDivision(this);
-      } else {
+      } else if (!matchesSaved(state)) {
         await updateDivision(this);
       }
-    }
+      rememberSaved(state);
+    });
   }
 
   /// Updates the [passage] of the division.
@@ -60,8 +72,18 @@ class Division {
     await update();
   }
 
-  /// Deletes the [Division] from the database.
-  Future<void> delete() async {
-    await deleteDivision(this);
+  /// Deletes the [Division] from the database. Waits for any save in flight
+  /// first, and makes later saves no-ops.
+  Future<void> delete() {
+    markDeleted();
+    return serialize(() async {
+      if (id == null) return;
+      try {
+        await deleteDivision(this);
+      } catch (_) {
+        unmarkDeleted();
+        rethrow;
+      }
+    });
   }
 }

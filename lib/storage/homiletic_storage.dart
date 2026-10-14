@@ -22,9 +22,9 @@ final Future<Database> database = getDatabasesPath().then((String path) {
             ''');
     },
     version: 2,
-    onUpgrade: (db, oldVersion, newVersion) {
+    onUpgrade: (db, oldVersion, newVersion) async {
       if (oldVersion < 2) {
-        db.execute('ALTER TABLE homiletics ADD COLUMN fcf TEXT DEFAULT ""');
+        await db.execute("ALTER TABLE homiletics ADD COLUMN fcf TEXT DEFAULT ''");
       }
     },
   );
@@ -58,26 +58,6 @@ Future<Homiletic> getHomileticById(int id) async {
   } catch (error) {
     sendError(error, "getHomileticById");
     throw Exception("Failed to get homiletics by id");
-  }
-}
-
-Future<void> resetTable() async {
-  try {
-    final Database db = await database;
-    await db.execute("DROP TABLE IF EXISTS homiletics ");
-    await db.execute('''
-            CREATE TABLE homiletics (
-              id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-              passage TEXT,
-              subject_sentence TEXT,
-              aim TEXT,
-              updated_at TEXT,
-              fcf TEXT DEFAULT ''
-            )
-            ''');
-  } catch (error) {
-    sendError(error, "resetTable");
-    throw Exception("Failed to resetTable");
   }
 }
 
@@ -152,8 +132,8 @@ Future<List<Homiletic>> getHomileticsByPassageText(String text) async {
       return Homiletic.fromJson(maps[i]);
     });
   } catch (error) {
-    sendError(error, "getHomileticsByText");
-    throw Exception("Failed to get homiletics by text");
+    sendError(error, "getHomileticsByPassageText");
+    throw Exception("Failed to get homiletics by passage text");
   }
 }
 
@@ -167,8 +147,8 @@ Future<List<Homiletic>> getHomileticsBySummarySentenceText(String text) async {
       return Homiletic.fromJson(maps[i]);
     });
   } catch (error) {
-    sendError(error, "getHomileticsByText");
-    throw Exception("Failed to get homiletics by text");
+    sendError(error, "getHomileticsBySummarySentenceText");
+    throw Exception("Failed to get homiletics by subject sentence text");
   }
 }
 
@@ -182,7 +162,7 @@ Future<List<Homiletic>> getHomileticsByAimText(String text) async {
       return Homiletic.fromJson(maps[i]);
     });
   } catch (error) {
-    sendError(error, "getHomileticsByText");
-    throw Exception("Failed to get homiletics by text");
+    sendError(error, "getHomileticsByAimText");
+    throw Exception("Failed to get homiletics by aim text");
   }
 }

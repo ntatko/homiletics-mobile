@@ -20,8 +20,6 @@ class PassageSchedule {
   });
 
   /// Creates a new [PassageSchedule] from a JSON map.
-
-  /// Creates a new [PassageSchedule] from a JSON map.
   factory PassageSchedule.fromJson(Map<String, dynamic> json) {
     return PassageSchedule(
       passage: json['passage'],

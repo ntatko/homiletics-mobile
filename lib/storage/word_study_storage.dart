@@ -46,29 +46,6 @@ Future<List<WordStudy>> getAllWordStudies() async {
   }
 }
 
-Future<void> resetWordStudyTable() async {
-  try {
-    final Database db = await database;
-    await db.execute("DROP TABLE IF EXISTS word_studies ");
-    await db.execute('''
-            CREATE TABLE word_studies (
-              id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-              passage TEXT,
-              word TEXT,
-              definition TEXT,
-              other_usage TEXT,
-              contextual_meaning TEXT,
-              deeper_meaning TEXT,
-              application TEXT,
-              updated_at TEXT
-            )
-            ''');
-  } catch (error) {
-    sendError(error, "resetWordStudyTable");
-    throw Exception("failed to reset word studies table");
-  }
-}
-
 Future<int> insertWordStudy(WordStudy study) async {
   try {
     final Database db = await database;

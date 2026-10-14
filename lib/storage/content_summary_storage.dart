@@ -27,8 +27,8 @@ Future<List<ContentSummary>> getSummariesByHomileticId(int? id) async {
   try {
     final Database db = await database;
 
-    final List<Map<String, dynamic>> maps = await db
-        .query('content_summaries', where: 'homiletic_id = ?', whereArgs: [id]);
+    final List<Map<String, dynamic>> maps = await db.query('content_summaries',
+        where: 'homiletic_id = ?', whereArgs: [id], orderBy: 'id');
 
     if (maps.isEmpty) {
       return [];
@@ -38,25 +38,6 @@ Future<List<ContentSummary>> getSummariesByHomileticId(int? id) async {
   } catch (error) {
     sendError(error, "getSummariesByHomileticId");
     throw Exception("Failed to get Summaries by Homiletic ID");
-  }
-}
-
-Future<void> resetSummariesTable() async {
-  try {
-    final Database db = await database;
-    await db.execute("DROP TABLE IF EXISTS content_summaries ");
-    await db.execute('''
-            CREATE TABLE content_summaries (
-              id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-              summary TEXT,
-              passage TEXT,
-              sort INTEGER,
-              homiletic_id INTEGER
-            )
-            ''');
-  } catch (error) {
-    sendError(error, "resetSummariesTable");
-    throw Exception("Failed to reset summaries table");
   }
 }
 
@@ -96,15 +77,12 @@ Future<void> deleteSummary(ContentSummary summary) async {
   }
 }
 
-Future<List<ContentSummary>> deleteSummaryByHomileticId(int id) async {
+Future<void> deleteSummaryByHomileticId(int id) async {
   try {
     final Database db = await database;
 
-    List<ContentSummary> summaries = await getSummariesByHomileticId(id);
-
     await db.delete('content_summaries',
         where: 'homiletic_id = ?', whereArgs: [id]);
-    return summaries;
   } catch (error) {
     sendError(error, "deleteSummaryByHomileticId");
     throw Exception("Failed to delete summaries");

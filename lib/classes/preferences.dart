@@ -6,7 +6,6 @@ class Preferences {
 
   static const String _boxKey = 'user';
   static const String _preferredVersionKey = 'preferredVersion';
-  static const String _preferredLanguageKey = 'preferredLanguage';
   static const String _hasSeenTranscriptionPromptKey =
       'hasSeenTranscriptionPrompt';
   static const String _hasSeenFormattingPromptKey = 'hasSeenFormattingPrompt';
@@ -24,14 +23,8 @@ class Preferences {
         orElse: () => Translation.web);
   }
 
-  static String get preferredLanguage =>
-      Hive.box(_boxKey).get(_preferredLanguageKey) ?? 'en';
-
   static set preferredVersion(String version) =>
       Hive.box(_boxKey).put(_preferredVersionKey, version);
-
-  static set preferredLanguage(String language) =>
-      Hive.box(_boxKey).put(_preferredLanguageKey, language);
 
   static bool get hasSeenTranscriptionPrompt =>
       Hive.box(_boxKey).get(_hasSeenTranscriptionPromptKey) ?? false;

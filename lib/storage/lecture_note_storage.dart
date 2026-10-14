@@ -74,27 +74,6 @@ Future<List<LectureNote>> getLectureNotes() async {
   }
 }
 
-Future<void> resetLectureNoteTable() async {
-  try {
-    final Database db = await database;
-    await db.execute("DROP TABLE IF EXISTS lectures ");
-    await db.execute('''
-            CREATE TABLE lectures (
-              id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-              note TEXT,
-              passage TEXT,
-              time TEXT,
-              recording_path TEXT,
-              transcript TEXT,
-              formatted_transcript TEXT
-            )
-            ''');
-  } catch (error) {
-    sendError(error, "resetLectureNoteTable");
-    throw Exception("failed to reset notes table");
-  }
-}
-
 Future<int> insertLectureNote(LectureNote note) async {
   try {
     final Database db = await database;
@@ -128,7 +107,7 @@ Future<void> deleteLectureNote(LectureNote note) async {
     await db.delete('lectures', where: 'id = ?', whereArgs: [note.id]);
   } catch (error) {
     sendError(error, "deleteLectureNote");
-    throw Exception("failed to update lecture note");
+    throw Exception("failed to delete lecture note");
   }
 }
 
@@ -153,25 +132,6 @@ Future<List<LectureNote>> getLectureNotesMatchingPassageReference(String passage
   } catch (error) {
     sendError(error, "getLectureNotesMatchingPassageReference");
     throw Exception("failed to get lecture notes by passage reference");
-  }
-}
-
-Future<List<LectureNote>> getLectureNoteByText(String text) async {
-  try {
-    final Database db = await database;
-
-    final List<Map<String, dynamic>> maps = await db
-        .query('lectures', where: 'note LIKE ?', whereArgs: ['%$text%']);
-
-    if (maps.isEmpty) {
-      return [];
-    }
-
-    return List.generate(
-        maps.length, (index) => LectureNote.fromJson(maps[index]));
-  } catch (error) {
-    sendError(error, "getLectureNoteByText");
-    throw Exception("failed to get lecture notes");
   }
 }
 

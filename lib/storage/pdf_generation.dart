@@ -44,19 +44,18 @@ Future<pw.Document> createHomileticsPdf(
                 50), // Adjust other column widths as needed
             2: const pw.FlexColumnWidth(3),
           }, children: [
-            ...summaries
-                .map((summary) => pw.TableRow(children: [
-                      pw.Container(
-                        width: 20,
-                        child: pw.Text("${summaries.indexOf(summary) + 1}.",
-                            style: defaultStyle),
-                      ),
-                      pw.Container(
-                          width: 50,
-                          child: pw.Text(summary.passage, style: defaultStyle)),
-                      pw.Text(summary.summary, style: defaultStyle)
-                    ]))
-                .toList()
+            for (final (int index, ContentSummary summary)
+                in summaries.indexed)
+              pw.TableRow(children: [
+                pw.Container(
+                  width: 20,
+                  child: pw.Text("${index + 1}.", style: defaultStyle),
+                ),
+                pw.Container(
+                    width: 50,
+                    child: pw.Text(summary.passage, style: defaultStyle)),
+                pw.Text(summary.summary, style: defaultStyle)
+              ])
           ]),
           pw.SizedBox(height: 15),
           if (divisions.isNotEmpty) ...[
@@ -64,7 +63,7 @@ Future<pw.Document> createHomileticsPdf(
             pw.Table(columnWidths: {
               0: const pw.FixedColumnWidth(
                   40), // Set fixed width for the first column
-              2: const pw.FlexColumnWidth(3),
+              1: const pw.FlexColumnWidth(3),
             }, children: [
               ...divisions
                   .map((division) => pw.TableRow(children: [

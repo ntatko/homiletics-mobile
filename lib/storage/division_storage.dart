@@ -27,8 +27,8 @@ Future<List<Division>> getDivisionsByHomileticId(int? id) async {
   try {
     final Database db = await database;
 
-    final List<Map<String, dynamic>> maps =
-        await db.query('divisions', where: 'homiletic_id = ?', whereArgs: [id]);
+    final List<Map<String, dynamic>> maps = await db.query('divisions',
+        where: 'homiletic_id = ?', whereArgs: [id], orderBy: 'id');
 
     if (maps.isEmpty) {
       return [];
@@ -38,25 +38,6 @@ Future<List<Division>> getDivisionsByHomileticId(int? id) async {
   } catch (error) {
     sendError(error, "getDivisionsByHomileticId");
     throw Exception("Failed to get Divisions By Homiletic Id");
-  }
-}
-
-Future<void> resetDivisionsTable() async {
-  try {
-    final Database db = await database;
-    await db.execute("DROP TABLE IF EXISTS divisions ");
-    await db.execute('''
-            CREATE TABLE divisions (
-              id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-              title TEXT,
-              passage TEXT,
-              sort INTEGER,
-              homiletic_id INTEGER
-            )
-            ''');
-  } catch (error) {
-    sendError(error, "resetDivisionsTable");
-    throw Exception("Failed to reset divisions table");
   }
 }
 
@@ -95,14 +76,11 @@ Future<void> deleteDivision(Division division) async {
   }
 }
 
-Future<List<Division>> deleteDivisionByHomileticId(int id) async {
+Future<void> deleteDivisionByHomileticId(int id) async {
   try {
     final Database db = await database;
 
-    List<Division> divisions = await getDivisionsByHomileticId(id);
-
     await db.delete('divisions', where: 'homiletic_id = ?', whereArgs: [id]);
-    return divisions;
   } catch (error) {
     sendError(error, "deleteDivisionByHomileticId");
     throw Exception("Failed to delete divisions by homiletics");
