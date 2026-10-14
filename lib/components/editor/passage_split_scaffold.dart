@@ -311,10 +311,16 @@ class _PassageSplitScaffoldState extends State<PassageSplitScaffold> {
                         decoration: InputDecoration(
                           isDense: true,
                           filled: false,
-                          contentPadding: EdgeInsets.zero,
-                          border: InputBorder.none,
-                          enabledBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none,
+                          // A light underline marks the passage as
+                          // editable; it turns accent while editing.
+                          contentPadding: const EdgeInsets.only(bottom: 4),
+                          border: UnderlineInputBorder(
+                              borderSide: BorderSide(color: c.lineStrong)),
+                          enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: c.lineStrong)),
+                          focusedBorder: UnderlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: c.accent, width: 1.5)),
                           hintText:
                               widget.passageHint ?? l.editorAddPassageHint,
                           hintStyle:
