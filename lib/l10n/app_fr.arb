@@ -859,5 +859,20 @@
   "bibleWebUnavailableMessage": "Sous Windows, l'application ne peut pas afficher les passages de Bible Gateway. Ouvrez ce passage dans votre navigateur ou choisissez une traduction lue depuis votre appareil.",
   "bibleOpenInBrowser": "Ouvrir dans le navigateur",
   "bibleUseOfflineTranslation": "Utiliser une traduction hors ligne ({translation})",
-  "wordStudyOtherUsageOpenedInBrowser": "Les résultats se sont ouverts dans votre navigateur. Tapez ou collez ici les références à conserver."
+  "wordStudyOtherUsageOpenedInBrowser": "Les résultats se sont ouverts dans votre navigateur. Tapez ou collez ici les références à conserver.",
+  "settingsCheckForUpdates": "Rechercher des mises à jour",
+  "settingsVersion": "Version {version}",
+  "updateAvailableTitle": "Homiletics {version} est disponible",
+  "updateAvailableMessage": "Vous avez la version {current}. Nouveautés :",
+  "updateNow": "Mettre à jour",
+  "updateDownload": "Télécharger",
+  "updateLater": "Plus tard",
+  "updateSkipVersion": "Ignorer cette version",
+  "updateDownloading": "Téléchargement de la mise à jour…",
+  "updateInstalling": "Installation en cours. Homiletics va se rouvrir dans un instant.",
+  "updateFailed": "Impossible de télécharger la mise à jour. Réessayez ou téléchargez-la sur homiletics.app.",
+  "updateTryAgain": "Réessayer",
+  "updatePortableNote": "Cette copie n’a pas été installée avec le programme d’installation : téléchargez la nouvelle version sur homiletics.app.",
+  "updateUpToDate": "Vous avez la dernière version (Homiletics {version}).",
+  "updateCheckFailed": "Impossible de rechercher des mises à jour. Vérifiez votre connexion internet et réessayez."
 }

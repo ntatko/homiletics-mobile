@@ -2559,6 +2559,96 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Search results opened in your browser. Type or paste the references you want to keep here.'**
   String get wordStudyOtherUsageOpenedInBrowser;
+
+  /// Windows only: Settings row that checks GitHub for a newer version.
+  ///
+  /// In en, this message translates to:
+  /// **'Check for updates'**
+  String get settingsCheckForUpdates;
+
+  /// Value next to the Check for updates row, e.g. 'Version 3.0.0'.
+  ///
+  /// In en, this message translates to:
+  /// **'Version {version}'**
+  String settingsVersion(String version);
+
+  /// Title of the prompt when a newer Windows version exists.
+  ///
+  /// In en, this message translates to:
+  /// **'Homiletics {version} is available'**
+  String updateAvailableTitle(String version);
+
+  /// Under the update title, before the release notes.
+  ///
+  /// In en, this message translates to:
+  /// **'You have version {current}. What\'s new:'**
+  String updateAvailableMessage(String current);
+
+  /// Button: download and install the update.
+  ///
+  /// In en, this message translates to:
+  /// **'Update now'**
+  String get updateNow;
+
+  /// Button for portable (zip) copies: opens the download page.
+  ///
+  /// In en, this message translates to:
+  /// **'Download'**
+  String get updateDownload;
+
+  /// Button: dismiss the update prompt for now.
+  ///
+  /// In en, this message translates to:
+  /// **'Later'**
+  String get updateLater;
+
+  /// Button: don't offer this version again at launch.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip this version'**
+  String get updateSkipVersion;
+
+  /// Shown with a progress bar while the update downloads.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloading the update…'**
+  String get updateDownloading;
+
+  /// Shown just before the app closes to install the update.
+  ///
+  /// In en, this message translates to:
+  /// **'Installing. Homiletics will reopen in a moment.'**
+  String get updateInstalling;
+
+  /// The update download or install failed.
+  ///
+  /// In en, this message translates to:
+  /// **'The update couldn\'t be downloaded. Try again, or download it from homiletics.app.'**
+  String get updateFailed;
+
+  /// Button: retry the update download.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get updateTryAgain;
+
+  /// For copies run from the zip (not installed): explains the Download button.
+  ///
+  /// In en, this message translates to:
+  /// **'This copy wasn\'t installed with the installer, so download the new version from homiletics.app.'**
+  String get updatePortableNote;
+
+  /// Snackbar after a manual check finds nothing newer.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re up to date (Homiletics {version}).'**
+  String updateUpToDate(String version);
+
+  /// Snackbar when a manual update check can't reach the server.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t check for updates. Check your internet connection and try again.'**
+  String get updateCheckFailed;
 }
 
 class _AppLocalizationsDelegate

@@ -12,6 +12,7 @@ import 'package:flutter_quill/flutter_quill.dart'
 import 'package:hive/hive.dart';
 import 'package:homiletics/classes/preferences.dart';
 import 'package:homiletics/common/report_error.dart';
+import 'package:homiletics/components/update_prompt.dart';
 import 'package:homiletics/pages/home.dart';
 import 'package:homiletics/services/incoming_links.dart';
 import 'package:homiletics/services/transcript_formatter_service.dart';
@@ -29,6 +30,10 @@ void main() async {
 
   // Share links opened from other apps (and the one that launched us).
   if (!kIsWeb) IncomingLinks.start();
+
+  // Windows has no store to deliver updates; offer new releases (once a
+  // day at most). A no-op elsewhere.
+  unawaited(checkForUpdatesOnLaunch());
 
   // Not needed for the first frame (only the recording / model settings UI
   // uses it), so don't delay startup. Reports its own errors.

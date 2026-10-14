@@ -859,5 +859,20 @@
   "bibleWebUnavailableMessage": "Kwenye Windows, programu haiwezi kuonyesha vifungu vya Bible Gateway ndani ya programu. Fungua kifungu hiki kwenye kivinjari chako, au badilisha kwenda tafsiri inayosomwa kutoka kwenye kifaa chako.",
   "bibleOpenInBrowser": "Fungua kwenye kivinjari",
   "bibleUseOfflineTranslation": "Tumia tafsiri isiyohitaji mtandao ({translation})",
-  "wordStudyOtherUsageOpenedInBrowser": "Matokeo yamefunguliwa kwenye kivinjari chako. Andika au bandika hapa marejeo unayotaka kuhifadhi."
+  "wordStudyOtherUsageOpenedInBrowser": "Matokeo yamefunguliwa kwenye kivinjari chako. Andika au bandika hapa marejeo unayotaka kuhifadhi.",
+  "settingsCheckForUpdates": "Angalia masasisho",
+  "settingsVersion": "Toleo {version}",
+  "updateAvailableTitle": "Homiletics {version} inapatikana",
+  "updateAvailableMessage": "Una toleo {current}. Mapya:",
+  "updateNow": "Sasisha sasa",
+  "updateDownload": "Pakua",
+  "updateLater": "Baadaye",
+  "updateSkipVersion": "Ruka toleo hili",
+  "updateDownloading": "Inapakua sasisho…",
+  "updateInstalling": "Inasakinisha. Homiletics itafunguka tena baada ya muda mfupi.",
+  "updateFailed": "Sasisho halikuweza kupakuliwa. Jaribu tena, au lipakue kutoka homiletics.app.",
+  "updateTryAgain": "Jaribu tena",
+  "updatePortableNote": "Nakala hii haikusakinishwa kwa kisakinishi, kwa hiyo pakua toleo jipya kutoka homiletics.app.",
+  "updateUpToDate": "Una toleo la karibuni (Homiletics {version}).",
+  "updateCheckFailed": "Haikuweza kuangalia masasisho. Angalia muunganisho wako wa intaneti kisha ujaribu tena."
 }

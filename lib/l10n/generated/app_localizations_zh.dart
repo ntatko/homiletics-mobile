@@ -1389,6 +1389,59 @@ class AppLocalizationsZh extends AppLocalizations {
   @override
   String get wordStudyOtherUsageOpenedInBrowser =>
       '搜索结果已在浏览器中打开。请在这里输入或粘贴要保留的经文出处。';
+
+  @override
+  String get settingsCheckForUpdates => '检查更新';
+
+  @override
+  String settingsVersion(String version) {
+    return '版本 $version';
+  }
+
+  @override
+  String updateAvailableTitle(String version) {
+    return 'Homiletics $version 现已推出';
+  }
+
+  @override
+  String updateAvailableMessage(String current) {
+    return '你目前使用的是 $current 版。新内容：';
+  }
+
+  @override
+  String get updateNow => '立即更新';
+
+  @override
+  String get updateDownload => '下载';
+
+  @override
+  String get updateLater => '以后再说';
+
+  @override
+  String get updateSkipVersion => '跳过此版本';
+
+  @override
+  String get updateDownloading => '正在下载更新…';
+
+  @override
+  String get updateInstalling => '正在安装，Homiletics 稍后会重新打开。';
+
+  @override
+  String get updateFailed => '无法下载更新。请重试，或从 homiletics.app 下载。';
+
+  @override
+  String get updateTryAgain => '重试';
+
+  @override
+  String get updatePortableNote => '此副本不是通过安装程序安装的，请从 homiletics.app 下载新版本。';
+
+  @override
+  String updateUpToDate(String version) {
+    return '已是最新版本（Homiletics $version）。';
+  }
+
+  @override
+  String get updateCheckFailed => '无法检查更新。请检查网络连接后重试。';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hans`).
@@ -2776,6 +2829,59 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   @override
   String get wordStudyOtherUsageOpenedInBrowser =>
       '搜索结果已在浏览器中打开。请在这里输入或粘贴要保留的经文出处。';
+
+  @override
+  String get settingsCheckForUpdates => '检查更新';
+
+  @override
+  String settingsVersion(String version) {
+    return '版本 $version';
+  }
+
+  @override
+  String updateAvailableTitle(String version) {
+    return 'Homiletics $version 现已推出';
+  }
+
+  @override
+  String updateAvailableMessage(String current) {
+    return '你目前使用的是 $current 版。新内容：';
+  }
+
+  @override
+  String get updateNow => '立即更新';
+
+  @override
+  String get updateDownload => '下载';
+
+  @override
+  String get updateLater => '以后再说';
+
+  @override
+  String get updateSkipVersion => '跳过此版本';
+
+  @override
+  String get updateDownloading => '正在下载更新…';
+
+  @override
+  String get updateInstalling => '正在安装，Homiletics 稍后会重新打开。';
+
+  @override
+  String get updateFailed => '无法下载更新。请重试，或从 homiletics.app 下载。';
+
+  @override
+  String get updateTryAgain => '重试';
+
+  @override
+  String get updatePortableNote => '此副本不是通过安装程序安装的，请从 homiletics.app 下载新版本。';
+
+  @override
+  String updateUpToDate(String version) {
+    return '已是最新版本（Homiletics $version）。';
+  }
+
+  @override
+  String get updateCheckFailed => '无法检查更新。请检查网络连接后重试。';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).
@@ -4164,4 +4270,57 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   @override
   String get wordStudyOtherUsageOpenedInBrowser =>
       '搜尋結果已在瀏覽器中開啟。請在這裡輸入或貼上要保留的經文出處。';
+
+  @override
+  String get settingsCheckForUpdates => '檢查更新';
+
+  @override
+  String settingsVersion(String version) {
+    return '版本 $version';
+  }
+
+  @override
+  String updateAvailableTitle(String version) {
+    return 'Homiletics $version 現已推出';
+  }
+
+  @override
+  String updateAvailableMessage(String current) {
+    return '你目前使用的是 $current 版。新內容：';
+  }
+
+  @override
+  String get updateNow => '立即更新';
+
+  @override
+  String get updateDownload => '下載';
+
+  @override
+  String get updateLater => '以後再說';
+
+  @override
+  String get updateSkipVersion => '略過此版本';
+
+  @override
+  String get updateDownloading => '正在下載更新…';
+
+  @override
+  String get updateInstalling => '正在安裝，Homiletics 稍後會重新開啟。';
+
+  @override
+  String get updateFailed => '無法下載更新。請再試一次，或從 homiletics.app 下載。';
+
+  @override
+  String get updateTryAgain => '重試';
+
+  @override
+  String get updatePortableNote => '此副本不是透過安裝程式安裝的，請從 homiletics.app 下載新版本。';
+
+  @override
+  String updateUpToDate(String version) {
+    return '已是最新版本（Homiletics $version）。';
+  }
+
+  @override
+  String get updateCheckFailed => '無法檢查更新。請檢查網路連線後再試一次。';
 }
