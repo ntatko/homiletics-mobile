@@ -154,6 +154,11 @@ String _readingCss(AppColors c) => """
     background: transparent !important; color: ${_hex(c.ink)} !important;
     font: 500 12px -apple-system, 'Roboto', sans-serif;
   }
+  #homiletics-reader-header button, #homiletics-reader-header button * {
+    color: ${_hex(c.ink)} !important; fill: none !important;
+    stroke: currentColor !important;
+  }
+  #homiletics-reader-header .short { stroke: none !important; }
   #homiletics-reader-header svg { width: 16px; height: 16px; }
   #homiletics-reader, .passage-text, .passage-content,
   .passage-content > div { margin-top: 0 !important; padding-top: 0 !important; }

@@ -32,17 +32,119 @@ Future<void> showOtherUsageSearchSheet(
   );
 }
 
-const String _bridgeScript = '''
-if (!window.__otherUsageBound) {
-  window.__otherUsageBound = true;
-  document.querySelectorAll('a.bible-item-title').forEach(function(el) {
-    el.addEventListener('click', function(e) {
-      e.preventDefault();
-      OtherUsageChannel.postMessage(el.textContent.trim());
-    });
-  });
+String _hex(Color c) =>
+    '#${(c.toARGB32() & 0xFFFFFF).toRadixString(16).padLeft(6, '0')}';
+
+/// Turns Bible Gateway's search page into a plain list of results: the
+/// results container is moved into its own wrapper and everything else
+/// (header, menus, ads, footer) is hidden rather than removed, so the
+/// page's own scripts can keep filling in results and pages. Taps on a
+/// result title are caught with one delegated listener, so results added
+/// after load still post their reference.
+String _readerScript(AppColors c, Color accent) {
+  final String css = """
+    @import url('https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,600&display=swap');
+    html, body { background: ${_hex(c.surface)} !important; margin: 0 !important; }
+    body > *:not(#homiletics-results) { display: none !important; }
+    #homiletics-results {
+      padding: 0 16px 28px; color: ${_hex(c.ink)};
+      font-family: -apple-system, 'Roboto', sans-serif;
+    }
+    #homiletics-results * {
+      background: transparent !important; box-shadow: none !important;
+      border-color: ${_hex(c.line)} !important;
+    }
+    #homiletics-results .search-tools input,
+    #homiletics-results .mobile-search-controls,
+    #homiletics-results .vote,
+    #homiletics-results .vote-message,
+    #homiletics-results .bible-item-extras,
+    #homiletics-results ul.menu,
+    #homiletics-results .sponsor-ad,
+    #homiletics-results [class*="raptive"],
+    #homiletics-results iframe,
+    #homiletics-results ins,
+    #homiletics-results .iv-pane-topical {
+      display: none !important;
+    }
+    .search-result-heading, .search-result-heading .wrapper {
+      font-size: 11px !important; font-weight: 600 !important;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: ${_hex(c.muted)} !important; margin: 16px 0 0 !important;
+    }
+    .bible-item {
+      display: block; padding: 14px 0 !important; margin: 0 !important;
+      border-bottom: 1px solid ${_hex(c.line)} !important;
+    }
+    a.bible-item-title {
+      font-family: 'Newsreader', Georgia, serif !important;
+      font-size: 18px !important; font-weight: 600 !important;
+      color: ${_hex(accent)} !important; text-decoration: none !important;
+    }
+    a.bible-item-title::after {
+      content: '+ Add'; margin-left: 10px; padding: 2px 9px;
+      border: 1px solid ${_hex(accent)}; border-radius: 10px;
+      font: 600 11px -apple-system, 'Roboto', sans-serif;
+      vertical-align: 3px;
+    }
+    .bible-item-title-wrap + br { display: none; }
+    .bible-item-text {
+      display: block; margin-top: 4px;
+      font-family: 'Newsreader', Georgia, serif !important;
+      font-size: 15px !important; line-height: 1.5 !important;
+      color: ${_hex(c.ink)} !important;
+    }
+    .bible-item-text b, .bible-item-text strong {
+      background: ${_hex(c.highlight)} !important;
+      color: ${_hex(c.ink)} !important; font-weight: 600;
+      padding: 0 2px; border-radius: 3px;
+    }
+    .info-viewer-footer {
+      display: flex !important; justify-content: space-between;
+      gap: 12px; padding: 18px 0 8px;
+    }
+    .iv-prev-page a, .iv-next-page a {
+      display: inline-block; padding: 11px 16px; border-radius: 12px;
+      border: 1px solid ${_hex(c.lineStrong)} !important;
+      color: ${_hex(c.ink)} !important; text-decoration: none !important;
+      font-size: 14px; font-weight: 500;
+    }
+    .publisher-info, .publisher-info p, .publisher-info a {
+      font-size: 11px !important; color: ${_hex(c.muted)} !important;
+      font-weight: 400 !important;
+    }
+  """
+      .replaceAll('`', '');
+  return """
+    (function() {
+      var style = document.getElementById('homiletics-results-style');
+      if (!style) {
+        style = document.createElement('style');
+        style.id = 'homiletics-results-style';
+        (document.head || document.documentElement).appendChild(style);
+      }
+      style.innerHTML = `$css`;
+      var results = document.querySelector('.results-container') ||
+          document.querySelector('.search');
+      if (results && !document.getElementById('homiletics-results')) {
+        var wrapper = document.createElement('div');
+        wrapper.id = 'homiletics-results';
+        wrapper.appendChild(results);
+        document.body.appendChild(wrapper);
+      }
+      if (!window.__otherUsageBound) {
+        window.__otherUsageBound = true;
+        document.addEventListener('click', function(e) {
+          var link = e.target.closest && e.target.closest('a.bible-item-title');
+          if (!link) return;
+          e.preventDefault();
+          e.stopPropagation();
+          OtherUsageChannel.postMessage(link.textContent.trim());
+        }, true);
+      }
+    })();
+  """;
 }
-''';
 
 class _OtherUsageSearchSheet extends StatefulWidget {
   final String word;
@@ -62,6 +164,9 @@ class _OtherUsageSearchSheet extends StatefulWidget {
 class _OtherUsageSearchSheetState extends State<_OtherUsageSearchSheet> {
   late final WebViewController _controller;
   bool _isLoading = true;
+
+  /// Hides the page until it's been trimmed to the results list.
+  bool _styled = false;
   final List<String> _picked = [];
 
   @override
@@ -90,16 +195,31 @@ class _OtherUsageSearchSheetState extends State<_OtherUsageSearchSheet> {
         NavigationDelegate(
           onPageStarted: (String url) {
             if (!mounted) return;
-            setState(() => _isLoading = true);
+            setState(() {
+              _isLoading = true;
+              _styled = false;
+            });
           },
           onPageFinished: (String url) {
             if (!mounted) return;
             setState(() => _isLoading = false);
-            _controller.runJavaScript(_bridgeScript);
+            _applyReader();
           },
         ),
       )
       ..loadRequest(url);
+  }
+
+  Future<void> _applyReader() async {
+    final AppColors c = AppColors.of(context);
+    _controller.setBackgroundColor(c.surface);
+    try {
+      await _controller
+          .runJavaScript(_readerScript(c, c.step(StudyStep.summary)));
+    } catch (_) {
+      // Page navigated away mid-script; the next onPageFinished re-applies.
+    }
+    if (mounted && !_styled) setState(() => _styled = true);
   }
 
   @override
@@ -178,18 +298,28 @@ class _OtherUsageSearchSheetState extends State<_OtherUsageSearchSheet> {
               Expanded(
                 child: Stack(
                   children: [
-                    WebViewWidget(
-                      controller: _controller,
-                      // Claim drags right away; otherwise the bottom
-                      // sheet's own drag-to-dismiss wins every vertical
-                      // swipe and the results can't be scrolled.
-                      gestureRecognizers: {
-                        Factory<OneSequenceGestureRecognizer>(
-                            () => EagerGestureRecognizer()),
-                      },
+                    Opacity(
+                      opacity: _styled ? 1 : 0,
+                      child: WebViewWidget(
+                        controller: _controller,
+                        // Claim drags right away; otherwise the bottom
+                        // sheet's own drag-to-dismiss wins every vertical
+                        // swipe and the results can't be scrolled.
+                        gestureRecognizers: {
+                          Factory<OneSequenceGestureRecognizer>(
+                              () => EagerGestureRecognizer()),
+                        },
+                      ),
                     ),
-                    if (_isLoading)
-                      const Center(child: CircularProgressIndicator()),
+                    if (_isLoading || !_styled)
+                      Center(
+                        child: SizedBox(
+                          width: 22,
+                          height: 22,
+                          child: CircularProgressIndicator(
+                              strokeWidth: 2, color: c.muted),
+                        ),
+                      ),
                   ],
                 ),
               ),
