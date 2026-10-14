@@ -1,0 +1,144 @@
+name: Windows release
+
+# Builds the Windows app and packages it two ways:
+#   - Homiletics-Setup.exe   Inno Setup installer (per-user, no admin)
+#   - Homiletics-Windows.zip portable copy of the Release folder
+# Both are uploaded as workflow artifacts. On a v* tag they are also
+# attached to that tag's GitHub Release, so these always point at the
+# newest build:
+#   https://github.com/ntatko/homiletics-mobile/releases/latest/download/Homiletics-Setup.exe
+#   https://github.com/ntatko/homiletics-mobile/releases/latest/download/Homiletics-Windows.zip
+
+on:
+  push:
+    tags: [ "v*" ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  windows:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          # Keep in step with dart.yml (flutter_quill 11.5.0 needs this).
+          flutter-version: '3.41.7'
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Read version from pubspec
+        id: version
+        shell: pwsh
+        run: |
+          $line = Select-String -Path pubspec.yaml -Pattern '^version:\s*(\S+)' | Select-Object -First 1
+          if (-not $line) { throw "No version: line in pubspec.yaml" }
+          $full = $line.Matches[0].Groups[1].Value
+          $name = $full.Split('+')[0]
+          "version=$name" >> $env:GITHUB_OUTPUT
+          Write-Host "Version $name (pubspec $full)"
+
+      - name: Build Windows app
+        run: flutter build windows --release
+
+      # Flutter apps need the Visual C++ runtime. Ship it next to the exe
+      # (Microsoft's "app-local" deployment) so the app starts on PCs that
+      # never installed the VC++ redistributable.
+      - name: Bundle the Visual C++ runtime
+        shell: pwsh
+        run: |
+          $release = "build\windows\x64\runner\Release"
+          foreach ($dll in 'msvcp140.dll', 'vcruntime140.dll', 'vcruntime140_1.dll') {
+            Copy-Item "$env:WINDIR\System32\$dll" $release -Force
+          }
+          Get-ChildItem $release -Recurse | Select-Object FullName, Length | Format-Table -AutoSize
+
+      # --- Code signing (not set up yet) -------------------------------
+      # Unsigned builds work but Windows SmartScreen warns on first run
+      # ("Windows protected your PC" -> More info -> Run anyway). To sign,
+      # add the Authenticode certificate as repository secrets
+      # WINDOWS_CERT_PFX_BASE64 (base64 of the .pfx) and
+      # WINDOWS_CERT_PASSWORD, then uncomment this step and the matching
+      # one after the installer is built.
+      #
+      # - name: Sign app executable
+      #   shell: pwsh
+      #   env:
+      #     CERT_PFX_BASE64: ${{ secrets.WINDOWS_CERT_PFX_BASE64 }}
+      #     CERT_PASSWORD: ${{ secrets.WINDOWS_CERT_PASSWORD }}
+      #   run: |
+      #     $pfx = "$env:RUNNER_TEMP\cert.pfx"
+      #     [IO.File]::WriteAllBytes($pfx, [Convert]::FromBase64String($env:CERT_PFX_BASE64))
+      #     $signtool = Get-ChildItem "${env:ProgramFiles(x86)}\Windows Kits\10\bin\*\x64\signtool.exe" | Select-Object -Last 1
+      #     & $signtool.FullName sign /f $pfx /p $env:CERT_PASSWORD /fd SHA256 `
+      #       /tr http://timestamp.digicert.com /td SHA256 `
+      #       build\windows\x64\runner\Release\Homiletics.exe
+      #     Remove-Item $pfx
+      # -----------------------------------------------------------------
+
+      - name: Package portable zip
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force dist | Out-Null
+          Compress-Archive -Path build\windows\x64\runner\Release\* `
+            -DestinationPath dist\Homiletics-Windows.zip -Force
+
+      - name: Install Inno Setup
+        run: choco install innosetup --no-progress -y
+
+      - name: Build installer
+        shell: pwsh
+        run: |
+          $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
+          if (-not (Test-Path $iscc)) {
+            $iscc = (Get-Command iscc.exe -ErrorAction Stop).Source
+          }
+          & $iscc `
+            "/DAppVersion=${{ steps.version.outputs.version }}" `
+            "/DSourceDir=$env:GITHUB_WORKSPACE\build\windows\x64\runner\Release" `
+            "/DOutputDir=$env:GITHUB_WORKSPACE\dist" `
+            installer\windows\homiletics.iss
+          if ($LASTEXITCODE -ne 0) { throw "ISCC failed ($LASTEXITCODE)" }
+          Get-ChildItem dist | Select-Object Name, Length | Format-Table -AutoSize
+
+      # - name: Sign installer
+      #   shell: pwsh
+      #   env:
+      #     CERT_PFX_BASE64: ${{ secrets.WINDOWS_CERT_PFX_BASE64 }}
+      #     CERT_PASSWORD: ${{ secrets.WINDOWS_CERT_PASSWORD }}
+      #   run: |
+      #     $pfx = "$env:RUNNER_TEMP\cert.pfx"
+      #     [IO.File]::WriteAllBytes($pfx, [Convert]::FromBase64String($env:CERT_PFX_BASE64))
+      #     $signtool = Get-ChildItem "${env:ProgramFiles(x86)}\Windows Kits\10\bin\*\x64\signtool.exe" | Select-Object -Last 1
+      #     & $signtool.FullName sign /f $pfx /p $env:CERT_PASSWORD /fd SHA256 `
+      #       /tr http://timestamp.digicert.com /td SHA256 dist\Homiletics-Setup.exe
+      #     Remove-Item $pfx
+
+      - name: Upload installer artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Homiletics-Setup
+          path: dist/Homiletics-Setup.exe
+          if-no-files-found: error
+
+      - name: Upload portable artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Homiletics-Windows
+          path: dist/Homiletics-Windows.zip
+          if-no-files-found: error
+
+      - name: Attach to GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/Homiletics-Setup.exe
+            dist/Homiletics-Windows.zip
