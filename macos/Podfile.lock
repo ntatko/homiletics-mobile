@@ -1,4 +1,6 @@
 PODS:
+  - app_links (6.4.1):
+    - FlutterMacOS
   - audioplayers_darwin (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -21,6 +23,8 @@ PODS:
     - FlutterMacOS
   - record_macos (1.2.1):
     - FlutterMacOS
+  - share_plus (0.0.1):
+    - FlutterMacOS
   - shared_preferences_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -36,6 +40,7 @@ PODS:
     - FlutterMacOS
 
 DEPENDENCIES:
+  - app_links (from `Flutter/ephemeral/.symlinks/plugins/app_links/macos`)
   - audioplayers_darwin (from `Flutter/ephemeral/.symlinks/plugins/audioplayers_darwin/darwin`)
   - ffmpeg_kit_flutter_new_min (from `Flutter/ephemeral/.symlinks/plugins/ffmpeg_kit_flutter_new_min/macos`)
   - flutter_gemma (from `Flutter/ephemeral/.symlinks/plugins/flutter_gemma/macos`)
@@ -45,6 +50,7 @@ DEPENDENCIES:
   - printing (from `Flutter/ephemeral/.symlinks/plugins/printing/macos`)
   - quill_native_bridge_macos (from `Flutter/ephemeral/.symlinks/plugins/quill_native_bridge_macos/macos`)
   - record_macos (from `Flutter/ephemeral/.symlinks/plugins/record_macos/macos`)
+  - share_plus (from `Flutter/ephemeral/.symlinks/plugins/share_plus/macos`)
   - shared_preferences_foundation (from `Flutter/ephemeral/.symlinks/plugins/shared_preferences_foundation/darwin`)
   - sqflite_darwin (from `Flutter/ephemeral/.symlinks/plugins/sqflite_darwin/darwin`)
   - url_launcher_macos (from `Flutter/ephemeral/.symlinks/plugins/url_launcher_macos/macos`)
@@ -52,6 +58,8 @@ DEPENDENCIES:
   - whisper_ggml (from `Flutter/ephemeral/.symlinks/plugins/whisper_ggml/macos`)
 
 EXTERNAL SOURCES:
+  app_links:
+    :path: Flutter/ephemeral/.symlinks/plugins/app_links/macos
   audioplayers_darwin:
     :path: Flutter/ephemeral/.symlinks/plugins/audioplayers_darwin/darwin
   ffmpeg_kit_flutter_new_min:
@@ -70,6 +78,8 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/quill_native_bridge_macos/macos
   record_macos:
     :path: Flutter/ephemeral/.symlinks/plugins/record_macos/macos
+  share_plus:
+    :path: Flutter/ephemeral/.symlinks/plugins/share_plus/macos
   shared_preferences_foundation:
     :path: Flutter/ephemeral/.symlinks/plugins/shared_preferences_foundation/darwin
   sqflite_darwin:
@@ -82,6 +92,7 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/whisper_ggml/macos
 
 SPEC CHECKSUMS:
+  app_links: c3185399a5cabc2e610ee5ad52fb7269b84ff869
   audioplayers_darwin: f15e209a3e856d1a7edcf98dc029f484fead2242
   ffmpeg_kit_flutter_new_min: 9a859120bdef0222d153a51b9cbda0cc5873909a
   flutter_gemma: 6815c3b3d237adf6505ab73db9a76a3fa3f2026c
@@ -91,6 +102,7 @@ SPEC CHECKSUMS:
   printing: 1dd6a1fce2209ec240698e2439a4adbb9b427637
   quill_native_bridge_macos: 3a5f378bc757eb92825193853020b759b56cbb2c
   record_macos: ccd7864c9922136e50c2937b21384f0b175922f2
+  share_plus: 1fa619de8392a4398bfaf176d441853922614e89
   shared_preferences_foundation: 5086985c1d43c5ba4d5e69a4e8083a389e2909e6
   sqflite_darwin: 5a7236e3b501866c1c9befc6771dfd73ffb8702d
   url_launcher_macos: 175a54c831f4375a6cf895875f716ee5af3888ce

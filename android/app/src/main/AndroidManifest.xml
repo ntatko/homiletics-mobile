@@ -63,6 +63,26 @@
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+            <!-- Share links (docs/SHARE_LINKS.md), handled by app_links in
+                 lib/services/incoming_links.dart. App Links verify against
+                 https://homiletics.app/.well-known/assetlinks.json. -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https" />
+                <data android:host="homiletics.app" />
+                <data android:pathPrefix="/view" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="homiletics" android:host="view" />
+            </intent-filter>
+            <!-- app_links delivers links; keep Flutter's router from also
+                 trying to push them as named routes. -->
+            <meta-data android:name="flutter_deeplinking_enabled" android:value="false" />
         </activity>
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
