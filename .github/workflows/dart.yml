@@ -22,10 +22,9 @@ jobs:
         with:
           channel: 'stable'
           # Pinned to the version the app is built and released with.
-          # flutter_quill 11.5.0 doesn't compile against newer Flutter
-          # (QuillRawEditorState misses new TextInputClient members), so
-          # bump this together with flutter_quill.
-          flutter-version: '3.41.7'
+          # 3.44.9 is the first with Xcode 27's one-arch-per-call lipo fix;
+          # flutter_quill must stay compatible, so bump them together.
+          flutter-version: '3.44.9'
 
       - name: Install dependencies
         run: flutter pub get
@@ -57,7 +56,7 @@ jobs:
         with:
           channel: 'stable'
           # Same pin as the build job above.
-          flutter-version: '3.41.7'
+          flutter-version: '3.44.9'
           cache: true
 
       - name: Install dependencies

@@ -59,7 +59,7 @@ dependencies:
   # On-device LLM that formats lecture transcripts where Apple's Foundation
   # Models aren't available. Pinned below 1.x, which needs a newer Dart SDK.
   flutter_gemma: ^0.16.5
-  flutter_quill: 11.5.0
+  flutter_quill: ^11.6.0
   flutter_localizations:
     sdk: flutter
   intl: any
