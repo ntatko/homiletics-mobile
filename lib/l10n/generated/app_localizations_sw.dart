@@ -1460,6 +1460,118 @@ class AppLocalizationsSw extends AppLocalizations {
       'Matokeo yamefunguliwa kwenye kivinjari chako. Andika au bandika hapa marejeo unayotaka kuhifadhi.';
 
   @override
+  String get settingsSectionStorage => 'Hifadhi';
+
+  @override
+  String get storageRecordingsTitle => 'Rekodi za hotuba';
+
+  @override
+  String get storageChecking => 'Inakagua…';
+
+  @override
+  String storageRecordingsSummary(int count, String size) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Rekodi $count · $size',
+      one: 'Rekodi 1 · $size',
+      zero: 'Hakuna rekodi zilizohifadhiwa',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get storageRemoveOlderThan => 'Futa rekodi za zamani kuliko';
+
+  @override
+  String get storageAgeOneMonth => 'Mwezi 1';
+
+  @override
+  String get storageAgeThreeMonths => 'Miezi 3';
+
+  @override
+  String get storageAgeSixMonths => 'Miezi 6';
+
+  @override
+  String get storageAgeOneYear => 'Mwaka 1';
+
+  @override
+  String storageOlderSummary(int count, String size) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Rekodi $count · $size',
+      one: 'Rekodi 1 · $size',
+      zero: 'Hakuna za zamani hivyo',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get storageFreeUpSpace => 'Ongeza nafasi';
+
+  @override
+  String storageConfirmTitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Futa rekodi $count?',
+      one: 'Futa rekodi 1?',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String storageConfirmMessage(String size) {
+    return 'Hii itaongeza nafasi ya takriban $size. Maelezo, manukuu na alama za muda vitabaki; sauti pekee ndiyo itafutwa, na haiwezi kurudishwa.';
+  }
+
+  @override
+  String storageConfirmUntranscribed(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          'Rekodi $count kati ya hizo hazikunukuliwa, hivyo yatabaki maelezo yako tu.',
+      one:
+          'Rekodi 1 kati ya hizo haikunukuliwa, hivyo yatabaki maelezo yako tu.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get storageConfirmRemove => 'Futa';
+
+  @override
+  String storageFreed(String size) {
+    return 'Nafasi ya $size imeongezwa.';
+  }
+
+  @override
+  String get storageRemoveFailed =>
+      'Baadhi ya rekodi hazikuweza kufutwa. Jaribu tena.';
+
+  @override
+  String get storageAutoRemove => 'Futa kiotomatiki';
+
+  @override
+  String storageAutoRemoveDetail(String age) {
+    return 'Mara moja kwa siku, hufuta rekodi za zamani kuliko $age ambazo zina manukuu.';
+  }
+
+  @override
+  String get lectureRecordingRemovedTitle =>
+      'Rekodi imefutwa ili kuokoa nafasi';
+
+  @override
+  String get lectureRecordingRemovedSubtitle =>
+      'Maelezo na manukuu yako yamehifadhiwa';
+
+  @override
+  String get lectureTranscriptEmptyRecordingRemoved =>
+      'Rekodi ilifutwa ili kuokoa nafasi kabla ya kunukuliwa.';
+
+  @override
   String get settingsSectionBackup => 'Hifadhi na urejeshe';
 
   @override

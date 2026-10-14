@@ -13,6 +13,10 @@ class Preferences {
   static const String _hasSeenFormattingPromptKey = 'hasSeenFormattingPrompt';
   static const String _appLanguageKey = 'appLanguage';
   static const String _hasSeenOnboardingKey = 'hasSeenOnboarding';
+  static const String _removedRecordingsKey = 'removedRecordings';
+  static const String _autoRemoveRecordingsKey = 'autoRemoveRecordings';
+  static const String _recordingRemovalAgeDaysKey = 'recordingRemovalAgeDays';
+  static const String _lastRecordingCleanupKey = 'lastRecordingCleanup';
   static const String _lastBackupAtKey = 'lastBackupAt';
   static const String _lastUpdateCheckKey = 'lastUpdateCheck';
   static const String _skippedUpdateVersionKey = 'skippedUpdateVersion';
@@ -72,6 +76,54 @@ class Preferences {
 
   static set hasSeenOnboarding(bool seen) =>
       Hive.box(_boxKey).put(_hasSeenOnboardingKey, seen);
+
+  /// When "Free up space" removed lecture note [noteId]'s recording, or null
+  /// if it didn't. The note keeps its notes and transcripts; this only lets
+  /// the editor say where the audio went.
+  static DateTime? recordingRemovedAt(int noteId) {
+    // Read while building the editor; never throw from there.
+    if (!Hive.isBoxOpen(_boxKey)) return null;
+    final Object? removed = Hive.box(_boxKey).get(_removedRecordingsKey);
+    if (removed is! Map) return null;
+    return DateTime.tryParse(removed['$noteId'] as String? ?? '');
+  }
+
+  static Future<void> markRecordingRemoved(int noteId, DateTime at) {
+    final Object? stored = Hive.box(_boxKey).get(_removedRecordingsKey);
+    return Hive.box(_boxKey).put(_removedRecordingsKey, {
+      if (stored is Map) ...stored,
+      '$noteId': at.toIso8601String(),
+    });
+  }
+
+  /// Forgets the removal once the note has a recording again.
+  static Future<void> clearRecordingRemoved(int noteId) async {
+    final Object? stored = Hive.box(_boxKey).get(_removedRecordingsKey);
+    if (stored is! Map || !stored.containsKey('$noteId')) return;
+    await Hive.box(_boxKey).put(_removedRecordingsKey,
+        Map<dynamic, dynamic>.of(stored)..remove('$noteId'));
+  }
+
+  /// Whether old recordings are removed on launch (at most once a day).
+  static bool get autoRemoveRecordings =>
+      Hive.box(_boxKey).get(_autoRemoveRecordingsKey) ?? false;
+
+  static set autoRemoveRecordings(bool enabled) =>
+      Hive.box(_boxKey).put(_autoRemoveRecordingsKey, enabled);
+
+  /// The age picked under "Remove recordings older than", in days.
+  static int get recordingRemovalAgeDays =>
+      Hive.box(_boxKey).get(_recordingRemovalAgeDaysKey) ?? 91;
+
+  static set recordingRemovalAgeDays(int days) =>
+      Hive.box(_boxKey).put(_recordingRemovalAgeDaysKey, days);
+
+  /// When the automatic removal last ran.
+  static DateTime? get lastRecordingCleanup => DateTime.tryParse(
+      Hive.box(_boxKey).get(_lastRecordingCleanupKey) as String? ?? '');
+
+  static set lastRecordingCleanup(DateTime? at) =>
+      Hive.box(_boxKey).put(_lastRecordingCleanupKey, at?.toIso8601String());
 
   /// When the user last made a backup (Settings → Backup & restore), or
   /// null if never.

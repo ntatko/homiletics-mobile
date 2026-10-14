@@ -145,6 +145,20 @@ class LectureNote with SerializedSave {
     }
   }
 
+  /// Deletes the recording file to save space but keeps the note, its
+  /// transcripts and its time marks. Unlike [updateRecordingPath] this
+  /// doesn't bump [time]. Does nothing for an unsaved or deleted note.
+  Future<void> removeRecordingFile() {
+    return serializeSave(() async {
+      final String? filePath = await recordingFilePath();
+      if (filePath == null || id == -1) return;
+      await clearLectureRecordingPath(id);
+      recordingPath = null;
+      rememberSaved(_contentJson());
+      await _deleteFile(filePath);
+    });
+  }
+
   /// Updates the transcript in the database with the parameter of this
   /// function. Null leaves it unchanged; '' clears it.
   Future<void> updateTranscript(String? text) async {

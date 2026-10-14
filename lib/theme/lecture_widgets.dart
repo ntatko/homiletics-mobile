@@ -21,6 +21,14 @@ TextStyle timeMarkTextStyle(AppColors c) => TextStyle(
       fontFeatures: _tabular,
     );
 
+/// A time mark whose recording was removed to save space: still readable
+/// as a time, but not styled as something to tap.
+TextStyle inactiveTimeMarkTextStyle(AppColors c) => TextStyle(
+      color: c.muted,
+      fontWeight: FontWeight.w600,
+      fontFeatures: _tabular,
+    );
+
 /// Secondary text on the dark recording bar.
 Color recordingBarMuted(AppColors c) =>
     c.onRecordingBar.withValues(alpha: 0.72);

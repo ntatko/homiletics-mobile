@@ -1457,6 +1457,117 @@ class AppLocalizationsEn extends AppLocalizations {
       'Search results opened in your browser. Type or paste the references you want to keep here.';
 
   @override
+  String get settingsSectionStorage => 'Storage';
+
+  @override
+  String get storageRecordingsTitle => 'Lecture recordings';
+
+  @override
+  String get storageChecking => 'Checking…';
+
+  @override
+  String storageRecordingsSummary(int count, String size) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count recordings · $size',
+      one: '1 recording · $size',
+      zero: 'No recordings stored',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get storageRemoveOlderThan => 'Remove recordings older than';
+
+  @override
+  String get storageAgeOneMonth => '1 month';
+
+  @override
+  String get storageAgeThreeMonths => '3 months';
+
+  @override
+  String get storageAgeSixMonths => '6 months';
+
+  @override
+  String get storageAgeOneYear => '1 year';
+
+  @override
+  String storageOlderSummary(int count, String size) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count recordings · $size',
+      one: '1 recording · $size',
+      zero: 'None that old',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get storageFreeUpSpace => 'Free up space';
+
+  @override
+  String storageConfirmTitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Remove $count recordings?',
+      one: 'Remove 1 recording?',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String storageConfirmMessage(String size) {
+    return 'This frees about $size. Your notes, transcripts and time marks are kept; only the audio is deleted, and it can’t be brought back.';
+  }
+
+  @override
+  String storageConfirmUntranscribed(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          '$count of them were never transcribed, so only your notes will be left of them.',
+      one:
+          '1 of them was never transcribed, so only your notes will be left of it.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get storageConfirmRemove => 'Remove';
+
+  @override
+  String storageFreed(String size) {
+    return 'Freed $size.';
+  }
+
+  @override
+  String get storageRemoveFailed =>
+      'Some recordings couldn’t be removed. Try again.';
+
+  @override
+  String get storageAutoRemove => 'Remove automatically';
+
+  @override
+  String storageAutoRemoveDetail(String age) {
+    return 'Once a day, removes recordings older than $age that have a transcript.';
+  }
+
+  @override
+  String get lectureRecordingRemovedTitle => 'Recording removed to save space';
+
+  @override
+  String get lectureRecordingRemovedSubtitle =>
+      'Your notes and transcript are kept';
+
+  @override
+  String get lectureTranscriptEmptyRecordingRemoved =>
+      'The recording was removed to save space before it was transcribed.';
+
+  @override
   String get settingsSectionBackup => 'Backup & restore';
 
   @override

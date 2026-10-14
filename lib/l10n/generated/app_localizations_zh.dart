@@ -1391,6 +1391,108 @@ class AppLocalizationsZh extends AppLocalizations {
       '搜索结果已在浏览器中打开。请在这里输入或粘贴要保留的经文出处。';
 
   @override
+  String get settingsSectionStorage => '存储空间';
+
+  @override
+  String get storageRecordingsTitle => '讲课录音';
+
+  @override
+  String get storageChecking => '正在检查…';
+
+  @override
+  String storageRecordingsSummary(int count, String size) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 段录音 · $size',
+      zero: '没有保存的录音',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get storageRemoveOlderThan => '删除早于以下时间的录音';
+
+  @override
+  String get storageAgeOneMonth => '1 个月';
+
+  @override
+  String get storageAgeThreeMonths => '3 个月';
+
+  @override
+  String get storageAgeSixMonths => '6 个月';
+
+  @override
+  String get storageAgeOneYear => '1 年';
+
+  @override
+  String storageOlderSummary(int count, String size) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 段录音 · $size',
+      zero: '没有这么早的录音',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get storageFreeUpSpace => '释放空间';
+
+  @override
+  String storageConfirmTitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '删除 $count 段录音？',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String storageConfirmMessage(String size) {
+    return '这将释放约 $size。你的笔记、文字稿和时间标记都会保留；只删除音频，且无法恢复。';
+  }
+
+  @override
+  String storageConfirmUntranscribed(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '其中 $count 段从未转成文字稿，删除后只会留下你的笔记。',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get storageConfirmRemove => '删除';
+
+  @override
+  String storageFreed(String size) {
+    return '已释放 $size。';
+  }
+
+  @override
+  String get storageRemoveFailed => '有些录音无法删除，请重试。';
+
+  @override
+  String get storageAutoRemove => '自动删除';
+
+  @override
+  String storageAutoRemoveDetail(String age) {
+    return '每天一次，删除早于 $age 且已有文字稿的录音。';
+  }
+
+  @override
+  String get lectureRecordingRemovedTitle => '录音已删除以节省空间';
+
+  @override
+  String get lectureRecordingRemovedSubtitle => '你的笔记和文字稿仍会保留';
+
+  @override
+  String get lectureTranscriptEmptyRecordingRemoved => '录音在转成文字稿之前已删除以节省空间。';
+
+  @override
   String get settingsSectionBackup => '备份与恢复';
 
   @override
@@ -2904,6 +3006,108 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   @override
   String get wordStudyOtherUsageOpenedInBrowser =>
       '搜索结果已在浏览器中打开。请在这里输入或粘贴要保留的经文出处。';
+
+  @override
+  String get settingsSectionStorage => '存储空间';
+
+  @override
+  String get storageRecordingsTitle => '讲课录音';
+
+  @override
+  String get storageChecking => '正在检查…';
+
+  @override
+  String storageRecordingsSummary(int count, String size) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 段录音 · $size',
+      zero: '没有保存的录音',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get storageRemoveOlderThan => '删除早于以下时间的录音';
+
+  @override
+  String get storageAgeOneMonth => '1 个月';
+
+  @override
+  String get storageAgeThreeMonths => '3 个月';
+
+  @override
+  String get storageAgeSixMonths => '6 个月';
+
+  @override
+  String get storageAgeOneYear => '1 年';
+
+  @override
+  String storageOlderSummary(int count, String size) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 段录音 · $size',
+      zero: '没有这么早的录音',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get storageFreeUpSpace => '释放空间';
+
+  @override
+  String storageConfirmTitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '删除 $count 段录音？',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String storageConfirmMessage(String size) {
+    return '这将释放约 $size。你的笔记、文字稿和时间标记都会保留；只删除音频，且无法恢复。';
+  }
+
+  @override
+  String storageConfirmUntranscribed(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '其中 $count 段从未转成文字稿，删除后只会留下你的笔记。',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get storageConfirmRemove => '删除';
+
+  @override
+  String storageFreed(String size) {
+    return '已释放 $size。';
+  }
+
+  @override
+  String get storageRemoveFailed => '有些录音无法删除，请重试。';
+
+  @override
+  String get storageAutoRemove => '自动删除';
+
+  @override
+  String storageAutoRemoveDetail(String age) {
+    return '每天一次，删除早于 $age 且已有文字稿的录音。';
+  }
+
+  @override
+  String get lectureRecordingRemovedTitle => '录音已删除以节省空间';
+
+  @override
+  String get lectureRecordingRemovedSubtitle => '你的笔记和文字稿仍会保留';
+
+  @override
+  String get lectureTranscriptEmptyRecordingRemoved => '录音在转成文字稿之前已删除以节省空间。';
 
   @override
   String get settingsSectionBackup => '备份与恢复';
@@ -4420,6 +4624,108 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   @override
   String get wordStudyOtherUsageOpenedInBrowser =>
       '搜尋結果已在瀏覽器中開啟。請在這裡輸入或貼上要保留的經文出處。';
+
+  @override
+  String get settingsSectionStorage => '儲存空間';
+
+  @override
+  String get storageRecordingsTitle => '講課錄音';
+
+  @override
+  String get storageChecking => '正在檢查…';
+
+  @override
+  String storageRecordingsSummary(int count, String size) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 段錄音 · $size',
+      zero: '沒有儲存的錄音',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get storageRemoveOlderThan => '刪除早於以下時間的錄音';
+
+  @override
+  String get storageAgeOneMonth => '1 個月';
+
+  @override
+  String get storageAgeThreeMonths => '3 個月';
+
+  @override
+  String get storageAgeSixMonths => '6 個月';
+
+  @override
+  String get storageAgeOneYear => '1 年';
+
+  @override
+  String storageOlderSummary(int count, String size) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 段錄音 · $size',
+      zero: '沒有這麼早的錄音',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get storageFreeUpSpace => '釋放空間';
+
+  @override
+  String storageConfirmTitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '刪除 $count 段錄音？',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String storageConfirmMessage(String size) {
+    return '這將釋放約 $size。你的筆記、文字稿和時間標記都會保留；只刪除音訊，且無法復原。';
+  }
+
+  @override
+  String storageConfirmUntranscribed(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '其中 $count 段從未轉成文字稿，刪除後只會留下你的筆記。',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get storageConfirmRemove => '刪除';
+
+  @override
+  String storageFreed(String size) {
+    return '已釋放 $size。';
+  }
+
+  @override
+  String get storageRemoveFailed => '有些錄音無法刪除，請重試。';
+
+  @override
+  String get storageAutoRemove => '自動刪除';
+
+  @override
+  String storageAutoRemoveDetail(String age) {
+    return '每天一次，刪除早於 $age 且已有文字稿的錄音。';
+  }
+
+  @override
+  String get lectureRecordingRemovedTitle => '錄音已刪除以節省空間';
+
+  @override
+  String get lectureRecordingRemovedSubtitle => '你的筆記和文字稿仍會保留';
+
+  @override
+  String get lectureTranscriptEmptyRecordingRemoved => '錄音在轉成文字稿之前已刪除以節省空間。';
 
   @override
   String get settingsSectionBackup => '備份與還原';
