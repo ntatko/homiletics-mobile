@@ -63,7 +63,9 @@ class LectureNote with SerializedSave {
   /// Older versions stored an absolute path; keep only the file name.
   static String? _normalizeRecordingPath(String? stored) {
     if (stored == null || stored.isEmpty) return null;
-    return stored.contains('/') ? p.basename(stored) : stored;
+    return stored.contains('/') || stored.contains('\\')
+        ? p.basename(stored)
+        : stored;
   }
 
   /// Returns a map representation of the lecture note.
@@ -88,7 +90,7 @@ class LectureNote with SerializedSave {
   Future<String?> recordingFilePath() async {
     final String? fileName = recordingPath;
     if (fileName == null || fileName.isEmpty) return null;
-    return '${(await getApplicationDocumentsDirectory()).path}/$fileName';
+    return p.join((await getApplicationDocumentsDirectory()).path, fileName);
   }
 
   /// Updates the note in the database with whatever is in this object.
