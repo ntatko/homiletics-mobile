@@ -1389,6 +1389,81 @@ class AppLocalizationsZh extends AppLocalizations {
   @override
   String get wordStudyOtherUsageOpenedInBrowser =>
       '搜索结果已在浏览器中打开。请在这里输入或粘贴要保留的经文出处。';
+
+  @override
+  String get settingsSectionBackup => '备份与恢复';
+
+  @override
+  String get backupExplainer =>
+      '把你所有的学习存成一个文件，保存在 Google 云端硬盘、“文件”或任何你喜欢的地方。应用不会上传它。';
+
+  @override
+  String get backupNow => '立即备份';
+
+  @override
+  String backupLastTime(String time) {
+    return '上次备份：$time';
+  }
+
+  @override
+  String get backupNever => '尚未备份';
+
+  @override
+  String backupIncludeRecordings(String size) {
+    return '包含讲课录音（$size）';
+  }
+
+  @override
+  String get backupSaved => '备份已保存';
+
+  @override
+  String get backupFailed => '无法备份，请重试。';
+
+  @override
+  String get restoreFromBackup => '从备份恢复';
+
+  @override
+  String get restorePreviewTitle => '恢复此备份？';
+
+  @override
+  String restorePreviewCreated(String date) {
+    return '创建于 $date';
+  }
+
+  @override
+  String get restoreCountHomiletics => '讲道大纲';
+
+  @override
+  String get restoreCountLectureNotes => '讲课笔记';
+
+  @override
+  String get restoreCountWordStudies => '字词研究';
+
+  @override
+  String get restoreCountRecordings => '录音';
+
+  @override
+  String get restorePreviewNote => '只会添加你还没有的内容，不会更改或删除此设备上的任何内容。';
+
+  @override
+  String get restoreConfirm => '恢复';
+
+  @override
+  String restoreDone(String added, String skipped) {
+    return '恢复完成。已添加：$added · 已存在：$skipped';
+  }
+
+  @override
+  String get restoreFailed => '无法恢复备份，请重试。';
+
+  @override
+  String get restoreNotABackup => '该文件不是 Homiletics 备份。';
+
+  @override
+  String get restoreDamaged => '该备份似乎已损坏，无法读取。';
+
+  @override
+  String get restoreNewerVersion => '此备份由较新版本的 Homiletics 创建。请更新应用后重试。';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hans`).
@@ -2776,6 +2851,81 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   @override
   String get wordStudyOtherUsageOpenedInBrowser =>
       '搜索结果已在浏览器中打开。请在这里输入或粘贴要保留的经文出处。';
+
+  @override
+  String get settingsSectionBackup => '备份与恢复';
+
+  @override
+  String get backupExplainer =>
+      '把你所有的学习存成一个文件，保存在 Google 云端硬盘、“文件”或任何你喜欢的地方。应用不会上传它。';
+
+  @override
+  String get backupNow => '立即备份';
+
+  @override
+  String backupLastTime(String time) {
+    return '上次备份：$time';
+  }
+
+  @override
+  String get backupNever => '尚未备份';
+
+  @override
+  String backupIncludeRecordings(String size) {
+    return '包含讲课录音（$size）';
+  }
+
+  @override
+  String get backupSaved => '备份已保存';
+
+  @override
+  String get backupFailed => '无法备份，请重试。';
+
+  @override
+  String get restoreFromBackup => '从备份恢复';
+
+  @override
+  String get restorePreviewTitle => '恢复此备份？';
+
+  @override
+  String restorePreviewCreated(String date) {
+    return '创建于 $date';
+  }
+
+  @override
+  String get restoreCountHomiletics => '讲道大纲';
+
+  @override
+  String get restoreCountLectureNotes => '讲课笔记';
+
+  @override
+  String get restoreCountWordStudies => '字词研究';
+
+  @override
+  String get restoreCountRecordings => '录音';
+
+  @override
+  String get restorePreviewNote => '只会添加你还没有的内容，不会更改或删除此设备上的任何内容。';
+
+  @override
+  String get restoreConfirm => '恢复';
+
+  @override
+  String restoreDone(String added, String skipped) {
+    return '恢复完成。已添加：$added · 已存在：$skipped';
+  }
+
+  @override
+  String get restoreFailed => '无法恢复备份，请重试。';
+
+  @override
+  String get restoreNotABackup => '该文件不是 Homiletics 备份。';
+
+  @override
+  String get restoreDamaged => '该备份似乎已损坏，无法读取。';
+
+  @override
+  String get restoreNewerVersion => '此备份由较新版本的 Homiletics 创建。请更新应用后重试。';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).
@@ -4164,4 +4314,79 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   @override
   String get wordStudyOtherUsageOpenedInBrowser =>
       '搜尋結果已在瀏覽器中開啟。請在這裡輸入或貼上要保留的經文出處。';
+
+  @override
+  String get settingsSectionBackup => '備份與還原';
+
+  @override
+  String get backupExplainer =>
+      '把你所有的學習存成一個檔案，保存在 Google 雲端硬碟、「檔案」或任何你喜歡的地方。應用程式不會上傳它。';
+
+  @override
+  String get backupNow => '立即備份';
+
+  @override
+  String backupLastTime(String time) {
+    return '上次備份：$time';
+  }
+
+  @override
+  String get backupNever => '尚未備份';
+
+  @override
+  String backupIncludeRecordings(String size) {
+    return '包含講課錄音（$size）';
+  }
+
+  @override
+  String get backupSaved => '備份已儲存';
+
+  @override
+  String get backupFailed => '無法備份，請再試一次。';
+
+  @override
+  String get restoreFromBackup => '從備份還原';
+
+  @override
+  String get restorePreviewTitle => '還原此備份？';
+
+  @override
+  String restorePreviewCreated(String date) {
+    return '建立於 $date';
+  }
+
+  @override
+  String get restoreCountHomiletics => '講道大綱';
+
+  @override
+  String get restoreCountLectureNotes => '講課筆記';
+
+  @override
+  String get restoreCountWordStudies => '字詞研究';
+
+  @override
+  String get restoreCountRecordings => '錄音';
+
+  @override
+  String get restorePreviewNote => '只會加入你還沒有的內容，不會變更或刪除此裝置上的任何內容。';
+
+  @override
+  String get restoreConfirm => '還原';
+
+  @override
+  String restoreDone(String added, String skipped) {
+    return '還原完成。已加入：$added · 已存在：$skipped';
+  }
+
+  @override
+  String get restoreFailed => '無法還原備份，請再試一次。';
+
+  @override
+  String get restoreNotABackup => '該檔案不是 Homiletics 備份。';
+
+  @override
+  String get restoreDamaged => '該備份似乎已損毀，無法讀取。';
+
+  @override
+  String get restoreNewerVersion => '此備份由較新版本的 Homiletics 建立。請更新應用程式後再試一次。';
 }

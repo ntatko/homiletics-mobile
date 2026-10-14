@@ -1469,4 +1469,84 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get wordStudyOtherUsageOpenedInBrowser =>
       'Les résultats se sont ouverts dans votre navigateur. Tapez ou collez ici les références à conserver.';
+
+  @override
+  String get settingsSectionBackup => 'Sauvegarde et restauration';
+
+  @override
+  String get backupExplainer =>
+      'Enregistrez toutes vos études dans un seul fichier, à conserver dans Google Drive, Fichiers ou ailleurs. L’application ne l’envoie nulle part.';
+
+  @override
+  String get backupNow => 'Sauvegarder';
+
+  @override
+  String backupLastTime(String time) {
+    return 'Dernière sauvegarde : $time';
+  }
+
+  @override
+  String get backupNever => 'Aucune sauvegarde pour l’instant';
+
+  @override
+  String backupIncludeRecordings(String size) {
+    return 'Inclure les enregistrements ($size)';
+  }
+
+  @override
+  String get backupSaved => 'Sauvegarde enregistrée';
+
+  @override
+  String get backupFailed => 'La sauvegarde a échoué. Veuillez réessayer.';
+
+  @override
+  String get restoreFromBackup => 'Restaurer une sauvegarde';
+
+  @override
+  String get restorePreviewTitle => 'Restaurer cette sauvegarde ?';
+
+  @override
+  String restorePreviewCreated(String date) {
+    return 'Créée le $date';
+  }
+
+  @override
+  String get restoreCountHomiletics => 'Homilétiques';
+
+  @override
+  String get restoreCountLectureNotes => 'Notes d’exposé';
+
+  @override
+  String get restoreCountWordStudies => 'Études de mot';
+
+  @override
+  String get restoreCountRecordings => 'Enregistrements';
+
+  @override
+  String get restorePreviewNote =>
+      'Tout ce que vous n’avez pas encore est ajouté. Rien n’est modifié ni supprimé sur cet appareil.';
+
+  @override
+  String get restoreConfirm => 'Restaurer';
+
+  @override
+  String restoreDone(String added, String skipped) {
+    return 'Restauration terminée. Ajoutés : $added · Déjà présents : $skipped';
+  }
+
+  @override
+  String get restoreFailed =>
+      'Impossible de restaurer la sauvegarde. Veuillez réessayer.';
+
+  @override
+  String get restoreNotABackup =>
+      'Ce fichier n’est pas une sauvegarde Homiletics.';
+
+  @override
+  String get restoreDamaged =>
+      'Cette sauvegarde semble endommagée et illisible.';
+
+  @override
+  String get restoreNewerVersion =>
+      'Cette sauvegarde provient d’une version plus récente de Homiletics. Mettez l’application à jour, puis réessayez.';
 }

@@ -13,6 +13,7 @@ class Preferences {
   static const String _hasSeenFormattingPromptKey = 'hasSeenFormattingPrompt';
   static const String _appLanguageKey = 'appLanguage';
   static const String _hasSeenOnboardingKey = 'hasSeenOnboarding';
+  static const String _lastBackupAtKey = 'lastBackupAt';
 
   /// The interface language the user picked, or null to follow the phone.
   /// MaterialApp listens to this so a change applies immediately.
@@ -69,4 +70,12 @@ class Preferences {
 
   static set hasSeenOnboarding(bool seen) =>
       Hive.box(_boxKey).put(_hasSeenOnboardingKey, seen);
+
+  /// When the user last made a backup (Settings → Backup & restore), or
+  /// null if never.
+  static DateTime? get lastBackupAt =>
+      DateTime.tryParse(Hive.box(_boxKey).get(_lastBackupAtKey) as String? ?? '');
+
+  static set lastBackupAt(DateTime? time) =>
+      Hive.box(_boxKey).put(_lastBackupAtKey, time?.toIso8601String());
 }
