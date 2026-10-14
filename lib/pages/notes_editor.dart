@@ -118,17 +118,25 @@ class _NotesState extends State<NotesEditor> {
   }
 
   Widget _toolbarButton(Attribute attribute, Widget icon, String tooltip) {
-    return QuillToolbarToggleStyleButton(
-      controller: _noteController,
-      attribute: attribute,
-      options: QuillToolbarToggleStyleButtonOptions(
-        childBuilder: (options, extra) => NotesToolbarButton(
+    // Driven straight from the controller: flutter_quill's
+    // QuillToolbarToggleStyleButton childBuilder hook throws a type error
+    // at runtime in 11.5.0.
+    return ListenableBuilder(
+      listenable: _noteController,
+      builder: (context, _) {
+        final bool isToggled = _noteController
+                .getSelectionStyle()
+                .attributes[attribute.key]
+                ?.value ==
+            attribute.value;
+        return NotesToolbarButton(
           icon: icon,
           tooltip: tooltip,
-          selected: extra.isToggled,
-          onPressed: extra.onPressed,
-        ),
-      ),
+          selected: isToggled,
+          onPressed: () => _noteController.formatSelection(
+              isToggled ? Attribute.clone(attribute, null) : attribute),
+        );
+      },
     );
   }
 

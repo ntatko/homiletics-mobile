@@ -282,7 +282,7 @@ class _PassageSplitScaffoldState extends State<PassageSplitScaffold> {
     return Scaffold(
         backgroundColor: c.ground,
         body: SafeArea(
-          bottom: false,
+          bottom: true,
           child: Column(children: [
             Padding(
               padding: const EdgeInsets.fromLTRB(4, 8, 4, 4),
