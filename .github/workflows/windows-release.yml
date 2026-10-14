@@ -51,6 +51,26 @@ jobs:
       - name: Build Windows app
         run: flutter build windows --release
 
+      # flutter_gemma's build hook bundles ~170 MB of LiteRT / OpenVINO /
+      # qdrant DLLs, but transcript formatting is off on Windows
+      # (TranscriptFormatterService.isLocalModelSupported) and they are
+      # only ever loaded on demand by that code. Drop them to keep the
+      # download small. flutter_gemma_plugin.dll itself stays (the runner
+      # registers it); it links none of these.
+      - name: Remove unused flutter_gemma native libraries
+        shell: pwsh
+        run: |
+          $release = "build\windows\x64\runner\Release"
+          $patterns = 'LiteRt*.dll', 'libLiteRt*.dll', '*GemmaModelConstraintProvider.dll',
+                      'qdrant_edge_ffi.dll', 'openvino*.dll', 'tbb*.dll',
+                      'dxcompiler.dll', 'dxil.dll', 'StreamProxy.dll'
+          foreach ($pattern in $patterns) {
+            Get-ChildItem $release -Filter $pattern | ForEach-Object {
+              Write-Host "Removing $($_.Name) ($($_.Length) bytes)"
+              Remove-Item $_.FullName
+            }
+          }
+
       # Flutter apps need the Visual C++ runtime. Ship it next to the exe
       # (Microsoft's "app-local" deployment) so the app starts on PCs that
       # never installed the VC++ redistributable.
