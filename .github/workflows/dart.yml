@@ -43,3 +43,25 @@ jobs:
       # want to change this to 'flutter test'.
       - name: Run tests
         run: flutter test
+
+  # Catches Windows-only breakage (plugins without a Windows build, native
+  # code that doesn't compile with MSVC) on every PR. The installer itself
+  # is built by windows-release.yml.
+  windows:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          # Same pin as the build job above.
+          flutter-version: '3.41.7'
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build Windows app
+        run: flutter build windows --release

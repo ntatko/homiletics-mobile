@@ -1962,5 +1962,39 @@
   "startOpenSharedStudy": "Open shared study",
   "@startOpenSharedStudy": {
     "description": "Button above the \"Study another passage\" field when a share link was pasted into it."
+  },
+  "bibleWebUnavailableTitle": "Read {translation} in your browser",
+  "@bibleWebUnavailableTitle": {
+    "description": "Windows only: verse panel title when the chosen translation is only available from Bible Gateway, which can't be shown inside the app on Windows.",
+    "placeholders": {
+      "translation": {
+        "type": "String",
+        "example": "NIV",
+        "description": "Short code of the Bible translation, e.g. \"NIV\" or \"WEB\" (not localized)."
+      }
+    }
+  },
+  "bibleWebUnavailableMessage": "On Windows the app can't show Bible Gateway passages inside the app. Open this passage in your browser, or switch to a translation that's read from your device.",
+  "@bibleWebUnavailableMessage": {
+    "description": "Windows only: verse panel message explaining that Bible Gateway passages open in the web browser, or the user can switch to an offline translation."
+  },
+  "bibleOpenInBrowser": "Open in browser",
+  "@bibleOpenInBrowser": {
+    "description": "Windows only: button in the verse panel that opens the passage on Bible Gateway in the web browser."
+  },
+  "bibleUseOfflineTranslation": "Use an offline translation ({translation})",
+  "@bibleUseOfflineTranslation": {
+    "description": "Windows only: button in the verse panel that switches the Bible translation to one that can be read offline in the app.",
+    "placeholders": {
+      "translation": {
+        "type": "String",
+        "example": "WEB",
+        "description": "Short code of the offline translation that will be used, e.g. \"WEB\" (not localized)."
+      }
+    }
+  },
+  "wordStudyOtherUsageOpenedInBrowser": "Search results opened in your browser. Type or paste the references you want to keep here.",
+  "@wordStudyOtherUsageOpenedInBrowser": {
+    "description": "Windows only: snackbar after the 'other usage' Bible Gateway search was opened in the web browser (it can't be shown in the app there); the user types or pastes references into the field themselves."
   }
 }

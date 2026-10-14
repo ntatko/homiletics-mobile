@@ -1434,4 +1434,25 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get startOpenSharedStudy => 'Open shared study';
+
+  @override
+  String bibleWebUnavailableTitle(String translation) {
+    return 'Read $translation in your browser';
+  }
+
+  @override
+  String get bibleWebUnavailableMessage =>
+      'On Windows the app can\'t show Bible Gateway passages inside the app. Open this passage in your browser, or switch to a translation that\'s read from your device.';
+
+  @override
+  String get bibleOpenInBrowser => 'Open in browser';
+
+  @override
+  String bibleUseOfflineTranslation(String translation) {
+    return 'Use an offline translation ($translation)';
+  }
+
+  @override
+  String get wordStudyOtherUsageOpenedInBrowser =>
+      'Search results opened in your browser. Type or paste the references you want to keep here.';
 }

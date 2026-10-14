@@ -244,10 +244,16 @@ class _RecordingSectionState extends State<RecordingSection>
       if (!mounted) return;
       final AppLocalizations l10n = context.l10n;
       final String fileName =
-          'lecture_${widget.note.id}_${DateTime.now().millisecondsSinceEpoch}.m4a';
+          'lecture_${widget.note.id}_${DateTime.now().millisecondsSinceEpoch}'
+          '${Platform.isWindows ? '.wav' : '.m4a'}';
       try {
         await _recorder.start(
           RecordConfig(
+            // whisper_ggml can't convert audio on Windows (no ffmpeg_kit
+            // there) but reads a 16 kHz mono WAV as is, so record that.
+            encoder: Platform.isWindows ? AudioEncoder.wav : AudioEncoder.aacLc,
+            sampleRate: Platform.isWindows ? 16000 : 44100,
+            numChannels: Platform.isWindows ? 1 : 2,
             // Runs recording in an Android foreground service (with an
             // ongoing notification) so it keeps going with the screen off.
             // iOS gets the same via UIBackgroundModes=audio in Info.plist.
@@ -259,7 +265,7 @@ class _RecordingSectionState extends State<RecordingSection>
               ),
             ),
           ),
-          path: '${dir.path}/$fileName',
+          path: p.join(dir.path, fileName),
         );
       } catch (error) {
         sendError(error, "RecordingSection start");
@@ -881,7 +887,8 @@ class _RecordingSectionState extends State<RecordingSection>
                     onSelectionChanged: (selection) =>
                         setState(() => _showFormatted = selection.first),
                   )
-                : !_isFormatting && !_isTranscribing
+                // No formatting model runs on Windows.
+                : !_isFormatting && !_isTranscribing && !Platform.isWindows
                     ? TextButton.icon(
                         style: TextButton.styleFrom(
                             minimumSize: const Size(0, 44)),

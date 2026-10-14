@@ -854,5 +854,10 @@
   "importSaveCopy": "Enregistrer une copie",
   "importSaved": "Enregistré dans vos études",
   "importSaveFailed": "Impossible d'enregistrer l'étude. Réessayez.",
-  "startOpenSharedStudy": "Ouvrir l'étude partagée"
+  "startOpenSharedStudy": "Ouvrir l'étude partagée",
+  "bibleWebUnavailableTitle": "Lire {translation} dans votre navigateur",
+  "bibleWebUnavailableMessage": "Sous Windows, l'application ne peut pas afficher les passages de Bible Gateway. Ouvrez ce passage dans votre navigateur ou choisissez une traduction lue depuis votre appareil.",
+  "bibleOpenInBrowser": "Ouvrir dans le navigateur",
+  "bibleUseOfflineTranslation": "Utiliser une traduction hors ligne ({translation})",
+  "wordStudyOtherUsageOpenedInBrowser": "Les résultats se sont ouverts dans votre navigateur. Tapez ou collez ici les références à conserver."
 }

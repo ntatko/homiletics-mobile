@@ -120,4 +120,20 @@ void main() {
     // Every translation appears exactly once.
     expect(es.expand((g) => g.value).length, Translation.all.length);
   });
+
+  test('offline fallback (Windows) stays in the language and script', () {
+    expect(Translation.offlineFallbackFor(Translation.niv), Translation.web);
+    expect(Translation.offlineFallbackFor(Translation.nvi), Translation.rv1909);
+    expect(
+        Translation.offlineFallbackFor(Translation.cuvs), Translation.cuvmps);
+    expect(Translation.offlineFallbackFor(Translation.cuv), Translation.cuvmpt);
+    expect(
+        Translation.offlineFallbackFor(Translation.nviPt), Translation.blivre);
+    // No offline text in the language: World English Bible.
+    expect(Translation.offlineFallbackFor(Translation.nav), Translation.web);
+    for (final Translation t in Translation.all) {
+      expect(Translation.offlineFallbackFor(t).offlineAvailable, isTrue,
+          reason: t.code);
+    }
+  });
 }

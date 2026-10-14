@@ -854,5 +854,10 @@
   "importSaveCopy": "Hifadhi nakala",
   "importSaved": "Imehifadhiwa kwenye masomo yako",
   "importSaveFailed": "Imeshindwa kuhifadhi somo. Jaribu tena.",
-  "startOpenSharedStudy": "Fungua somo lililoshirikiwa"
+  "startOpenSharedStudy": "Fungua somo lililoshirikiwa",
+  "bibleWebUnavailableTitle": "Soma {translation} kwenye kivinjari",
+  "bibleWebUnavailableMessage": "Kwenye Windows, programu haiwezi kuonyesha vifungu vya Bible Gateway ndani ya programu. Fungua kifungu hiki kwenye kivinjari chako, au badilisha kwenda tafsiri inayosomwa kutoka kwenye kifaa chako.",
+  "bibleOpenInBrowser": "Fungua kwenye kivinjari",
+  "bibleUseOfflineTranslation": "Tumia tafsiri isiyohitaji mtandao ({translation})",
+  "wordStudyOtherUsageOpenedInBrowser": "Matokeo yamefunguliwa kwenye kivinjari chako. Andika au bandika hapa marejeo unayotaka kuhifadhi."
 }

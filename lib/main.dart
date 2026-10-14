@@ -70,6 +70,7 @@ Future<bool> initializeApp() async {
   // exists but can't be read, when no safe fallback exists.
   if (!kIsWeb) {
     try {
+      await AppStorage.useFfiOnDesktop();
       await AppStorage.init();
     } catch (error) {
       sendError(error, "main: AppStorage.init");

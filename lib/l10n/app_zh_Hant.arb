@@ -854,5 +854,10 @@
   "importSaveCopy": "儲存副本",
   "importSaved": "已儲存到你的學習",
   "importSaveFailed": "無法儲存這份學習，請重試。",
-  "startOpenSharedStudy": "開啟分享的學習"
+  "startOpenSharedStudy": "開啟分享的學習",
+  "bibleWebUnavailableTitle": "在瀏覽器中閱讀 {translation}",
+  "bibleWebUnavailableMessage": "在 Windows 上，應用程式無法在程式內顯示 Bible Gateway 的經文。請在瀏覽器中開啟這段經文，或改用可在裝置上離線閱讀的譯本。",
+  "bibleOpenInBrowser": "在瀏覽器中開啟",
+  "bibleUseOfflineTranslation": "使用離線譯本（{translation}）",
+  "wordStudyOtherUsageOpenedInBrowser": "搜尋結果已在瀏覽器中開啟。請在這裡輸入或貼上要保留的經文出處。"
 }

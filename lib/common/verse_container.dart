@@ -60,6 +60,11 @@ String getBibleGatewayVersion(Translation translation) {
   return fallback.isEmpty ? 'NIV' : fallback;
 }
 
+/// Whether the passage can be shown in a web view. webview_flutter has no
+/// Windows implementation, so there Bible Gateway passages open in the
+/// browser and offline texts are preferred.
+bool get webViewSupported => kIsWeb || !Platform.isWindows;
+
 /// Creates a Bible Gateway URL for the given passage and translation
 String _createBibleGatewayUrl(String passage, Translation translation) {
   final encodedPassage = Uri.encodeComponent(passage);
@@ -180,6 +185,10 @@ enum _PanelMode {
 
   /// An offline-only translation that doesn't have this passage.
   notFound,
+
+  /// A Bible Gateway translation where there's no web view (Windows):
+  /// offers the browser or an offline translation.
+  webUnavailable,
 }
 
 /// Matches Bible Gateway's per-verse class, e.g. "text Rom-3-4".
@@ -310,7 +319,8 @@ class VerseContainerState extends State<VerseContainer> {
         }
       } else {
         _startAutoDownload(translation);
-        if (translation.offlineOnly) {
+        // Without a web view, wait for the (auto-started) download.
+        if (translation.offlineOnly || !webViewSupported) {
           setState(() => _mode = _PanelMode.needsDownload);
           return;
         }
@@ -320,6 +330,13 @@ class VerseContainerState extends State<VerseContainer> {
     // Gateway code).
     if (!translation.webAvailable) {
       setState(() => _mode = _PanelMode.notFound);
+      return;
+    }
+    if (!webViewSupported) {
+      setState(() {
+        _mode = _PanelMode.webUnavailable;
+        _chapters = null;
+      });
       return;
     }
     _showWeb(translation, force: force);
@@ -436,6 +453,32 @@ class VerseContainerState extends State<VerseContainer> {
       _launchExternally(uri);
     }
     return NavigationDecision.prevent;
+  }
+
+  /// Opens the passage on Bible Gateway in the browser (no web view).
+  Future<void> _openInBrowser() async {
+    final ScaffoldMessengerState? messenger =
+        ScaffoldMessenger.maybeOf(context);
+    final String failed = context.l10n.commonSomethingWentWrong;
+    bool opened = false;
+    try {
+      opened = await launchUrl(
+          Uri.parse(_createBibleGatewayUrl(widget.passage, _loadedTranslation)
+              .replaceFirst('&interface=print', '')),
+          mode: LaunchMode.externalApplication);
+    } catch (_) {
+      opened = false;
+    }
+    if (!opened) messenger?.showSnackBar(SnackBar(content: Text(failed)));
+  }
+
+  /// Switches the user's translation to one read offline in the app (no
+  /// web view); its text downloads automatically if needed.
+  void _useOfflineTranslation() {
+    final Translation fallback =
+        Translation.offlineFallbackFor(_loadedTranslation);
+    Preferences.preferredVersion = fallback.code;
+    _resolve(fallback);
   }
 
   Future<void> _launchExternally(Uri uri) async {
@@ -577,6 +620,7 @@ class VerseContainerState extends State<VerseContainer> {
     required String message,
     bool offerDownload = false,
     VoidCallback? onRetry,
+    List<Widget> actions = const [],
   }) {
     final AppColors c = _colors;
     final AppLocalizations l = context.l10n;
@@ -627,6 +671,7 @@ class VerseContainerState extends State<VerseContainer> {
                     label: Text(l.bibleDownloadAction),
                   ),
           ),
+        for (final Widget action in actions) Center(child: action),
         if (onRetry != null)
           Center(
             child: TextButton(
@@ -684,6 +729,28 @@ class VerseContainerState extends State<VerseContainer> {
               : l.bibleOfflineNoDownloadMessage,
           offerDownload: t.offlineAvailable,
           onRetry: () => _resolve(t, force: true),
+        );
+      case _PanelMode.webUnavailable:
+        final Translation offline = Translation.offlineFallbackFor(t);
+        return _message(
+          icon: Icons.open_in_new_rounded,
+          title: l.bibleWebUnavailableTitle(t.short),
+          message: l.bibleWebUnavailableMessage,
+          actions: [
+            FilledButton.icon(
+              style: FilledButton.styleFrom(minimumSize: const Size(44, 44)),
+              onPressed: _openInBrowser,
+              icon: const Icon(Icons.open_in_new_rounded, size: 20),
+              label: Text(l.bibleOpenInBrowser),
+            ),
+            const SizedBox(height: 8),
+            TextButton.icon(
+              style: TextButton.styleFrom(minimumSize: const Size(44, 44)),
+              onPressed: _useOfflineTranslation,
+              icon: const Icon(Icons.download_for_offline_outlined, size: 20),
+              label: Text(l.bibleUseOfflineTranslation(offline.short)),
+            ),
+          ],
         );
       case _PanelMode.web:
         return Stack(
