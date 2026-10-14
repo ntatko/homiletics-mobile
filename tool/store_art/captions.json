@@ -1,0 +1,48 @@
+{
+  "en": {
+    "dive": {
+      "title": "Dive deep",
+      "sub": "in your personal quiet time"
+    },
+    "step1": {
+      "eyebrow": "Step 1",
+      "title": "Summarize the facts",
+      "sub": "in your own words, verse by verse"
+    },
+    "step23": {
+      "eyebrow": "Steps 2–3",
+      "title": "Divide the passage",
+      "sub": "then sum it up in 10 words"
+    },
+    "step46": {
+      "eyebrow": "Steps 4–6",
+      "title": "Find the need and the aim",
+      "sub": "and how to live it this week"
+    },
+    "steps_all": {
+      "eyebrow": "Steps 1–3",
+      "title": "Write your homiletics",
+      "sub": "with the passage open beside you"
+    },
+    "lecture": {
+      "title": "Take notes on the lecture",
+      "sub": "Recording keeps going with the screen off. Tap a time mark to replay."
+    },
+    "lecture_short": {
+      "title": "Take notes on the lecture",
+      "sub": "Record, then tap a time mark to replay it"
+    },
+    "word": {
+      "title": "Dig into a single word",
+      "sub": "Definition, other uses, and deeper meaning"
+    },
+    "language": {
+      "title": "Your language, your Bible",
+      "sub": "7 languages · 50+ translations\nBibles that work offline"
+    },
+    "brand": {
+      "name": "Homiletics",
+      "tagline": "dive deep"
+    }
+  }
+}
