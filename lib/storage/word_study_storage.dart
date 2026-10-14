@@ -3,34 +3,15 @@ import 'dart:async';
 import 'package:homiletics/classes/word_study.dart';
 import 'package:homiletics/common/passage_reference.dart';
 import 'package:homiletics/common/report_error.dart';
-import 'package:path/path.dart';
+import 'package:homiletics/storage/app_storage.dart';
 import 'package:sqflite/sqflite.dart';
 
-final Future<Database> database = getDatabasesPath().then((String path) {
-  return openDatabase(
-    join(path, 'word_studies.db'),
-    onCreate: (db, version) {
-      return db.execute('''
-            CREATE TABLE word_studies (
-              id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-              passage TEXT,
-              word TEXT,
-              definition TEXT,
-              other_usage TEXT,
-              contextual_meaning TEXT,
-              deeper_meaning TEXT,
-              application TEXT,
-              updated_at TEXT
-            )
-            ''');
-    },
-    version: 1,
-  );
-});
+/// The database holding the `word_studies` table (see [AppStorage]).
+Future<Database> _db() => AppStorage.database('word_studies');
 
 Future<List<WordStudy>> getAllWordStudies() async {
   try {
-    final Database db = await database;
+    final Database db = await _db();
 
     final List<Map<String, dynamic>> maps = await db.query('word_studies');
 
@@ -48,7 +29,7 @@ Future<List<WordStudy>> getAllWordStudies() async {
 
 Future<int> insertWordStudy(WordStudy study) async {
   try {
-    final Database db = await database;
+    final Database db = await _db();
     study.updatedAt = DateTime.now();
 
     return await db.insert('word_studies', study.toJson()..remove('id'),
@@ -61,7 +42,7 @@ Future<int> insertWordStudy(WordStudy study) async {
 
 Future<void> updateWordStudy(WordStudy study) async {
   try {
-    final Database db = await database;
+    final Database db = await _db();
     study.updatedAt = DateTime.now();
 
     await db.update('word_studies', study.toJson()..remove('id'),
@@ -74,7 +55,7 @@ Future<void> updateWordStudy(WordStudy study) async {
 
 Future<void> deleteWordStudy(WordStudy study) async {
   try {
-    final Database db = await database;
+    final Database db = await _db();
 
     await db.delete('word_studies', where: 'id = ?', whereArgs: [study.id]);
   } catch (error) {
@@ -85,7 +66,8 @@ Future<void> deleteWordStudy(WordStudy study) async {
 
 /// Word studies whose [passage] matches [passage] after [normalizePassageReference],
 /// newest [WordStudy.updatedAt] first.
-Future<List<WordStudy>> getWordStudiesMatchingPassageReference(String passage) async {
+Future<List<WordStudy>> getWordStudiesMatchingPassageReference(
+    String passage) async {
   try {
     final String key = normalizePassageReference(passage);
     if (key.isEmpty) {
@@ -111,7 +93,7 @@ Future<List<WordStudy>> getWordStudiesMatchingPassageReference(String passage) a
 /// deeper meaning, or application contains [text].
 Future<List<WordStudy>> getWordStudiesByText(String text) async {
   try {
-    final Database db = await database;
+    final Database db = await _db();
 
     final String like = '%$text%';
     final List<Map<String, dynamic>> maps = await db.query('word_studies',

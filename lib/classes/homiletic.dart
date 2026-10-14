@@ -3,9 +3,6 @@ import 'package:homiletics/classes/Division.dart';
 import 'package:homiletics/classes/application.dart';
 import 'package:homiletics/classes/content_summary.dart';
 import 'package:homiletics/classes/serialized_save.dart';
-import 'package:homiletics/storage/application_storage.dart';
-import 'package:homiletics/storage/content_summary_storage.dart';
-import 'package:homiletics/storage/division_storage.dart';
 import 'package:homiletics/storage/homiletic_storage.dart';
 
 /// The bread and butter of the app. The [Homiletic] is a collection of [Division]s, [ContentSummary]s, and [Application]s.
@@ -117,27 +114,26 @@ class Homiletic with SerializedSave {
   }
 
   /// Deletes the homiletic from the database, as well as its associated
-  /// [ContentSummary]s, [Application]s, and [Division]s.
+  /// [ContentSummary]s, [Application]s, and [Division]s, in one transaction.
+  /// Waits for any save in flight first, and makes later saves no-ops.
   ///
-  /// The homiletic row goes first: these live in separate databases, so if a
-  /// later step fails the worst case is orphaned children rather than a
-  /// homiletic that has silently lost its content. Calling this again
-  /// retries the child deletes.
+  /// (While storage is still on the legacy per-table files, the homiletic
+  /// row goes first: the worst case is orphaned children rather than a
+  /// homiletic that has silently lost its content, and calling this again
+  /// retries the child deletes.)
   Future<void> delete() {
     markDeleted();
     return serialize(() async {
       if (id == -1) return;
       try {
-        await deleteHomiletic(this);
+        await deleteHomileticWithChildren(id);
+      } on HomileticPartiallyDeletedException {
+        // The homiletic row is gone; stay deleted.
+        rethrow;
       } catch (_) {
         unmarkDeleted();
         rethrow;
       }
-      await Future.wait([
-        deleteSummaryByHomileticId(id),
-        deleteApplicationByHomileticId(id),
-        deleteDivisionByHomileticId(id),
-      ]);
     });
   }
 }

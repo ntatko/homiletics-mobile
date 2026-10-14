@@ -2,30 +2,15 @@ import 'dart:async';
 
 import 'package:homiletics/classes/content_summary.dart';
 import 'package:homiletics/common/report_error.dart';
-import 'package:path/path.dart';
+import 'package:homiletics/storage/app_storage.dart';
 import 'package:sqflite/sqflite.dart';
 
-final Future<Database> database = getDatabasesPath().then((String path) {
-  return openDatabase(
-    join(path, 'contentSummaries.db'),
-    onCreate: (db, version) {
-      return db.execute('''
-            CREATE TABLE content_summaries (
-              id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-              summary TEXT,
-              passage TEXT,
-              sort INTEGER,
-              homiletic_id INTEGER
-            )
-            ''');
-    },
-    version: 1,
-  );
-});
+/// The database holding the `content_summaries` table (see [AppStorage]).
+Future<Database> _db() => AppStorage.database('content_summaries');
 
 Future<List<ContentSummary>> getSummariesByHomileticId(int? id) async {
   try {
-    final Database db = await database;
+    final Database db = await _db();
 
     final List<Map<String, dynamic>> maps = await db.query('content_summaries',
         where: 'homiletic_id = ?', whereArgs: [id], orderBy: 'id');
@@ -43,7 +28,7 @@ Future<List<ContentSummary>> getSummariesByHomileticId(int? id) async {
 
 Future<int> insertSummary(ContentSummary summary) async {
   try {
-    final Database db = await database;
+    final Database db = await _db();
 
     return await db.insert('content_summaries', summary.toJson(),
         conflictAlgorithm: ConflictAlgorithm.replace);
@@ -55,7 +40,7 @@ Future<int> insertSummary(ContentSummary summary) async {
 
 Future<void> updateSummary(ContentSummary summary) async {
   try {
-    final Database db = await database;
+    final Database db = await _db();
 
     await db.update('content_summaries', summary.toJson()..remove('id'),
         where: 'id = ?', whereArgs: [summary.id]);
@@ -67,7 +52,7 @@ Future<void> updateSummary(ContentSummary summary) async {
 
 Future<void> deleteSummary(ContentSummary summary) async {
   try {
-    final Database db = await database;
+    final Database db = await _db();
 
     await db
         .delete('content_summaries', where: 'id = ?', whereArgs: [summary.id]);
@@ -79,7 +64,7 @@ Future<void> deleteSummary(ContentSummary summary) async {
 
 Future<void> deleteSummaryByHomileticId(int id) async {
   try {
-    final Database db = await database;
+    final Database db = await _db();
 
     await db.delete('content_summaries',
         where: 'homiletic_id = ?', whereArgs: [id]);
@@ -91,7 +76,7 @@ Future<void> deleteSummaryByHomileticId(int id) async {
 
 Future<List<ContentSummary>> getSummaryByText(String text) async {
   try {
-    final Database db = await database;
+    final Database db = await _db();
 
     final List<Map<String, dynamic>> maps = await db.query('content_summaries',
         where: 'summary LIKE ?', whereArgs: ['%$text%']);
