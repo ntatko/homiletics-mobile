@@ -23,7 +23,11 @@ import 'package:homiletics/theme/widgets.dart';
 import 'package:homiletics/theme/homiletics_widgets.dart';
 
 class HomileticEditor extends StatefulWidget {
-  const HomileticEditor({Key? key, this.homiletic}) : super(key: key);
+  const HomileticEditor({Key? key, this.homiletic, this.initialExpanded})
+      : super(key: key);
+
+  /// Steps to open on load instead of the first unfinished one.
+  final Set<StudyStep>? initialExpanded;
 
   final Homiletic? homiletic;
 
@@ -101,7 +105,11 @@ class _HomileticState extends State<HomileticEditor> {
         _applications = savedApplications.isNotEmpty
             ? savedApplications
             : [Application.blank(_thisHomiletic.id)];
-        if (!_userChoseStep) {
+        if (!_userChoseStep && widget.initialExpanded != null) {
+          _expanded
+            ..clear()
+            ..addAll(widget.initialExpanded!);
+        } else if (!_userChoseStep) {
           final StudyStep? firstOpen =
               StudyStep.values.where((step) => !_isDone(step)).firstOrNull;
           _expanded

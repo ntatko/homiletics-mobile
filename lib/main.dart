@@ -22,7 +22,19 @@ import 'package:path_provider/path_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  if (!await initializeApp()) return;
 
+  runApp(const MyApp());
+
+  // Not needed for the first frame (only the recording / model settings UI
+  // uses it), so don't delay startup. Reports its own errors.
+  unawaited(WhisperModelService.cleanUpConversionFiles());
+  unawaited(TranscriptFormatterService.initialize());
+}
+
+/// Opens local storage. Returns false (after showing [StartupErrorApp]) if
+/// the app can't run. Shared with lib/main_screenshots.dart.
+Future<bool> initializeApp() async {
   // Hive must be initialized and the preferences box opened before runApp —
   // the UI reads Preferences synchronously on first frame. Without it the app
   // can't work, so show an error screen instead of crashing later.
@@ -36,7 +48,7 @@ void main() async {
   } catch (error) {
     sendError(error, "main: Hive init");
     runApp(const StartupErrorApp());
-    return;
+    return false;
   }
 
   try {
@@ -44,7 +56,7 @@ void main() async {
   } catch (error) {
     sendError(error, "main: Preferences.init");
     runApp(const StartupErrorApp());
-    return;
+    return false;
   }
 
   // Opens the single database and, on the first launch after the upgrade,
@@ -58,7 +70,7 @@ void main() async {
     } catch (error) {
       sendError(error, "main: AppStorage.init");
       runApp(const StartupErrorApp());
-      return;
+      return false;
     }
   }
 
@@ -68,19 +80,21 @@ void main() async {
   } catch (error) {
     sendError(error, "main: SuggestedPassagesRepository.init");
   }
-
-  runApp(const MyApp());
-
-  // Not needed for the first frame (only the recording / model settings UI
-  // uses it), so don't delay startup. Reports its own errors.
-  unawaited(WhisperModelService.cleanUpConversionFiles());
-  unawaited(TranscriptFormatterService.initialize());
+  return true;
 }
 
 ThemeData _buildTheme(Brightness brightness) => buildAppTheme(brightness);
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  /// The first screen; Home unless a screenshot build picks another.
+  final Widget home;
+  final ThemeMode themeMode;
+
+  const MyApp({
+    Key? key,
+    this.home = const Home(),
+    this.themeMode = ThemeMode.system,
+  }) : super(key: key);
 
   // This widget is the root of your application.
   @override
@@ -103,8 +117,8 @@ class MyApp extends StatelessWidget {
         ],
         theme: _buildTheme(Brightness.light),
         darkTheme: _buildTheme(Brightness.dark),
-        themeMode: ThemeMode.system,
-        home: const Home(),
+        themeMode: themeMode,
+        home: home,
       ),
     );
   }

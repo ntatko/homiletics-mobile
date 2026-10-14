@@ -202,27 +202,28 @@ class _WordStudyEditorState extends State<WordStudyEditor> {
             ),
           ),
           const SizedBox(height: 10),
-          IntrinsicHeight(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Expanded(
-                  child: DefinitionCard(
-                    wordController: _wordController,
-                    controller: _definitionController,
-                    onChanged: _thisStudy.updateDefinition,
-                  ),
+          // Each card sizes to its own content: forcing equal heights
+          // (IntrinsicHeight) mis-measures the multi-line fields and
+          // overflows the taller card.
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: DefinitionCard(
+                  wordController: _wordController,
+                  controller: _definitionController,
+                  onChanged: _thisStudy.updateDefinition,
                 ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: OtherUsageCard(
-                    wordController: _wordController,
-                    controller: _otherUsageController,
-                    onChanged: _thisStudy.updateOtherUsage,
-                  ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: OtherUsageCard(
+                  wordController: _wordController,
+                  controller: _otherUsageController,
+                  onChanged: _thisStudy.updateOtherUsage,
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
           const SizedBox(height: 10),
           WordStudySectionCard(
