@@ -1,0 +1,826 @@
+{
+  "@@locale": "zh_Hant",
+  "prefsTitle": "偏好設定",
+  "prefsAppLanguage": "偏好語言",
+  "prefsBibleVersion": "偏好聖經譯本",
+  "bibleNewTestamentOnly": "僅有新約",
+  "appTitle": "Homiletics",
+  "commonCancel": "取消",
+  "commonOk": "確定",
+  "commonDelete": "刪除",
+  "commonDone": "完成",
+  "commonSave": "儲存",
+  "commonClose": "關閉",
+  "commonRetry": "重試",
+  "commonSomethingWentWrong": "發生錯誤，請稍後再試。",
+  "languageSystemDefault": "手機語言",
+  "stepContent": "內容摘要",
+  "stepDivisions": "段落劃分",
+  "stepSummary": "摘要句",
+  "stepFcf": "FCF",
+  "stepAim": "目標",
+  "stepApplication": "應用",
+  "stepShortContent": "內容",
+  "stepShortDivisions": "分段",
+  "stepShortSummary": "摘要",
+  "stepShortFcf": "FCF",
+  "stepShortAim": "目標",
+  "stepShortApplication": "應用",
+  "commonShare": "分享",
+  "commonPrint": "列印",
+  "commonPreferences": "偏好設定",
+  "commonUntitled": "未命名",
+  "homeSearchIntro": "搜尋你的講道大綱、段落劃分、應用問題、講課筆記和字詞研究。",
+  "homeSearchFieldHint": "搜尋課程、經文、筆記…",
+  "homeSearchTooltip": "搜尋",
+  "homeCloseSearch": "關閉搜尋",
+  "homeAllStudies": "所有查經",
+  "homeFilterByStudy": "依查經篩選",
+  "homeOpenStudySite": "開啟查經網站",
+  "homeThisWeek": "本週",
+  "homeEarlier": "先前",
+  "homeComingUp": "即將到來",
+  "homeWeekOverline": "{when} · {lesson}",
+  "@homeWeekOverline": {
+    "description": "Overline on a passage card: the week label (This week / Earlier / Coming up) followed by the lesson name from the study schedule. Shown in upper case on one line.",
+    "placeholders": {
+      "when": {
+        "type": "String"
+      },
+      "lesson": {
+        "type": "String"
+      }
+    }
+  },
+  "homeStartHomiletics": "開始講道大綱",
+  "homeContinueHomiletics": "繼續講道大綱",
+  "homeOpenHomiletics": "開啟講道大綱",
+  "homeLoadingPassages": "正在載入建議經文…",
+  "homeContinue": "繼續",
+  "homeSeeAll": "查看全部",
+  "homeLivingItOut": "活出真道",
+  "homeKindTileHomiletic": "講",
+  "homeKindTileWordStudy": "字",
+  "homeProgressNoneDone": "尚未完成任何步驟",
+  "homeProgressDone": "已完成：{steps}",
+  "@homeProgressDone": {
+    "description": "Screen-reader label for the homiletic step progress bar; {steps} is a comma-separated list of completed step names.",
+    "placeholders": {
+      "steps": {
+        "type": "String"
+      }
+    }
+  },
+  "homePageOf": "第{page}頁，共{count}頁",
+  "@homePageOf": {
+    "description": "Screen-reader label for the dots under the swipeable passage cards.",
+    "placeholders": {
+      "page": {
+        "type": "int"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homePageFraction": "{page} / {count}",
+  "@homePageFraction": {
+    "description": "Compact page indicator under the passage cards when there are too many pages for dots, e.g. '3 / 12'.",
+    "placeholders": {
+      "page": {
+        "type": "int"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "studiesTitle": "我的查經",
+  "studiesTabHomiletics": "講道大綱",
+  "studiesTabLectures": "講課",
+  "studiesTabWordStudies": "字詞研究",
+  "studiesNoHomiletics": "還沒有講道大綱。",
+  "studiesNoLectureNotes": "還沒有講課筆記。",
+  "studiesNoWordStudies": "還沒有字詞研究。",
+  "studiesNoApplications": "還沒有應用問題。",
+  "studiesProgressNotStarted": "尚未開始",
+  "studiesProgressAll": "全部{total}步",
+  "@studiesProgressAll": {
+    "description": "Homiletic progress summary when every step is done, e.g. 'All 6 steps'. Short.",
+    "placeholders": {
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "studiesProgressSome": "{done}/{total}步",
+  "@studiesProgressSome": {
+    "description": "Homiletic progress summary, e.g. '2 of 6 steps'. Short.",
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "studiesHomileticSubtitle": "講道大綱 · {progress} · {time}",
+  "@studiesHomileticSubtitle": {
+    "description": "Subtitle of a homiletic in a study list: kind, progress (e.g. '2 of 6 steps') and relative time (e.g. '3 days ago'). One line.",
+    "placeholders": {
+      "progress": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "studiesHomileticSubtitleNoProgress": "講道大綱 · {time}",
+  "@studiesHomileticSubtitleNoProgress": {
+    "description": "Subtitle of a homiletic in a study list while its progress loads; {time} is a relative time like '3 days ago'.",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "studiesLectureTitle": "{passage}講課",
+  "@studiesLectureTitle": {
+    "description": "Title of a lecture note in a study list; {passage} is a Bible reference like 'John 3:1-21'.",
+    "placeholders": {
+      "passage": {
+        "type": "String"
+      }
+    }
+  },
+  "studiesLectureUntitled": "講課",
+  "studiesLectureSubtitle": "講課筆記 · {time}",
+  "@studiesLectureSubtitle": {
+    "description": "Subtitle of a lecture note in a study list; {time} is a relative time like '3 days ago'.",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "studiesWordStudyUntitled": "字詞研究",
+  "studiesWordStudySubtitle": "字詞研究 · {time}",
+  "@studiesWordStudySubtitle": {
+    "description": "Subtitle of a word study in a study list; {time} is a relative time like '3 days ago'.",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "studiesWordStudySubtitleWithPassage": "字詞研究 · {passage} · {time}",
+  "@studiesWordStudySubtitleWithPassage": {
+    "description": "Subtitle of a word study in a study list; {passage} is a Bible reference, {time} a relative time like '3 days ago'.",
+    "placeholders": {
+      "passage": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "searchHint": "搜尋",
+  "searchSectionContentSummaries": "內容摘要",
+  "searchSectionDivisions": "段落劃分",
+  "searchSectionApplications": "應用問題",
+  "searchSectionAims": "目標",
+  "searchSectionSummarySentences": "摘要句",
+  "searchSectionPassages": "講道大綱經文",
+  "searchSectionLectureNotes": "講課筆記",
+  "searchSectionWordStudies": "字詞研究",
+  "searchOpenFailed": "無法開啟這個結果，它可能已被刪除。",
+  "settingsTitle": "設定",
+  "settingsSectionLanguage": "語言",
+  "settingsAppLanguage": "App 語言",
+  "settingsSectionReading": "閱讀",
+  "settingsSectionModels": "裝置端模型",
+  "settingsSectionHelp": "說明",
+  "settingsCopyright": "Copyright (C) {year} 13one.org · 版權所有",
+  "@settingsCopyright": {
+    "description": "Copyright line at the bottom of the settings page. Keep '13one.org' unchanged.",
+    "placeholders": {
+      "year": {
+        "type": "String"
+      }
+    }
+  },
+  "helpRequestFeedback": "尋求協助／提供意見",
+  "helpCopyright": "Copyright (C) {year} 13one.org",
+  "@helpCopyright": {
+    "description": "Copyright line at the foot of the home screen. Keep '13one.org' unchanged.",
+    "placeholders": {
+      "year": {
+        "type": "String"
+      }
+    }
+  },
+  "helpAllRightsReserved": "版權所有",
+  "feedbackTitle": "提供意見",
+  "feedbackPublicNotice": "你的意見會以公開的 GitHub issue 送出——網路上任何人都能閱讀。請勿填寫密碼或其他私人資訊。你的電子郵件在 GitHub 上會部分隱藏；我們可能會在伺服器上保留完整地址，僅用於後續聯繫。",
+  "feedbackTypeGeneral": "協助或意見",
+  "feedbackTypeTranslation": "翻譯問題",
+  "feedbackTranslationHint": "請告訴我們哪些字詞看起來不對，以及應該怎麼寫。我們會一併附上你的 App 語言和聖經譯本。",
+  "feedbackNameLabel": "姓名",
+  "feedbackEmailLabel": "電子郵件（選填）",
+  "feedbackContentLabel": "意見",
+  "feedbackSubmit": "送出",
+  "feedbackEmpty": "請先輸入你的意見。",
+  "feedbackSubmittedIssue": "已送出。你隨時可以在 GitHub 上開啟這個 issue 新增留言（不一定需要登入）。",
+  "feedbackOpenIssue": "開啟",
+  "feedbackSubmitted": "意見已成功送出",
+  "feedbackBadRequest": "無法送出這個請求，請檢查你的訊息後再試一次。",
+  "feedbackServerUnreachableTitle": "無法連線到伺服器",
+  "feedbackServerUnreachableBody": "請改用瀏覽器開啟 GitHub 來回報。你可能需要在那裡登入才能送出 issue。",
+  "feedbackNotNow": "以後再說",
+  "feedbackOpenGitHub": "開啟 GitHub",
+  "feedbackBrowserFailed": "無法開啟瀏覽器。",
+  "startHomiletics": "講道大綱",
+  "startLecture": "講課",
+  "startWordStudy": "字詞研究",
+  "startPassageHint": "查考其他經文…",
+  "startClear": "清除",
+  "startOtherStudy": "其他查經",
+  "startMenuLectureNote": "講課筆記",
+  "startMenuWordStudy": "字詞研究",
+  "startDuplicateHomileticTitle": "這段經文已經有講道大綱了？",
+  "startDuplicateHomileticMany": "{passage}\n\n這段經文你已有{count}份講道大綱；將開啟最近的一份。",
+  "@startDuplicateHomileticMany": {
+    "description": "Body of the duplicate-homiletic dialog when there are several; {passage} is a Bible reference. 'Edit existing' opens the most recent.",
+    "placeholders": {
+      "passage": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "startDuplicateLectureTitle": "這段經文已經有講課筆記了？",
+  "startDuplicateLectureMany": "{passage}\n\n這段經文你已有{count}份講課筆記；將開啟最近的一份。",
+  "@startDuplicateLectureMany": {
+    "description": "Body of the duplicate-lecture-notes dialog when there are several; {passage} is a Bible reference.",
+    "placeholders": {
+      "passage": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "startDuplicateWordStudyTitle": "這段經文已經有字詞研究了？",
+  "startDuplicateWordStudyMany": "{passage}\n\n這段經文你已有{count}份字詞研究；將開啟最近的一份。",
+  "@startDuplicateWordStudyMany": {
+    "description": "Body of the duplicate-word-study dialog when there are several; {passage} is a Bible reference.",
+    "placeholders": {
+      "passage": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "startCreateNew": "建立新的",
+  "startEditExisting": "編輯現有的",
+  "homileticHeaderLabel": "講道大綱 · 經文",
+  "homileticItemName": "講道大綱",
+  "homileticDeletedMessage": "講道大綱已刪除",
+  "homileticLoadError": "載入這份講道大綱時發生錯誤。",
+  "homileticPdfShared": "PDF 已成功分享。",
+  "homileticPdfShareFailed": "分享 PDF 時發生錯誤，請稍後再試。",
+  "homileticPdfPrinted": "PDF 已成功列印。",
+  "homileticPdfPrintFailed": "建立 PDF 時發生錯誤，請稍後再試。",
+  "homileticCompleteTitle": "六個步驟都完成了",
+  "homileticCompleteMessage": "列印出來帶去上課，或分享給你的小組。",
+  "homileticContentEmptySummary": "經節＋摘要",
+  "homileticDivisionsEmptySummary": "分成2–4段",
+  "homileticSummaryEmptySummary": "≤ 20字",
+  "homileticFcfEmptySummary": "墮落景況焦點",
+  "homileticAimEmptySummary": "最主要的信息",
+  "homileticApplicationEmptySummary": "我可以如何…",
+  "homileticStepStatusDone": "已完成",
+  "homileticStepStatusToDo": "待完成",
+  "homileticStepCollapseLabel": "{title}，收合",
+  "@homileticStepCollapseLabel": {
+    "description": "Screen-reader label of an open step's header; tapping it closes the step.",
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Divisions"
+      }
+    }
+  },
+  "homileticStepHelpLabel": "關於{title}",
+  "@homileticStepHelpLabel": {
+    "description": "Tooltip and screen-reader label of the '?' button that explains a homiletic step.",
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Divisions"
+      }
+    }
+  },
+  "homileticVersesLabel": "經節",
+  "homileticVersesHint": "節",
+  "homileticAddButtonLabel": "+ {label}",
+  "@homileticAddButtonLabel": {
+    "description": "Text of the dashed add button under a list step; {label} is e.g. 'Add summary'. Keep the plus sign unless your language puts it elsewhere.",
+    "placeholders": {
+      "label": {
+        "type": "String",
+        "example": "Add summary"
+      }
+    }
+  },
+  "homileticRemoveRowMessage": "你在這裡寫的內容將被刪除。",
+  "homileticRemoveRowConfirm": "移除",
+  "homileticContentSummaryHint": "摘要…",
+  "homileticAddContentSummary": "新增摘要",
+  "homileticRemoveContentSummaryTooltip": "移除內容摘要",
+  "homileticRemoveContentSummaryTitle": "要移除這則內容摘要嗎？",
+  "homileticRemoveContentSummaryFailed": "無法移除這則內容摘要",
+  "homileticDivisionHint": "分段句…",
+  "homileticAddDivision": "新增分段",
+  "homileticRemoveDivisionTooltip": "移除分段",
+  "homileticRemoveDivisionTitle": "要移除這個分段嗎？",
+  "homileticRemoveDivisionFailed": "無法移除這個分段",
+  "homileticApplicationHint": "我可以如何…",
+  "homileticAddApplication": "新增問題",
+  "homileticRemoveApplicationTooltip": "移除應用問題",
+  "homileticRemoveApplicationTitle": "要移除這個應用問題嗎？",
+  "homileticRemoveApplicationFailed": "無法移除這個應用問題",
+  "homileticSummaryHint": "用一句話概括（20字以內）",
+  "homileticFcfHint": "墮落／軟弱／無力／善變",
+  "homileticAimHint": "使聽眾明白…",
+  "homileticContentHelpTitle": "內容摘要",
+  "homileticContentHelpText": "內容摘要是針對一段聖經經文所寫的摘要。它不一定要是一個完整的句子，也可以超過一句。它應該用你自己的話，概括這段經文的內容。\n你應該寫至少10則、但不超過20則內容摘要。一般來說，視經文長短而定，你可以把經文切成大小差不多的段落，讓總數落在10到20則之間。例如經文有30節，我會試著平均每3節寫一則內容摘要。",
+  "homileticDivisionsHelpText": "段落劃分是把彼此相關的經節歸為一組。至少要分成兩段，最多不超過四段。",
+  "homileticSummaryHelpTitle": "摘要句",
+  "homileticSummaryHelpText": "摘要句是一句簡潔、好記的話，概括這段經文中最重要的事實。一個好方法是「凌晨兩點測試」：如果有人在凌晨兩點把你叫醒，問你這篇講道在講什麼，你會怎麼回答？你說出口的那句話就是摘要句。\n它應該簡短，大約20字以內。如果你有興致，也可以試著讓它押韻或對仗。",
+  "homileticFcfHelpText": "FCF（墮落景況焦點）是這段經文中最突顯或最常提到的人性狀況。它是聽眾所處的景況，也是聽眾需要被拯救的原因。",
+  "homileticAimHelpText": "目標是重點，是你希望自己或聽眾帶走的那一個最主要的真理。它可能可以從FCF推導出來，而且很可能會影響應用問題。",
+  "homileticApplicationHelpTitle": "應用問題",
+  "homileticApplicationHelpText": "這些問題幫助聽眾把剛聽到的內容應用在自己的生活中。問題應該具體、切身、開放，並且引人深思。",
+  "homileticSummaryCount": "{count, plural, other{{count}則摘要}}",
+  "@homileticSummaryCount": {
+    "description": "Shown on the collapsed Content step: how many content summaries are written.",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "homileticDivisionCount": "{count, plural, other{{count}個分段}}",
+  "@homileticDivisionCount": {
+    "description": "Shown on the collapsed Divisions step: how many divisions are written.",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "homileticQuestionCount": "{count, plural, other{{count}個問題}}",
+  "@homileticQuestionCount": {
+    "description": "Shown on the collapsed Application step: how many application questions are written.",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "homileticStepTileLabel": "{title}，{status}",
+  "@homileticStepTileLabel": {
+    "description": "Screen-reader label of a collapsed step in compact layout. {status} is 'done' or 'to do'.",
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Aim"
+      },
+      "status": {
+        "type": "String",
+        "example": "done"
+      }
+    }
+  },
+  "homileticStepTileLabelWithSummary": "{title}，{status}，{summary}",
+  "@homileticStepTileLabelWithSummary": {
+    "description": "Screen-reader label of a collapsed step. {status} is 'done' or 'to do'; {summary} is the short text on the right (e.g. '3 summaries' or the user's text).",
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Content"
+      },
+      "status": {
+        "type": "String",
+        "example": "done"
+      },
+      "summary": {
+        "type": "String",
+        "example": "3 summaries"
+      }
+    }
+  },
+  "lectureItemName": "講課筆記",
+  "lectureDeleted": "講課筆記已刪除",
+  "lecturePassageHint": "經文",
+  "lectureHeaderLabel": "講課 · 經文",
+  "lectureNotesPlaceholder": "筆記",
+  "lectureToolbarBold": "粗體",
+  "lectureToolbarItalic": "斜體",
+  "lectureToolbarBulletedList": "項目符號清單",
+  "lectureToolbarNumberedList": "編號清單",
+  "lectureReplaceTitle": "要取代現有的錄音嗎？",
+  "lectureReplaceMessage": "舊的錄音和逐字稿將被刪除。",
+  "lectureReplaceConfirm": "取代",
+  "lectureMicPermissionRequired": "需要麥克風權限才能錄音。",
+  "lectureNotificationTitle": "正在錄製講課",
+  "lectureNotificationContent": "{appName}正在錄音",
+  "@lectureNotificationContent": {
+    "description": "Text of the Android ongoing notification shown while recording.",
+    "placeholders": {
+      "appName": {
+        "type": "String",
+        "example": "Homiletics"
+      }
+    }
+  },
+  "lectureStartFailed": "無法開始錄音。麥克風可能正被其他 App 使用。",
+  "lectureTranscriptionModelTitle": "要下載離線轉錄模型嗎？",
+  "lectureTranscriptionModelMessage": "只需下載一次（約140MB），你的錄音就能自動轉成文字並可供搜尋。你可以先略過，之後再到「設定」下載。",
+  "lectureNotNow": "以後再說",
+  "lectureDownload": "下載",
+  "lectureModelDownloadFailed": "下載模型時發生錯誤。你可以到「設定」再試一次。",
+  "lectureRecordingFileNotFound": "找不到錄音檔案。",
+  "lectureTranscriptionEmpty": "轉錄沒有產生任何文字。",
+  "lectureFormattingModelTitle": "要下載逐字稿整理模型嗎？",
+  "lectureFormattingModelMessage": "只需下載一次（{size}），就能在你的裝置上把逐字稿整理成易讀的段落，完全不需上傳。建議使用 Wi-Fi。你也可以之後再到「設定」下載。",
+  "@lectureFormattingModelMessage": {
+    "description": "Body of the formatting-model download dialog. {size} is the approximate download size.",
+    "placeholders": {
+      "size": {
+        "type": "String",
+        "example": "~1.6GB"
+      }
+    }
+  },
+  "lectureFormattingModelMissing": "尚未下載整理模型。",
+  "lectureFormattingFailed": "無法整理逐字稿。",
+  "lecturePlaybackFailed": "無法播放錄音。",
+  "lectureDownloadingModel": "正在下載模型 {percent}%",
+  "@lectureDownloadingModel": {
+    "description": "Progress line on the recording bar while a model downloads. Keep short (~30 chars).",
+    "placeholders": {
+      "percent": {
+        "type": "String",
+        "example": "42"
+      }
+    }
+  },
+  "lectureTranscribingProgress": "正在轉錄 {percent}%",
+  "@lectureTranscribingProgress": {
+    "description": "Progress line on the recording bar while the recording is transcribed. Keep short (~30 chars).",
+    "placeholders": {
+      "percent": {
+        "type": "int",
+        "example": "42"
+      }
+    }
+  },
+  "lectureFormattingProgress": "正在整理逐字稿 {done}/{total}",
+  "@lectureFormattingProgress": {
+    "description": "Progress line while the transcript is formatted, in chunks done/total. Keep short (~30 chars).",
+    "placeholders": {
+      "done": {
+        "type": "int",
+        "example": "3"
+      },
+      "total": {
+        "type": "int",
+        "example": "8"
+      }
+    }
+  },
+  "lectureFormattingIndeterminate": "正在整理逐字稿…",
+  "lectureRecordingSemantics": "錄音中，{time}",
+  "@lectureRecordingSemantics": {
+    "description": "Screen-reader label for the live recording clock. {time} is elapsed mm:ss.",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "example": "14:02"
+      }
+    }
+  },
+  "lectureRecordingSubtitle": "錄音中 · 關閉螢幕也會繼續錄",
+  "lectureStopRecording": "停止錄音",
+  "lectureRecordLecture": "錄製講課",
+  "lectureRecordIdleSubtitle": "關閉螢幕也會繼續錄音",
+  "lecturePause": "暫停",
+  "lecturePlayRecording": "播放錄音",
+  "lectureRecordAgain": "重新錄音",
+  "lectureNotTranscribedYet": "尚未轉錄",
+  "lectureTranscribe": "轉錄",
+  "lectureTimeMark": "+ 時間標記",
+  "lectureTranscriptEmptyRecording": "停止錄音後，講課內容會在這支手機上轉錄成文字。",
+  "lectureTranscriptEmptyPending": "逐字稿完成後會顯示在這裡。",
+  "lectureTranscriptEmptyNotTranscribed": "轉錄錄音後，就能在這裡閱讀和搜尋。",
+  "lectureTranscriptEmptyNoRecording": "錄製講課後，停止錄音時就會在這支手機上轉錄成文字。",
+  "lectureTranscribing": "正在轉錄…",
+  "lectureNoTranscriptYet": "還沒有逐字稿",
+  "lectureFormatted": "已整理",
+  "lectureRaw": "原始",
+  "lectureFormatTranscript": "整理逐字稿",
+  "lectureTabMyNotes": "我的筆記",
+  "lectureTabTranscript": "逐字稿",
+  "modelTranscriptionTitle": "離線轉錄模型",
+  "modelTranscriptionEnglishNeeded": "英文模型，{language}需要使用",
+  "@modelTranscriptionEnglishNeeded": {
+    "description": "Settings card detail: this is the English-only speech-to-text model, and it is the one the current app language uses.",
+    "placeholders": {
+      "language": {
+        "type": "String",
+        "example": "English"
+      }
+    }
+  },
+  "modelTranscriptionEnglishNotNeeded": "英文模型，{language}不需要使用",
+  "@modelTranscriptionEnglishNotNeeded": {
+    "description": "Settings card detail: this is the English-only speech-to-text model, which the current app language does not use (it can be deleted to save space).",
+    "placeholders": {
+      "language": {
+        "type": "String",
+        "example": "Español"
+      }
+    }
+  },
+  "modelTranscriptionMultilingualNeeded": "多語言模型，{language}需要使用",
+  "@modelTranscriptionMultilingualNeeded": {
+    "description": "Settings card detail: this is the multilingual speech-to-text model, and it is the one the current app language uses.",
+    "placeholders": {
+      "language": {
+        "type": "String",
+        "example": "Español"
+      }
+    }
+  },
+  "modelTranscriptionMultilingualNotNeeded": "多語言模型，{language}不需要使用",
+  "@modelTranscriptionMultilingualNotNeeded": {
+    "description": "Settings card detail: this is the multilingual speech-to-text model, which the current app language does not use (it can be deleted to save space).",
+    "placeholders": {
+      "language": {
+        "type": "String",
+        "example": "English"
+      }
+    }
+  },
+  "modelFormattingTitle": "逐字稿整理模型",
+  "modelAppleIntelligenceStatus": "使用 Apple Intelligence（不需下載）",
+  "modelStatusChecking": "正在檢查…",
+  "modelStatusNotDownloaded": "未下載（{size}）",
+  "@modelStatusNotDownloaded": {
+    "description": "Model card status when the model is not downloaded; size is the approximate download size.",
+    "placeholders": {
+      "size": {
+        "type": "String",
+        "example": "~140MB"
+      }
+    }
+  },
+  "modelStatusDownloading": "正在下載… {percent}%",
+  "@modelStatusDownloading": {
+    "description": "Model card status while the model downloads.",
+    "placeholders": {
+      "percent": {
+        "type": "String",
+        "example": "42"
+      }
+    }
+  },
+  "modelStatusDownloaded": "已下載",
+  "modelStatusDownloadedSize": "已下載（{megabytes}MB）",
+  "@modelStatusDownloadedSize": {
+    "description": "Model card status when the model is downloaded, with its size on the device in megabytes.",
+    "placeholders": {
+      "megabytes": {
+        "type": "String",
+        "example": "142"
+      }
+    }
+  },
+  "modelDownload": "下載",
+  "modelDelete": "刪除",
+  "modelDownloadFailed": "下載模型時發生錯誤，請稍後再試。",
+  "modelDeleteFailed": "刪除模型時發生錯誤。",
+  "pdfOverlineHomiletics": "講道大綱",
+  "pdfOverlineWordStudy": "字詞研究",
+  "pdfUntitledPassage": "未命名經文",
+  "pdfUntitledWord": "未命名字詞",
+  "pdfHomileticLabel": "講道大綱 · {passage}",
+  "@pdfHomileticLabel": {
+    "description": "Document title and running page footer of a printed homiletic handout. 'Homiletics' is the app name / method name.",
+    "placeholders": {
+      "passage": {
+        "type": "String",
+        "example": "Revelation 2:1–11"
+      }
+    }
+  },
+  "pdfWordStudyLabel": "字詞研究 · {word}",
+  "@pdfWordStudyLabel": {
+    "description": "Document title and running page footer of a printed word-study handout with no passage.",
+    "placeholders": {
+      "word": {
+        "type": "String",
+        "example": "Lampstand"
+      }
+    }
+  },
+  "pdfWordStudyLabelWithPassage": "字詞研究 · {word} · {passage}",
+  "@pdfWordStudyLabelWithPassage": {
+    "description": "Document title and running page footer of a printed word-study handout: the word studied and the Bible passage it comes from.",
+    "placeholders": {
+      "word": {
+        "type": "String",
+        "example": "Lampstand"
+      },
+      "passage": {
+        "type": "String",
+        "example": "Revelation 2:1–7"
+      }
+    }
+  },
+  "pdfPageOf": "第{current}頁，共{total}頁",
+  "@pdfPageOf": {
+    "description": "Page number in the footer of a printed handout (lowercase in English).",
+    "placeholders": {
+      "current": {
+        "type": "int",
+        "example": "1"
+      },
+      "total": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "pdfFcfCaption": "墮落景況焦點",
+  "pdfAimLeadIn": "使聽眾明白",
+  "pdfEmptyHomiletic": "這段經文還沒有寫任何內容。",
+  "pdfEmptyWordStudy": "這份字詞研究還沒有寫任何內容。",
+  "pdfWordStudyDefinition": "定義",
+  "pdfWordStudyOtherUsage": "其他用法",
+  "pdfWordStudyContextualMeaning": "上下文含義",
+  "pdfWordStudyDeeperMeaning": "深層含義",
+  "pdfWordStudyApplication": "應用",
+  "editorSaveAndClose": "儲存並關閉",
+  "editorDeleteConfirmTitle": "確定嗎？",
+  "editorDeleteConfirmMessage": "刪除這份{itemName}後將無法復原。確定要繼續嗎？",
+  "@editorDeleteConfirmMessage": {
+    "description": "Body of the delete confirmation dialog in a study editor.",
+    "placeholders": {
+      "itemName": {
+        "type": "String",
+        "example": "Word Study",
+        "description": "Name of the kind of study being deleted, e.g. 'Word Study' or 'Lecture Note' (already localized)."
+      }
+    }
+  },
+  "editorPassageLabel": "經文",
+  "editorAddPassageHint": "新增經文",
+  "editorBack": "返回",
+  "editorMoreOptions": "更多選項",
+  "editorChangeTranslation": "更換譯本",
+  "editorStudyCompleteMessage": "列印出來帶去上課，或分享給你的小組。",
+  "wordStudyItemName": "字詞研究",
+  "wordStudyDeleted": "字詞研究已刪除",
+  "wordStudyHeaderLabel": "字詞研究 · 經文",
+  "wordStudyPdfShared": "PDF 已成功分享。",
+  "wordStudyPdfShareFailed": "分享 PDF 時發生錯誤，請稍後再試。",
+  "wordStudyPdfPrinted": "PDF 已成功列印。",
+  "wordStudyPdfPrintFailed": "建立 PDF 時發生錯誤，請稍後再試。",
+  "wordStudyWordTitle": "字詞",
+  "wordStudyWordHelp": "你要研究的特定字詞或短語。輸入之後，「定義」和「其他用法」可以為你建議內容。",
+  "wordStudyWordHint": "新增字詞",
+  "wordStudyEnterWordFirst": "請先在上方輸入字詞。",
+  "wordStudyDefinitionTitle": "定義",
+  "wordStudyDefinitionHelp": "這個字詞用淺白的話來說是什麼意思？點「+」查看從字典找到的候選定義，或自己寫。",
+  "wordStudyDefinitionHelpNoSuggest": "這個字詞用淺白的話來說是什麼意思？請自己寫下來。",
+  "wordStudyDefinitionHint": "用淺白的話來說，它是什麼意思？",
+  "wordStudySuggestDefinition": "建議定義",
+  "wordStudyDefinitionsFor": "「{word}」的定義",
+  "@wordStudyDefinitionsFor": {
+    "description": "Title of the sheet listing dictionary definitions.",
+    "placeholders": {
+      "word": {
+        "type": "String",
+        "example": "grace",
+        "description": "The word being studied, as typed by the user."
+      }
+    }
+  },
+  "wordStudyDefinitionsTapToUse": "點一個來使用。",
+  "wordStudyDefinitionsLoadError": "無法載入定義，請稍後再試。",
+  "wordStudyNoDefinitions": "找不到這個字詞的定義。",
+  "wordStudyReplaceDefinitionTitle": "要取代你的定義嗎？",
+  "wordStudyReplaceDefinitionMessage": "你已經寫了定義。要用建議內容取代它，還是把建議內容加在下方？",
+  "wordStudyAddBelow": "加在下方",
+  "wordStudyReplace": "取代",
+  "wordStudyOtherUsageTitle": "其他用法",
+  "wordStudyOtherUsageHelp": "這個字詞或概念在聖經其他地方還出現在哪裡？點「+」搜尋 Bible Gateway，加入你找到的經文出處，或自己寫。",
+  "wordStudyOtherUsageHint": "它在聖經其他地方還出現在哪裡？",
+  "wordStudyFindOtherUsages": "尋找其他用法",
+  "wordStudyOtherUsageSheetTitle": "「{word}」還出現在哪裡",
+  "@wordStudyOtherUsageSheetTitle": {
+    "description": "Title of the Bible search sheet for other usages of the word.",
+    "placeholders": {
+      "word": {
+        "type": "String",
+        "example": "grace",
+        "description": "The word being studied, as typed by the user."
+      }
+    }
+  },
+  "wordStudyOtherUsageAdded": "已加入",
+  "wordStudyOtherUsageInstructions": "點下方的結果來加入它的經文出處。",
+  "wordStudyOtherUsageAddResult": "+ 加入",
+  "wordStudyContextualMeaningTitle": "上下文含義",
+  "wordStudyContextualMeaningHelp": "作者在這段經文裡，想用這個字詞表達什麼意思？請考慮上下文的經節，而不是只看這個字詞本身。",
+  "wordStudyContextualMeaningHint": "它在這段經文裡是什麼意思？",
+  "wordStudyDeeperMeaningTitle": "深層含義",
+  "wordStudyDeeperMeaningHelp": "有沒有來自原文、註釋書或其他研讀資料的洞見，能在基本定義之外帶來更深的理解？聖經其他部分如何塑造它的意義？Strong's 經文彙編或 Blue Letter Bible 在這裡會有幫助。",
+  "wordStudyDeeperMeaningHint": "聖經其他部分如何塑造它的意義？",
+  "wordStudyApplicationTitle": "應用",
+  "wordStudyApplicationHelp": "這個真理應該如何塑造你的生活？要具體、切身、實際。",
+  "wordStudyApplicationHint": "你要如何實踐？",
+  "wordStudyDoneTitle": "字詞研究完成",
+  "wordStudySectionHelpSemantics": "{title}，關於這個部分",
+  "@wordStudySectionHelpSemantics": {
+    "description": "Screen reader label for a section title that opens its help text.",
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Definition",
+        "description": "The section's title."
+      }
+    }
+  },
+  "lectureTimeMarkNoRecording": "此筆記沒有可播放的錄音。",
+  "lectureTimeMarkStopRecordingFirst": "請先停止錄音，再從時間標記處播放。",
+  "lectureTimeMarkPastEnd": "該時間標記超出了錄音的長度。",
+  "onboardingSkip": "跳過",
+  "onboardingBack": "上一步",
+  "onboardingNext": "下一步",
+  "onboardingWelcomeOverline": "歡迎",
+  "onboardingWelcomeTitle": "一次一段經文，好好查考聖經",
+  "onboardingWelcomeBody": "這個應用程式幫助你寫講道大綱、做講課筆記和字詞研究——經文始終就在旁邊，用你的語言和你選擇的聖經譯本。",
+  "onboardingMethodOverline": "方法",
+  "onboardingMethodTitle": "什麼是講道大綱？",
+  "onboardingMethodBody": "講道大綱是一種簡短的查經方法：找出經文的中心信息，再思考如何活出來。共有六個步驟——不需要做得完美，每週都會越來越順手。",
+  "onboardingStepsOverline": "逐步進行",
+  "onboardingStepsTitle": "六個步驟",
+  "onboardingStepContent": "用自己的話，把經文概括成10到20個簡短的小段。",
+  "onboardingStepDivisions": "把這些小段歸納成2到4個部分。",
+  "onboardingStepSummary": "用不超過20個字概括整段經文。",
+  "onboardingStepFcf": "墮落景況焦點：經文所針對的人的需要或破碎。",
+  "onboardingStepAim": "你希望聽眾學到的那個核心真理。",
+  "onboardingStepApplication": "幫助人把經文活在日常生活中的問題。",
+  "onboardingLecturesOverline": "講課與字詞研究",
+  "onboardingLecturesTitle": "用心聆聽，深入挖掘",
+  "onboardingLecturesBody": "錄下講課——關閉螢幕也會繼續錄音，並直接在手機上轉成文字。一邊聽一邊做筆記，加上時間標記，方便以後找到那一刻。",
+  "onboardingWordStudyBody": "對某個詞感到好奇？開始一個字詞研究，深入了解它在經文中的意思。",
+  "onboardingStartOverline": "開始",
+  "onboardingStartTitle": "你已準備好開始了",
+  "onboardingStartBody": "從本週的經文開始，或者先四處看看。你寫下的每一步都會自動儲存。",
+  "onboardingReopenHint": "你隨時可以在設定中再次開啟本指南。",
+  "onboardingStartThisWeek": "開始本週的講道大綱",
+  "onboardingExplore": "自己先看看",
+  "onboardingThisWeekPassage": "本週：{passage}",
+  "onboardingSettingsRow": "講道大綱怎麼做",
+  "bibleOfflineSize": "可離線 · {size}",
+  "bibleDownloadedSize": "已下載 · {size}",
+  "bibleDownloadAction": "下載以離線使用",
+  "bibleDownloading": "正在下載…",
+  "bibleRemoveDownload": "刪除下載",
+  "bibleDownloadFailed": "無法下載 {translation}。請檢查網路後再試一次。",
+  "bibleOfflineTitle": "沒有網路連線",
+  "bibleOfflineMessage": "這段經文來自 Bible Gateway，需要連上網路。下載 {translation} 後可隨時閱讀。",
+  "bibleOfflineNoDownloadMessage": "這段經文來自 Bible Gateway，需要連上網路。請連線後再試一次。",
+  "bibleTryAgain": "再試一次",
+  "bibleNeedsDownloadTitle": "下載 {translation}",
+  "bibleNeedsDownloadMessage": "這本聖經從你的裝置讀取。下載一次（約 {size}）即可查看經文。",
+  "bibleNotInTranslation": "在 {translation} 中找不到這段經文。",
+  "bibleVerseTapTip": "提示：點按經節編號，即可從該節開始寫摘要。",
+  "bibleVerseTapLabel": "從第 {verse} 節開始寫摘要"
+}

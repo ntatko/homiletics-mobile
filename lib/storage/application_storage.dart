@@ -2,32 +2,19 @@ import 'dart:async';
 
 import 'package:homiletics/classes/application.dart';
 import 'package:homiletics/common/report_error.dart';
+import 'package:homiletics/storage/app_storage.dart';
 import 'package:homiletics/storage/homiletic_storage.dart';
-import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
-final Future<Database> database = getDatabasesPath().then((String path) {
-  return openDatabase(
-    join(path, 'applications.db'),
-    onCreate: (db, version) {
-      return db.execute('''
-            CREATE TABLE applications (
-              id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-              text TEXT,
-              homiletic_id INTEGER
-            )
-            ''');
-    },
-    version: 1,
-  );
-});
+/// The database holding the `applications` table (see [AppStorage]).
+Future<Database> _db() => AppStorage.database('applications');
 
 Future<List<Application>> getApplicationsByHomileticId(int? id) async {
   try {
-    final Database db = await database;
+    final Database db = await _db();
 
-    final List<Map<String, dynamic>> maps = await db
-        .query('applications', where: 'homiletic_id = ?', whereArgs: [id]);
+    final List<Map<String, dynamic>> maps = await db.query('applications',
+        where: 'homiletic_id = ?', whereArgs: [id], orderBy: 'id');
 
     if (maps.isEmpty) {
       return [];
@@ -40,21 +27,9 @@ Future<List<Application>> getApplicationsByHomileticId(int? id) async {
   }
 }
 
-Future<void> resetApplicationsTable() async {
-  final Database db = await database;
-  await db.execute("DROP TABLE IF EXISTS applications ");
-  await db.execute('''
-            CREATE TABLE applications (
-              id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-              text TEXT,
-              homiletic_id INTEGER
-            )
-            ''');
-}
-
 Future<int> insertApplication(Application application) async {
   try {
-    final Database db = await database;
+    final Database db = await _db();
 
     return await db.insert('applications', application.toJson(),
         conflictAlgorithm: ConflictAlgorithm.replace);
@@ -66,7 +41,7 @@ Future<int> insertApplication(Application application) async {
 
 Future<void> updateApplication(Application application) async {
   try {
-    final Database db = await database;
+    final Database db = await _db();
 
     await db.update('applications', application.toJson()..remove('id'),
         where: 'id = ?', whereArgs: [application.id]);
@@ -78,7 +53,7 @@ Future<void> updateApplication(Application application) async {
 
 Future<void> deleteApplication(Application application) async {
   try {
-    final Database db = await database;
+    final Database db = await _db();
 
     await db
         .delete('applications', where: 'id = ?', whereArgs: [application.id]);
@@ -88,14 +63,11 @@ Future<void> deleteApplication(Application application) async {
   }
 }
 
-Future<List<Application>> deleteApplicationByHomileticId(int id) async {
+Future<void> deleteApplicationByHomileticId(int id) async {
   try {
-    final Database db = await database;
-
-    List<Application> things = await getApplicationsByHomileticId(id);
+    final Database db = await _db();
 
     await db.delete('applications', where: 'homiletic_id = ?', whereArgs: [id]);
-    return things;
   } catch (error) {
     sendError(error, "deleteApplicationByHomileticId");
     throw Exception("Failed to delete applications by homiletic ID");
@@ -104,7 +76,7 @@ Future<List<Application>> deleteApplicationByHomileticId(int id) async {
 
 Future<List<Application>> getAllApplications() async {
   try {
-    final Database db = await database;
+    final Database db = await _db();
 
     final List<Map<String, dynamic>> maps = await db.query('applications');
 
@@ -144,7 +116,7 @@ Future<List<Application>> getAllApplicationsWithPassages() async {
 
 Future<List<Application>> getApplicationsByText(String text) async {
   try {
-    final Database db = await database;
+    final Database db = await _db();
 
     final List<Map<String, dynamic>> maps = await db
         .query('applications', where: 'text LIKE ?', whereArgs: ['%$text%']);

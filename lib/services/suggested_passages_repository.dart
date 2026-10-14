@@ -23,9 +23,12 @@ class SuggestedPassagesRepository {
       final decoded = jsonDecode(body) as Map<String, dynamic>;
       final data = decoded['data'] as List<dynamic>?;
       if (data == null) return null;
+      final Object? studies = decoded['studies'];
       final list = data
-          .map((e) =>
-              PassageSchedule.fromJson(Map<String, dynamic>.from(e as Map)))
+          .map((e) => PassageSchedule.fromJson(
+              Map<String, dynamic>.from(e as Map),
+              studies:
+                  studies is Map ? Map<String, dynamic>.from(studies) : null))
           .toList();
       list.sort((a, b) => a.rollout.compareTo(b.rollout));
       return list;
@@ -65,13 +68,11 @@ class SuggestedPassagesRepository {
     }
 
     try {
-      final response =
-          await http.get(Uri.parse(kSuggestedPassagesUrl)).timeout(
-                const Duration(seconds: 30),
-              );
+      final response = await http.get(Uri.parse(kSuggestedPassagesUrl)).timeout(
+            const Duration(seconds: 30),
+          );
       if (response.statusCode != 200) {
-        throw Exception(
-            'Suggested passages HTTP ${response.statusCode}');
+        throw Exception('Suggested passages HTTP ${response.statusCode}');
       }
       final parsed = _parseBody(response.body);
       if (parsed == null) {

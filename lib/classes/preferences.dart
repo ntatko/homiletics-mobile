@@ -1,4 +1,6 @@
+import 'package:flutter/widgets.dart';
 import 'package:hive/hive.dart';
+import 'package:homiletics/classes/language.dart';
 import 'package:homiletics/classes/translation.dart';
 
 class Preferences {
@@ -6,32 +8,47 @@ class Preferences {
 
   static const String _boxKey = 'user';
   static const String _preferredVersionKey = 'preferredVersion';
-  static const String _preferredLanguageKey = 'preferredLanguage';
   static const String _hasSeenTranscriptionPromptKey =
       'hasSeenTranscriptionPrompt';
   static const String _hasSeenFormattingPromptKey = 'hasSeenFormattingPrompt';
+  static const String _appLanguageKey = 'appLanguage';
+  static const String _hasSeenOnboardingKey = 'hasSeenOnboarding';
+
+  /// The interface language the user picked, or null to follow the phone.
+  /// MaterialApp listens to this so a change applies immediately.
+  static final ValueNotifier<Language?> appLanguageNotifier =
+      ValueNotifier<Language?>(null);
 
   static Future<void> init() async {
     await Hive.openBox(_boxKey);
+    appLanguageNotifier.value =
+        Language.fromCode(Hive.box(_boxKey).get(_appLanguageKey) as String?);
   }
 
-  static String get preferredVersion =>
-      Hive.box(_boxKey).get(_preferredVersionKey) ?? Translation.web.code;
+  /// The user's chosen interface language, or null to follow the phone.
+  static Language? get appLanguage => appLanguageNotifier.value;
 
-  static Translation get translation {
-    return Translation.all.firstWhere(
-        (translation) => translation.code == preferredVersion,
-        orElse: () => Translation.web);
+  static set appLanguage(Language? language) {
+    Hive.box(_boxKey).put(_appLanguageKey, language?.code);
+    appLanguageNotifier.value = language;
   }
 
-  static String get preferredLanguage =>
-      Hive.box(_boxKey).get(_preferredLanguageKey) ?? 'en';
+  /// The language the interface is actually shown in.
+  static Language get effectiveLanguage =>
+      appLanguage ??
+      Language.match(WidgetsBinding.instance.platformDispatcher.locale);
+
+  /// The code of the Bible translation in use (see [translation]).
+  static String get preferredVersion => translation.code;
+
+  /// The translation the user chose, or — if they never chose one (or the
+  /// stored code no longer exists) — the default for the app language.
+  static Translation get translation => Translation.resolve(
+      Hive.box(_boxKey).get(_preferredVersionKey) as String?,
+      effectiveLanguage);
 
   static set preferredVersion(String version) =>
       Hive.box(_boxKey).put(_preferredVersionKey, version);
-
-  static set preferredLanguage(String language) =>
-      Hive.box(_boxKey).put(_preferredLanguageKey, language);
 
   static bool get hasSeenTranscriptionPrompt =>
       Hive.box(_boxKey).get(_hasSeenTranscriptionPromptKey) ?? false;
@@ -44,4 +61,12 @@ class Preferences {
 
   static set hasSeenFormattingPrompt(bool seen) =>
       Hive.box(_boxKey).put(_hasSeenFormattingPromptKey, seen);
+
+  /// Whether the first-run guide ("How homiletics works") has been shown
+  /// or skipped, so Home doesn't open it again.
+  static bool get hasSeenOnboarding =>
+      Hive.box(_boxKey).get(_hasSeenOnboardingKey) ?? false;
+
+  static set hasSeenOnboarding(bool seen) =>
+      Hive.box(_boxKey).put(_hasSeenOnboardingKey, seen);
 }

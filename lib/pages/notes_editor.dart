@@ -1,15 +1,16 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:homiletics/classes/lecture_note.dart';
-import 'package:homiletics/classes/preferences.dart';
-import 'package:homiletics/classes/translation.dart';
-import 'package:homiletics/common/report_error.dart';
-import 'package:homiletics/common/verse_container.dart';
+import 'package:homiletics/common/study_data_builder.dart';
+import 'package:homiletics/components/editor/passage_split_scaffold.dart';
+import 'package:homiletics/components/lecture/time_marks.dart';
 import 'package:homiletics/components/recording_section.dart';
-import 'package:homiletics/pages/home.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:homiletics/l10n/l10n.dart';
+import 'package:homiletics/theme/app_theme.dart';
+import 'package:homiletics/theme/lecture_widgets.dart';
 
 class NotesEditor extends StatefulWidget {
   const NotesEditor({Key? key, this.note}) : super(key: key);
@@ -21,18 +22,26 @@ class NotesEditor extends StatefulWidget {
 }
 
 class _NotesState extends State<NotesEditor> {
-  late LectureNote _thisNote;
-  late QuillController _noteController;
-  bool _isTrayOpen = false;
-  String _translationVersion = 'web';
-  final PanelController _controller = PanelController();
-  final GlobalKey<VerseContainerState> _verseContainerKey =
-      GlobalKey<VerseContainerState>();
+  static const Duration _saveDelay = Duration(milliseconds: 500);
+
+  late final LectureNote _thisNote;
+  late final QuillController _noteController;
+  final RecordingSectionController _recording = RecordingSectionController();
+
+  /// The Delta JSON last copied into [_thisNote.note], so selection-only
+  /// changes (which also notify the controller) don't trigger saves.
+  late String _lastNoteJson;
+  Timer? _saveTimer;
 
   @override
   void initState() {
     super.initState();
-    prepTheTable();
+    _thisNote = widget.note ?? LectureNote();
+    _noteController = _buildNoteController(_thisNote.note);
+    _lastNoteJson = _currentNoteJson();
+    // Only a brand-new note needs saving up front; re-saving an existing one
+    // would bump its time just for being opened.
+    if (_thisNote.id == -1) _thisNote.update();
   }
 
   /// The note's rich text is stored as Quill Delta JSON in the same `note`
@@ -56,299 +65,166 @@ class _NotesState extends State<NotesEditor> {
     return controller;
   }
 
+  String _currentNoteJson() =>
+      jsonEncode(_noteController.document.toDelta().toJson());
+
   void _onNoteChanged() {
-    final String json = jsonEncode(_noteController.document.toDelta().toJson());
+    final String json = _currentNoteJson();
+    if (json == _lastNoteJson) return;
+    _lastNoteJson = json;
     _thisNote.note = json;
-    if (_thisNote.id != -1) _thisNote.update();
+    _scheduleSave();
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // Check if translation preference has changed and reload if needed
-    final currentTranslation = Preferences.preferredVersion;
-    if (currentTranslation != _translationVersion) {
-      setState(() {
-        _translationVersion = currentTranslation;
-      });
-      // Reload the verse container with new translation
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _verseContainerKey.currentState?.reloadPassage();
-      });
-    }
+  void _onPassageChanged(String value) {
+    _thisNote.passage = value;
+    _scheduleSave();
   }
 
-  prepTheTable() async {
-    setState(() {
-      _thisNote = widget.note ?? LectureNote();
-      _translationVersion = Preferences.preferredVersion;
-      _noteController = _buildNoteController(_thisNote.note);
-    });
+  /// Debounces saves while the user types; [_flushSave] writes immediately.
+  void _scheduleSave() {
+    _saveTimer?.cancel();
+    _saveTimer = Timer(_saveDelay, _flushSave);
+  }
+
+  Future<void> _flushSave() async {
+    _saveTimer?.cancel();
+    _saveTimer = null;
+    // update() runs saves in order, so this can't race the initial insert.
     await _thisNote.update();
   }
 
   @override
   void dispose() {
+    final bool hadPendingSave = _saveTimer?.isActive ?? false;
     _noteController.removeListener(_onNoteChanged);
     _noteController.dispose();
+    if (hadPendingSave) {
+      _flushSave().whenComplete(notifyStudyDataChanged);
+    } else {
+      _saveTimer?.cancel();
+      notifyStudyDataChanged();
+    }
     super.dispose();
+  }
+
+  /// Inserts [mark] (a recording time, "[14:02] ") at the cursor,
+  /// replacing any selected text.
+  void _insertTimeMark(String mark) {
+    final TextSelection selection = _noteController.selection;
+    // The document always ends with a newline that can't be typed past.
+    final int end = _noteController.document.length - 1;
+    final int from = selection.isValid ? selection.start.clamp(0, end) : end;
+    final int to = selection.isValid ? selection.end.clamp(from, end) : end;
+    _noteController.replaceText(from, to - from, mark,
+        TextSelection.collapsed(offset: from + mark.length));
+  }
+
+  /// Plays the recording from a tapped time mark. Returns whether the tap
+  /// was used, so a tap anywhere else (or any tap while recording, when
+  /// there's nothing to play yet) still places the cursor.
+  bool _onEditorTapUp(
+      TapUpDetails details, TextPosition Function(Offset) positionAt) {
+    if (_recording.isRecording) return false;
+    final TimeMark? mark = timeMarkInDocumentAt(
+        _noteController.document, positionAt(details.globalPosition).offset);
+    if (mark == null) return false;
+    _recording.playFrom(mark.position);
+    return true;
+  }
+
+  Widget _toolbarButton(Attribute attribute, Widget icon, String tooltip) {
+    // Driven straight from the controller: flutter_quill's
+    // QuillToolbarToggleStyleButton childBuilder hook throws a type error
+    // at runtime in 11.5.0.
+    return ListenableBuilder(
+      listenable: _noteController,
+      builder: (context, _) {
+        final bool isToggled = _noteController
+                .getSelectionStyle()
+                .attributes[attribute.key]
+                ?.value ==
+            attribute.value;
+        return NotesToolbarButton(
+          icon: icon,
+          tooltip: tooltip,
+          selected: isToggled,
+          onPressed: () => _noteController.formatSelection(
+              isToggled ? Attribute.clone(attribute, null) : attribute),
+        );
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text('Homiletics'),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => const Home()),
-                  (r) => false);
-            },
-          ),
-          actions: [
-            PopupMenuButton(
-                onSelected: (value) async {
-                  switch (value) {
-                    case 0:
-                      Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(builder: (context) => const Home()),
-                          (r) => false);
-                      return;
-                    case 1:
-                      showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: const Text("Are you sure?"),
-                              content: const Text(
-                                  "Deleting this Lecture Note is permanent and cannot be undone. Are you sure you wish to proceed?"),
-                              actions: [
-                                TextButton(
-                                    onPressed: () => Navigator.pop(context),
-                                    child: const Text('Cancel')),
-                                TextButton(
-                                  onPressed: () async {
-                                    try {
-                                      await _thisNote.delete();
-                                      if (!mounted) return;
-                                      final navigatorContext = context;
-                                      Navigator.pushAndRemoveUntil(
-                                          navigatorContext,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const Home()),
-                                          (r) => false);
-                                      ScaffoldMessenger.of(navigatorContext)
-                                          .showSnackBar(SnackBar(
-                                        content:
-                                            const Text("Lecture Note Deleted"),
-                                        action: SnackBarAction(
-                                          onPressed: () {},
-                                          label: "Ok",
-                                        ),
-                                      ));
-                                    } catch (error) {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(SnackBar(
-                                        content: const Text(
-                                            "Something went wrong. Try again soon."),
-                                        action: SnackBarAction(
-                                          onPressed: () {},
-                                          label: "Ok",
-                                        ),
-                                      ));
-                                      sendError(error, "notes deletion");
-                                    }
-                                  },
-                                  style: TextButton.styleFrom(
-                                    foregroundColor: Colors.red,
-                                  ),
-                                  child: const Text("Delete"),
-                                )
-                              ],
-                            );
-                          });
-                      return;
-                    // case 2:
-                    //   try {
-                    //     await createHomileticsPdf(_thisHomiletic!, _summaries,
-                    //         _divisions, _applications);
-                    //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    //       content: const Text(
-                    //           "PDF created successfully. Look in your files app to find it."),
-                    //       action: SnackBarAction(
-                    //         onPressed: () {},
-                    //         label: "Ok",
-                    //       ),
-                    //     ));
-                    //   } catch (error) {
-                    //     print("error: ${error.toString()}");
-                    //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    //       content: const Text(
-                    //           "Something went wrong creating your PDF. Try again soon."),
-                    //       action: SnackBarAction(
-                    //         onPressed: () {},
-                    //         label: "Ok",
-                    //       ),
-                    //     ));
-                    //   }
-                  }
-                },
-                icon: const Icon(Icons.menu),
-                itemBuilder: (context) => [
-                      const PopupMenuItem(
-                        value: 0,
-                        child: ListTile(
-                            leading: Icon(Icons.save), title: Text("Save")),
-                      ),
-                      const PopupMenuItem(
-                        value: 1,
-                        child: ListTile(
-                          title: Text('Delete'),
-                          leading: Icon(Icons.delete),
-                        ),
-                      ),
-                    ]),
-          ],
+    final AppColors c = AppColors.of(context);
+    final AppLocalizations l10n = context.l10n;
+    final TextStyle noteStyle =
+        AppText.body.copyWith(height: 1.55, color: c.ink);
+    const HorizontalSpacing noSpacing = HorizontalSpacing(0, 0);
+
+    final Widget toolbar = Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        _toolbarButton(Attribute.bold, const Icon(Icons.format_bold_rounded),
+            l10n.lectureToolbarBold),
+        _toolbarButton(Attribute.italic,
+            const Icon(Icons.format_italic_rounded), l10n.lectureToolbarItalic),
+        _toolbarButton(
+            Attribute.ul,
+            const Icon(Icons.format_list_bulleted_rounded),
+            l10n.lectureToolbarBulletedList),
+        _toolbarButton(
+            Attribute.ol,
+            const Icon(Icons.format_list_numbered_rounded),
+            l10n.lectureToolbarNumberedList),
+      ],
+    );
+
+    final Widget editor = QuillEditor.basic(
+      controller: _noteController,
+      config: QuillEditorConfig(
+        placeholder: l10n.lectureNotesPlaceholder,
+        // Time marks ("[14:02]") stay plain text in the Delta; they're
+        // styled when drawn and found again when tapped.
+        textSpanBuilder: timeMarkSpanBuilder(timeMarkTextStyle(c)),
+        onTapUp: _onEditorTapUp,
+        padding: const EdgeInsets.fromLTRB(24, 10, 24, 24),
+        customStyles: DefaultStyles(
+          paragraph: DefaultTextBlockStyle(noteStyle, noSpacing,
+              const VerticalSpacing(0, 6), VerticalSpacing.zero, null),
+          lists: DefaultListBlockStyle(
+              noteStyle,
+              noSpacing,
+              const VerticalSpacing(0, 6),
+              const VerticalSpacing(0, 4),
+              null,
+              null),
+          placeHolder: DefaultTextBlockStyle(noteStyle.copyWith(color: c.muted),
+              noSpacing, VerticalSpacing.zero, VerticalSpacing.zero, null),
         ),
-        body: SlidingUpPanel(
-            backdropColor:
-                MediaQuery.of(context).platformBrightness == Brightness.dark
-                    ? Colors.white
-                    : Colors.white,
-            controller: _controller,
-            minHeight: 75,
-            // panelSnapping: false,
-            backdropEnabled: true,
-            parallaxEnabled: false,
-            isDraggable: true,
-            color: MediaQuery.of(context).platformBrightness == Brightness.dark
-                ? Colors.black
-                : Colors.white,
-            borderRadius: BorderRadius.circular(15),
-            onPanelClosed: () {
-              setState(() {
-                _isTrayOpen = false;
-              });
-            },
-            onPanelSlide: (height) {
-              if (height > 0 && !_isTrayOpen) {
-                setState(() {
-                  _isTrayOpen = true;
-                });
-              }
-            },
-            onPanelOpened: () {
-              FocusManager.instance.primaryFocus?.unfocus();
-              setState(() {
-                _isTrayOpen = true;
-              });
-            },
-            collapsed: Column(children: [
-              Container(
-                  padding: const EdgeInsets.only(top: 7),
-                  child: Center(
-                    child: Container(
-                      height: 5,
-                      width: 40,
-                      decoration: BoxDecoration(
-                          color: Colors.grey,
-                          borderRadius: BorderRadius.circular(300)),
-                    ),
-                  )),
-              SizedBox(
-                  height: 60,
-                  child: Row(children: [
-                    Container(
-                        width: MediaQuery.of(context).size.width - 100,
-                        margin: const EdgeInsets.all(8),
-                        child: TextField(
-                          keyboardType: TextInputType.text,
-                          textCapitalization: TextCapitalization.sentences,
-                          controller:
-                              TextEditingController(text: _thisNote.passage),
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                          ),
-                          onChanged: (String value) async {
-                            _thisNote.passage = value;
-                            if (_thisNote.id != -1) await _thisNote.update();
-                          },
-                        )),
-                    SizedBox(
-                      width: 75,
-                      child: DropdownButton(
-                        items: [
-                          ...Translation.all
-                              .map((e) => DropdownMenuItem(
-                                    value: e.code,
-                                    child: Text(
-                                      e.short,
-                                      style: const TextStyle(fontSize: 12),
-                                    ),
-                                  ))
-                              .toList()
-                        ],
-                        onChanged: (version) {
-                          setState(() {
-                            _translationVersion = version.toString();
-                          });
-                        },
-                        value: _translationVersion,
-                      ),
-                    )
-                  ])),
-            ]),
-            panel: Column(children: [
-              Container(
-                  padding: const EdgeInsets.only(top: 7, bottom: 12),
-                  child: Center(
-                    child: Container(
-                      height: 5,
-                      width: 40,
-                      decoration: BoxDecoration(
-                          color: Colors.grey,
-                          borderRadius: BorderRadius.circular(300)),
-                    ),
-                  )),
-              Container(
-                  padding: const EdgeInsets.only(top: 40),
-                  height: MediaQuery.of(context).size.height * 0.56,
-                  child: VerseContainer(
-                      key: _verseContainerKey,
-                      passage: _thisNote.passage,
-                      translation: Preferences.translation))
-            ]),
-            body: Column(children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: RecordingSection(note: _thisNote),
-              ),
-              QuillSimpleToolbar(
-                controller: _noteController,
-                config: const QuillSimpleToolbarConfig(
-                  multiRowsDisplay: false,
-                  showFontFamily: false,
-                  showFontSize: false,
-                  showSearchButton: false,
-                ),
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: QuillEditor.basic(
-                    controller: _noteController,
-                    config: const QuillEditorConfig(
-                      placeholder: 'Notes',
-                      padding: EdgeInsets.symmetric(vertical: 8),
-                    ),
-                  ),
-                ),
-              ),
-            ])));
+      ),
+    );
+
+    return PassageSplitScaffold(
+      initialPassage: _thisNote.passage,
+      passageHint: l10n.lecturePassageHint,
+      onPassageChanged: _onPassageChanged,
+      itemName: l10n.lectureItemName,
+      deletedMessage: l10n.lectureDeleted,
+      deleteErrorIdentifier: "notes deletion",
+      onDelete: _thisNote.delete,
+      headerLabel: l10n.lectureHeaderLabel,
+      versePanelFirst: false,
+      verseWeight: 0.26,
+      child: RecordingSection(
+        note: _thisNote,
+        notesToolbar: toolbar,
+        notesEditor: editor,
+        onTimeMark: _insertTimeMark,
+        controller: _recording,
+      ),
+    );
   }
 }

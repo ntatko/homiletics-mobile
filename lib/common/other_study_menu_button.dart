@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:homiletics/l10n/l10n.dart';
 import 'package:homiletics/common/start_passage_item_flow.dart';
 
 /// Button that opens a menu of the non-Homiletics study types (Lecture
@@ -31,9 +32,12 @@ class OtherStudyMenuButton extends StatelessWidget {
     final String? choice = await showMenu<String>(
       context: context,
       position: position,
-      items: const [
-        PopupMenuItem(value: 'lecture_note', child: Text('Lecture Note')),
-        PopupMenuItem(value: 'word_study', child: Text('Word Study')),
+      items: [
+        PopupMenuItem(
+            value: 'lecture_note',
+            child: Text(context.l10n.startMenuLectureNote)),
+        PopupMenuItem(
+            value: 'word_study', child: Text(context.l10n.startMenuWordStudy)),
       ],
     );
 
@@ -50,13 +54,13 @@ class OtherStudyMenuButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
+    return OutlinedButton(
       onPressed: enabled ? () => _showMenu(context) : null,
-      child: const Row(
+      child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text('Other Study'),
-          Icon(Icons.arrow_drop_down),
+          Text(context.l10n.startOtherStudy),
+          const Icon(Icons.arrow_drop_down_rounded),
         ],
       ),
     );

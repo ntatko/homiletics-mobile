@@ -1,0 +1,826 @@
+{
+  "@@locale": "sw",
+  "prefsTitle": "Mapendeleo",
+  "prefsAppLanguage": "Lugha unayopendelea",
+  "prefsBibleVersion": "Toleo la Biblia unalopendelea",
+  "bibleNewTestamentOnly": "Agano Jipya pekee",
+  "appTitle": "Homiletics",
+  "commonCancel": "Ghairi",
+  "commonOk": "Sawa",
+  "commonDelete": "Futa",
+  "commonDone": "Tayari",
+  "commonSave": "Hifadhi",
+  "commonClose": "Funga",
+  "commonRetry": "Jaribu tena",
+  "commonSomethingWentWrong": "Hitilafu imetokea. Jaribu tena baadaye kidogo.",
+  "languageSystemDefault": "Lugha ya simu",
+  "stepContent": "Maudhui",
+  "stepDivisions": "Migawanyo",
+  "stepSummary": "Sentensi ya muhtasari",
+  "stepFcf": "FCF",
+  "stepAim": "Lengo",
+  "stepApplication": "Matumizi",
+  "stepShortContent": "Maudhui",
+  "stepShortDivisions": "Gawanya",
+  "stepShortSummary": "Muhtasari",
+  "stepShortFcf": "FCF",
+  "stepShortAim": "Lengo",
+  "stepShortApplication": "Tumia",
+  "commonShare": "Shiriki",
+  "commonPrint": "Chapisha",
+  "commonPreferences": "Mapendeleo",
+  "commonUntitled": "Bila kichwa",
+  "homeSearchIntro": "Tafuta homiletiki zako, migawanyo, matumizi, madokezo ya hotuba na uchunguzi wa maneno.",
+  "homeSearchFieldHint": "Tafuta masomo, vifungu, madokezo…",
+  "homeSearchTooltip": "Tafuta",
+  "homeCloseSearch": "Funga utafutaji",
+  "homeAllStudies": "Masomo yote",
+  "homeFilterByStudy": "Chuja kwa somo",
+  "homeOpenStudySite": "Fungua tovuti ya somo",
+  "homeThisWeek": "Wiki hii",
+  "homeEarlier": "Awali",
+  "homeComingUp": "Inakuja",
+  "homeWeekOverline": "{when} · {lesson}",
+  "@homeWeekOverline": {
+    "description": "Overline on a passage card: the week label (This week / Earlier / Coming up) followed by the lesson name from the study schedule. Shown in upper case on one line.",
+    "placeholders": {
+      "when": {
+        "type": "String"
+      },
+      "lesson": {
+        "type": "String"
+      }
+    }
+  },
+  "homeStartHomiletics": "Anza homiletiki",
+  "homeContinueHomiletics": "Endelea na homiletiki",
+  "homeOpenHomiletics": "Fungua homiletiki",
+  "homeLoadingPassages": "Inapakia vifungu vilivyopendekezwa…",
+  "homeContinue": "Endelea",
+  "homeSeeAll": "Ona yote",
+  "homeLivingItOut": "Kuishi kwa vitendo",
+  "homeKindTileHomiletic": "H",
+  "homeKindTileWordStudy": "N",
+  "homeProgressNoneDone": "Bado hakuna hatua iliyokamilika",
+  "homeProgressDone": "Zimekamilika: {steps}",
+  "@homeProgressDone": {
+    "description": "Screen-reader label for the homiletic step progress bar; {steps} is a comma-separated list of completed step names.",
+    "placeholders": {
+      "steps": {
+        "type": "String"
+      }
+    }
+  },
+  "homePageOf": "Ukurasa {page} kati ya {count}",
+  "@homePageOf": {
+    "description": "Screen-reader label for the dots under the swipeable passage cards.",
+    "placeholders": {
+      "page": {
+        "type": "int"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homePageFraction": "{page} / {count}",
+  "@homePageFraction": {
+    "description": "Compact page indicator under the passage cards when there are too many pages for dots, e.g. '3 / 12'.",
+    "placeholders": {
+      "page": {
+        "type": "int"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "studiesTitle": "Masomo yako",
+  "studiesTabHomiletics": "Homiletiki",
+  "studiesTabLectures": "Hotuba",
+  "studiesTabWordStudies": "Uchunguzi wa maneno",
+  "studiesNoHomiletics": "Bado hakuna homiletiki.",
+  "studiesNoLectureNotes": "Bado hakuna madokezo ya hotuba.",
+  "studiesNoWordStudies": "Bado hakuna uchunguzi wa maneno.",
+  "studiesNoApplications": "Bado hakuna maswali ya matumizi.",
+  "studiesProgressNotStarted": "Haijaanza",
+  "studiesProgressAll": "Hatua zote {total}",
+  "@studiesProgressAll": {
+    "description": "Homiletic progress summary when every step is done, e.g. 'All 6 steps'. Short.",
+    "placeholders": {
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "studiesProgressSome": "Hatua {done} kati ya {total}",
+  "@studiesProgressSome": {
+    "description": "Homiletic progress summary, e.g. '2 of 6 steps'. Short.",
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "studiesHomileticSubtitle": "Homiletiki · {progress} · {time}",
+  "@studiesHomileticSubtitle": {
+    "description": "Subtitle of a homiletic in a study list: kind, progress (e.g. '2 of 6 steps') and relative time (e.g. '3 days ago'). One line.",
+    "placeholders": {
+      "progress": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "studiesHomileticSubtitleNoProgress": "Homiletiki · {time}",
+  "@studiesHomileticSubtitleNoProgress": {
+    "description": "Subtitle of a homiletic in a study list while its progress loads; {time} is a relative time like '3 days ago'.",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "studiesLectureTitle": "Hotuba ya {passage}",
+  "@studiesLectureTitle": {
+    "description": "Title of a lecture note in a study list; {passage} is a Bible reference like 'John 3:1-21'.",
+    "placeholders": {
+      "passage": {
+        "type": "String"
+      }
+    }
+  },
+  "studiesLectureUntitled": "Hotuba",
+  "studiesLectureSubtitle": "Madokezo ya hotuba · {time}",
+  "@studiesLectureSubtitle": {
+    "description": "Subtitle of a lecture note in a study list; {time} is a relative time like '3 days ago'.",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "studiesWordStudyUntitled": "Uchunguzi wa neno",
+  "studiesWordStudySubtitle": "Uchunguzi wa neno · {time}",
+  "@studiesWordStudySubtitle": {
+    "description": "Subtitle of a word study in a study list; {time} is a relative time like '3 days ago'.",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "studiesWordStudySubtitleWithPassage": "Uchunguzi wa neno · {passage} · {time}",
+  "@studiesWordStudySubtitleWithPassage": {
+    "description": "Subtitle of a word study in a study list; {passage} is a Bible reference, {time} a relative time like '3 days ago'.",
+    "placeholders": {
+      "passage": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "searchHint": "Tafuta",
+  "searchSectionContentSummaries": "Mihtasari ya Maudhui",
+  "searchSectionDivisions": "Migawanyo",
+  "searchSectionApplications": "Matumizi",
+  "searchSectionAims": "Malengo",
+  "searchSectionSummarySentences": "Sentensi za Muhtasari",
+  "searchSectionPassages": "Vifungu vya Homiletiki",
+  "searchSectionLectureNotes": "Madokezo ya Hotuba",
+  "searchSectionWordStudies": "Uchunguzi wa Maneno",
+  "searchOpenFailed": "Imeshindikana kufungua tokeo hilo. Huenda limefutwa.",
+  "settingsTitle": "Mipangilio",
+  "settingsSectionLanguage": "Lugha",
+  "settingsAppLanguage": "Lugha ya programu",
+  "settingsSectionReading": "Usomaji",
+  "settingsSectionModels": "Modeli za kwenye simu",
+  "settingsSectionHelp": "Msaada",
+  "settingsCopyright": "Hakimiliki (C) {year} 13one.org · Haki zote zimehifadhiwa",
+  "@settingsCopyright": {
+    "description": "Copyright line at the bottom of the settings page. Keep '13one.org' unchanged.",
+    "placeholders": {
+      "year": {
+        "type": "String"
+      }
+    }
+  },
+  "helpRequestFeedback": "Omba msaada / toa maoni",
+  "helpCopyright": "Hakimiliki (C) {year} 13one.org",
+  "@helpCopyright": {
+    "description": "Copyright line at the foot of the home screen. Keep '13one.org' unchanged.",
+    "placeholders": {
+      "year": {
+        "type": "String"
+      }
+    }
+  },
+  "helpAllRightsReserved": "Haki zote zimehifadhiwa",
+  "feedbackTitle": "Toa maoni yako",
+  "feedbackPublicNotice": "Maoni yako yanawasilishwa kama suala (issue) la wazi kwenye GitHub—mtu yeyote kwenye mtandao anaweza kuyasoma. Usiweke nywila wala taarifa nyingine za faragha. Barua pepe yako inafichwa kwa sehemu kwenye GitHub; huenda tukahifadhi anwani kamili kwenye seva zetu kwa ajili ya kuwasiliana nawe tu.",
+  "feedbackTypeGeneral": "Msaada au maoni",
+  "feedbackTypeTranslation": "Tatizo la tafsiri",
+  "feedbackTranslationHint": "Tuambie ni maneno gani yanaonekana si sahihi na yanapaswa kusema nini. Tutaambatisha lugha ya programu yako na tafsiri yako ya Biblia.",
+  "feedbackNameLabel": "Jina",
+  "feedbackEmailLabel": "Barua pepe (si lazima)",
+  "feedbackContentLabel": "Maoni",
+  "feedbackSubmit": "Tuma",
+  "feedbackEmpty": "Tafadhali andika maoni yako kwanza.",
+  "feedbackSubmittedIssue": "Yametumwa. Fungua suala hilo kwenye GitHub wakati wowote ili kuongeza maoni (kuingia si lazima).",
+  "feedbackOpenIssue": "Fungua",
+  "feedbackSubmitted": "Maoni yametumwa kikamilifu",
+  "feedbackBadRequest": "Imeshindikana kutuma ombi hilo. Kagua ujumbe wako kisha ujaribu tena.",
+  "feedbackServerUnreachableTitle": "Imeshindikana kufikia seva",
+  "feedbackServerUnreachableBody": "Badala yake, fungua GitHub kwenye kivinjari chako ili uwasilishe ripoti hii. Huenda ukahitaji kuingia huko ili kuwasilisha suala hilo.",
+  "feedbackNotNow": "Si sasa",
+  "feedbackOpenGitHub": "Fungua GitHub",
+  "feedbackBrowserFailed": "Imeshindikana kufungua kivinjari.",
+  "startHomiletics": "Homiletiki",
+  "startLecture": "Hotuba",
+  "startWordStudy": "Chunguza neno",
+  "startPassageHint": "Jifunze kifungu kingine…",
+  "startClear": "Futa",
+  "startOtherStudy": "Somo lingine",
+  "startMenuLectureNote": "Madokezo ya hotuba",
+  "startMenuWordStudy": "Uchunguzi wa neno",
+  "startDuplicateHomileticTitle": "Tayari una homiletiki ya kifungu hiki?",
+  "startDuplicateHomileticMany": "{passage}\n\nUna homiletiki {count} za kifungu hiki; tutafungua ya karibuni zaidi.",
+  "@startDuplicateHomileticMany": {
+    "description": "Body of the duplicate-homiletic dialog when there are several; {passage} is a Bible reference. 'Edit existing' opens the most recent.",
+    "placeholders": {
+      "passage": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "startDuplicateLectureTitle": "Tayari una madokezo ya hotuba ya kifungu hiki?",
+  "startDuplicateLectureMany": "{passage}\n\nUna madokezo {count} ya hotuba ya kifungu hiki; tutafungua ya karibuni zaidi.",
+  "@startDuplicateLectureMany": {
+    "description": "Body of the duplicate-lecture-notes dialog when there are several; {passage} is a Bible reference.",
+    "placeholders": {
+      "passage": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "startDuplicateWordStudyTitle": "Tayari una uchunguzi wa neno wa kifungu hiki?",
+  "startDuplicateWordStudyMany": "{passage}\n\nUna masomo {count} ya neno ya kifungu hiki; tutafungua la karibuni zaidi.",
+  "@startDuplicateWordStudyMany": {
+    "description": "Body of the duplicate-word-study dialog when there are several; {passage} is a Bible reference.",
+    "placeholders": {
+      "passage": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "startCreateNew": "Unda jipya",
+  "startEditExisting": "Hariri lililopo",
+  "homileticHeaderLabel": "Homiletiki · Kifungu",
+  "homileticItemName": "somo la homiletiki",
+  "homileticDeletedMessage": "Homiletiki imefutwa",
+  "homileticLoadError": "Hitilafu imetokea wakati wa kupakia somo hili.",
+  "homileticPdfShared": "PDF imeshirikiwa kikamilifu.",
+  "homileticPdfShareFailed": "Hitilafu imetokea wakati wa kushiriki PDF yako. Jaribu tena baadaye kidogo.",
+  "homileticPdfPrinted": "PDF imechapishwa kikamilifu.",
+  "homileticPdfPrintFailed": "Hitilafu imetokea wakati wa kuunda PDF yako. Jaribu tena baadaye kidogo.",
+  "homileticCompleteTitle": "Hatua zote sita zimekamilika",
+  "homileticCompleteMessage": "Ichapishe kwa ajili ya darasa, au uishiriki na kikundi chako.",
+  "homileticContentEmptySummary": "Mistari + muhtasari",
+  "homileticDivisionsEmptySummary": "Makundi 2–4",
+  "homileticSummaryEmptySummary": "≤ maneno 10",
+  "homileticFcfEmptySummary": "Hali ya kuanguka",
+  "homileticAimEmptySummary": "Funzo kuu",
+  "homileticApplicationEmptySummary": "Ninawezaje…",
+  "homileticStepStatusDone": "imekamilika",
+  "homileticStepStatusToDo": "bado",
+  "homileticStepCollapseLabel": "{title}, kunja",
+  "@homileticStepCollapseLabel": {
+    "description": "Screen-reader label of an open step's header; tapping it closes the step.",
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Divisions"
+      }
+    }
+  },
+  "homileticStepHelpLabel": "Kuhusu {title}",
+  "@homileticStepHelpLabel": {
+    "description": "Tooltip and screen-reader label of the '?' button that explains a homiletic step.",
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Divisions"
+      }
+    }
+  },
+  "homileticVersesLabel": "Mistari",
+  "homileticVersesHint": "mst",
+  "homileticAddButtonLabel": "+ {label}",
+  "@homileticAddButtonLabel": {
+    "description": "Text of the dashed add button under a list step; {label} is e.g. 'Add summary'. Keep the plus sign unless your language puts it elsewhere.",
+    "placeholders": {
+      "label": {
+        "type": "String",
+        "example": "Add summary"
+      }
+    }
+  },
+  "homileticRemoveRowMessage": "Ulichoandika hapa kitafutwa.",
+  "homileticRemoveRowConfirm": "Ondoa",
+  "homileticContentSummaryHint": "Muhtasari…",
+  "homileticAddContentSummary": "Ongeza muhtasari",
+  "homileticRemoveContentSummaryTooltip": "Ondoa muhtasari wa maudhui",
+  "homileticRemoveContentSummaryTitle": "Uondoe muhtasari huu wa maudhui?",
+  "homileticRemoveContentSummaryFailed": "Imeshindikana kuondoa muhtasari huo wa maudhui",
+  "homileticDivisionHint": "Sentensi ya mgawanyo…",
+  "homileticAddDivision": "Ongeza mgawanyo",
+  "homileticRemoveDivisionTooltip": "Ondoa mgawanyo",
+  "homileticRemoveDivisionTitle": "Uondoe mgawanyo huu?",
+  "homileticRemoveDivisionFailed": "Imeshindikana kuondoa mgawanyo huo",
+  "homileticApplicationHint": "Ninawezaje…",
+  "homileticAddApplication": "Ongeza swali",
+  "homileticRemoveApplicationTooltip": "Ondoa swali la matumizi",
+  "homileticRemoveApplicationTitle": "Uondoe swali hili la matumizi?",
+  "homileticRemoveApplicationFailed": "Imeshindikana kuondoa swali hilo la matumizi",
+  "homileticSummaryHint": "Fupisha: maneno 10 au machache",
+  "homileticFcfHint": "Kuanguka/Udhaifu/Unyonge/Ugeugeu",
+  "homileticAimHint": "Kuwafanya wasikilizaji wajifunze kwamba…",
+  "homileticContentHelpTitle": "Mihtasari ya Maudhui",
+  "homileticContentHelpText": "Muhtasari wa maudhui ni ufupisho wa sehemu ya Biblia. Si lazima uwe sentensi moja; unaweza pia kuwa zaidi ya sentensi moja. Unapaswa kuwa muhtasari, kwa maneno yako mwenyewe, wa maudhui ya kifungu.\nUnapaswa kuwa na mihtasari ya maudhui isiyopungua 10, lakini isiyozidi 20. Kwa kawaida, kutegemea urefu wa kifungu, utagawanya kifungu chako katika vipande vya ukubwa unaokaribiana ili ufikie kiwango cha 10–20. Kwa hiyo, kifungu chako kikiwa na mistari 30, ningejaribu kuweka wastani wa mistari 3 kwa kila muhtasari wa maudhui.",
+  "homileticDivisionsHelpText": "Migawanyo ni makundi ya mistari inayohusiana. Inapaswa kuwa angalau miwili na isizidi minne.",
+  "homileticSummaryHelpTitle": "Sentensi ya Muhtasari",
+  "homileticSummaryHelpText": "Sentensi ya Muhtasari ni kauli fupi, inayokumbukika, inayojumlisha mambo muhimu zaidi. Njia nzuri ya kuifikiria ni jaribio la saa nane usiku: mtu akikuamsha saa nane usiku na kukuuliza mahubiri yalihusu nini, ungesema nini? Ungesema Sentensi ya Muhtasari.\nInapaswa kuwa na maneno 10 au machache. Ukijisikia mchangamfu, unaweza kujaribu kutumia maneno yanayoanza kwa sauti moja.",
+  "homileticFcfHelpText": "FCF (Fallen Condition Focus — Kiini cha Hali ya Kuanguka) ni ile sehemu ya hali ya ubinadamu inayoonyeshwa au kutajwa zaidi katika kifungu. Ni hali waliyomo wasikilizaji, sababu inayowafanya wasikilizaji wahitaji kuokolewa.",
+  "homileticAimHelpText": "Lengo ni hoja kuu, ile kweli moja kuu ambayo unataka wewe mwenyewe au wasikilizaji muondoke nayo. Huenda likatokana na FCF, na huenda likaathiri Maswali ya Matumizi.",
+  "homileticApplicationHelpTitle": "Maswali ya Matumizi",
+  "homileticApplicationHelpText": "Haya ni maswali yanayowasaidia wasikilizaji kutumia katika maisha yao wenyewe yale waliyoyasikia hivi punde. Yanapaswa kuwa mahususi, ya kibinafsi, ya wazi, na yenye kuchochea fikra.",
+  "homileticSummaryCount": "{count, plural, one{muhtasari 1} other{mihtasari {count}}}",
+  "@homileticSummaryCount": {
+    "description": "Shown on the collapsed Content step: how many content summaries are written.",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "homileticDivisionCount": "{count, plural, one{mgawanyo 1} other{migawanyo {count}}}",
+  "@homileticDivisionCount": {
+    "description": "Shown on the collapsed Divisions step: how many divisions are written.",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "homileticQuestionCount": "{count, plural, one{swali 1} other{maswali {count}}}",
+  "@homileticQuestionCount": {
+    "description": "Shown on the collapsed Application step: how many application questions are written.",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "homileticStepTileLabel": "{title}, {status}",
+  "@homileticStepTileLabel": {
+    "description": "Screen-reader label of a collapsed step in compact layout. {status} is 'done' or 'to do'.",
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Aim"
+      },
+      "status": {
+        "type": "String",
+        "example": "done"
+      }
+    }
+  },
+  "homileticStepTileLabelWithSummary": "{title}, {status}, {summary}",
+  "@homileticStepTileLabelWithSummary": {
+    "description": "Screen-reader label of a collapsed step. {status} is 'done' or 'to do'; {summary} is the short text on the right (e.g. '3 summaries' or the user's text).",
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Content"
+      },
+      "status": {
+        "type": "String",
+        "example": "done"
+      },
+      "summary": {
+        "type": "String",
+        "example": "3 summaries"
+      }
+    }
+  },
+  "lectureItemName": "madokezo ya hotuba",
+  "lectureDeleted": "Madokezo ya hotuba yamefutwa",
+  "lecturePassageHint": "Kifungu",
+  "lectureHeaderLabel": "Hotuba · Kifungu",
+  "lectureNotesPlaceholder": "Madokezo",
+  "lectureToolbarBold": "Herufi nzito",
+  "lectureToolbarItalic": "Herufi za mlalo",
+  "lectureToolbarBulletedList": "Orodha ya vitone",
+  "lectureToolbarNumberedList": "Orodha ya namba",
+  "lectureReplaceTitle": "Ubadilishe rekodi iliyopo?",
+  "lectureReplaceMessage": "Sauti ya zamani na nakala yake ya maandishi vitafutwa.",
+  "lectureReplaceConfirm": "Badilisha",
+  "lectureMicPermissionRequired": "Ruhusa ya kipaza sauti inahitajika ili kurekodi.",
+  "lectureNotificationTitle": "Inarekodi hotuba",
+  "lectureNotificationContent": "{appName} inarekodi sauti",
+  "@lectureNotificationContent": {
+    "description": "Text of the Android ongoing notification shown while recording.",
+    "placeholders": {
+      "appName": {
+        "type": "String",
+        "example": "Homiletics"
+      }
+    }
+  },
+  "lectureStartFailed": "Imeshindikana kuanza kurekodi. Huenda kipaza sauti kinatumiwa na programu nyingine.",
+  "lectureTranscriptionModelTitle": "Upakue modeli ya kunukuu sauti bila mtandao?",
+  "lectureTranscriptionModelMessage": "Upakuaji wa mara moja wa takriban 140MB unawezesha rekodi zako kunukuliwa kuwa maandishi na kutafutwa kiotomatiki. Unaweza kuruka hatua hii na kuipakua baadaye kutoka Mipangilio.",
+  "lectureNotNow": "Si sasa",
+  "lectureDownload": "Pakua",
+  "lectureModelDownloadFailed": "Hitilafu imetokea wakati wa kupakua modeli. Unaweza kujaribu tena kutoka Mipangilio.",
+  "lectureRecordingFileNotFound": "Faili ya rekodi haikupatikana.",
+  "lectureTranscriptionEmpty": "Unukuzi haukutoa maandishi yoyote.",
+  "lectureFormattingModelTitle": "Upakue modeli ya kupanga nakala?",
+  "lectureFormattingModelMessage": "Upakuaji wa mara moja wa {size} unawezesha nakala za maandishi kusafishwa na kupangwa katika aya zinazosomeka, kikamilifu kwenye kifaa chako. Inapendekezwa kutumia Wi-Fi. Unaweza pia kufanya hivi baadaye kutoka Mipangilio.",
+  "@lectureFormattingModelMessage": {
+    "description": "Body of the formatting-model download dialog. {size} is the approximate download size.",
+    "placeholders": {
+      "size": {
+        "type": "String",
+        "example": "~1.6GB"
+      }
+    }
+  },
+  "lectureFormattingModelMissing": "Modeli ya kupanga haijapakuliwa.",
+  "lectureFormattingFailed": "Imeshindikana kupanga nakala.",
+  "lecturePlaybackFailed": "Imeshindikana kucheza rekodi.",
+  "lectureDownloadingModel": "Inapakua modeli {percent}%",
+  "@lectureDownloadingModel": {
+    "description": "Progress line on the recording bar while a model downloads. Keep short (~30 chars).",
+    "placeholders": {
+      "percent": {
+        "type": "String",
+        "example": "42"
+      }
+    }
+  },
+  "lectureTranscribingProgress": "Inanukuu {percent}%",
+  "@lectureTranscribingProgress": {
+    "description": "Progress line on the recording bar while the recording is transcribed. Keep short (~30 chars).",
+    "placeholders": {
+      "percent": {
+        "type": "int",
+        "example": "42"
+      }
+    }
+  },
+  "lectureFormattingProgress": "Inapanga nakala {done}/{total}",
+  "@lectureFormattingProgress": {
+    "description": "Progress line while the transcript is formatted, in chunks done/total. Keep short (~30 chars).",
+    "placeholders": {
+      "done": {
+        "type": "int",
+        "example": "3"
+      },
+      "total": {
+        "type": "int",
+        "example": "8"
+      }
+    }
+  },
+  "lectureFormattingIndeterminate": "Inapanga nakala…",
+  "lectureRecordingSemantics": "Inarekodi, {time}",
+  "@lectureRecordingSemantics": {
+    "description": "Screen-reader label for the live recording clock. {time} is elapsed mm:ss.",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "example": "14:02"
+      }
+    }
+  },
+  "lectureRecordingSubtitle": "Inarekodi · inaendelea skrini ikiwa imezimwa",
+  "lectureStopRecording": "Acha kurekodi",
+  "lectureRecordLecture": "Rekodi hotuba",
+  "lectureRecordIdleSubtitle": "Inaendelea kurekodi skrini ikizimwa",
+  "lecturePause": "Sitisha",
+  "lecturePlayRecording": "Cheza rekodi",
+  "lectureRecordAgain": "Rekodi tena",
+  "lectureNotTranscribedYet": "Bado haijanukuliwa",
+  "lectureTranscribe": "Nukuu",
+  "lectureTimeMark": "+ Alama ya muda",
+  "lectureTranscriptEmptyRecording": "Hotuba itanukuliwa kwenye simu hii baada ya kuacha kurekodi.",
+  "lectureTranscriptEmptyPending": "Nakala itaonekana hapa ikiwa tayari.",
+  "lectureTranscriptEmptyNotTranscribed": "Nukuu rekodi ili uisome na kuitafuta hapa.",
+  "lectureTranscriptEmptyNoRecording": "Rekodi hotuba, nayo itanukuliwa kwenye simu hii baada ya kuacha.",
+  "lectureTranscribing": "Inanukuu…",
+  "lectureNoTranscriptYet": "Bado hakuna nakala",
+  "lectureFormatted": "Imepangwa",
+  "lectureRaw": "Ghafi",
+  "lectureFormatTranscript": "Panga nakala",
+  "lectureTabMyNotes": "Madokezo yangu",
+  "lectureTabTranscript": "Nakala",
+  "modelTranscriptionTitle": "Modeli ya kunukuu bila mtandao",
+  "modelTranscriptionEnglishNeeded": "Modeli ya Kiingereza, inahitajika kwa {language}",
+  "@modelTranscriptionEnglishNeeded": {
+    "description": "Settings card detail: this is the English-only speech-to-text model, and it is the one the current app language uses.",
+    "placeholders": {
+      "language": {
+        "type": "String",
+        "example": "English"
+      }
+    }
+  },
+  "modelTranscriptionEnglishNotNeeded": "Modeli ya Kiingereza, haihitajiki kwa {language}",
+  "@modelTranscriptionEnglishNotNeeded": {
+    "description": "Settings card detail: this is the English-only speech-to-text model, which the current app language does not use (it can be deleted to save space).",
+    "placeholders": {
+      "language": {
+        "type": "String",
+        "example": "Español"
+      }
+    }
+  },
+  "modelTranscriptionMultilingualNeeded": "Modeli ya lugha nyingi, inahitajika kwa {language}",
+  "@modelTranscriptionMultilingualNeeded": {
+    "description": "Settings card detail: this is the multilingual speech-to-text model, and it is the one the current app language uses.",
+    "placeholders": {
+      "language": {
+        "type": "String",
+        "example": "Español"
+      }
+    }
+  },
+  "modelTranscriptionMultilingualNotNeeded": "Modeli ya lugha nyingi, haihitajiki kwa {language}",
+  "@modelTranscriptionMultilingualNotNeeded": {
+    "description": "Settings card detail: this is the multilingual speech-to-text model, which the current app language does not use (it can be deleted to save space).",
+    "placeholders": {
+      "language": {
+        "type": "String",
+        "example": "English"
+      }
+    }
+  },
+  "modelFormattingTitle": "Modeli ya kupanga nakala",
+  "modelAppleIntelligenceStatus": "Inatumia Apple Intelligence (hakuna haja ya kupakua)",
+  "modelStatusChecking": "Inakagua…",
+  "modelStatusNotDownloaded": "Haijapakuliwa ({size})",
+  "@modelStatusNotDownloaded": {
+    "description": "Model card status when the model is not downloaded; size is the approximate download size.",
+    "placeholders": {
+      "size": {
+        "type": "String",
+        "example": "~140MB"
+      }
+    }
+  },
+  "modelStatusDownloading": "Inapakua… {percent}%",
+  "@modelStatusDownloading": {
+    "description": "Model card status while the model downloads.",
+    "placeholders": {
+      "percent": {
+        "type": "String",
+        "example": "42"
+      }
+    }
+  },
+  "modelStatusDownloaded": "Imepakuliwa",
+  "modelStatusDownloadedSize": "Imepakuliwa ({megabytes}MB)",
+  "@modelStatusDownloadedSize": {
+    "description": "Model card status when the model is downloaded, with its size on the device in megabytes.",
+    "placeholders": {
+      "megabytes": {
+        "type": "String",
+        "example": "142"
+      }
+    }
+  },
+  "modelDownload": "Pakua",
+  "modelDelete": "Futa",
+  "modelDownloadFailed": "Hitilafu imetokea wakati wa kupakua modeli. Jaribu tena baadaye kidogo.",
+  "modelDeleteFailed": "Hitilafu imetokea wakati wa kufuta modeli.",
+  "pdfOverlineHomiletics": "HOMILETIKI",
+  "pdfOverlineWordStudy": "UCHUNGUZI WA NENO",
+  "pdfUntitledPassage": "Kifungu bila kichwa",
+  "pdfUntitledWord": "Neno bila kichwa",
+  "pdfHomileticLabel": "Homiletiki · {passage}",
+  "@pdfHomileticLabel": {
+    "description": "Document title and running page footer of a printed homiletic handout. 'Homiletics' is the app name / method name.",
+    "placeholders": {
+      "passage": {
+        "type": "String",
+        "example": "Revelation 2:1–11"
+      }
+    }
+  },
+  "pdfWordStudyLabel": "Uchunguzi wa neno · {word}",
+  "@pdfWordStudyLabel": {
+    "description": "Document title and running page footer of a printed word-study handout with no passage.",
+    "placeholders": {
+      "word": {
+        "type": "String",
+        "example": "Lampstand"
+      }
+    }
+  },
+  "pdfWordStudyLabelWithPassage": "Uchunguzi wa neno · {word} · {passage}",
+  "@pdfWordStudyLabelWithPassage": {
+    "description": "Document title and running page footer of a printed word-study handout: the word studied and the Bible passage it comes from.",
+    "placeholders": {
+      "word": {
+        "type": "String",
+        "example": "Lampstand"
+      },
+      "passage": {
+        "type": "String",
+        "example": "Revelation 2:1–7"
+      }
+    }
+  },
+  "pdfPageOf": "ukurasa {current} kati ya {total}",
+  "@pdfPageOf": {
+    "description": "Page number in the footer of a printed handout (lowercase in English).",
+    "placeholders": {
+      "current": {
+        "type": "int",
+        "example": "1"
+      },
+      "total": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "pdfFcfCaption": "Kiini cha Hali ya Kuanguka",
+  "pdfAimLeadIn": "Kuwafanya wasikilizaji wajifunze kwamba ",
+  "pdfEmptyHomiletic": "Bado hakuna kilichoandikwa kwa kifungu hiki.",
+  "pdfEmptyWordStudy": "Bado hakuna kilichoandikwa kwa uchunguzi huu wa neno.",
+  "pdfWordStudyDefinition": "Maana",
+  "pdfWordStudyOtherUsage": "Matumizi mengine",
+  "pdfWordStudyContextualMeaning": "Maana katika muktadha",
+  "pdfWordStudyDeeperMeaning": "Maana ya ndani zaidi",
+  "pdfWordStudyApplication": "Matumizi maishani",
+  "editorSaveAndClose": "Hifadhi na funga",
+  "editorDeleteConfirmTitle": "Una uhakika?",
+  "editorDeleteConfirmMessage": "Kufuta {itemName} ni kwa kudumu na hakuwezi kutenduliwa. Una uhakika unataka kuendelea?",
+  "@editorDeleteConfirmMessage": {
+    "description": "Body of the delete confirmation dialog in a study editor.",
+    "placeholders": {
+      "itemName": {
+        "type": "String",
+        "example": "Word Study",
+        "description": "Name of the kind of study being deleted, e.g. 'Word Study' or 'Lecture Note' (already localized)."
+      }
+    }
+  },
+  "editorPassageLabel": "Kifungu",
+  "editorAddPassageHint": "Ongeza kifungu",
+  "editorBack": "Rudi",
+  "editorMoreOptions": "Chaguo zaidi",
+  "editorChangeTranslation": "Badilisha tafsiri",
+  "editorStudyCompleteMessage": "Ichapishe kwa ajili ya darasa, au uishiriki na kikundi chako.",
+  "wordStudyItemName": "uchunguzi wa neno",
+  "wordStudyDeleted": "Uchunguzi wa neno umefutwa",
+  "wordStudyHeaderLabel": "Uchunguzi wa neno · Kifungu",
+  "wordStudyPdfShared": "PDF imeshirikiwa kikamilifu.",
+  "wordStudyPdfShareFailed": "Hitilafu imetokea wakati wa kushiriki PDF yako. Jaribu tena baadaye kidogo.",
+  "wordStudyPdfPrinted": "PDF imechapishwa kikamilifu.",
+  "wordStudyPdfPrintFailed": "Hitilafu imetokea wakati wa kuunda PDF yako. Jaribu tena baadaye kidogo.",
+  "wordStudyWordTitle": "Neno",
+  "wordStudyWordHelp": "Neno mahususi au kifungu kifupi cha maneno unachochunguza. Ukishaliandika, sehemu za Maana na Matumizi Mengine zinaweza kukupendekezea maudhui.",
+  "wordStudyWordHint": "Ongeza neno",
+  "wordStudyEnterWordFirst": "Andika neno hapo juu kwanza.",
+  "wordStudyDefinitionTitle": "Maana",
+  "wordStudyDefinitionHelp": "Neno hili lina maana gani, kwa lugha rahisi? Gusa \"+\" upate maana zinazopendekezwa kutoka kamusi, au andika yako mwenyewe.",
+  "wordStudyDefinitionHelpNoSuggest": "Neno hili lina maana gani, kwa lugha rahisi? Andika yako mwenyewe.",
+  "wordStudyDefinitionHint": "Lina maana gani, kwa lugha rahisi?",
+  "wordStudySuggestDefinition": "Pendekeza maana",
+  "wordStudyDefinitionsFor": "Maana za “{word}”",
+  "@wordStudyDefinitionsFor": {
+    "description": "Title of the sheet listing dictionary definitions.",
+    "placeholders": {
+      "word": {
+        "type": "String",
+        "example": "grace",
+        "description": "The word being studied, as typed by the user."
+      }
+    }
+  },
+  "wordStudyDefinitionsTapToUse": "Gusa mojawapo ili uitumie.",
+  "wordStudyDefinitionsLoadError": "Imeshindikana kupakia maana. Jaribu tena baadaye kidogo.",
+  "wordStudyNoDefinitions": "Hakuna maana zilizopatikana kwa neno hili.",
+  "wordStudyReplaceDefinitionTitle": "Ubadilishe maana uliyoandika?",
+  "wordStudyReplaceDefinitionMessage": "Tayari umeandika maana. Uibadilishe kwa pendekezo hili, au uongeze pendekezo chini yake?",
+  "wordStudyAddBelow": "Ongeza chini",
+  "wordStudyReplace": "Badilisha",
+  "wordStudyOtherUsageTitle": "Matumizi mengine",
+  "wordStudyOtherUsageHelp": "Neno hili au wazo hili linapatikana wapi kwingine katika Maandiko? Gusa \"+\" ili kutafuta kwenye Bible Gateway na kuongeza marejeo unayopata, au andika yako mwenyewe.",
+  "wordStudyOtherUsageHint": "Linapatikana wapi kwingine katika Maandiko?",
+  "wordStudyFindOtherUsages": "Tafuta matumizi mengine",
+  "wordStudyOtherUsageSheetTitle": "Mahali pengine “{word}” linapopatikana",
+  "@wordStudyOtherUsageSheetTitle": {
+    "description": "Title of the Bible search sheet for other usages of the word.",
+    "placeholders": {
+      "word": {
+        "type": "String",
+        "example": "grace",
+        "description": "The word being studied, as typed by the user."
+      }
+    }
+  },
+  "wordStudyOtherUsageAdded": "Yameongezwa",
+  "wordStudyOtherUsageInstructions": "Gusa tokeo hapa chini ili kuongeza rejeo lake.",
+  "wordStudyOtherUsageAddResult": "+ Ongeza",
+  "wordStudyContextualMeaningTitle": "Maana katika muktadha",
+  "wordStudyContextualMeaningHelp": "Mwandishi alikusudia neno hili limaanishe nini hapa, katika kifungu hiki? Tafakari mistari inayolizunguka, si neno peke yake.",
+  "wordStudyContextualMeaningHint": "Lina maana gani hapa, katika kifungu hiki?",
+  "wordStudyDeeperMeaningTitle": "Maana ya ndani zaidi",
+  "wordStudyDeeperMeaningHelp": "Je, kuna ufahamu wowote kutoka lugha ya asili, maoni ya wafafanuzi, au uchunguzi mwingine unaoongeza kina zaidi ya maana ya msingi? Maandiko mengine yanaiundaje maana yake? Strong's concordance au Blue Letter Bible inaweza kusaidia hapa.",
+  "wordStudyDeeperMeaningHint": "Maandiko mengine yanaiundaje maana yake?",
+  "wordStudyApplicationTitle": "Matumizi maishani",
+  "wordStudyApplicationHelp": "Kweli hii inapaswa kuyaundaje maisha yako? Kuwa mahususi, wa kibinafsi, na wa vitendo.",
+  "wordStudyApplicationHint": "Utafanya nini nayo?",
+  "wordStudyDoneTitle": "Uchunguzi wa neno umekamilika",
+  "wordStudySectionHelpSemantics": "{title}, kuhusu sehemu hii",
+  "@wordStudySectionHelpSemantics": {
+    "description": "Screen reader label for a section title that opens its help text.",
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Definition",
+        "description": "The section's title."
+      }
+    }
+  },
+  "lectureTimeMarkNoRecording": "Maelezo haya hayana rekodi ya kucheza.",
+  "lectureTimeMarkStopRecordingFirst": "Simamisha kurekodi ili kucheza kuanzia alama ya muda.",
+  "lectureTimeMarkPastEnd": "Alama hiyo ya muda iko baada ya mwisho wa rekodi.",
+  "onboardingSkip": "Ruka",
+  "onboardingBack": "Rudi",
+  "onboardingNext": "Endelea",
+  "onboardingWelcomeOverline": "Karibu",
+  "onboardingWelcomeTitle": "Jifunze Biblia, kifungu kimoja kwa wakati",
+  "onboardingWelcomeBody": "Homiletics inakusaidia kuandika homiletiki yako, kuandika maelezo ya hotuba na kufanya uchunguzi wa neno — kifungu kikiwa wazi kando yako, kwa lugha yako na tafsiri yako ya Biblia.",
+  "onboardingMethodOverline": "Mbinu",
+  "onboardingMethodTitle": "Homiletiki ni nini?",
+  "onboardingMethodBody": "Homiletiki ni njia fupi ya kujifunza kifungu: unatafuta ujumbe wake mkuu, kisha unafikiri jinsi ya kuuishi. Ina hatua sita — na haihitaji kuwa kamili. Inakuwa rahisi kila wiki.",
+  "onboardingStepsOverline": "Hatua kwa hatua",
+  "onboardingStepsTitle": "Hatua sita",
+  "onboardingStepContent": "Fupisha kifungu kwa vipande vifupi 10–20, kwa maneno yako mwenyewe.",
+  "onboardingStepDivisions": "Panga vipande hivyo katika sehemu 2–4.",
+  "onboardingStepSummary": "Kifungu kizima kwa maneno 10 au machache.",
+  "onboardingStepFcf": "Kiini cha Hali ya Kuanguka: hitaji au uvunjifu wa mwanadamu ambao kifungu kinazungumzia.",
+  "onboardingStepAim": "Kweli moja kuu unayotaka wasikilizaji wako wajifunze.",
+  "onboardingStepApplication": "Maswali yanayogeuza kifungu kuwa maisha ya kila siku.",
+  "onboardingLecturesOverline": "Hotuba na uchunguzi wa neno",
+  "onboardingLecturesTitle": "Sikiliza kwa makini, chimba zaidi",
+  "onboardingLecturesBody": "Rekodi hotuba — inaendelea hata skrini ikiwa imezimwa na inanakiliwa kwenye simu yako yenyewe. Andika maelezo unaposikiliza na uweke alama za muda ili kupata tena sehemu fulani.",
+  "onboardingWordStudyBody": "Una hamu ya kujua neno moja? Anza uchunguzi wa neno na uchimbe maana yake katika kifungu.",
+  "onboardingStartOverline": "Anza",
+  "onboardingStartTitle": "Uko tayari kuanza",
+  "onboardingStartBody": "Anza na kifungu cha wiki hii, au angalia kwanza. Kila hatua unayoandika inahifadhiwa papo hapo.",
+  "onboardingReopenHint": "Unaweza kufungua mwongozo huu tena wakati wowote kutoka Mipangilio.",
+  "onboardingStartThisWeek": "Anza homiletiki ya wiki hii",
+  "onboardingExplore": "Gundua mwenyewe",
+  "onboardingThisWeekPassage": "Wiki hii: {passage}",
+  "onboardingSettingsRow": "Jinsi homiletiki inavyofanya kazi",
+  "bibleOfflineSize": "Bila mtandao · {size}",
+  "bibleDownloadedSize": "Imepakuliwa · {size}",
+  "bibleDownloadAction": "Pakua kwa matumizi bila mtandao",
+  "bibleDownloading": "Inapakua…",
+  "bibleRemoveDownload": "Ondoa upakuaji",
+  "bibleDownloadFailed": "Imeshindwa kupakua {translation}. Angalia muunganisho wako kisha ujaribu tena.",
+  "bibleOfflineTitle": "Hakuna muunganisho",
+  "bibleOfflineMessage": "Kifungu hiki kinatoka Bible Gateway, kinachohitaji intaneti. Pakua {translation} ili ukisome popote.",
+  "bibleOfflineNoDownloadMessage": "Kifungu hiki kinatoka Bible Gateway, kinachohitaji intaneti. Unganisha kisha ujaribu tena.",
+  "bibleTryAgain": "Jaribu tena",
+  "bibleNeedsDownloadTitle": "Pakua {translation}",
+  "bibleNeedsDownloadMessage": "Biblia hii inasomwa kutoka kwenye kifaa chako. Ipakue mara moja (karibu {size}) ili kuona kifungu.",
+  "bibleNotInTranslation": "Kifungu hiki hakikupatikana katika {translation}.",
+  "bibleVerseTapTip": "Kidokezo: gusa namba ya mstari ili kuanza muhtasari hapo.",
+  "bibleVerseTapLabel": "Anza muhtasari kwenye mstari {verse}"
+}

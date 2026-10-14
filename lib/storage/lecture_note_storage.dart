@@ -3,62 +3,15 @@ import 'dart:async';
 import 'package:homiletics/classes/lecture_note.dart';
 import 'package:homiletics/common/passage_reference.dart';
 import 'package:homiletics/common/report_error.dart';
-import 'package:path/path.dart';
+import 'package:homiletics/storage/app_storage.dart';
 import 'package:sqflite/sqflite.dart';
 
-final Future<Database> database = getDatabasesPath().then((String path) {
-  return openDatabase(
-    join(path, 'lectures.db'),
-    onUpgrade: onUpgrade,
-    onCreate: (db, version) {
-      return db.execute('''
-            CREATE TABLE lectures (
-              id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-              note TEXT,
-              passage TEXT,
-              time TEXT,
-              recording_path TEXT,
-              transcript TEXT,
-              formatted_transcript TEXT
-            )
-            ''');
-    },
-    version: 4,
-  );
-});
-
-Future<void> onUpgrade(Database db, int oldVersion, int newVersion) async {
-  for (var version = oldVersion + 1; version <= newVersion; version++) {
-    switch (version) {
-      case 1:
-        {
-          // Version 1 - no changes
-          break;
-        }
-      case 2:
-        {
-          await db
-              .execute('ALTER TABLE lectures ADD COLUMN recording_path TEXT');
-          break;
-        }
-      case 3:
-        {
-          await db.execute('ALTER TABLE lectures ADD COLUMN transcript TEXT');
-          break;
-        }
-      case 4:
-        {
-          await db.execute(
-              'ALTER TABLE lectures ADD COLUMN formatted_transcript TEXT');
-          break;
-        }
-    }
-  }
-}
+/// The database holding the `lectures` table (see [AppStorage]).
+Future<Database> _db() => AppStorage.database('lectures');
 
 Future<List<LectureNote>> getLectureNotes() async {
   try {
-    final Database db = await database;
+    final Database db = await _db();
 
     final List<Map<String, dynamic>> maps = await db.query('lectures');
 
@@ -74,30 +27,9 @@ Future<List<LectureNote>> getLectureNotes() async {
   }
 }
 
-Future<void> resetLectureNoteTable() async {
-  try {
-    final Database db = await database;
-    await db.execute("DROP TABLE IF EXISTS lectures ");
-    await db.execute('''
-            CREATE TABLE lectures (
-              id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-              note TEXT,
-              passage TEXT,
-              time TEXT,
-              recording_path TEXT,
-              transcript TEXT,
-              formatted_transcript TEXT
-            )
-            ''');
-  } catch (error) {
-    sendError(error, "resetLectureNoteTable");
-    throw Exception("failed to reset notes table");
-  }
-}
-
 Future<int> insertLectureNote(LectureNote note) async {
   try {
-    final Database db = await database;
+    final Database db = await _db();
     note.time = DateTime.now();
 
     return await db.insert('lectures', note.toJson()..remove('id'),
@@ -110,7 +42,7 @@ Future<int> insertLectureNote(LectureNote note) async {
 
 Future<void> updateLectureNote(LectureNote note) async {
   try {
-    final Database db = await database;
+    final Database db = await _db();
     note.time = DateTime.now();
 
     await db.update('lectures', note.toJson()..remove('id'),
@@ -123,18 +55,19 @@ Future<void> updateLectureNote(LectureNote note) async {
 
 Future<void> deleteLectureNote(LectureNote note) async {
   try {
-    final Database db = await database;
+    final Database db = await _db();
 
     await db.delete('lectures', where: 'id = ?', whereArgs: [note.id]);
   } catch (error) {
     sendError(error, "deleteLectureNote");
-    throw Exception("failed to update lecture note");
+    throw Exception("failed to delete lecture note");
   }
 }
 
 /// Lecture notes whose [passage] matches [passage] after [normalizePassageReference],
 /// newest [LectureNote.time] first.
-Future<List<LectureNote>> getLectureNotesMatchingPassageReference(String passage) async {
+Future<List<LectureNote>> getLectureNotesMatchingPassageReference(
+    String passage) async {
   try {
     final String key = normalizePassageReference(passage);
     if (key.isEmpty) {
@@ -156,33 +89,15 @@ Future<List<LectureNote>> getLectureNotesMatchingPassageReference(String passage
   }
 }
 
-Future<List<LectureNote>> getLectureNoteByText(String text) async {
-  try {
-    final Database db = await database;
-
-    final List<Map<String, dynamic>> maps = await db
-        .query('lectures', where: 'note LIKE ?', whereArgs: ['%$text%']);
-
-    if (maps.isEmpty) {
-      return [];
-    }
-
-    return List.generate(
-        maps.length, (index) => LectureNote.fromJson(maps[index]));
-  } catch (error) {
-    sendError(error, "getLectureNoteByText");
-    throw Exception("failed to get lecture notes");
-  }
-}
-
 /// Lecture notes whose [note] or [transcript] contains [text].
 Future<List<LectureNote>> getLectureNotesByText(String text) async {
   try {
-    final Database db = await database;
+    final Database db = await _db();
 
     final String like = '%$text%';
     final List<Map<String, dynamic>> maps = await db.query('lectures',
-        where: 'note LIKE ? OR transcript LIKE ? OR formatted_transcript LIKE ?',
+        where:
+            'note LIKE ? OR transcript LIKE ? OR formatted_transcript LIKE ?',
         whereArgs: [like, like, like]);
 
     if (maps.isEmpty) {

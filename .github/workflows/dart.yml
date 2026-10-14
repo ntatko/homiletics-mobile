@@ -21,6 +21,11 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
+          # Pinned to the version the app is built and released with.
+          # flutter_quill 11.5.0 doesn't compile against newer Flutter
+          # (QuillRawEditorState misses new TextInputClient members), so
+          # bump this together with flutter_quill.
+          flutter-version: '3.41.7'
 
       - name: Install dependencies
         run: flutter pub get

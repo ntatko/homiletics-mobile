@@ -2,23 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:homiletics/classes/application.dart';
 import 'package:homiletics/pages/homeletic_editor.dart';
 import 'package:homiletics/storage/homiletic_storage.dart';
+import 'package:homiletics/theme/app_theme.dart';
+import 'package:homiletics/theme/home_widgets.dart';
+import 'package:homiletics/theme/widgets.dart';
 
-/// [carousel] — home horizontal strip (consistent height, width follows text).
-/// [list] — full “show more” screen (wraps text, no wasted vertical space).
-enum ApplicationQuestionDisplay { carousel, list }
+/// [compact] — a row inside Home's "Living it out" card (text clipped to
+/// three lines, hairline under it).
+/// [list] — its own card on the full "show more" screen (text wraps).
+enum ApplicationQuestionDisplay { compact, list }
 
+/// An application question: an empty check square, the question, and the
+/// passage of the homiletic it came from. Tapping opens that homiletic.
 class ApplicationListItem extends StatelessWidget {
   final Application application;
   final ApplicationQuestionDisplay displayStyle;
 
-  /// Fixed height for carousel row items (matches [ApplicationList] strip).
-  final double? carouselStripHeight;
+  /// Draws a hairline under a [ApplicationQuestionDisplay.compact] row.
+  final bool divider;
 
   const ApplicationListItem({
     Key? key,
     required this.application,
-    this.displayStyle = ApplicationQuestionDisplay.carousel,
-    this.carouselStripHeight,
+    this.displayStyle = ApplicationQuestionDisplay.compact,
+    this.divider = false,
   }) : super(key: key);
 
   Future<void> _openHomiletic(BuildContext context) async {
@@ -32,220 +38,66 @@ class ApplicationListItem extends StatelessWidget {
     );
   }
 
-  Color _cardColor(BuildContext context) {
-    final isLight =
-        MediaQuery.of(context).platformBrightness == Brightness.light;
-    return isLight ? Colors.green.shade300 : Colors.green.shade800;
-  }
-
   @override
   Widget build(BuildContext context) {
-    if (displayStyle == ApplicationQuestionDisplay.list) {
-      return _ListApplicationTile(
-        application: application,
-        cardColor: _cardColor(context),
-        onOpen: () => _openHomiletic(context),
-      );
-    }
+    final AppColors c = AppColors.of(context);
+    final bool compact = displayStyle == ApplicationQuestionDisplay.compact;
+    final String? passage = application.homileticPassage;
 
-    return _CarouselApplicationCard(
-      application: application,
-      cardColor: _cardColor(context),
-      onOpen: () => _openHomiletic(context),
-      stripHeight: carouselStripHeight ?? 124,
-    );
-  }
-}
-
-class _CarouselApplicationCard extends StatelessWidget {
-  final Application application;
-  final Color cardColor;
-  final VoidCallback onOpen;
-  final double stripHeight;
-
-  static const double _minCardWidth = 152;
-  static const double _maxCardWidth = 292;
-
-  const _CarouselApplicationCard({
-    required this.application,
-    required this.cardColor,
-    required this.onOpen,
-    required this.stripHeight,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final passage = application.homileticPassage;
-    final onCard = theme.brightness == Brightness.dark
-        ? Colors.white
-        : Colors.black87;
-    final passageColor = theme.brightness == Brightness.dark
-        ? Colors.white.withValues(alpha: 0.72)
-        : Colors.black.withValues(alpha: 0.55);
-
-    return SizedBox(
-      height: stripHeight,
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(5, 0, 5, 2),
-        child: IntrinsicWidth(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(
-              minWidth: _minCardWidth,
-              maxWidth: _maxCardWidth,
-            ),
-            child: SizedBox(
-              height: stripHeight - 2,
-              child: Material(
-                color: cardColor,
-                elevation: 1,
-                shadowColor: Colors.black26,
-                borderRadius: BorderRadius.circular(12),
-                clipBehavior: Clip.antiAlias,
-                child: InkWell(
-                  onTap: onOpen,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 8, 10, 8),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: Text(
-                            application.text,
-                            maxLines: passage != null && passage.isNotEmpty
-                                ? 3
-                                : 4,
-                            overflow: TextOverflow.ellipsis,
-                            style: theme.textTheme.titleSmall?.copyWith(
-                                  height: 1.25,
-                                  fontWeight: FontWeight.w600,
-                                  color: onCard,
-                                ) ??
-                                TextStyle(
-                                  fontSize: 14.5,
-                                  height: 1.25,
-                                  fontWeight: FontWeight.w600,
-                                  color: onCard,
-                                ),
-                          ),
-                        ),
-                        if (passage != null && passage.isNotEmpty) ...[
-                          const SizedBox(height: 4),
-                          Text(
-                            passage,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: theme.textTheme.labelMedium?.copyWith(
-                                  height: 1.2,
-                                  fontSize: 11.5,
-                                  fontWeight: FontWeight.w500,
-                                  color: passageColor,
-                                ) ??
-                                TextStyle(
-                                  fontSize: 11.5,
-                                  height: 1.2,
-                                  fontWeight: FontWeight.w500,
-                                  color: passageColor,
-                                ),
-                          ),
-                        ],
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
+    final Widget content = Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.only(top: 1),
+          child: CheckSquare(),
         ),
-      ),
-    );
-  }
-}
-
-class _ListApplicationTile extends StatelessWidget {
-  final Application application;
-  final Color cardColor;
-  final VoidCallback onOpen;
-
-  const _ListApplicationTile({
-    required this.application,
-    required this.cardColor,
-    required this.onOpen,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final passage = application.homileticPassage;
-    final onCard = theme.brightness == Brightness.dark
-        ? Colors.white.withValues(alpha: 0.92)
-        : Colors.black87;
-    final passageColor = theme.brightness == Brightness.dark
-        ? Colors.white.withValues(alpha: 0.65)
-        : Colors.black.withValues(alpha: 0.5);
-
-    return Material(
-      color: cardColor,
-      elevation: 0,
-      borderRadius: BorderRadius.circular(12),
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: onOpen,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-          child: Row(
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(
-                Icons.format_quote_rounded,
-                size: 22,
-                color: onCard.withValues(alpha: 0.75),
+              Text(
+                application.text,
+                maxLines: compact ? 3 : null,
+                overflow: compact ? TextOverflow.ellipsis : null,
+                style: AppText.body.copyWith(color: c.ink),
               ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      application.text,
-                      style: theme.textTheme.bodyLarge?.copyWith(
-                            height: 1.35,
-                            color: onCard,
-                          ) ??
-                          TextStyle(
-                            fontSize: 16,
-                            height: 1.35,
-                            color: onCard,
-                          ),
-                    ),
-                    if (passage != null && passage.isNotEmpty) ...[
-                      const SizedBox(height: 6),
-                      Text(
-                        passage,
-                        style: theme.textTheme.bodySmall?.copyWith(
-                              height: 1.3,
-                              fontSize: 13,
-                              color: passageColor,
-                            ) ??
-                            TextStyle(
-                              fontSize: 13,
-                              height: 1.3,
-                              color: passageColor,
-                            ),
-                      ),
-                    ],
-                  ],
+              if (passage != null && passage.isNotEmpty) ...[
+                const SizedBox(height: 2),
+                Text(
+                  passage,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppText.caption.copyWith(color: c.muted),
                 ),
-              ),
-              const SizedBox(width: 4),
-              Icon(
-                Icons.chevron_right_rounded,
-                color: onCard.withValues(alpha: 0.45),
-              ),
+              ],
             ],
           ),
         ),
+        const SizedBox(width: 4),
+        Icon(Icons.chevron_right_rounded, size: 22, color: c.muted),
+      ],
+    );
+
+    if (!compact) {
+      return AppCard(
+        radius: 16,
+        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+        onTap: () => _openHomiletic(context),
+        child: content,
+      );
+    }
+
+    return InkWell(
+      onTap: () => _openHomiletic(context),
+      child: Container(
+        constraints: const BoxConstraints(minHeight: 48),
+        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+        decoration: divider
+            ? BoxDecoration(border: Border(bottom: BorderSide(color: c.line)))
+            : null,
+        child: content,
       ),
     );
   }

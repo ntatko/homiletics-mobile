@@ -1,688 +1,2456 @@
 {
+  "studies": {
+    "bsfinternational.org/john": {
+      "en": "BSF John",
+      "es": "BSF Juan",
+      "zh_Hans": "BSF 约翰福音",
+      "zh_Hant": "BSF 約翰福音",
+      "fr": "BSF Jean",
+      "pt": "BSF João",
+      "sw": "BSF Yohana"
+    },
+    "13one.org/exodus": {
+      "en": "The Exodus",
+      "es": "El Éxodo",
+      "zh_Hans": "出埃及",
+      "zh_Hant": "出埃及",
+      "fr": "L’Exode",
+      "pt": "O Êxodo",
+      "sw": "Kutoka"
+    },
+    "bsfinternational.org/revelation": {
+      "en": "BSF Revelation",
+      "es": "BSF Apocalipsis",
+      "zh_Hans": "BSF 启示录",
+      "zh_Hant": "BSF 啟示錄",
+      "fr": "BSF Apocalypse",
+      "pt": "BSF Apocalipse",
+      "sw": "BSF Ufunuo"
+    },
+    "https://13one.org/psalms-of-the-sons-of-korah": {
+      "en": "13one | Summer 2025",
+      "es": "13one | Verano 2025",
+      "zh_Hans": "13one | 2025 夏季",
+      "zh_Hant": "13one | 2025 夏季",
+      "fr": "13one | Été 2025",
+      "pt": "13one | Verão 2025",
+      "sw": "13one | Kiangazi 2025"
+    },
+    "bsfinternational.org/exile-and-return/": {
+      "en": "BSF Exile",
+      "es": "BSF Exilio",
+      "zh_Hans": "BSF 被掳归回",
+      "zh_Hant": "BSF 被擄歸回",
+      "fr": "BSF Exil",
+      "pt": "BSF Exílio",
+      "sw": "BSF Uhamisho"
+    },
+    "bsfinternational.org/bsf/our-studies/romans/": {
+      "en": "BSF Romans",
+      "es": "BSF Romanos",
+      "zh_Hans": "BSF 罗马书",
+      "zh_Hant": "BSF 羅馬書",
+      "fr": "BSF Romains",
+      "pt": "BSF Romanos",
+      "sw": "BSF Warumi"
+    }
+  },
   "data": [
     {
       "passage": "John 19",
       "study": "bsfinternational.org/john",
       "lesson": "BSF John #26",
-      "rollout": "2024-04-01T12:00:00Z"
+      "rollout": "2024-04-01T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Juan #26",
+        "zh_Hans": "BSF 约翰福音 第26课",
+        "zh_Hant": "BSF 約翰福音 第26課",
+        "fr": "BSF Jean n° 26",
+        "pt": "BSF João nº 26",
+        "sw": "BSF Yohana #26"
+      },
+      "passage_i18n": {
+        "es": "Juan 19",
+        "zh_Hans": "约翰福音 19",
+        "zh_Hant": "約翰福音 19",
+        "fr": "Jean 19",
+        "pt": "João 19",
+        "sw": "Yohana 19"
+      }
     },
     {
       "passage": "John 20",
       "study": "bsfinternational.org/john",
       "lesson": "BSF John #27",
-      "rollout": "2024-04-08T12:00:00Z"
+      "rollout": "2024-04-08T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Juan #27",
+        "zh_Hans": "BSF 约翰福音 第27课",
+        "zh_Hant": "BSF 約翰福音 第27課",
+        "fr": "BSF Jean n° 27",
+        "pt": "BSF João nº 27",
+        "sw": "BSF Yohana #27"
+      },
+      "passage_i18n": {
+        "es": "Juan 20",
+        "zh_Hans": "约翰福音 20",
+        "zh_Hant": "約翰福音 20",
+        "fr": "Jean 20",
+        "pt": "João 20",
+        "sw": "Yohana 20"
+      }
     },
     {
       "passage": "John 21",
       "study": "bsfinternational.org/john",
       "lesson": "BSF John #28",
-      "rollout": "2024-04-15T12:00:00Z"
+      "rollout": "2024-04-15T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Juan #28",
+        "zh_Hans": "BSF 约翰福音 第28课",
+        "zh_Hant": "BSF 約翰福音 第28課",
+        "fr": "BSF Jean n° 28",
+        "pt": "BSF João nº 28",
+        "sw": "BSF Yohana #28"
+      },
+      "passage_i18n": {
+        "es": "Juan 21",
+        "zh_Hans": "约翰福音 21",
+        "zh_Hant": "約翰福音 21",
+        "fr": "Jean 21",
+        "pt": "João 21",
+        "sw": "Yohana 21"
+      }
     },
     {
       "passage": "Exodus 1",
       "study": "13one.org/exodus",
       "lesson": "The Exodus #1",
-      "rollout": "2024-05-13T12:00:00Z"
+      "rollout": "2024-05-13T12:00:00Z",
+      "lesson_i18n": {
+        "es": "El Éxodo #1",
+        "zh_Hans": "出埃及 第1课",
+        "zh_Hant": "出埃及 第1課",
+        "fr": "L’Exode n° 1",
+        "pt": "O Êxodo nº 1",
+        "sw": "Kutoka #1"
+      },
+      "passage_i18n": {
+        "es": "Éxodo 1",
+        "zh_Hans": "出埃及记 1",
+        "zh_Hant": "出埃及記 1",
+        "fr": "Exode 1",
+        "pt": "Êxodo 1",
+        "sw": "Kutoka 1"
+      }
     },
     {
       "passage": "Exodus 2",
       "study": "13one.org/exodus",
       "lesson": "The Exodus #2",
-      "rollout": "2024-05-20T12:00:00Z"
+      "rollout": "2024-05-20T12:00:00Z",
+      "lesson_i18n": {
+        "es": "El Éxodo #2",
+        "zh_Hans": "出埃及 第2课",
+        "zh_Hant": "出埃及 第2課",
+        "fr": "L’Exode n° 2",
+        "pt": "O Êxodo nº 2",
+        "sw": "Kutoka #2"
+      },
+      "passage_i18n": {
+        "es": "Éxodo 2",
+        "zh_Hans": "出埃及记 2",
+        "zh_Hant": "出埃及記 2",
+        "fr": "Exode 2",
+        "pt": "Êxodo 2",
+        "sw": "Kutoka 2"
+      }
     },
     {
       "passage": "Exodus 3:1-4:17",
       "study": "13one.org/exodus",
       "lesson": "The Exodus #3",
-      "rollout": "2024-06-03T12:00:00Z"
+      "rollout": "2024-06-03T12:00:00Z",
+      "lesson_i18n": {
+        "es": "El Éxodo #3",
+        "zh_Hans": "出埃及 第3课",
+        "zh_Hant": "出埃及 第3課",
+        "fr": "L’Exode n° 3",
+        "pt": "O Êxodo nº 3",
+        "sw": "Kutoka #3"
+      },
+      "passage_i18n": {
+        "es": "Éxodo 3:1-4:17",
+        "zh_Hans": "出埃及记 3:1-4:17",
+        "zh_Hant": "出埃及記 3:1-4:17",
+        "fr": "Exode 3:1-4:17",
+        "pt": "Êxodo 3:1-4:17",
+        "sw": "Kutoka 3:1-4:17"
+      }
     },
     {
       "passage": "Exodus 4:18-6:12",
       "study": "13one.org/exodus",
       "lesson": "The Exodus #4",
-      "rollout": "2024-06-10T12:00:00Z"
+      "rollout": "2024-06-10T12:00:00Z",
+      "lesson_i18n": {
+        "es": "El Éxodo #4",
+        "zh_Hans": "出埃及 第4课",
+        "zh_Hant": "出埃及 第4課",
+        "fr": "L’Exode n° 4",
+        "pt": "O Êxodo nº 4",
+        "sw": "Kutoka #4"
+      },
+      "passage_i18n": {
+        "es": "Éxodo 4:18-6:12",
+        "zh_Hans": "出埃及记 4:18-6:12",
+        "zh_Hant": "出埃及記 4:18-6:12",
+        "fr": "Exode 4:18-6:12",
+        "pt": "Êxodo 4:18-6:12",
+        "sw": "Kutoka 4:18-6:12"
+      }
     },
     {
       "passage": "Exodus 6:13-7:13",
       "study": "13one.org/exodus",
       "lesson": "The Exodus #5",
-      "rollout": "2024-06-17T12:00:00Z"
+      "rollout": "2024-06-17T12:00:00Z",
+      "lesson_i18n": {
+        "es": "El Éxodo #5",
+        "zh_Hans": "出埃及 第5课",
+        "zh_Hant": "出埃及 第5課",
+        "fr": "L’Exode n° 5",
+        "pt": "O Êxodo nº 5",
+        "sw": "Kutoka #5"
+      },
+      "passage_i18n": {
+        "es": "Éxodo 6:13-7:13",
+        "zh_Hans": "出埃及记 6:13-7:13",
+        "zh_Hant": "出埃及記 6:13-7:13",
+        "fr": "Exode 6:13-7:13",
+        "pt": "Êxodo 6:13-7:13",
+        "sw": "Kutoka 6:13-7:13"
+      }
     },
     {
       "passage": "Exodus 7:14-8:19",
       "study": "13one.org/exodus",
       "lesson": "The Exodus #6",
-      "rollout": "2024-06-24T12:00:00Z"
+      "rollout": "2024-06-24T12:00:00Z",
+      "lesson_i18n": {
+        "es": "El Éxodo #6",
+        "zh_Hans": "出埃及 第6课",
+        "zh_Hant": "出埃及 第6課",
+        "fr": "L’Exode n° 6",
+        "pt": "O Êxodo nº 6",
+        "sw": "Kutoka #6"
+      },
+      "passage_i18n": {
+        "es": "Éxodo 7:14-8:19",
+        "zh_Hans": "出埃及记 7:14-8:19",
+        "zh_Hant": "出埃及記 7:14-8:19",
+        "fr": "Exode 7:14-8:19",
+        "pt": "Êxodo 7:14-8:19",
+        "sw": "Kutoka 7:14-8:19"
+      }
     },
     {
       "passage": "Exodus 8:20-9:12",
       "study": "13one.org/exodus",
       "lesson": "The Exodus #7",
-      "rollout": "2024-07-01T12:00:00Z"
+      "rollout": "2024-07-01T12:00:00Z",
+      "lesson_i18n": {
+        "es": "El Éxodo #7",
+        "zh_Hans": "出埃及 第7课",
+        "zh_Hant": "出埃及 第7課",
+        "fr": "L’Exode n° 7",
+        "pt": "O Êxodo nº 7",
+        "sw": "Kutoka #7"
+      },
+      "passage_i18n": {
+        "es": "Éxodo 8:20-9:12",
+        "zh_Hans": "出埃及记 8:20-9:12",
+        "zh_Hant": "出埃及記 8:20-9:12",
+        "fr": "Exode 8:20-9:12",
+        "pt": "Êxodo 8:20-9:12",
+        "sw": "Kutoka 8:20-9:12"
+      }
     },
     {
       "passage": "Exodus 9:13-10:29",
       "study": "13one.org/exodus",
       "lesson": "The Exodus #8",
-      "rollout": "2024-07-15T12:00:00Z"
+      "rollout": "2024-07-15T12:00:00Z",
+      "lesson_i18n": {
+        "es": "El Éxodo #8",
+        "zh_Hans": "出埃及 第8课",
+        "zh_Hant": "出埃及 第8課",
+        "fr": "L’Exode n° 8",
+        "pt": "O Êxodo nº 8",
+        "sw": "Kutoka #8"
+      },
+      "passage_i18n": {
+        "es": "Éxodo 9:13-10:29",
+        "zh_Hans": "出埃及记 9:13-10:29",
+        "zh_Hant": "出埃及記 9:13-10:29",
+        "fr": "Exode 9:13-10:29",
+        "pt": "Êxodo 9:13-10:29",
+        "sw": "Kutoka 9:13-10:29"
+      }
     },
     {
       "passage": "Exodus 11:1-13:16",
       "study": "13one.org/exodus",
       "lesson": "The Exodus #9",
-      "rollout": "2024-07-22T12:00:00Z"
+      "rollout": "2024-07-22T12:00:00Z",
+      "lesson_i18n": {
+        "es": "El Éxodo #9",
+        "zh_Hans": "出埃及 第9课",
+        "zh_Hant": "出埃及 第9課",
+        "fr": "L’Exode n° 9",
+        "pt": "O Êxodo nº 9",
+        "sw": "Kutoka #9"
+      },
+      "passage_i18n": {
+        "es": "Éxodo 11:1-13:16",
+        "zh_Hans": "出埃及记 11:1-13:16",
+        "zh_Hant": "出埃及記 11:1-13:16",
+        "fr": "Exode 11:1-13:16",
+        "pt": "Êxodo 11:1-13:16",
+        "sw": "Kutoka 11:1-13:16"
+      }
     },
     {
       "passage": "Exodus 13:17-15:21",
       "study": "13one.org/exodus",
       "lesson": "The Exodus #10",
-      "rollout": "2024-07-29T12:00:00Z"
+      "rollout": "2024-07-29T12:00:00Z",
+      "lesson_i18n": {
+        "es": "El Éxodo #10",
+        "zh_Hans": "出埃及 第10课",
+        "zh_Hant": "出埃及 第10課",
+        "fr": "L’Exode n° 10",
+        "pt": "O Êxodo nº 10",
+        "sw": "Kutoka #10"
+      },
+      "passage_i18n": {
+        "es": "Éxodo 13:17-15:21",
+        "zh_Hans": "出埃及记 13:17-15:21",
+        "zh_Hant": "出埃及記 13:17-15:21",
+        "fr": "Exode 13:17-15:21",
+        "pt": "Êxodo 13:17-15:21",
+        "sw": "Kutoka 13:17-15:21"
+      }
     },
     {
       "passage": "Exodus 15:22-17:7",
       "study": "13one.org/exodus",
       "lesson": "The Exodus #11",
-      "rollout": "2024-08-05T12:00:00Z"
+      "rollout": "2024-08-05T12:00:00Z",
+      "lesson_i18n": {
+        "es": "El Éxodo #11",
+        "zh_Hans": "出埃及 第11课",
+        "zh_Hant": "出埃及 第11課",
+        "fr": "L’Exode n° 11",
+        "pt": "O Êxodo nº 11",
+        "sw": "Kutoka #11"
+      },
+      "passage_i18n": {
+        "es": "Éxodo 15:22-17:7",
+        "zh_Hans": "出埃及记 15:22-17:7",
+        "zh_Hant": "出埃及記 15:22-17:7",
+        "fr": "Exode 15:22-17:7",
+        "pt": "Êxodo 15:22-17:7",
+        "sw": "Kutoka 15:22-17:7"
+      }
     },
     {
       "passage": "Exodus 17:8-18:27",
       "study": "13one.org/exodus",
       "lesson": "The Exodus #12",
-      "rollout": "2024-08-12T12:00:00Z"
+      "rollout": "2024-08-12T12:00:00Z",
+      "lesson_i18n": {
+        "es": "El Éxodo #12",
+        "zh_Hans": "出埃及 第12课",
+        "zh_Hant": "出埃及 第12課",
+        "fr": "L’Exode n° 12",
+        "pt": "O Êxodo nº 12",
+        "sw": "Kutoka #12"
+      },
+      "passage_i18n": {
+        "es": "Éxodo 17:8-18:27",
+        "zh_Hans": "出埃及记 17:8-18:27",
+        "zh_Hant": "出埃及記 17:8-18:27",
+        "fr": "Exode 17:8-18:27",
+        "pt": "Êxodo 17:8-18:27",
+        "sw": "Kutoka 17:8-18:27"
+      }
     },
     {
       "passage": "Exodus 19:1-23:33",
       "study": "13one.org/exodus",
       "lesson": "The Exodus #13",
-      "rollout": "2024-08-19T12:00:00Z"
+      "rollout": "2024-08-19T12:00:00Z",
+      "lesson_i18n": {
+        "es": "El Éxodo #13",
+        "zh_Hans": "出埃及 第13课",
+        "zh_Hant": "出埃及 第13課",
+        "fr": "L’Exode n° 13",
+        "pt": "O Êxodo nº 13",
+        "sw": "Kutoka #13"
+      },
+      "passage_i18n": {
+        "es": "Éxodo 19:1-23:33",
+        "zh_Hans": "出埃及记 19:1-23:33",
+        "zh_Hant": "出埃及記 19:1-23:33",
+        "fr": "Exode 19:1-23:33",
+        "pt": "Êxodo 19:1-23:33",
+        "sw": "Kutoka 19:1-23:33"
+      }
     },
     {
       "passage": "Exodus 24",
       "study": "13one.org/exodus",
       "lesson": "The Exodus #14",
-      "rollout": "2024-08-26T12:00:00Z"
+      "rollout": "2024-08-26T12:00:00Z",
+      "lesson_i18n": {
+        "es": "El Éxodo #14",
+        "zh_Hans": "出埃及 第14课",
+        "zh_Hant": "出埃及 第14課",
+        "fr": "L’Exode n° 14",
+        "pt": "O Êxodo nº 14",
+        "sw": "Kutoka #14"
+      },
+      "passage_i18n": {
+        "es": "Éxodo 24",
+        "zh_Hans": "出埃及记 24",
+        "zh_Hant": "出埃及記 24",
+        "fr": "Exode 24",
+        "pt": "Êxodo 24",
+        "sw": "Kutoka 24"
+      }
     },
     {
       "passage": "Revelation 1",
       "study": "bsfinternational.org/revelation",
       "lesson": "BSF Revelation #3",
-      "rollout": "2024-09-30T12:00:00Z"
+      "rollout": "2024-09-30T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Apocalipsis #3",
+        "zh_Hans": "BSF 启示录 第3课",
+        "zh_Hant": "BSF 啟示錄 第3課",
+        "fr": "BSF Apocalypse n° 3",
+        "pt": "BSF Apocalipse nº 3",
+        "sw": "BSF Ufunuo #3"
+      },
+      "passage_i18n": {
+        "es": "Apocalipsis 1",
+        "zh_Hans": "启示录 1",
+        "zh_Hant": "啟示錄 1",
+        "fr": "Apocalypse 1",
+        "pt": "Apocalipse 1",
+        "sw": "Ufunuo 1"
+      }
     },
     {
       "passage": "Revelation 2:1-11",
       "study": "bsfinternational.org/revelation",
       "lesson": "BSF Revelation #4",
-      "rollout": "2024-10-07T12:00:00Z"
+      "rollout": "2024-10-07T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Apocalipsis #4",
+        "zh_Hans": "BSF 启示录 第4课",
+        "zh_Hant": "BSF 啟示錄 第4課",
+        "fr": "BSF Apocalypse n° 4",
+        "pt": "BSF Apocalipse nº 4",
+        "sw": "BSF Ufunuo #4"
+      },
+      "passage_i18n": {
+        "es": "Apocalipsis 2:1-11",
+        "zh_Hans": "启示录 2:1-11",
+        "zh_Hant": "啟示錄 2:1-11",
+        "fr": "Apocalypse 2:1-11",
+        "pt": "Apocalipse 2:1-11",
+        "sw": "Ufunuo 2:1-11"
+      }
     },
     {
       "passage": "Revelation 2:12-3:6",
       "study": "bsfinternational.org/revelation",
       "lesson": "BSF Revelation #5",
-      "rollout": "2024-10-14T12:00:00Z"
+      "rollout": "2024-10-14T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Apocalipsis #5",
+        "zh_Hans": "BSF 启示录 第5课",
+        "zh_Hant": "BSF 啟示錄 第5課",
+        "fr": "BSF Apocalypse n° 5",
+        "pt": "BSF Apocalipse nº 5",
+        "sw": "BSF Ufunuo #5"
+      },
+      "passage_i18n": {
+        "es": "Apocalipsis 2:12-3:6",
+        "zh_Hans": "启示录 2:12-3:6",
+        "zh_Hant": "啟示錄 2:12-3:6",
+        "fr": "Apocalypse 2:12-3:6",
+        "pt": "Apocalipse 2:12-3:6",
+        "sw": "Ufunuo 2:12-3:6"
+      }
     },
     {
       "passage": "Revelation 3:7-22",
       "study": "bsfinternational.org/revelation",
       "lesson": "BSF Revelation #6",
-      "rollout": "2024-10-21T12:00:00Z"
+      "rollout": "2024-10-21T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Apocalipsis #6",
+        "zh_Hans": "BSF 启示录 第6课",
+        "zh_Hant": "BSF 啟示錄 第6課",
+        "fr": "BSF Apocalypse n° 6",
+        "pt": "BSF Apocalipse nº 6",
+        "sw": "BSF Ufunuo #6"
+      },
+      "passage_i18n": {
+        "es": "Apocalipsis 3:7-22",
+        "zh_Hans": "启示录 3:7-22",
+        "zh_Hant": "啟示錄 3:7-22",
+        "fr": "Apocalypse 3:7-22",
+        "pt": "Apocalipse 3:7-22",
+        "sw": "Ufunuo 3:7-22"
+      }
     },
     {
       "passage": "Acts 2; Romans 11; Ephesians 4",
       "study": "bsfinternational.org/revelation",
       "lesson": "BSF Revelation #7",
-      "rollout": "2024-10-28T12:00:00Z"
+      "rollout": "2024-10-28T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Apocalipsis #7",
+        "zh_Hans": "BSF 启示录 第7课",
+        "zh_Hant": "BSF 啟示錄 第7課",
+        "fr": "BSF Apocalypse n° 7",
+        "pt": "BSF Apocalipse nº 7",
+        "sw": "BSF Ufunuo #7"
+      },
+      "passage_i18n": {
+        "es": "Hechos 2; Romanos 11; Efesios 4",
+        "zh_Hans": "使徒行传 2；罗马书 11；以弗所书 4",
+        "zh_Hant": "使徒行傳 2；羅馬書 11；以弗所書 4",
+        "fr": "Actes 2; Romains 11; Éphésiens 4",
+        "pt": "Atos 2; Romanos 11; Efésios 4",
+        "sw": "Matendo 2; Warumi 11; Waefeso 4"
+      }
     },
     {
       "passage": "Daniel 1-2;6-7",
       "study": "bsfinternational.org/revelation",
       "lesson": "BSF Revelation #8",
-      "rollout": "2024-11-04T12:00:00Z"
+      "rollout": "2024-11-04T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Apocalipsis #8",
+        "zh_Hans": "BSF 启示录 第8课",
+        "zh_Hant": "BSF 啟示錄 第8課",
+        "fr": "BSF Apocalypse n° 8",
+        "pt": "BSF Apocalipse nº 8",
+        "sw": "BSF Ufunuo #8"
+      },
+      "passage_i18n": {
+        "es": "Daniel 1-2; 6-7",
+        "zh_Hans": "但以理书 1-2；6-7",
+        "zh_Hant": "但以理書 1-2；6-7",
+        "fr": "Daniel 1-2; 6-7",
+        "pt": "Daniel 1-2; 6-7",
+        "sw": "Danieli 1-2; 6-7"
+      }
     },
     {
       "passage": "Revelation 4",
       "study": "bsfinternational.org/revelation",
       "lesson": "BSF Revelation #9",
-      "rollout": "2024-11-11T12:00:00Z"
+      "rollout": "2024-11-11T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Apocalipsis #9",
+        "zh_Hans": "BSF 启示录 第9课",
+        "zh_Hant": "BSF 啟示錄 第9課",
+        "fr": "BSF Apocalypse n° 9",
+        "pt": "BSF Apocalipse nº 9",
+        "sw": "BSF Ufunuo #9"
+      },
+      "passage_i18n": {
+        "es": "Apocalipsis 4",
+        "zh_Hans": "启示录 4",
+        "zh_Hant": "啟示錄 4",
+        "fr": "Apocalypse 4",
+        "pt": "Apocalipse 4",
+        "sw": "Ufunuo 4"
+      }
     },
     {
       "passage": "Revelation 5",
       "study": "bsfinternational.org/revelation",
       "lesson": "BSF Revelation #10",
-      "rollout": "2024-11-18T12:00:00Z"
+      "rollout": "2024-11-18T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Apocalipsis #10",
+        "zh_Hans": "BSF 启示录 第10课",
+        "zh_Hant": "BSF 啟示錄 第10課",
+        "fr": "BSF Apocalypse n° 10",
+        "pt": "BSF Apocalipse nº 10",
+        "sw": "BSF Ufunuo #10"
+      },
+      "passage_i18n": {
+        "es": "Apocalipsis 5",
+        "zh_Hans": "启示录 5",
+        "zh_Hant": "啟示錄 5",
+        "fr": "Apocalypse 5",
+        "pt": "Apocalipse 5",
+        "sw": "Ufunuo 5"
+      }
     },
     {
       "passage": "Joel; 2 Peter 3",
       "study": "bsfinternational.org/revelation",
       "lesson": "BSF Revelation #11",
-      "rollout": "2024-11-25T12:00:00Z"
+      "rollout": "2024-11-25T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Apocalipsis #11",
+        "zh_Hans": "BSF 启示录 第11课",
+        "zh_Hant": "BSF 啟示錄 第11課",
+        "fr": "BSF Apocalypse n° 11",
+        "pt": "BSF Apocalipse nº 11",
+        "sw": "BSF Ufunuo #11"
+      },
+      "passage_i18n": {
+        "es": "Joel; 2 Pedro 3",
+        "zh_Hans": "约珥书；彼得后书 3",
+        "zh_Hant": "約珥書；彼得後書 3",
+        "fr": "Joël; 2 Pierre 3",
+        "pt": "Joel; 2 Pedro 3",
+        "sw": "Yoeli; 2 Petro 3"
+      }
     },
     {
       "passage": "Revelation 6",
       "study": "bsfinternational.org/revelation",
       "lesson": "BSF Revelation #12",
-      "rollout": "2024-12-09T12:00:00Z"
+      "rollout": "2024-12-09T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Apocalipsis #12",
+        "zh_Hans": "BSF 启示录 第12课",
+        "zh_Hant": "BSF 啟示錄 第12課",
+        "fr": "BSF Apocalypse n° 12",
+        "pt": "BSF Apocalipse nº 12",
+        "sw": "BSF Ufunuo #12"
+      },
+      "passage_i18n": {
+        "es": "Apocalipsis 6",
+        "zh_Hans": "启示录 6",
+        "zh_Hant": "啟示錄 6",
+        "fr": "Apocalypse 6",
+        "pt": "Apocalipse 6",
+        "sw": "Ufunuo 6"
+      }
     },
     {
       "passage": "Revelation 7",
       "study": "bsfinternational.org/revelation",
       "lesson": "BSF Revelation #13",
-      "rollout": "2024-12-16T12:00:00Z"
+      "rollout": "2024-12-16T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Apocalipsis #13",
+        "zh_Hans": "BSF 启示录 第13课",
+        "zh_Hant": "BSF 啟示錄 第13課",
+        "fr": "BSF Apocalypse n° 13",
+        "pt": "BSF Apocalipse nº 13",
+        "sw": "BSF Ufunuo #13"
+      },
+      "passage_i18n": {
+        "es": "Apocalipsis 7",
+        "zh_Hans": "启示录 7",
+        "zh_Hant": "啟示錄 7",
+        "fr": "Apocalypse 7",
+        "pt": "Apocalipse 7",
+        "sw": "Ufunuo 7"
+      }
     },
     {
       "passage": "Revelation 8-9",
       "study": "bsfinternational.org/revelation",
       "lesson": "BSF Revelation #14",
-      "rollout": "2025-01-06T12:00:00Z"
+      "rollout": "2025-01-06T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Apocalipsis #14",
+        "zh_Hans": "BSF 启示录 第14课",
+        "zh_Hant": "BSF 啟示錄 第14課",
+        "fr": "BSF Apocalypse n° 14",
+        "pt": "BSF Apocalipse nº 14",
+        "sw": "BSF Ufunuo #14"
+      },
+      "passage_i18n": {
+        "es": "Apocalipsis 8-9",
+        "zh_Hans": "启示录 8-9",
+        "zh_Hant": "啟示錄 8-9",
+        "fr": "Apocalypse 8-9",
+        "pt": "Apocalipse 8-9",
+        "sw": "Ufunuo 8-9"
+      }
     },
     {
       "passage": "Revelation 10-11",
       "study": "bsfinternational.org/revelation",
       "lesson": "BSF Revelation #15",
-      "rollout": "2025-01-13T12:00:00Z"
+      "rollout": "2025-01-13T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Apocalipsis #15",
+        "zh_Hans": "BSF 启示录 第15课",
+        "zh_Hant": "BSF 啟示錄 第15課",
+        "fr": "BSF Apocalypse n° 15",
+        "pt": "BSF Apocalipse nº 15",
+        "sw": "BSF Ufunuo #15"
+      },
+      "passage_i18n": {
+        "es": "Apocalipsis 10-11",
+        "zh_Hans": "启示录 10-11",
+        "zh_Hant": "啟示錄 10-11",
+        "fr": "Apocalypse 10-11",
+        "pt": "Apocalipse 10-11",
+        "sw": "Ufunuo 10-11"
+      }
     },
     {
       "passage": "Revelation 12",
       "study": "bsfinternational.org/revelation",
       "lesson": "BSF Revelation #16",
-      "rollout": "2025-01-20T12:00:00Z"
+      "rollout": "2025-01-20T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Apocalipsis #16",
+        "zh_Hans": "BSF 启示录 第16课",
+        "zh_Hant": "BSF 啟示錄 第16課",
+        "fr": "BSF Apocalypse n° 16",
+        "pt": "BSF Apocalipse nº 16",
+        "sw": "BSF Ufunuo #16"
+      },
+      "passage_i18n": {
+        "es": "Apocalipsis 12",
+        "zh_Hans": "启示录 12",
+        "zh_Hant": "啟示錄 12",
+        "fr": "Apocalypse 12",
+        "pt": "Apocalipse 12",
+        "sw": "Ufunuo 12"
+      }
     },
     {
       "passage": "Revelation 13",
       "study": "bsfinternational.org/revelation",
       "lesson": "BSF Revelation #17",
-      "rollout": "2025-01-27T12:00:00Z"
+      "rollout": "2025-01-27T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Apocalipsis #17",
+        "zh_Hans": "BSF 启示录 第17课",
+        "zh_Hant": "BSF 啟示錄 第17課",
+        "fr": "BSF Apocalypse n° 17",
+        "pt": "BSF Apocalipse nº 17",
+        "sw": "BSF Ufunuo #17"
+      },
+      "passage_i18n": {
+        "es": "Apocalipsis 13",
+        "zh_Hans": "启示录 13",
+        "zh_Hant": "啟示錄 13",
+        "fr": "Apocalypse 13",
+        "pt": "Apocalipse 13",
+        "sw": "Ufunuo 13"
+      }
     },
     {
       "passage": "Revelation 14",
       "study": "bsfinternational.org/revelation",
       "lesson": "BSF Revelation #19",
-      "rollout": "2025-02-10T12:00:00Z"
+      "rollout": "2025-02-10T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Apocalipsis #19",
+        "zh_Hans": "BSF 启示录 第19课",
+        "zh_Hant": "BSF 啟示錄 第19課",
+        "fr": "BSF Apocalypse n° 19",
+        "pt": "BSF Apocalipse nº 19",
+        "sw": "BSF Ufunuo #19"
+      },
+      "passage_i18n": {
+        "es": "Apocalipsis 14",
+        "zh_Hans": "启示录 14",
+        "zh_Hant": "啟示錄 14",
+        "fr": "Apocalypse 14",
+        "pt": "Apocalipse 14",
+        "sw": "Ufunuo 14"
+      }
     },
     {
       "passage": "Revelation 15-16",
       "study": "bsfinternational.org/revelation",
       "lesson": "BSF Revelation #20",
-      "rollout": "2025-02-17T12:00:00Z"
+      "rollout": "2025-02-17T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Apocalipsis #20",
+        "zh_Hans": "BSF 启示录 第20课",
+        "zh_Hant": "BSF 啟示錄 第20課",
+        "fr": "BSF Apocalypse n° 20",
+        "pt": "BSF Apocalipse nº 20",
+        "sw": "BSF Ufunuo #20"
+      },
+      "passage_i18n": {
+        "es": "Apocalipsis 15-16",
+        "zh_Hans": "启示录 15-16",
+        "zh_Hant": "啟示錄 15-16",
+        "fr": "Apocalypse 15-16",
+        "pt": "Apocalipse 15-16",
+        "sw": "Ufunuo 15-16"
+      }
     },
     {
       "passage": "Revelation 17",
       "study": "bsfinternational.org/revelation",
       "lesson": "BSF Revelation #22",
-      "rollout": "2025-03-03T12:00:00Z"
+      "rollout": "2025-03-03T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Apocalipsis #22",
+        "zh_Hans": "BSF 启示录 第22课",
+        "zh_Hant": "BSF 啟示錄 第22課",
+        "fr": "BSF Apocalypse n° 22",
+        "pt": "BSF Apocalipse nº 22",
+        "sw": "BSF Ufunuo #22"
+      },
+      "passage_i18n": {
+        "es": "Apocalipsis 17",
+        "zh_Hans": "启示录 17",
+        "zh_Hant": "啟示錄 17",
+        "fr": "Apocalypse 17",
+        "pt": "Apocalipse 17",
+        "sw": "Ufunuo 17"
+      }
     },
     {
       "passage": "Revelation 18",
       "study": "bsfinternational.org/revelation",
       "lesson": "BSF Revelation #23",
-      "rollout": "2025-03-10T12:00:00Z"
+      "rollout": "2025-03-10T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Apocalipsis #23",
+        "zh_Hans": "BSF 启示录 第23课",
+        "zh_Hant": "BSF 啟示錄 第23課",
+        "fr": "BSF Apocalypse n° 23",
+        "pt": "BSF Apocalipse nº 23",
+        "sw": "BSF Ufunuo #23"
+      },
+      "passage_i18n": {
+        "es": "Apocalipsis 18",
+        "zh_Hans": "启示录 18",
+        "zh_Hant": "啟示錄 18",
+        "fr": "Apocalypse 18",
+        "pt": "Apocalipse 18",
+        "sw": "Ufunuo 18"
+      }
     },
     {
       "passage": "Revelation 19",
       "study": "bsfinternational.org/revelation",
       "lesson": "BSF Revelation #24",
-      "rollout": "2025-03-17T12:00:00Z"
+      "rollout": "2025-03-17T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Apocalipsis #24",
+        "zh_Hans": "BSF 启示录 第24课",
+        "zh_Hant": "BSF 啟示錄 第24課",
+        "fr": "BSF Apocalypse n° 24",
+        "pt": "BSF Apocalipse nº 24",
+        "sw": "BSF Ufunuo #24"
+      },
+      "passage_i18n": {
+        "es": "Apocalipsis 19",
+        "zh_Hans": "启示录 19",
+        "zh_Hant": "啟示錄 19",
+        "fr": "Apocalypse 19",
+        "pt": "Apocalipse 19",
+        "sw": "Ufunuo 19"
+      }
     },
     {
       "passage": "Revelation 20:1-10",
       "study": "bsfinternational.org/revelation",
       "lesson": "BSF Revelation #25",
-      "rollout": "2025-03-24T12:00:00Z"
+      "rollout": "2025-03-24T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Apocalipsis #25",
+        "zh_Hans": "BSF 启示录 第25课",
+        "zh_Hant": "BSF 啟示錄 第25課",
+        "fr": "BSF Apocalypse n° 25",
+        "pt": "BSF Apocalipse nº 25",
+        "sw": "BSF Ufunuo #25"
+      },
+      "passage_i18n": {
+        "es": "Apocalipsis 20:1-10",
+        "zh_Hans": "启示录 20:1-10",
+        "zh_Hant": "啟示錄 20:1-10",
+        "fr": "Apocalypse 20:1-10",
+        "pt": "Apocalipse 20:1-10",
+        "sw": "Ufunuo 20:1-10"
+      }
     },
     {
       "passage": "Revelation 20:11-21:8",
       "study": "bsfinternational.org/revelation",
       "lesson": "BSF Revelation #26",
-      "rollout": "2025-03-31T12:00:00Z"
+      "rollout": "2025-03-31T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Apocalipsis #26",
+        "zh_Hans": "BSF 启示录 第26课",
+        "zh_Hant": "BSF 啟示錄 第26課",
+        "fr": "BSF Apocalypse n° 26",
+        "pt": "BSF Apocalipse nº 26",
+        "sw": "BSF Ufunuo #26"
+      },
+      "passage_i18n": {
+        "es": "Apocalipsis 20:11-21:8",
+        "zh_Hans": "启示录 20:11-21:8",
+        "zh_Hant": "啟示錄 20:11-21:8",
+        "fr": "Apocalypse 20:11-21:8",
+        "pt": "Apocalipse 20:11-21:8",
+        "sw": "Ufunuo 20:11-21:8"
+      }
     },
     {
       "passage": "Revelation 21:9-22:5",
       "study": "bsfinternational.org/revelation",
       "lesson": "BSF Revelation #27",
-      "rollout": "2025-04-07T12:00:00Z"
+      "rollout": "2025-04-07T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Apocalipsis #27",
+        "zh_Hans": "BSF 启示录 第27课",
+        "zh_Hant": "BSF 啟示錄 第27課",
+        "fr": "BSF Apocalypse n° 27",
+        "pt": "BSF Apocalipse nº 27",
+        "sw": "BSF Ufunuo #27"
+      },
+      "passage_i18n": {
+        "es": "Apocalipsis 21:9-22:5",
+        "zh_Hans": "启示录 21:9-22:5",
+        "zh_Hant": "啟示錄 21:9-22:5",
+        "fr": "Apocalypse 21:9-22:5",
+        "pt": "Apocalipse 21:9-22:5",
+        "sw": "Ufunuo 21:9-22:5"
+      }
     },
     {
       "passage": "Revelation 22:6-21",
       "study": "bsfinternational.org/revelation",
       "lesson": "BSF Revelation #29",
-      "rollout": "2025-04-28T12:00:00Z"
+      "rollout": "2025-04-28T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Apocalipsis #29",
+        "zh_Hans": "BSF 启示录 第29课",
+        "zh_Hant": "BSF 啟示錄 第29課",
+        "fr": "BSF Apocalypse n° 29",
+        "pt": "BSF Apocalipse nº 29",
+        "sw": "BSF Ufunuo #29"
+      },
+      "passage_i18n": {
+        "es": "Apocalipsis 22:6-21",
+        "zh_Hans": "启示录 22:6-21",
+        "zh_Hant": "啟示錄 22:6-21",
+        "fr": "Apocalypse 22:6-21",
+        "pt": "Apocalipse 22:6-21",
+        "sw": "Ufunuo 22:6-21"
+      }
     },
     {
       "passage": "1 Chronicles 28-29",
       "study": "https://13one.org/psalms-of-the-sons-of-korah",
       "lesson": "13one | Summer 2025",
-      "rollout": "2025-05-12T12:00:00Z"
+      "rollout": "2025-05-12T12:00:00Z",
+      "passage_i18n": {
+        "es": "1 Crónicas 28-29",
+        "zh_Hans": "历代志上 28-29",
+        "zh_Hant": "歷代志上 28-29",
+        "fr": "1 Chroniques 28-29",
+        "pt": "1 Crônicas 28-29",
+        "sw": "1 Mambo ya Nyakati 28-29"
+      }
     },
     {
       "passage": "Psalm 49",
       "study": "https://13one.org/psalms-of-the-sons-of-korah",
       "lesson": "13one | Summer 2025",
-      "rollout": "2025-05-19T12:00:00Z"
+      "rollout": "2025-05-19T12:00:00Z",
+      "passage_i18n": {
+        "es": "Salmo 49",
+        "zh_Hans": "诗篇 49",
+        "zh_Hant": "詩篇 49",
+        "fr": "Psaume 49",
+        "pt": "Salmo 49",
+        "sw": "Zaburi 49"
+      }
     },
     {
       "passage": "Psalm 84",
       "study": "https://13one.org/psalms-of-the-sons-of-korah",
       "lesson": "13one | Summer 2025",
-      "rollout": "2025-06-02T12:00:00Z"
+      "rollout": "2025-06-02T12:00:00Z",
+      "passage_i18n": {
+        "es": "Salmo 84",
+        "zh_Hans": "诗篇 84",
+        "zh_Hant": "詩篇 84",
+        "fr": "Psaume 84",
+        "pt": "Salmo 84",
+        "sw": "Zaburi 84"
+      }
     },
     {
       "passage": "Psalm 87",
       "study": "https://13one.org/psalms-of-the-sons-of-korah",
       "lesson": "13one | Summer 2025",
-      "rollout": "2025-06-09T12:00:00Z"
+      "rollout": "2025-06-09T12:00:00Z",
+      "passage_i18n": {
+        "es": "Salmo 87",
+        "zh_Hans": "诗篇 87",
+        "zh_Hant": "詩篇 87",
+        "fr": "Psaume 87",
+        "pt": "Salmo 87",
+        "sw": "Zaburi 87"
+      }
     },
     {
       "passage": "Psalm 46",
       "study": "https://13one.org/psalms-of-the-sons-of-korah",
       "lesson": "13one | Summer 2025",
-      "rollout": "2025-06-16T12:00:00Z"
+      "rollout": "2025-06-16T12:00:00Z",
+      "passage_i18n": {
+        "es": "Salmo 46",
+        "zh_Hans": "诗篇 46",
+        "zh_Hant": "詩篇 46",
+        "fr": "Psaume 46",
+        "pt": "Salmo 46",
+        "sw": "Zaburi 46"
+      }
     },
     {
       "passage": "Psalm 85",
       "study": "https://13one.org/psalms-of-the-sons-of-korah",
       "lesson": "13one | Summer 2025",
-      "rollout": "2025-06-23T12:00:00Z"
+      "rollout": "2025-06-23T12:00:00Z",
+      "passage_i18n": {
+        "es": "Salmo 85",
+        "zh_Hans": "诗篇 85",
+        "zh_Hant": "詩篇 85",
+        "fr": "Psaume 85",
+        "pt": "Salmo 85",
+        "sw": "Zaburi 85"
+      }
     },
     {
       "passage": "Psalm 47",
       "study": "https://13one.org/psalms-of-the-sons-of-korah",
       "lesson": "13one | Summer 2025",
-      "rollout": "2025-06-30T12:00:00Z"
+      "rollout": "2025-06-30T12:00:00Z",
+      "passage_i18n": {
+        "es": "Salmo 47",
+        "zh_Hans": "诗篇 47",
+        "zh_Hant": "詩篇 47",
+        "fr": "Psaume 47",
+        "pt": "Salmo 47",
+        "sw": "Zaburi 47"
+      }
     },
     {
       "passage": "Psalm 89",
       "study": "https://13one.org/psalms-of-the-sons-of-korah",
       "lesson": "13one | Summer 2025",
-      "rollout": "2025-07-14T12:00:00Z"
+      "rollout": "2025-07-14T12:00:00Z",
+      "passage_i18n": {
+        "es": "Salmo 89",
+        "zh_Hans": "诗篇 89",
+        "zh_Hant": "詩篇 89",
+        "fr": "Psaume 89",
+        "pt": "Salmo 89",
+        "sw": "Zaburi 89"
+      }
     },
     {
       "passage": "Psalm 88",
       "study": "https://13one.org/psalms-of-the-sons-of-korah",
       "lesson": "13one | Summer 2025",
-      "rollout": "2025-07-21T12:00:00Z"
+      "rollout": "2025-07-21T12:00:00Z",
+      "passage_i18n": {
+        "es": "Salmo 88",
+        "zh_Hans": "诗篇 88",
+        "zh_Hant": "詩篇 88",
+        "fr": "Psaume 88",
+        "pt": "Salmo 88",
+        "sw": "Zaburi 88"
+      }
     },
     {
       "passage": "Psalm 86",
       "study": "https://13one.org/psalms-of-the-sons-of-korah",
       "lesson": "13one | Summer 2025",
-      "rollout": "2025-07-28T12:00:00Z"
+      "rollout": "2025-07-28T12:00:00Z",
+      "passage_i18n": {
+        "es": "Salmo 86",
+        "zh_Hans": "诗篇 86",
+        "zh_Hant": "詩篇 86",
+        "fr": "Psaume 86",
+        "pt": "Salmo 86",
+        "sw": "Zaburi 86"
+      }
     },
     {
       "passage": "Psalm 42-43",
       "study": "https://13one.org/psalms-of-the-sons-of-korah",
       "lesson": "13one | Summer 2025",
-      "rollout": "2025-08-04T12:00:00Z"
+      "rollout": "2025-08-04T12:00:00Z",
+      "passage_i18n": {
+        "es": "Salmo 42-43",
+        "zh_Hans": "诗篇 42-43",
+        "zh_Hant": "詩篇 42-43",
+        "fr": "Psaume 42-43",
+        "pt": "Salmo 42-43",
+        "sw": "Zaburi 42-43"
+      }
     },
     {
       "passage": "Psalm 48",
       "study": "https://13one.org/psalms-of-the-sons-of-korah",
       "lesson": "13one | Summer 2025",
-      "rollout": "2025-08-11T12:00:00Z"
+      "rollout": "2025-08-11T12:00:00Z",
+      "passage_i18n": {
+        "es": "Salmo 48",
+        "zh_Hans": "诗篇 48",
+        "zh_Hant": "詩篇 48",
+        "fr": "Psaume 48",
+        "pt": "Salmo 48",
+        "sw": "Zaburi 48"
+      }
     },
     {
       "passage": "Psalm 44",
       "study": "https://13one.org/psalms-of-the-sons-of-korah",
       "lesson": "13one | Summer 2025",
-      "rollout": "2025-08-18T12:00:00Z"
+      "rollout": "2025-08-18T12:00:00Z",
+      "passage_i18n": {
+        "es": "Salmo 44",
+        "zh_Hans": "诗篇 44",
+        "zh_Hant": "詩篇 44",
+        "fr": "Psaume 44",
+        "pt": "Salmo 44",
+        "sw": "Zaburi 44"
+      }
     },
     {
       "passage": "Psalm 45",
       "study": "https://13one.org/psalms-of-the-sons-of-korah",
       "lesson": "13one | Summer 2025",
-      "rollout": "2025-08-25T12:00:00Z"
+      "rollout": "2025-08-25T12:00:00Z",
+      "passage_i18n": {
+        "es": "Salmo 45",
+        "zh_Hans": "诗篇 45",
+        "zh_Hant": "詩篇 45",
+        "fr": "Psaume 45",
+        "pt": "Salmo 45",
+        "sw": "Zaburi 45"
+      }
     },
     {
       "passage": "Ezekiel 1-2",
       "study": "bsfinternational.org/exile-and-return/",
       "lesson": "BSF Exile #1",
-      "rollout": "2025-09-08T12:00:00Z"
+      "rollout": "2025-09-08T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Exilio #1",
+        "zh_Hans": "BSF 被掳归回 第1课",
+        "zh_Hant": "BSF 被擄歸回 第1課",
+        "fr": "BSF Exil n° 1",
+        "pt": "BSF Exílio nº 1",
+        "sw": "BSF Uhamisho #1"
+      },
+      "passage_i18n": {
+        "es": "Ezequiel 1-2",
+        "zh_Hans": "以西结书 1-2",
+        "zh_Hant": "以西結書 1-2",
+        "fr": "Ézéchiel 1-2",
+        "pt": "Ezequiel 1-2",
+        "sw": "Ezekieli 1-2"
+      }
     },
     {
       "passage": "Ezekiel 36:16-37:28",
       "study": "bsfinternational.org/exile-and-return/",
       "lesson": "BSF Exile #2",
-      "rollout": "2025-09-15T12:00:00Z"
+      "rollout": "2025-09-15T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Exilio #2",
+        "zh_Hans": "BSF 被掳归回 第2课",
+        "zh_Hant": "BSF 被擄歸回 第2課",
+        "fr": "BSF Exil n° 2",
+        "pt": "BSF Exílio nº 2",
+        "sw": "BSF Uhamisho #2"
+      },
+      "passage_i18n": {
+        "es": "Ezequiel 36:16-37:28",
+        "zh_Hans": "以西结书 36:16-37:28",
+        "zh_Hant": "以西結書 36:16-37:28",
+        "fr": "Ézéchiel 36:16-37:28",
+        "pt": "Ezequiel 36:16-37:28",
+        "sw": "Ezekieli 36:16-37:28"
+      }
     },
     {
       "passage": "Daniel 1-2",
       "study": "bsfinternational.org/exile-and-return/",
       "lesson": "BSF Exile #3",
-      "rollout": "2025-09-22T12:00:00Z"
+      "rollout": "2025-09-22T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Exilio #3",
+        "zh_Hans": "BSF 被掳归回 第3课",
+        "zh_Hant": "BSF 被擄歸回 第3課",
+        "fr": "BSF Exil n° 3",
+        "pt": "BSF Exílio nº 3",
+        "sw": "BSF Uhamisho #3"
+      },
+      "passage_i18n": {
+        "es": "Daniel 1-2",
+        "zh_Hans": "但以理书 1-2",
+        "zh_Hant": "但以理書 1-2",
+        "fr": "Daniel 1-2",
+        "pt": "Daniel 1-2",
+        "sw": "Danieli 1-2"
+      }
     },
     {
       "passage": "Daniel 3-4",
       "study": "bsfinternational.org/exile-and-return/",
       "lesson": "BSF Exile #4",
-      "rollout": "2025-09-29T12:00:00Z"
+      "rollout": "2025-09-29T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Exilio #4",
+        "zh_Hans": "BSF 被掳归回 第4课",
+        "zh_Hant": "BSF 被擄歸回 第4課",
+        "fr": "BSF Exil n° 4",
+        "pt": "BSF Exílio nº 4",
+        "sw": "BSF Uhamisho #4"
+      },
+      "passage_i18n": {
+        "es": "Daniel 3-4",
+        "zh_Hans": "但以理书 3-4",
+        "zh_Hant": "但以理書 3-4",
+        "fr": "Daniel 3-4",
+        "pt": "Daniel 3-4",
+        "sw": "Danieli 3-4"
+      }
     },
     {
       "passage": "Daniel 5-6",
       "study": "bsfinternational.org/exile-and-return/",
       "lesson": "BSF Exile #5",
-      "rollout": "2025-10-06T12:00:00Z"
+      "rollout": "2025-10-06T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Exilio #5",
+        "zh_Hans": "BSF 被掳归回 第5课",
+        "zh_Hant": "BSF 被擄歸回 第5課",
+        "fr": "BSF Exil n° 5",
+        "pt": "BSF Exílio nº 5",
+        "sw": "BSF Uhamisho #5"
+      },
+      "passage_i18n": {
+        "es": "Daniel 5-6",
+        "zh_Hans": "但以理书 5-6",
+        "zh_Hant": "但以理書 5-6",
+        "fr": "Daniel 5-6",
+        "pt": "Daniel 5-6",
+        "sw": "Danieli 5-6"
+      }
     },
     {
       "passage": "Daniel 7-8",
       "study": "bsfinternational.org/exile-and-return/",
       "lesson": "BSF Exile #6",
-      "rollout": "2025-10-13T12:00:00Z"
+      "rollout": "2025-10-13T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Exilio #6",
+        "zh_Hans": "BSF 被掳归回 第6课",
+        "zh_Hant": "BSF 被擄歸回 第6課",
+        "fr": "BSF Exil n° 6",
+        "pt": "BSF Exílio nº 6",
+        "sw": "BSF Uhamisho #6"
+      },
+      "passage_i18n": {
+        "es": "Daniel 7-8",
+        "zh_Hans": "但以理书 7-8",
+        "zh_Hant": "但以理書 7-8",
+        "fr": "Daniel 7-8",
+        "pt": "Daniel 7-8",
+        "sw": "Danieli 7-8"
+      }
     },
     {
       "passage": "Daniel 9",
       "study": "bsfinternational.org/exile-and-return/",
       "lesson": "BSF Exile #7",
-      "rollout": "2025-10-20T12:00:00Z"
+      "rollout": "2025-10-20T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Exilio #7",
+        "zh_Hans": "BSF 被掳归回 第7课",
+        "zh_Hant": "BSF 被擄歸回 第7課",
+        "fr": "BSF Exil n° 7",
+        "pt": "BSF Exílio nº 7",
+        "sw": "BSF Uhamisho #7"
+      },
+      "passage_i18n": {
+        "es": "Daniel 9",
+        "zh_Hans": "但以理书 9",
+        "zh_Hant": "但以理書 9",
+        "fr": "Daniel 9",
+        "pt": "Daniel 9",
+        "sw": "Danieli 9"
+      }
     },
     {
       "passage": "Daniel 10:1-12:13",
       "study": "bsfinternational.org/exile-and-return/",
       "lesson": "BSF Exile #8",
-      "rollout": "2025-11-03T12:00:00Z"
+      "rollout": "2025-11-03T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Exilio #8",
+        "zh_Hans": "BSF 被掳归回 第8课",
+        "zh_Hant": "BSF 被擄歸回 第8課",
+        "fr": "BSF Exil n° 8",
+        "pt": "BSF Exílio nº 8",
+        "sw": "BSF Uhamisho #8"
+      },
+      "passage_i18n": {
+        "es": "Daniel 10:1-12:13",
+        "zh_Hans": "但以理书 10:1-12:13",
+        "zh_Hant": "但以理書 10:1-12:13",
+        "fr": "Daniel 10:1-12:13",
+        "pt": "Daniel 10:1-12:13",
+        "sw": "Danieli 10:1-12:13"
+      }
     },
     {
       "passage": "Ezra 1-2",
       "study": "bsfinternational.org/exile-and-return/",
       "lesson": "BSF Exile #9",
-      "rollout": "2025-11-10T12:00:00Z"
+      "rollout": "2025-11-10T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Exilio #9",
+        "zh_Hans": "BSF 被掳归回 第9课",
+        "zh_Hant": "BSF 被擄歸回 第9課",
+        "fr": "BSF Exil n° 9",
+        "pt": "BSF Exílio nº 9",
+        "sw": "BSF Uhamisho #9"
+      },
+      "passage_i18n": {
+        "es": "Esdras 1-2",
+        "zh_Hans": "以斯拉记 1-2",
+        "zh_Hant": "以斯拉記 1-2",
+        "fr": "Esdras 1-2",
+        "pt": "Esdras 1-2",
+        "sw": "Ezra 1-2"
+      }
     },
     {
       "passage": "Ezra 3:1-6:22",
       "study": "bsfinternational.org/exile-and-return/",
       "lesson": "BSF Exile #10",
-      "rollout": "2025-11-17T12:00:00Z"
+      "rollout": "2025-11-17T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Exilio #10",
+        "zh_Hans": "BSF 被掳归回 第10课",
+        "zh_Hant": "BSF 被擄歸回 第10課",
+        "fr": "BSF Exil n° 10",
+        "pt": "BSF Exílio nº 10",
+        "sw": "BSF Uhamisho #10"
+      },
+      "passage_i18n": {
+        "es": "Esdras 3:1-6:22",
+        "zh_Hans": "以斯拉记 3:1-6:22",
+        "zh_Hant": "以斯拉記 3:1-6:22",
+        "fr": "Esdras 3:1-6:22",
+        "pt": "Esdras 3:1-6:22",
+        "sw": "Ezra 3:1-6:22"
+      }
     },
     {
       "passage": "Ezra 7-8",
       "study": "bsfinternational.org/exile-and-return/",
       "lesson": "BSF Exile #11",
-      "rollout": "2025-11-24T12:00:00Z"
+      "rollout": "2025-11-24T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Exilio #11",
+        "zh_Hans": "BSF 被掳归回 第11课",
+        "zh_Hant": "BSF 被擄歸回 第11課",
+        "fr": "BSF Exil n° 11",
+        "pt": "BSF Exílio nº 11",
+        "sw": "BSF Uhamisho #11"
+      },
+      "passage_i18n": {
+        "es": "Esdras 7-8",
+        "zh_Hans": "以斯拉记 7-8",
+        "zh_Hant": "以斯拉記 7-8",
+        "fr": "Esdras 7-8",
+        "pt": "Esdras 7-8",
+        "sw": "Ezra 7-8"
+      }
     },
     {
       "passage": "Ezra 9-10",
       "study": "bsfinternational.org/exile-and-return/",
       "lesson": "BSF Exile #12",
-      "rollout": "2025-12-08T12:00:00Z"
+      "rollout": "2025-12-08T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Exilio #12",
+        "zh_Hans": "BSF 被掳归回 第12课",
+        "zh_Hant": "BSF 被擄歸回 第12課",
+        "fr": "BSF Exil n° 12",
+        "pt": "BSF Exílio nº 12",
+        "sw": "BSF Uhamisho #12"
+      },
+      "passage_i18n": {
+        "es": "Esdras 9-10",
+        "zh_Hans": "以斯拉记 9-10",
+        "zh_Hant": "以斯拉記 9-10",
+        "fr": "Esdras 9-10",
+        "pt": "Esdras 9-10",
+        "sw": "Ezra 9-10"
+      }
     },
     {
       "passage": "Esther 1-2",
       "study": "bsfinternational.org/exile-and-return/",
       "lesson": "BSF Exile #13",
-      "rollout": "2025-12-15T12:00:00Z"
+      "rollout": "2025-12-15T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Exilio #13",
+        "zh_Hans": "BSF 被掳归回 第13课",
+        "zh_Hant": "BSF 被擄歸回 第13課",
+        "fr": "BSF Exil n° 13",
+        "pt": "BSF Exílio nº 13",
+        "sw": "BSF Uhamisho #13"
+      },
+      "passage_i18n": {
+        "es": "Ester 1-2",
+        "zh_Hans": "以斯帖记 1-2",
+        "zh_Hant": "以斯帖記 1-2",
+        "fr": "Esther 1-2",
+        "pt": "Ester 1-2",
+        "sw": "Esta 1-2"
+      }
     },
     {
       "passage": "Esther 3:1-7:10",
       "study": "bsfinternational.org/exile-and-return/",
       "lesson": "BSF Exile #14",
-      "rollout": "2026-01-12T12:00:00Z"
+      "rollout": "2026-01-12T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Exilio #14",
+        "zh_Hans": "BSF 被掳归回 第14课",
+        "zh_Hant": "BSF 被擄歸回 第14課",
+        "fr": "BSF Exil n° 14",
+        "pt": "BSF Exílio nº 14",
+        "sw": "BSF Uhamisho #14"
+      },
+      "passage_i18n": {
+        "es": "Ester 3:1-7:10",
+        "zh_Hans": "以斯帖记 3:1-7:10",
+        "zh_Hant": "以斯帖記 3:1-7:10",
+        "fr": "Esther 3:1-7:10",
+        "pt": "Ester 3:1-7:10",
+        "sw": "Esta 3:1-7:10"
+      }
     },
     {
       "passage": "Esther 8:1-10:3",
       "study": "bsfinternational.org/exile-and-return/",
       "lesson": "BSF Exile #15",
-      "rollout": "2026-01-19T12:00:00Z"
+      "rollout": "2026-01-19T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Exilio #15",
+        "zh_Hans": "BSF 被掳归回 第15课",
+        "zh_Hant": "BSF 被擄歸回 第15課",
+        "fr": "BSF Exil n° 15",
+        "pt": "BSF Exílio nº 15",
+        "sw": "BSF Uhamisho #15"
+      },
+      "passage_i18n": {
+        "es": "Ester 8:1-10:3",
+        "zh_Hans": "以斯帖记 8:1-10:3",
+        "zh_Hant": "以斯帖記 8:1-10:3",
+        "fr": "Esther 8:1-10:3",
+        "pt": "Ester 8:1-10:3",
+        "sw": "Esta 8:1-10:3"
+      }
     },
     {
       "passage": "Haggai 1-2",
       "study": "bsfinternational.org/exile-and-return/",
       "lesson": "BSF Exile #16",
-      "rollout": "2026-01-26T12:00:00Z"
+      "rollout": "2026-01-26T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Exilio #16",
+        "zh_Hans": "BSF 被掳归回 第16课",
+        "zh_Hant": "BSF 被擄歸回 第16課",
+        "fr": "BSF Exil n° 16",
+        "pt": "BSF Exílio nº 16",
+        "sw": "BSF Uhamisho #16"
+      },
+      "passage_i18n": {
+        "es": "Hageo 1-2",
+        "zh_Hans": "哈该书 1-2",
+        "zh_Hant": "哈該書 1-2",
+        "fr": "Aggée 1-2",
+        "pt": "Ageu 1-2",
+        "sw": "Hagai 1-2"
+      }
     },
     {
       "passage": "Zechariah 1:1-6",
       "study": "bsfinternational.org/exile-and-return/",
       "lesson": "BSF Exile #17",
-      "rollout": "2026-02-02T12:00:00Z"
+      "rollout": "2026-02-02T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Exilio #17",
+        "zh_Hans": "BSF 被掳归回 第17课",
+        "zh_Hant": "BSF 被擄歸回 第17課",
+        "fr": "BSF Exil n° 17",
+        "pt": "BSF Exílio nº 17",
+        "sw": "BSF Uhamisho #17"
+      },
+      "passage_i18n": {
+        "es": "Zacarías 1:1-6",
+        "zh_Hans": "撒迦利亚书 1:1-6",
+        "zh_Hant": "撒迦利亞書 1:1-6",
+        "fr": "Zacharie 1:1-6",
+        "pt": "Zacarias 1:1-6",
+        "sw": "Zekaria 1:1-6"
+      }
     },
     {
       "passage": "Zechariah 1:7-4:14",
       "study": "bsfinternational.org/exile-and-return/",
       "lesson": "BSF Exile #18",
-      "rollout": "2026-02-09T12:00:00Z"
+      "rollout": "2026-02-09T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Exilio #18",
+        "zh_Hans": "BSF 被掳归回 第18课",
+        "zh_Hant": "BSF 被擄歸回 第18課",
+        "fr": "BSF Exil n° 18",
+        "pt": "BSF Exílio nº 18",
+        "sw": "BSF Uhamisho #18"
+      },
+      "passage_i18n": {
+        "es": "Zacarías 1:7-4:14",
+        "zh_Hans": "撒迦利亚书 1:7-4:14",
+        "zh_Hant": "撒迦利亞書 1:7-4:14",
+        "fr": "Zacharie 1:7-4:14",
+        "pt": "Zacarias 1:7-4:14",
+        "sw": "Zekaria 1:7-4:14"
+      }
     },
     {
       "passage": "Zechariah 5-6",
       "study": "bsfinternational.org/exile-and-return/",
       "lesson": "BSF Exile #19",
-      "rollout": "2026-02-16T12:00:00Z"
+      "rollout": "2026-02-16T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Exilio #19",
+        "zh_Hans": "BSF 被掳归回 第19课",
+        "zh_Hant": "BSF 被擄歸回 第19課",
+        "fr": "BSF Exil n° 19",
+        "pt": "BSF Exílio nº 19",
+        "sw": "BSF Uhamisho #19"
+      },
+      "passage_i18n": {
+        "es": "Zacarías 5-6",
+        "zh_Hans": "撒迦利亚书 5-6",
+        "zh_Hant": "撒迦利亞書 5-6",
+        "fr": "Zacharie 5-6",
+        "pt": "Zacarias 5-6",
+        "sw": "Zekaria 5-6"
+      }
     },
     {
       "passage": "Zechariah 7-8",
       "study": "bsfinternational.org/exile-and-return/",
       "lesson": "BSF Exile #20",
-      "rollout": "2026-02-23T12:00:00Z"
+      "rollout": "2026-02-23T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Exilio #20",
+        "zh_Hans": "BSF 被掳归回 第20课",
+        "zh_Hant": "BSF 被擄歸回 第20課",
+        "fr": "BSF Exil n° 20",
+        "pt": "BSF Exílio nº 20",
+        "sw": "BSF Uhamisho #20"
+      },
+      "passage_i18n": {
+        "es": "Zacarías 7-8",
+        "zh_Hans": "撒迦利亚书 7-8",
+        "zh_Hant": "撒迦利亞書 7-8",
+        "fr": "Zacharie 7-8",
+        "pt": "Zacarias 7-8",
+        "sw": "Zekaria 7-8"
+      }
     },
     {
       "passage": "Zechariah 9:1-11:17",
       "study": "bsfinternational.org/exile-and-return/",
       "lesson": "BSF Exile #21",
-      "rollout": "2026-03-02T12:00:00Z"
+      "rollout": "2026-03-02T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Exilio #21",
+        "zh_Hans": "BSF 被掳归回 第21课",
+        "zh_Hant": "BSF 被擄歸回 第21課",
+        "fr": "BSF Exil n° 21",
+        "pt": "BSF Exílio nº 21",
+        "sw": "BSF Uhamisho #21"
+      },
+      "passage_i18n": {
+        "es": "Zacarías 9:1-11:17",
+        "zh_Hans": "撒迦利亚书 9:1-11:17",
+        "zh_Hant": "撒迦利亞書 9:1-11:17",
+        "fr": "Zacharie 9:1-11:17",
+        "pt": "Zacarias 9:1-11:17",
+        "sw": "Zekaria 9:1-11:17"
+      }
     },
     {
       "passage": "Zechariah 12:1-14:21",
       "study": "bsfinternational.org/exile-and-return/",
       "lesson": "BSF Exile #22",
-      "rollout": "2026-03-09T12:00:00Z"
+      "rollout": "2026-03-09T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Exilio #22",
+        "zh_Hans": "BSF 被掳归回 第22课",
+        "zh_Hant": "BSF 被擄歸回 第22課",
+        "fr": "BSF Exil n° 22",
+        "pt": "BSF Exílio nº 22",
+        "sw": "BSF Uhamisho #22"
+      },
+      "passage_i18n": {
+        "es": "Zacarías 12:1-14:21",
+        "zh_Hans": "撒迦利亚书 12:1-14:21",
+        "zh_Hant": "撒迦利亞書 12:1-14:21",
+        "fr": "Zacharie 12:1-14:21",
+        "pt": "Zacarias 12:1-14:21",
+        "sw": "Zekaria 12:1-14:21"
+      }
     },
     {
       "passage": "Nehemiah 1:1-3:32",
       "study": "bsfinternational.org/exile-and-return/",
       "lesson": "BSF Exile #23",
-      "rollout": "2026-03-16T12:00:00Z"
+      "rollout": "2026-03-16T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Exilio #23",
+        "zh_Hans": "BSF 被掳归回 第23课",
+        "zh_Hant": "BSF 被擄歸回 第23課",
+        "fr": "BSF Exil n° 23",
+        "pt": "BSF Exílio nº 23",
+        "sw": "BSF Uhamisho #23"
+      },
+      "passage_i18n": {
+        "es": "Nehemías 1:1-3:32",
+        "zh_Hans": "尼希米记 1:1-3:32",
+        "zh_Hant": "尼希米記 1:1-3:32",
+        "fr": "Néhémie 1:1-3:32",
+        "pt": "Neemias 1:1-3:32",
+        "sw": "Nehemia 1:1-3:32"
+      }
     },
     {
       "passage": "Nehemiah 4:1-6:14",
       "study": "bsfinternational.org/exile-and-return/",
       "lesson": "BSF Exile #24",
-      "rollout": "2026-03-23T12:00:00Z"
+      "rollout": "2026-03-23T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Exilio #24",
+        "zh_Hans": "BSF 被掳归回 第24课",
+        "zh_Hant": "BSF 被擄歸回 第24課",
+        "fr": "BSF Exil n° 24",
+        "pt": "BSF Exílio nº 24",
+        "sw": "BSF Uhamisho #24"
+      },
+      "passage_i18n": {
+        "es": "Nehemías 4:1-6:14",
+        "zh_Hans": "尼希米记 4:1-6:14",
+        "zh_Hant": "尼希米記 4:1-6:14",
+        "fr": "Néhémie 4:1-6:14",
+        "pt": "Neemias 4:1-6:14",
+        "sw": "Nehemia 4:1-6:14"
+      }
     },
     {
       "passage": "Nehemiah 6:15-8:18",
       "study": "bsfinternational.org/exile-and-return/",
       "lesson": "BSF Exile #25",
-      "rollout": "2026-03-30T12:00:00Z"
+      "rollout": "2026-03-30T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Exilio #25",
+        "zh_Hans": "BSF 被掳归回 第25课",
+        "zh_Hant": "BSF 被擄歸回 第25課",
+        "fr": "BSF Exil n° 25",
+        "pt": "BSF Exílio nº 25",
+        "sw": "BSF Uhamisho #25"
+      },
+      "passage_i18n": {
+        "es": "Nehemías 6:15-8:18",
+        "zh_Hans": "尼希米记 6:15-8:18",
+        "zh_Hant": "尼希米記 6:15-8:18",
+        "fr": "Néhémie 6:15-8:18",
+        "pt": "Neemias 6:15-8:18",
+        "sw": "Nehemia 6:15-8:18"
+      }
     },
     {
       "passage": "Nehemiah 9-10",
       "study": "bsfinternational.org/exile-and-return/",
       "lesson": "BSF Exile #26",
-      "rollout": "2026-04-13T12:00:00Z"
+      "rollout": "2026-04-13T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Exilio #26",
+        "zh_Hans": "BSF 被掳归回 第26课",
+        "zh_Hant": "BSF 被擄歸回 第26課",
+        "fr": "BSF Exil n° 26",
+        "pt": "BSF Exílio nº 26",
+        "sw": "BSF Uhamisho #26"
+      },
+      "passage_i18n": {
+        "es": "Nehemías 9-10",
+        "zh_Hans": "尼希米记 9-10",
+        "zh_Hant": "尼希米記 9-10",
+        "fr": "Néhémie 9-10",
+        "pt": "Neemias 9-10",
+        "sw": "Nehemia 9-10"
+      }
     },
     {
       "passage": "Nehemiah 11:1-13:31",
       "study": "bsfinternational.org/exile-and-return/",
       "lesson": "BSF Exile #27",
-      "rollout": "2026-04-20T12:00:00Z"
+      "rollout": "2026-04-20T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Exilio #27",
+        "zh_Hans": "BSF 被掳归回 第27课",
+        "zh_Hant": "BSF 被擄歸回 第27課",
+        "fr": "BSF Exil n° 27",
+        "pt": "BSF Exílio nº 27",
+        "sw": "BSF Uhamisho #27"
+      },
+      "passage_i18n": {
+        "es": "Nehemías 11:1-13:31",
+        "zh_Hans": "尼希米记 11:1-13:31",
+        "zh_Hant": "尼希米記 11:1-13:31",
+        "fr": "Néhémie 11:1-13:31",
+        "pt": "Neemias 11:1-13:31",
+        "sw": "Nehemia 11:1-13:31"
+      }
     },
     {
       "passage": "Malachi 1:1-4:6",
       "study": "bsfinternational.org/exile-and-return/",
       "lesson": "BSF Exile #28",
-      "rollout": "2026-04-27T12:00:00Z"
+      "rollout": "2026-04-27T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Exilio #28",
+        "zh_Hans": "BSF 被掳归回 第28课",
+        "zh_Hant": "BSF 被擄歸回 第28課",
+        "fr": "BSF Exil n° 28",
+        "pt": "BSF Exílio nº 28",
+        "sw": "BSF Uhamisho #28"
+      },
+      "passage_i18n": {
+        "es": "Malaquías 1:1-4:6",
+        "zh_Hans": "玛拉基书 1:1-4:6",
+        "zh_Hant": "瑪拉基書 1:1-4:6",
+        "fr": "Malachie 1:1-4:6",
+        "pt": "Malaquias 1:1-4:6",
+        "sw": "Malaki 1:1-4:6"
+      }
     },
     {
       "passage": "Overview",
       "study": "bsfinternational.org/bsf/our-studies/romans/",
       "lesson": "BSF Romans #0",
-      "rollout": "2026-09-14T12:00:00Z"
+      "rollout": "2026-09-14T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Romanos #0",
+        "zh_Hans": "BSF 罗马书 第0课",
+        "zh_Hant": "BSF 羅馬書 第0課",
+        "fr": "BSF Romains n° 0",
+        "pt": "BSF Romanos nº 0",
+        "sw": "BSF Warumi #0"
+      },
+      "passage_i18n": {
+        "es": "Panorama",
+        "zh_Hans": "概览",
+        "zh_Hant": "概覽",
+        "fr": "Vue d’ensemble",
+        "pt": "Visão geral",
+        "sw": "Muhtasari wa jumla"
+      }
     },
     {
       "passage": "Romans 1:1-17",
       "study": "bsfinternational.org/bsf/our-studies/romans/",
       "lesson": "BSF Romans #1",
-      "rollout": "2026-09-21T12:00:00Z"
+      "rollout": "2026-09-21T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Romanos #1",
+        "zh_Hans": "BSF 罗马书 第1课",
+        "zh_Hant": "BSF 羅馬書 第1課",
+        "fr": "BSF Romains n° 1",
+        "pt": "BSF Romanos nº 1",
+        "sw": "BSF Warumi #1"
+      },
+      "passage_i18n": {
+        "es": "Romanos 1:1-17",
+        "zh_Hans": "罗马书 1:1-17",
+        "zh_Hant": "羅馬書 1:1-17",
+        "fr": "Romains 1:1-17",
+        "pt": "Romanos 1:1-17",
+        "sw": "Warumi 1:1-17"
+      }
     },
     {
       "passage": "Romans 1:18-32",
       "study": "bsfinternational.org/bsf/our-studies/romans/",
       "lesson": "BSF Romans #2",
-      "rollout": "2026-09-28T12:00:00Z"
+      "rollout": "2026-09-28T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Romanos #2",
+        "zh_Hans": "BSF 罗马书 第2课",
+        "zh_Hant": "BSF 羅馬書 第2課",
+        "fr": "BSF Romains n° 2",
+        "pt": "BSF Romanos nº 2",
+        "sw": "BSF Warumi #2"
+      },
+      "passage_i18n": {
+        "es": "Romanos 1:18-32",
+        "zh_Hans": "罗马书 1:18-32",
+        "zh_Hant": "羅馬書 1:18-32",
+        "fr": "Romains 1:18-32",
+        "pt": "Romanos 1:18-32",
+        "sw": "Warumi 1:18-32"
+      }
     },
     {
       "passage": "Romans 2",
       "study": "bsfinternational.org/bsf/our-studies/romans/",
       "lesson": "BSF Romans #3",
-      "rollout": "2026-10-05T12:00:00Z"
+      "rollout": "2026-10-05T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Romanos #3",
+        "zh_Hans": "BSF 罗马书 第3课",
+        "zh_Hant": "BSF 羅馬書 第3課",
+        "fr": "BSF Romains n° 3",
+        "pt": "BSF Romanos nº 3",
+        "sw": "BSF Warumi #3"
+      },
+      "passage_i18n": {
+        "es": "Romanos 2",
+        "zh_Hans": "罗马书 2",
+        "zh_Hant": "羅馬書 2",
+        "fr": "Romains 2",
+        "pt": "Romanos 2",
+        "sw": "Warumi 2"
+      }
     },
     {
       "passage": "Romans 3:1-20",
       "study": "bsfinternational.org/bsf/our-studies/romans/",
       "lesson": "BSF Romans #4",
-      "rollout": "2026-10-12T12:00:00Z"
+      "rollout": "2026-10-12T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Romanos #4",
+        "zh_Hans": "BSF 罗马书 第4课",
+        "zh_Hant": "BSF 羅馬書 第4課",
+        "fr": "BSF Romains n° 4",
+        "pt": "BSF Romanos nº 4",
+        "sw": "BSF Warumi #4"
+      },
+      "passage_i18n": {
+        "es": "Romanos 3:1-20",
+        "zh_Hans": "罗马书 3:1-20",
+        "zh_Hant": "羅馬書 3:1-20",
+        "fr": "Romains 3:1-20",
+        "pt": "Romanos 3:1-20",
+        "sw": "Warumi 3:1-20"
+      }
     },
     {
       "passage": "Romans 3:21-26",
       "study": "bsfinternational.org/bsf/our-studies/romans/",
       "lesson": "BSF Romans #5",
-      "rollout": "2026-10-19T12:00:00Z"
+      "rollout": "2026-10-19T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Romanos #5",
+        "zh_Hans": "BSF 罗马书 第5课",
+        "zh_Hant": "BSF 羅馬書 第5課",
+        "fr": "BSF Romains n° 5",
+        "pt": "BSF Romanos nº 5",
+        "sw": "BSF Warumi #5"
+      },
+      "passage_i18n": {
+        "es": "Romanos 3:21-26",
+        "zh_Hans": "罗马书 3:21-26",
+        "zh_Hant": "羅馬書 3:21-26",
+        "fr": "Romains 3:21-26",
+        "pt": "Romanos 3:21-26",
+        "sw": "Warumi 3:21-26"
+      }
     },
     {
       "passage": "Romans 3:27-31",
       "study": "bsfinternational.org/bsf/our-studies/romans/",
       "lesson": "BSF Romans #6",
-      "rollout": "2026-10-26T12:00:00Z"
+      "rollout": "2026-10-26T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Romanos #6",
+        "zh_Hans": "BSF 罗马书 第6课",
+        "zh_Hant": "BSF 羅馬書 第6課",
+        "fr": "BSF Romains n° 6",
+        "pt": "BSF Romanos nº 6",
+        "sw": "BSF Warumi #6"
+      },
+      "passage_i18n": {
+        "es": "Romanos 3:27-31",
+        "zh_Hans": "罗马书 3:27-31",
+        "zh_Hant": "羅馬書 3:27-31",
+        "fr": "Romains 3:27-31",
+        "pt": "Romanos 3:27-31",
+        "sw": "Warumi 3:27-31"
+      }
     },
     {
       "passage": "Romans 4",
       "study": "bsfinternational.org/bsf/our-studies/romans/",
       "lesson": "BSF Romans #7",
-      "rollout": "2026-11-02T12:00:00Z"
+      "rollout": "2026-11-02T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Romanos #7",
+        "zh_Hans": "BSF 罗马书 第7课",
+        "zh_Hant": "BSF 羅馬書 第7課",
+        "fr": "BSF Romains n° 7",
+        "pt": "BSF Romanos nº 7",
+        "sw": "BSF Warumi #7"
+      },
+      "passage_i18n": {
+        "es": "Romanos 4",
+        "zh_Hans": "罗马书 4",
+        "zh_Hant": "羅馬書 4",
+        "fr": "Romains 4",
+        "pt": "Romanos 4",
+        "sw": "Warumi 4"
+      }
     },
     {
       "passage": "Romans 5:1-11",
       "study": "bsfinternational.org/bsf/our-studies/romans/",
       "lesson": "BSF Romans #8",
-      "rollout": "2026-11-09T12:00:00Z"
+      "rollout": "2026-11-09T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Romanos #8",
+        "zh_Hans": "BSF 罗马书 第8课",
+        "zh_Hant": "BSF 羅馬書 第8課",
+        "fr": "BSF Romains n° 8",
+        "pt": "BSF Romanos nº 8",
+        "sw": "BSF Warumi #8"
+      },
+      "passage_i18n": {
+        "es": "Romanos 5:1-11",
+        "zh_Hans": "罗马书 5:1-11",
+        "zh_Hant": "羅馬書 5:1-11",
+        "fr": "Romains 5:1-11",
+        "pt": "Romanos 5:1-11",
+        "sw": "Warumi 5:1-11"
+      }
     },
     {
       "passage": "Romans 5:12-21",
       "study": "bsfinternational.org/bsf/our-studies/romans/",
       "lesson": "BSF Romans #9",
-      "rollout": "2026-11-16T12:00:00Z"
+      "rollout": "2026-11-16T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Romanos #9",
+        "zh_Hans": "BSF 罗马书 第9课",
+        "zh_Hant": "BSF 羅馬書 第9課",
+        "fr": "BSF Romains n° 9",
+        "pt": "BSF Romanos nº 9",
+        "sw": "BSF Warumi #9"
+      },
+      "passage_i18n": {
+        "es": "Romanos 5:12-21",
+        "zh_Hans": "罗马书 5:12-21",
+        "zh_Hant": "羅馬書 5:12-21",
+        "fr": "Romains 5:12-21",
+        "pt": "Romanos 5:12-21",
+        "sw": "Warumi 5:12-21"
+      }
     },
     {
       "passage": "Romans 6:1-11",
       "study": "bsfinternational.org/bsf/our-studies/romans/",
       "lesson": "BSF Romans #10",
-      "rollout": "2026-11-23T12:00:00Z"
+      "rollout": "2026-11-23T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Romanos #10",
+        "zh_Hans": "BSF 罗马书 第10课",
+        "zh_Hant": "BSF 羅馬書 第10課",
+        "fr": "BSF Romains n° 10",
+        "pt": "BSF Romanos nº 10",
+        "sw": "BSF Warumi #10"
+      },
+      "passage_i18n": {
+        "es": "Romanos 6:1-11",
+        "zh_Hans": "罗马书 6:1-11",
+        "zh_Hant": "羅馬書 6:1-11",
+        "fr": "Romains 6:1-11",
+        "pt": "Romanos 6:1-11",
+        "sw": "Warumi 6:1-11"
+      }
     },
     {
       "passage": "Romans 6:12-23",
       "study": "bsfinternational.org/bsf/our-studies/romans/",
       "lesson": "BSF Romans #11",
-      "rollout": "2026-12-07T12:00:00Z"
+      "rollout": "2026-12-07T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Romanos #11",
+        "zh_Hans": "BSF 罗马书 第11课",
+        "zh_Hant": "BSF 羅馬書 第11課",
+        "fr": "BSF Romains n° 11",
+        "pt": "BSF Romanos nº 11",
+        "sw": "BSF Warumi #11"
+      },
+      "passage_i18n": {
+        "es": "Romanos 6:12-23",
+        "zh_Hans": "罗马书 6:12-23",
+        "zh_Hant": "羅馬書 6:12-23",
+        "fr": "Romains 6:12-23",
+        "pt": "Romanos 6:12-23",
+        "sw": "Warumi 6:12-23"
+      }
     },
     {
       "passage": "Romans 7",
       "study": "bsfinternational.org/bsf/our-studies/romans/",
       "lesson": "BSF Romans #12",
-      "rollout": "2026-12-14T12:00:00Z"
+      "rollout": "2026-12-14T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Romanos #12",
+        "zh_Hans": "BSF 罗马书 第12课",
+        "zh_Hant": "BSF 羅馬書 第12課",
+        "fr": "BSF Romains n° 12",
+        "pt": "BSF Romanos nº 12",
+        "sw": "BSF Warumi #12"
+      },
+      "passage_i18n": {
+        "es": "Romanos 7",
+        "zh_Hans": "罗马书 7",
+        "zh_Hant": "羅馬書 7",
+        "fr": "Romains 7",
+        "pt": "Romanos 7",
+        "sw": "Warumi 7"
+      }
     },
     {
       "passage": "Romans 8:1-17",
       "study": "bsfinternational.org/bsf/our-studies/romans/",
       "lesson": "BSF Romans #13",
-      "rollout": "2026-12-21T12:00:00Z"
+      "rollout": "2026-12-21T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Romanos #13",
+        "zh_Hans": "BSF 罗马书 第13课",
+        "zh_Hant": "BSF 羅馬書 第13課",
+        "fr": "BSF Romains n° 13",
+        "pt": "BSF Romanos nº 13",
+        "sw": "BSF Warumi #13"
+      },
+      "passage_i18n": {
+        "es": "Romanos 8:1-17",
+        "zh_Hans": "罗马书 8:1-17",
+        "zh_Hant": "羅馬書 8:1-17",
+        "fr": "Romains 8:1-17",
+        "pt": "Romanos 8:1-17",
+        "sw": "Warumi 8:1-17"
+      }
     },
     {
       "passage": "Romans 8:18-27",
       "study": "bsfinternational.org/bsf/our-studies/romans/",
       "lesson": "BSF Romans #14",
-      "rollout": "2027-01-11T12:00:00Z"
+      "rollout": "2027-01-11T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Romanos #14",
+        "zh_Hans": "BSF 罗马书 第14课",
+        "zh_Hant": "BSF 羅馬書 第14課",
+        "fr": "BSF Romains n° 14",
+        "pt": "BSF Romanos nº 14",
+        "sw": "BSF Warumi #14"
+      },
+      "passage_i18n": {
+        "es": "Romanos 8:18-27",
+        "zh_Hans": "罗马书 8:18-27",
+        "zh_Hant": "羅馬書 8:18-27",
+        "fr": "Romains 8:18-27",
+        "pt": "Romanos 8:18-27",
+        "sw": "Warumi 8:18-27"
+      }
     },
     {
       "passage": "Romans 8:28-39",
       "study": "bsfinternational.org/bsf/our-studies/romans/",
       "lesson": "BSF Romans #15",
-      "rollout": "2027-01-18T12:00:00Z"
+      "rollout": "2027-01-18T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Romanos #15",
+        "zh_Hans": "BSF 罗马书 第15课",
+        "zh_Hant": "BSF 羅馬書 第15課",
+        "fr": "BSF Romains n° 15",
+        "pt": "BSF Romanos nº 15",
+        "sw": "BSF Warumi #15"
+      },
+      "passage_i18n": {
+        "es": "Romanos 8:28-39",
+        "zh_Hans": "罗马书 8:28-39",
+        "zh_Hant": "羅馬書 8:28-39",
+        "fr": "Romains 8:28-39",
+        "pt": "Romanos 8:28-39",
+        "sw": "Warumi 8:28-39"
+      }
     },
     {
       "passage": "Romans 9:1-29",
       "study": "bsfinternational.org/bsf/our-studies/romans/",
       "lesson": "BSF Romans #16",
-      "rollout": "2027-01-25T12:00:00Z"
+      "rollout": "2027-01-25T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Romanos #16",
+        "zh_Hans": "BSF 罗马书 第16课",
+        "zh_Hant": "BSF 羅馬書 第16課",
+        "fr": "BSF Romains n° 16",
+        "pt": "BSF Romanos nº 16",
+        "sw": "BSF Warumi #16"
+      },
+      "passage_i18n": {
+        "es": "Romanos 9:1-29",
+        "zh_Hans": "罗马书 9:1-29",
+        "zh_Hant": "羅馬書 9:1-29",
+        "fr": "Romains 9:1-29",
+        "pt": "Romanos 9:1-29",
+        "sw": "Warumi 9:1-29"
+      }
     },
     {
       "passage": "Romans 9:30–10:13",
       "study": "bsfinternational.org/bsf/our-studies/romans/",
       "lesson": "BSF Romans #17",
-      "rollout": "2027-02-01T12:00:00Z"
+      "rollout": "2027-02-01T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Romanos #17",
+        "zh_Hans": "BSF 罗马书 第17课",
+        "zh_Hant": "BSF 羅馬書 第17課",
+        "fr": "BSF Romains n° 17",
+        "pt": "BSF Romanos nº 17",
+        "sw": "BSF Warumi #17"
+      },
+      "passage_i18n": {
+        "es": "Romanos 9:30–10:13",
+        "zh_Hans": "罗马书 9:30–10:13",
+        "zh_Hant": "羅馬書 9:30–10:13",
+        "fr": "Romains 9:30–10:13",
+        "pt": "Romanos 9:30–10:13",
+        "sw": "Warumi 9:30–10:13"
+      }
     },
     {
       "passage": "Romans 10:14-21",
       "study": "bsfinternational.org/bsf/our-studies/romans/",
       "lesson": "BSF Romans #18",
-      "rollout": "2027-02-08T12:00:00Z"
+      "rollout": "2027-02-08T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Romanos #18",
+        "zh_Hans": "BSF 罗马书 第18课",
+        "zh_Hant": "BSF 羅馬書 第18課",
+        "fr": "BSF Romains n° 18",
+        "pt": "BSF Romanos nº 18",
+        "sw": "BSF Warumi #18"
+      },
+      "passage_i18n": {
+        "es": "Romanos 10:14-21",
+        "zh_Hans": "罗马书 10:14-21",
+        "zh_Hant": "羅馬書 10:14-21",
+        "fr": "Romains 10:14-21",
+        "pt": "Romanos 10:14-21",
+        "sw": "Warumi 10:14-21"
+      }
     },
     {
       "passage": "Romans 11:1-32",
       "study": "bsfinternational.org/bsf/our-studies/romans/",
       "lesson": "BSF Romans #19",
-      "rollout": "2027-02-15T12:00:00Z"
+      "rollout": "2027-02-15T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Romanos #19",
+        "zh_Hans": "BSF 罗马书 第19课",
+        "zh_Hant": "BSF 羅馬書 第19課",
+        "fr": "BSF Romains n° 19",
+        "pt": "BSF Romanos nº 19",
+        "sw": "BSF Warumi #19"
+      },
+      "passage_i18n": {
+        "es": "Romanos 11:1-32",
+        "zh_Hans": "罗马书 11:1-32",
+        "zh_Hant": "羅馬書 11:1-32",
+        "fr": "Romains 11:1-32",
+        "pt": "Romanos 11:1-32",
+        "sw": "Warumi 11:1-32"
+      }
     },
     {
       "passage": "Romans 11:33-36",
       "study": "bsfinternational.org/bsf/our-studies/romans/",
       "lesson": "BSF Romans #20",
-      "rollout": "2027-02-22T12:00:00Z"
+      "rollout": "2027-02-22T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Romanos #20",
+        "zh_Hans": "BSF 罗马书 第20课",
+        "zh_Hant": "BSF 羅馬書 第20課",
+        "fr": "BSF Romains n° 20",
+        "pt": "BSF Romanos nº 20",
+        "sw": "BSF Warumi #20"
+      },
+      "passage_i18n": {
+        "es": "Romanos 11:33-36",
+        "zh_Hans": "罗马书 11:33-36",
+        "zh_Hant": "羅馬書 11:33-36",
+        "fr": "Romains 11:33-36",
+        "pt": "Romanos 11:33-36",
+        "sw": "Warumi 11:33-36"
+      }
     },
     {
       "passage": "Romans 12:1-8",
       "study": "bsfinternational.org/bsf/our-studies/romans/",
       "lesson": "BSF Romans #21",
-      "rollout": "2027-03-01T12:00:00Z"
+      "rollout": "2027-03-01T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Romanos #21",
+        "zh_Hans": "BSF 罗马书 第21课",
+        "zh_Hant": "BSF 羅馬書 第21課",
+        "fr": "BSF Romains n° 21",
+        "pt": "BSF Romanos nº 21",
+        "sw": "BSF Warumi #21"
+      },
+      "passage_i18n": {
+        "es": "Romanos 12:1-8",
+        "zh_Hans": "罗马书 12:1-8",
+        "zh_Hant": "羅馬書 12:1-8",
+        "fr": "Romains 12:1-8",
+        "pt": "Romanos 12:1-8",
+        "sw": "Warumi 12:1-8"
+      }
     },
     {
       "passage": "Romans 12:9-21",
       "study": "bsfinternational.org/bsf/our-studies/romans/",
       "lesson": "BSF Romans #22",
-      "rollout": "2027-03-08T12:00:00Z"
+      "rollout": "2027-03-08T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Romanos #22",
+        "zh_Hans": "BSF 罗马书 第22课",
+        "zh_Hant": "BSF 羅馬書 第22課",
+        "fr": "BSF Romains n° 22",
+        "pt": "BSF Romanos nº 22",
+        "sw": "BSF Warumi #22"
+      },
+      "passage_i18n": {
+        "es": "Romanos 12:9-21",
+        "zh_Hans": "罗马书 12:9-21",
+        "zh_Hant": "羅馬書 12:9-21",
+        "fr": "Romains 12:9-21",
+        "pt": "Romanos 12:9-21",
+        "sw": "Warumi 12:9-21"
+      }
     },
     {
       "passage": "Romans 13:1-7",
       "study": "bsfinternational.org/bsf/our-studies/romans/",
       "lesson": "BSF Romans #23",
-      "rollout": "2027-03-15T12:00:00Z"
+      "rollout": "2027-03-15T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Romanos #23",
+        "zh_Hans": "BSF 罗马书 第23课",
+        "zh_Hant": "BSF 羅馬書 第23課",
+        "fr": "BSF Romains n° 23",
+        "pt": "BSF Romanos nº 23",
+        "sw": "BSF Warumi #23"
+      },
+      "passage_i18n": {
+        "es": "Romanos 13:1-7",
+        "zh_Hans": "罗马书 13:1-7",
+        "zh_Hant": "羅馬書 13:1-7",
+        "fr": "Romains 13:1-7",
+        "pt": "Romanos 13:1-7",
+        "sw": "Warumi 13:1-7"
+      }
     },
     {
       "passage": "Romans 13:8-14",
       "study": "bsfinternational.org/bsf/our-studies/romans/",
       "lesson": "BSF Romans #24",
-      "rollout": "2027-03-22T12:00:00Z"
+      "rollout": "2027-03-22T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Romanos #24",
+        "zh_Hans": "BSF 罗马书 第24课",
+        "zh_Hant": "BSF 羅馬書 第24課",
+        "fr": "BSF Romains n° 24",
+        "pt": "BSF Romanos nº 24",
+        "sw": "BSF Warumi #24"
+      },
+      "passage_i18n": {
+        "es": "Romanos 13:8-14",
+        "zh_Hans": "罗马书 13:8-14",
+        "zh_Hant": "羅馬書 13:8-14",
+        "fr": "Romains 13:8-14",
+        "pt": "Romanos 13:8-14",
+        "sw": "Warumi 13:8-14"
+      }
     },
     {
       "passage": "Romans 14",
       "study": "bsfinternational.org/bsf/our-studies/romans/",
       "lesson": "BSF Romans #25",
-      "rollout": "2027-04-05T12:00:00Z"
+      "rollout": "2027-04-05T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Romanos #25",
+        "zh_Hans": "BSF 罗马书 第25课",
+        "zh_Hant": "BSF 羅馬書 第25課",
+        "fr": "BSF Romains n° 25",
+        "pt": "BSF Romanos nº 25",
+        "sw": "BSF Warumi #25"
+      },
+      "passage_i18n": {
+        "es": "Romanos 14",
+        "zh_Hans": "罗马书 14",
+        "zh_Hant": "羅馬書 14",
+        "fr": "Romains 14",
+        "pt": "Romanos 14",
+        "sw": "Warumi 14"
+      }
     },
     {
       "passage": "Romans 15:1-13",
       "study": "bsfinternational.org/bsf/our-studies/romans/",
       "lesson": "BSF Romans #26",
-      "rollout": "2027-04-12T12:00:00Z"
+      "rollout": "2027-04-12T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Romanos #26",
+        "zh_Hans": "BSF 罗马书 第26课",
+        "zh_Hant": "BSF 羅馬書 第26課",
+        "fr": "BSF Romains n° 26",
+        "pt": "BSF Romanos nº 26",
+        "sw": "BSF Warumi #26"
+      },
+      "passage_i18n": {
+        "es": "Romanos 15:1-13",
+        "zh_Hans": "罗马书 15:1-13",
+        "zh_Hant": "羅馬書 15:1-13",
+        "fr": "Romains 15:1-13",
+        "pt": "Romanos 15:1-13",
+        "sw": "Warumi 15:1-13"
+      }
     },
     {
       "passage": "Romans 15:14-33",
       "study": "bsfinternational.org/bsf/our-studies/romans/",
       "lesson": "BSF Romans #27",
-      "rollout": "2027-04-19T12:00:00Z"
+      "rollout": "2027-04-19T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Romanos #27",
+        "zh_Hans": "BSF 罗马书 第27课",
+        "zh_Hant": "BSF 羅馬書 第27課",
+        "fr": "BSF Romains n° 27",
+        "pt": "BSF Romanos nº 27",
+        "sw": "BSF Warumi #27"
+      },
+      "passage_i18n": {
+        "es": "Romanos 15:14-33",
+        "zh_Hans": "罗马书 15:14-33",
+        "zh_Hant": "羅馬書 15:14-33",
+        "fr": "Romains 15:14-33",
+        "pt": "Romanos 15:14-33",
+        "sw": "Warumi 15:14-33"
+      }
     },
     {
       "passage": "Romans 16",
       "study": "bsfinternational.org/bsf/our-studies/romans/",
       "lesson": "BSF Romans #28",
-      "rollout": "2027-04-26T12:00:00Z"
+      "rollout": "2027-04-26T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Romanos #28",
+        "zh_Hans": "BSF 罗马书 第28课",
+        "zh_Hant": "BSF 羅馬書 第28課",
+        "fr": "BSF Romains n° 28",
+        "pt": "BSF Romanos nº 28",
+        "sw": "BSF Warumi #28"
+      },
+      "passage_i18n": {
+        "es": "Romanos 16",
+        "zh_Hans": "罗马书 16",
+        "zh_Hant": "羅馬書 16",
+        "fr": "Romains 16",
+        "pt": "Romanos 16",
+        "sw": "Warumi 16"
+      }
     },
     {
       "passage": "Summary",
       "study": "bsfinternational.org/bsf/our-studies/romans/",
       "lesson": "BSF Romans #29",
-      "rollout": "2027-05-03T12:00:00Z"
+      "rollout": "2027-05-03T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Romanos #29",
+        "zh_Hans": "BSF 罗马书 第29课",
+        "zh_Hant": "BSF 羅馬書 第29課",
+        "fr": "BSF Romains n° 29",
+        "pt": "BSF Romanos nº 29",
+        "sw": "BSF Warumi #29"
+      },
+      "passage_i18n": {
+        "es": "Resumen",
+        "zh_Hans": "总结",
+        "zh_Hant": "總結",
+        "fr": "Résumé",
+        "pt": "Resumo",
+        "sw": "Muhtasari"
+      }
     },
     {
       "passage": "Reflections",
       "study": "bsfinternational.org/bsf/our-studies/romans/",
       "lesson": "BSF Romans #30",
-      "rollout": "2027-05-10T12:00:00Z"
+      "rollout": "2027-05-10T12:00:00Z",
+      "lesson_i18n": {
+        "es": "BSF Romanos #30",
+        "zh_Hans": "BSF 罗马书 第30课",
+        "zh_Hant": "BSF 羅馬書 第30課",
+        "fr": "BSF Romains n° 30",
+        "pt": "BSF Romanos nº 30",
+        "sw": "BSF Warumi #30"
+      },
+      "passage_i18n": {
+        "es": "Reflexiones",
+        "zh_Hans": "反思",
+        "zh_Hant": "反思",
+        "fr": "Réflexions",
+        "pt": "Reflexões",
+        "sw": "Tafakari"
+      }
     }
   ]
 }

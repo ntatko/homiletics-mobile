@@ -1,0 +1,826 @@
+{
+  "@@locale": "pt",
+  "prefsTitle": "Preferências",
+  "prefsAppLanguage": "Idioma preferido",
+  "prefsBibleVersion": "Versão da Bíblia preferida",
+  "bibleNewTestamentOnly": "Apenas o Novo Testamento",
+  "appTitle": "Homiletics",
+  "commonCancel": "Cancelar",
+  "commonOk": "OK",
+  "commonDelete": "Apagar",
+  "commonDone": "Concluído",
+  "commonSave": "Guardar",
+  "commonClose": "Fechar",
+  "commonRetry": "Tentar de novo",
+  "commonSomethingWentWrong": "Ocorreu um erro. Tente de novo daqui a pouco.",
+  "languageSystemDefault": "Idioma do dispositivo",
+  "stepContent": "Conteúdo",
+  "stepDivisions": "Divisões",
+  "stepSummary": "Frase-resumo",
+  "stepFcf": "FCF",
+  "stepAim": "Objetivo",
+  "stepApplication": "Aplicação",
+  "stepShortContent": "Conteúdo",
+  "stepShortDivisions": "Divisões",
+  "stepShortSummary": "Resumo",
+  "stepShortFcf": "FCF",
+  "stepShortAim": "Objetivo",
+  "stepShortApplication": "Aplicar",
+  "commonShare": "Compartilhar",
+  "commonPrint": "Imprimir",
+  "commonPreferences": "Preferências",
+  "commonUntitled": "Sem título",
+  "homeSearchIntro": "Pesquise as suas homiléticas, divisões, aplicações, notas de palestras e estudos de palavras.",
+  "homeSearchFieldHint": "Pesquisar lições, passagens, notas…",
+  "homeSearchTooltip": "Pesquisar",
+  "homeCloseSearch": "Fechar pesquisa",
+  "homeAllStudies": "Todos os estudos",
+  "homeFilterByStudy": "Filtrar por estudo",
+  "homeOpenStudySite": "Abrir o site do estudo",
+  "homeThisWeek": "Esta semana",
+  "homeEarlier": "Anterior",
+  "homeComingUp": "Em breve",
+  "homeWeekOverline": "{when} · {lesson}",
+  "@homeWeekOverline": {
+    "description": "Overline on a passage card: the week label (This week / Earlier / Coming up) followed by the lesson name from the study schedule. Shown in upper case on one line.",
+    "placeholders": {
+      "when": {
+        "type": "String"
+      },
+      "lesson": {
+        "type": "String"
+      }
+    }
+  },
+  "homeStartHomiletics": "Começar homilética",
+  "homeContinueHomiletics": "Continuar homilética",
+  "homeOpenHomiletics": "Abrir homilética",
+  "homeLoadingPassages": "Carregamento das passagens sugeridas…",
+  "homeContinue": "Continuar",
+  "homeSeeAll": "Ver tudo",
+  "homeLivingItOut": "Pôr em prática",
+  "homeKindTileHomiletic": "H",
+  "homeKindTileWordStudy": "P",
+  "homeProgressNoneDone": "Nenhuma etapa concluída",
+  "homeProgressDone": "Concluídas: {steps}",
+  "@homeProgressDone": {
+    "description": "Screen-reader label for the homiletic step progress bar; {steps} is a comma-separated list of completed step names.",
+    "placeholders": {
+      "steps": {
+        "type": "String"
+      }
+    }
+  },
+  "homePageOf": "Página {page} de {count}",
+  "@homePageOf": {
+    "description": "Screen-reader label for the dots under the swipeable passage cards.",
+    "placeholders": {
+      "page": {
+        "type": "int"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homePageFraction": "{page} / {count}",
+  "@homePageFraction": {
+    "description": "Compact page indicator under the passage cards when there are too many pages for dots, e.g. '3 / 12'.",
+    "placeholders": {
+      "page": {
+        "type": "int"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "studiesTitle": "Meus estudos",
+  "studiesTabHomiletics": "Homiléticas",
+  "studiesTabLectures": "Palestras",
+  "studiesTabWordStudies": "Estudos de palavras",
+  "studiesNoHomiletics": "Ainda não há homiléticas.",
+  "studiesNoLectureNotes": "Ainda não há notas de palestras.",
+  "studiesNoWordStudies": "Ainda não há estudos de palavras.",
+  "studiesNoApplications": "Ainda não há perguntas de aplicação.",
+  "studiesProgressNotStarted": "Não iniciada",
+  "studiesProgressAll": "Todas as {total} etapas",
+  "@studiesProgressAll": {
+    "description": "Homiletic progress summary when every step is done, e.g. 'All 6 steps'. Short.",
+    "placeholders": {
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "studiesProgressSome": "{done} de {total} etapas",
+  "@studiesProgressSome": {
+    "description": "Homiletic progress summary, e.g. '2 of 6 steps'. Short.",
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "studiesHomileticSubtitle": "Homilética · {progress} · {time}",
+  "@studiesHomileticSubtitle": {
+    "description": "Subtitle of a homiletic in a study list: kind, progress (e.g. '2 of 6 steps') and relative time (e.g. '3 days ago'). One line.",
+    "placeholders": {
+      "progress": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "studiesHomileticSubtitleNoProgress": "Homilética · {time}",
+  "@studiesHomileticSubtitleNoProgress": {
+    "description": "Subtitle of a homiletic in a study list while its progress loads; {time} is a relative time like '3 days ago'.",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "studiesLectureTitle": "Palestra: {passage}",
+  "@studiesLectureTitle": {
+    "description": "Title of a lecture note in a study list; {passage} is a Bible reference like 'John 3:1-21'.",
+    "placeholders": {
+      "passage": {
+        "type": "String"
+      }
+    }
+  },
+  "studiesLectureUntitled": "Palestra",
+  "studiesLectureSubtitle": "Notas de palestra · {time}",
+  "@studiesLectureSubtitle": {
+    "description": "Subtitle of a lecture note in a study list; {time} is a relative time like '3 days ago'.",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "studiesWordStudyUntitled": "Estudo de palavra",
+  "studiesWordStudySubtitle": "Estudo de palavra · {time}",
+  "@studiesWordStudySubtitle": {
+    "description": "Subtitle of a word study in a study list; {time} is a relative time like '3 days ago'.",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "studiesWordStudySubtitleWithPassage": "Estudo de palavra · {passage} · {time}",
+  "@studiesWordStudySubtitleWithPassage": {
+    "description": "Subtitle of a word study in a study list; {passage} is a Bible reference, {time} a relative time like '3 days ago'.",
+    "placeholders": {
+      "passage": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "searchHint": "Pesquisar",
+  "searchSectionContentSummaries": "Resumos do conteúdo",
+  "searchSectionDivisions": "Divisões",
+  "searchSectionApplications": "Aplicações",
+  "searchSectionAims": "Objetivos",
+  "searchSectionSummarySentences": "Frases-resumo",
+  "searchSectionPassages": "Passagens das homiléticas",
+  "searchSectionLectureNotes": "Notas de palestras",
+  "searchSectionWordStudies": "Estudos de palavras",
+  "searchOpenFailed": "Não foi possível abrir esse resultado. Talvez tenha sido apagado.",
+  "settingsTitle": "Configurações",
+  "settingsSectionLanguage": "Idioma",
+  "settingsAppLanguage": "Idioma da interface",
+  "settingsSectionReading": "Leitura",
+  "settingsSectionModels": "Modelos no dispositivo",
+  "settingsSectionHelp": "Ajuda",
+  "settingsCopyright": "Copyright (C) {year} 13one.org · Todos os direitos reservados",
+  "@settingsCopyright": {
+    "description": "Copyright line at the bottom of the settings page. Keep '13one.org' unchanged.",
+    "placeholders": {
+      "year": {
+        "type": "String"
+      }
+    }
+  },
+  "helpRequestFeedback": "Pedir ajuda / deixar comentário",
+  "helpCopyright": "Copyright (C) {year} 13one.org",
+  "@helpCopyright": {
+    "description": "Copyright line at the foot of the home screen. Keep '13one.org' unchanged.",
+    "placeholders": {
+      "year": {
+        "type": "String"
+      }
+    }
+  },
+  "helpAllRightsReserved": "Todos os direitos reservados",
+  "feedbackTitle": "Deixe o seu comentário",
+  "feedbackPublicNotice": "O seu comentário é publicado como um tópico público (issue) no GitHub — qualquer pessoa na internet pode lê-lo. Não inclua senhas nem outras informações privadas. O seu e-mail fica parcialmente oculto no GitHub; podemos guardar o endereço completo nos nossos servidores apenas para dar seguimento.",
+  "feedbackTypeGeneral": "Ajuda ou sugestão",
+  "feedbackTypeTranslation": "Erro de tradução",
+  "feedbackTranslationHint": "Diga-nos que palavras parecem erradas e o que deveriam dizer. Incluiremos o idioma da interface e a tradução da Bíblia que usa.",
+  "feedbackNameLabel": "Nome",
+  "feedbackEmailLabel": "E-mail (opcional)",
+  "feedbackContentLabel": "Comentário",
+  "feedbackSubmit": "Enviar",
+  "feedbackEmpty": "Escreva primeiro o seu comentário.",
+  "feedbackSubmittedIssue": "Enviado. Abra o tópico no GitHub a qualquer momento para acrescentar comentários (início de sessão opcional).",
+  "feedbackOpenIssue": "Abrir",
+  "feedbackSubmitted": "Comentário enviado com sucesso",
+  "feedbackBadRequest": "Não foi possível enviar o pedido. Verifique a mensagem e tente de novo.",
+  "feedbackServerUnreachableTitle": "O servidor não respondeu",
+  "feedbackServerUnreachableBody": "Abra o GitHub no navegador para enviar este relatório. Talvez seja preciso iniciar sessão lá para enviar o tópico.",
+  "feedbackNotNow": "Agora não",
+  "feedbackOpenGitHub": "Abrir o GitHub",
+  "feedbackBrowserFailed": "Não foi possível abrir o navegador.",
+  "startHomiletics": "Homilética",
+  "startLecture": "Palestra",
+  "startWordStudy": "Estudo de palavra",
+  "startPassageHint": "Estudar outra passagem…",
+  "startClear": "Limpar",
+  "startOtherStudy": "Outro estudo",
+  "startMenuLectureNote": "Notas de palestra",
+  "startMenuWordStudy": "Estudo de palavra",
+  "startDuplicateHomileticTitle": "Já tem uma homilética para esta passagem?",
+  "startDuplicateHomileticMany": "{passage}\n\nHá {count} homiléticas para esta passagem; será aberta a mais recente.",
+  "@startDuplicateHomileticMany": {
+    "description": "Body of the duplicate-homiletic dialog when there are several; {passage} is a Bible reference. 'Edit existing' opens the most recent.",
+    "placeholders": {
+      "passage": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "startDuplicateLectureTitle": "Já tem notas de palestra para esta passagem?",
+  "startDuplicateLectureMany": "{passage}\n\nHá {count} notas de palestra para esta passagem; será aberta a mais recente.",
+  "@startDuplicateLectureMany": {
+    "description": "Body of the duplicate-lecture-notes dialog when there are several; {passage} is a Bible reference.",
+    "placeholders": {
+      "passage": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "startDuplicateWordStudyTitle": "Já tem um estudo de palavra para esta passagem?",
+  "startDuplicateWordStudyMany": "{passage}\n\nHá {count} estudos de palavra para esta passagem; será aberto o mais recente.",
+  "@startDuplicateWordStudyMany": {
+    "description": "Body of the duplicate-word-study dialog when there are several; {passage} is a Bible reference.",
+    "placeholders": {
+      "passage": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "startCreateNew": "Criar novo",
+  "startEditExisting": "Editar existente",
+  "homileticHeaderLabel": "Homilética · Passagem",
+  "homileticItemName": "Lição de homilética",
+  "homileticDeletedMessage": "Homilética apagada",
+  "homileticLoadError": "Ocorreu um erro ao carregar esta lição.",
+  "homileticPdfShared": "PDF compartilhado com sucesso.",
+  "homileticPdfShareFailed": "Ocorreu um erro ao compartilhar o PDF. Tente de novo daqui a pouco.",
+  "homileticPdfPrinted": "PDF impresso com sucesso.",
+  "homileticPdfPrintFailed": "Ocorreu um erro ao criar o PDF. Tente de novo daqui a pouco.",
+  "homileticCompleteTitle": "Seis etapas concluídas",
+  "homileticCompleteMessage": "Imprima para a aula ou compartilhe com o seu grupo.",
+  "homileticContentEmptySummary": "Versículos + resumo",
+  "homileticDivisionsEmptySummary": "2–4 grupos",
+  "homileticSummaryEmptySummary": "≤ 10 palavras",
+  "homileticFcfEmptySummary": "Foco na condição caída",
+  "homileticAimEmptySummary": "A lição principal",
+  "homileticApplicationEmptySummary": "Como posso…",
+  "homileticStepStatusDone": "concluída",
+  "homileticStepStatusToDo": "pendente",
+  "homileticStepCollapseLabel": "{title}, recolher",
+  "@homileticStepCollapseLabel": {
+    "description": "Screen-reader label of an open step's header; tapping it closes the step.",
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Divisions"
+      }
+    }
+  },
+  "homileticStepHelpLabel": "Sobre {title}",
+  "@homileticStepHelpLabel": {
+    "description": "Tooltip and screen-reader label of the '?' button that explains a homiletic step.",
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Divisions"
+      }
+    }
+  },
+  "homileticVersesLabel": "Versículos",
+  "homileticVersesHint": "v.",
+  "homileticAddButtonLabel": "+ {label}",
+  "@homileticAddButtonLabel": {
+    "description": "Text of the dashed add button under a list step; {label} is e.g. 'Add summary'. Keep the plus sign unless your language puts it elsewhere.",
+    "placeholders": {
+      "label": {
+        "type": "String",
+        "example": "Add summary"
+      }
+    }
+  },
+  "homileticRemoveRowMessage": "O que escreveu aqui será apagado.",
+  "homileticRemoveRowConfirm": "Remover",
+  "homileticContentSummaryHint": "Resumo…",
+  "homileticAddContentSummary": "Adicionar resumo",
+  "homileticRemoveContentSummaryTooltip": "Remover resumo do conteúdo",
+  "homileticRemoveContentSummaryTitle": "Remover este resumo do conteúdo?",
+  "homileticRemoveContentSummaryFailed": "Não foi possível remover esse resumo do conteúdo",
+  "homileticDivisionHint": "Frase da divisão…",
+  "homileticAddDivision": "Adicionar divisão",
+  "homileticRemoveDivisionTooltip": "Remover divisão",
+  "homileticRemoveDivisionTitle": "Remover esta divisão?",
+  "homileticRemoveDivisionFailed": "Não foi possível remover essa divisão",
+  "homileticApplicationHint": "Como posso…",
+  "homileticAddApplication": "Adicionar pergunta",
+  "homileticRemoveApplicationTooltip": "Remover pergunta de aplicação",
+  "homileticRemoveApplicationTitle": "Remover esta pergunta de aplicação?",
+  "homileticRemoveApplicationFailed": "Não foi possível remover essa pergunta de aplicação",
+  "homileticSummaryHint": "Resuma em 10 palavras ou menos",
+  "homileticFcfHint": "Caído/Frágil/Fraco/Falho",
+  "homileticAimHint": "Levar os ouvintes a compreender que…",
+  "homileticContentHelpTitle": "Resumos do conteúdo",
+  "homileticContentHelpText": "Um resumo do conteúdo é um resumo de um trecho da Bíblia. Não precisa de ser uma frase completa e também pode ter mais de uma frase. Deve ser um resumo, com as suas próprias palavras, do conteúdo da passagem.\nDeve ter pelo menos 10 e no máximo 20 resumos do conteúdo. Em geral, conforme o tamanho da passagem, divida-a em trechos de tamanho aproximado para chegar aos 10 a 20 resumos. Por exemplo, se a passagem tiver 30 versículos, eu procuraria fazer, em média, um resumo a cada 3 versículos.",
+  "homileticDivisionsHelpText": "As divisões são agrupamentos de versículos relacionados entre si. Deve haver no mínimo duas e no máximo quatro.",
+  "homileticSummaryHelpTitle": "Frase-resumo",
+  "homileticSummaryHelpText": "A Frase-resumo é uma afirmação concisa e fácil de lembrar que reúne os pontos mais relevantes. Uma boa forma de pensar nela é o teste das 2 da manhã: se fosse acordado às 2 da manhã e lhe perguntassem de que tratava o sermão, o que responderia? Responderia com a Frase-resumo.\nDeve ter 10 palavras ou menos. Se estiver inspirado, tente fazer uma aliteração.",
+  "homileticFcfHelpText": "O FCF (Foco na Condição Caída) é a parte da condição humana mais ilustrado ou mencionado na passagem. É a condição em que os ouvintes se encontram, a razão pela qual precisam de salvação.",
+  "homileticAimHelpText": "O Objetivo é o ponto-chave: a verdade principal que se deseja que a própria pessoa ou os ouvintes levem consigo. Pode decorrer do FCF e provavelmente influenciará as Perguntas de aplicação.",
+  "homileticApplicationHelpTitle": "Perguntas de aplicação",
+  "homileticApplicationHelpText": "São perguntas que ajudam os ouvintes a aplicar à própria vida o que acabaram de ouvir. Devem ser específicas, pessoais, abertas e levar à reflexão.",
+  "homileticSummaryCount": "{count, plural, =1{1 resumo} other{{count} resumos}}",
+  "@homileticSummaryCount": {
+    "description": "Shown on the collapsed Content step: how many content summaries are written.",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "homileticDivisionCount": "{count, plural, =1{1 divisão} other{{count} divisões}}",
+  "@homileticDivisionCount": {
+    "description": "Shown on the collapsed Divisions step: how many divisions are written.",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "homileticQuestionCount": "{count, plural, =1{1 pergunta} other{{count} perguntas}}",
+  "@homileticQuestionCount": {
+    "description": "Shown on the collapsed Application step: how many application questions are written.",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "homileticStepTileLabel": "{title}, {status}",
+  "@homileticStepTileLabel": {
+    "description": "Screen-reader label of a collapsed step in compact layout. {status} is 'done' or 'to do'.",
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Aim"
+      },
+      "status": {
+        "type": "String",
+        "example": "done"
+      }
+    }
+  },
+  "homileticStepTileLabelWithSummary": "{title}, {status}, {summary}",
+  "@homileticStepTileLabelWithSummary": {
+    "description": "Screen-reader label of a collapsed step. {status} is 'done' or 'to do'; {summary} is the short text on the right (e.g. '3 summaries' or the user's text).",
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Content"
+      },
+      "status": {
+        "type": "String",
+        "example": "done"
+      },
+      "summary": {
+        "type": "String",
+        "example": "3 summaries"
+      }
+    }
+  },
+  "lectureItemName": "Nota de palestra",
+  "lectureDeleted": "Nota de palestra apagada",
+  "lecturePassageHint": "Passagem",
+  "lectureHeaderLabel": "Palestra · Passagem",
+  "lectureNotesPlaceholder": "Notas",
+  "lectureToolbarBold": "Negrito",
+  "lectureToolbarItalic": "Itálico",
+  "lectureToolbarBulletedList": "Lista com marcadores",
+  "lectureToolbarNumberedList": "Lista numerada",
+  "lectureReplaceTitle": "Substituir a gravação existente?",
+  "lectureReplaceMessage": "O áudio e a transcrição antigos serão apagados.",
+  "lectureReplaceConfirm": "Substituir",
+  "lectureMicPermissionRequired": "É necessária permissão de acesso ao microfone para gravar.",
+  "lectureNotificationTitle": "Gravação da palestra",
+  "lectureNotificationContent": "{appName}: gravação de áudio em curso",
+  "@lectureNotificationContent": {
+    "description": "Text of the Android ongoing notification shown while recording.",
+    "placeholders": {
+      "appName": {
+        "type": "String",
+        "example": "Homiletics"
+      }
+    }
+  },
+  "lectureStartFailed": "Não foi possível iniciar a gravação. O microfone pode estar ocupado por outra aplicação.",
+  "lectureTranscriptionModelTitle": "Fazer o download do modelo de transcrição offline?",
+  "lectureTranscriptionModelMessage": "Um download único de ~140MB permite que as suas gravações sejam transcritas automaticamente e possam ser pesquisadas. Pode ignorar isto e fazer o download mais tarde nas Configurações.",
+  "lectureNotNow": "Agora não",
+  "lectureDownload": "Download",
+  "lectureModelDownloadFailed": "Ocorreu um erro no download do modelo. Pode tentar de novo nas Configurações.",
+  "lectureRecordingFileNotFound": "Não foi possível encontrar a gravação.",
+  "lectureTranscriptionEmpty": "A transcrição não produziu nenhum texto.",
+  "lectureFormattingModelTitle": "Fazer o download do modelo de formatação de transcrições?",
+  "lectureFormattingModelMessage": "Um download único de {size} permite organizar as transcrições em parágrafos legíveis, inteiramente no seu dispositivo. Recomenda-se Wi-Fi. Também pode fazer isto mais tarde nas Configurações.",
+  "@lectureFormattingModelMessage": {
+    "description": "Body of the formatting-model download dialog. {size} is the approximate download size.",
+    "placeholders": {
+      "size": {
+        "type": "String",
+        "example": "~1.6GB"
+      }
+    }
+  },
+  "lectureFormattingModelMissing": "O modelo de formatação não está instalado.",
+  "lectureFormattingFailed": "Não foi possível formatar a transcrição.",
+  "lecturePlaybackFailed": "Não foi possível reproduzir a gravação.",
+  "lectureDownloadingModel": "Download do modelo: {percent}%",
+  "@lectureDownloadingModel": {
+    "description": "Progress line on the recording bar while a model downloads. Keep short (~30 chars).",
+    "placeholders": {
+      "percent": {
+        "type": "String",
+        "example": "42"
+      }
+    }
+  },
+  "lectureTranscribingProgress": "Transcrição: {percent}%",
+  "@lectureTranscribingProgress": {
+    "description": "Progress line on the recording bar while the recording is transcribed. Keep short (~30 chars).",
+    "placeholders": {
+      "percent": {
+        "type": "int",
+        "example": "42"
+      }
+    }
+  },
+  "lectureFormattingProgress": "Formatação do texto {done}/{total}",
+  "@lectureFormattingProgress": {
+    "description": "Progress line while the transcript is formatted, in chunks done/total. Keep short (~30 chars).",
+    "placeholders": {
+      "done": {
+        "type": "int",
+        "example": "3"
+      },
+      "total": {
+        "type": "int",
+        "example": "8"
+      }
+    }
+  },
+  "lectureFormattingIndeterminate": "Formatação da transcrição…",
+  "lectureRecordingSemantics": "Gravação, {time}",
+  "@lectureRecordingSemantics": {
+    "description": "Screen-reader label for the live recording clock. {time} is elapsed mm:ss.",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "example": "14:02"
+      }
+    }
+  },
+  "lectureRecordingSubtitle": "Gravação · continua com o aparelho bloqueado",
+  "lectureStopRecording": "Parar gravação",
+  "lectureRecordLecture": "Gravar palestra",
+  "lectureRecordIdleSubtitle": "Grava mesmo com o aparelho bloqueado",
+  "lecturePause": "Pausar",
+  "lecturePlayRecording": "Reproduzir gravação",
+  "lectureRecordAgain": "Gravar de novo",
+  "lectureNotTranscribedYet": "Ainda não transcrita",
+  "lectureTranscribe": "Transcrever",
+  "lectureTimeMark": "+ Marcar tempo",
+  "lectureTranscriptEmptyRecording": "A palestra é transcrita neste aparelho quando terminar a gravação.",
+  "lectureTranscriptEmptyPending": "A transcrição aparecerá aqui quando estiver pronta.",
+  "lectureTranscriptEmptyNotTranscribed": "Transcreva a gravação para lê-la e pesquisá-la aqui.",
+  "lectureTranscriptEmptyNoRecording": "Grave a palestra; ela será transcrita neste aparelho quando terminar a gravação.",
+  "lectureTranscribing": "Transcrição em curso…",
+  "lectureNoTranscriptYet": "Ainda sem transcrição",
+  "lectureFormatted": "Formatada",
+  "lectureRaw": "Original",
+  "lectureFormatTranscript": "Formatar transcrição",
+  "lectureTabMyNotes": "Minhas notas",
+  "lectureTabTranscript": "Transcrição",
+  "modelTranscriptionTitle": "Modelo de transcrição offline",
+  "modelTranscriptionEnglishNeeded": "Modelo em inglês, necessário para {language}",
+  "@modelTranscriptionEnglishNeeded": {
+    "description": "Settings card detail: this is the English-only speech-to-text model, and it is the one the current app language uses.",
+    "placeholders": {
+      "language": {
+        "type": "String",
+        "example": "English"
+      }
+    }
+  },
+  "modelTranscriptionEnglishNotNeeded": "Modelo em inglês, não necessário para {language}",
+  "@modelTranscriptionEnglishNotNeeded": {
+    "description": "Settings card detail: this is the English-only speech-to-text model, which the current app language does not use (it can be deleted to save space).",
+    "placeholders": {
+      "language": {
+        "type": "String",
+        "example": "Español"
+      }
+    }
+  },
+  "modelTranscriptionMultilingualNeeded": "Modelo para vários idiomas, necessário para {language}",
+  "@modelTranscriptionMultilingualNeeded": {
+    "description": "Settings card detail: this is the multilingual speech-to-text model, and it is the one the current app language uses.",
+    "placeholders": {
+      "language": {
+        "type": "String",
+        "example": "Español"
+      }
+    }
+  },
+  "modelTranscriptionMultilingualNotNeeded": "Modelo para vários idiomas, não necessário para {language}",
+  "@modelTranscriptionMultilingualNotNeeded": {
+    "description": "Settings card detail: this is the multilingual speech-to-text model, which the current app language does not use (it can be deleted to save space).",
+    "placeholders": {
+      "language": {
+        "type": "String",
+        "example": "English"
+      }
+    }
+  },
+  "modelFormattingTitle": "Modelo de formatação de transcrições",
+  "modelAppleIntelligenceStatus": "Com Apple Intelligence (sem download)",
+  "modelStatusChecking": "Em verificação…",
+  "modelStatusNotDownloaded": "Não instalado ({size})",
+  "@modelStatusNotDownloaded": {
+    "description": "Model card status when the model is not downloaded; size is the approximate download size.",
+    "placeholders": {
+      "size": {
+        "type": "String",
+        "example": "~140MB"
+      }
+    }
+  },
+  "modelStatusDownloading": "Download em curso… {percent}%",
+  "@modelStatusDownloading": {
+    "description": "Model card status while the model downloads.",
+    "placeholders": {
+      "percent": {
+        "type": "String",
+        "example": "42"
+      }
+    }
+  },
+  "modelStatusDownloaded": "Instalado",
+  "modelStatusDownloadedSize": "Instalado ({megabytes}MB)",
+  "@modelStatusDownloadedSize": {
+    "description": "Model card status when the model is downloaded, with its size on the device in megabytes.",
+    "placeholders": {
+      "megabytes": {
+        "type": "String",
+        "example": "142"
+      }
+    }
+  },
+  "modelDownload": "Download",
+  "modelDelete": "Apagar",
+  "modelDownloadFailed": "Ocorreu um erro no download do modelo. Tente de novo daqui a pouco.",
+  "modelDeleteFailed": "Ocorreu um erro ao apagar o modelo.",
+  "pdfOverlineHomiletics": "HOMILÉTICA",
+  "pdfOverlineWordStudy": "ESTUDO DE PALAVRA",
+  "pdfUntitledPassage": "Passagem sem título",
+  "pdfUntitledWord": "Palavra sem título",
+  "pdfHomileticLabel": "Homilética · {passage}",
+  "@pdfHomileticLabel": {
+    "description": "Document title and running page footer of a printed homiletic handout. 'Homiletics' is the app name / method name.",
+    "placeholders": {
+      "passage": {
+        "type": "String",
+        "example": "Revelation 2:1–11"
+      }
+    }
+  },
+  "pdfWordStudyLabel": "Estudo de palavra · {word}",
+  "@pdfWordStudyLabel": {
+    "description": "Document title and running page footer of a printed word-study handout with no passage.",
+    "placeholders": {
+      "word": {
+        "type": "String",
+        "example": "Lampstand"
+      }
+    }
+  },
+  "pdfWordStudyLabelWithPassage": "Estudo de palavra · {word} · {passage}",
+  "@pdfWordStudyLabelWithPassage": {
+    "description": "Document title and running page footer of a printed word-study handout: the word studied and the Bible passage it comes from.",
+    "placeholders": {
+      "word": {
+        "type": "String",
+        "example": "Lampstand"
+      },
+      "passage": {
+        "type": "String",
+        "example": "Revelation 2:1–7"
+      }
+    }
+  },
+  "pdfPageOf": "página {current} de {total}",
+  "@pdfPageOf": {
+    "description": "Page number in the footer of a printed handout (lowercase in English).",
+    "placeholders": {
+      "current": {
+        "type": "int",
+        "example": "1"
+      },
+      "total": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "pdfFcfCaption": "Foco na Condição Caída",
+  "pdfAimLeadIn": "Levar os ouvintes a compreender que ",
+  "pdfEmptyHomiletic": "Ainda não há nada escrito para esta passagem.",
+  "pdfEmptyWordStudy": "Ainda não há nada escrito para este estudo de palavra.",
+  "pdfWordStudyDefinition": "Definição",
+  "pdfWordStudyOtherUsage": "Outros usos",
+  "pdfWordStudyContextualMeaning": "Significado no contexto",
+  "pdfWordStudyDeeperMeaning": "Significado mais profundo",
+  "pdfWordStudyApplication": "Aplicação",
+  "editorSaveAndClose": "Guardar e fechar",
+  "editorDeleteConfirmTitle": "Deseja mesmo apagar?",
+  "editorDeleteConfirmMessage": "Este item ({itemName}) será apagado permanentemente, e isso não pode ser desfeito. Deseja mesmo continuar?",
+  "@editorDeleteConfirmMessage": {
+    "description": "Body of the delete confirmation dialog in a study editor.",
+    "placeholders": {
+      "itemName": {
+        "type": "String",
+        "example": "Word Study",
+        "description": "Name of the kind of study being deleted, e.g. 'Word Study' or 'Lecture Note' (already localized)."
+      }
+    }
+  },
+  "editorPassageLabel": "Passagem",
+  "editorAddPassageHint": "Adicionar uma passagem",
+  "editorBack": "Voltar",
+  "editorMoreOptions": "Mais opções",
+  "editorChangeTranslation": "Mudar tradução",
+  "editorStudyCompleteMessage": "Imprima para a aula ou compartilhe com o seu grupo.",
+  "wordStudyItemName": "Estudo de palavra",
+  "wordStudyDeleted": "Estudo de palavra apagado",
+  "wordStudyHeaderLabel": "Estudo de palavra · Passagem",
+  "wordStudyPdfShared": "PDF compartilhado com sucesso.",
+  "wordStudyPdfShareFailed": "Ocorreu um erro ao compartilhar o PDF. Tente de novo daqui a pouco.",
+  "wordStudyPdfPrinted": "PDF impresso com sucesso.",
+  "wordStudyPdfPrintFailed": "Ocorreu um erro ao criar o PDF. Tente de novo daqui a pouco.",
+  "wordStudyWordTitle": "Palavra",
+  "wordStudyWordHelp": "A palavra ou expressão curta específica que vai estudar. Depois de escrevê-la, as partes Definição e Outros usos podem sugerir conteúdo.",
+  "wordStudyWordHint": "Adicionar uma palavra",
+  "wordStudyEnterWordFirst": "Escreva primeiro uma palavra acima.",
+  "wordStudyDefinitionTitle": "Definição",
+  "wordStudyDefinitionHelp": "O que significa esta palavra, em termos simples? Toque em \"+\" para ver definições sugeridas de um dicionário, ou escreva a sua.",
+  "wordStudyDefinitionHelpNoSuggest": "O que significa esta palavra, em termos simples? Escreva a sua definição.",
+  "wordStudyDefinitionHint": "O que significa, em termos simples?",
+  "wordStudySuggestDefinition": "Sugerir uma definição",
+  "wordStudyDefinitionsFor": "Definições de “{word}”",
+  "@wordStudyDefinitionsFor": {
+    "description": "Title of the sheet listing dictionary definitions.",
+    "placeholders": {
+      "word": {
+        "type": "String",
+        "example": "grace",
+        "description": "The word being studied, as typed by the user."
+      }
+    }
+  },
+  "wordStudyDefinitionsTapToUse": "Escolha uma para usá-la.",
+  "wordStudyDefinitionsLoadError": "Não foi possível carregar as definições. Tente de novo daqui a pouco.",
+  "wordStudyNoDefinitions": "Nenhuma definição encontrada para esta palavra.",
+  "wordStudyReplaceDefinitionTitle": "Substituir a sua definição?",
+  "wordStudyReplaceDefinitionMessage": "Já escreveu uma definição. Deseja substituí-la pela sugestão ou adicionar a sugestão abaixo dela?",
+  "wordStudyAddBelow": "Adicionar abaixo",
+  "wordStudyReplace": "Substituir",
+  "wordStudyOtherUsageTitle": "Outros usos",
+  "wordStudyOtherUsageHelp": "Onde mais esta palavra ou conceito aparece nas Escrituras? Toque em \"+\" para pesquisar no Bible Gateway e adicionar as referências que encontrar, ou escreva as suas.",
+  "wordStudyOtherUsageHint": "Onde mais aparece nas Escrituras?",
+  "wordStudyFindOtherUsages": "Encontrar outros usos",
+  "wordStudyOtherUsageSheetTitle": "Onde mais aparece “{word}”",
+  "@wordStudyOtherUsageSheetTitle": {
+    "description": "Title of the Bible search sheet for other usages of the word.",
+    "placeholders": {
+      "word": {
+        "type": "String",
+        "example": "grace",
+        "description": "The word being studied, as typed by the user."
+      }
+    }
+  },
+  "wordStudyOtherUsageAdded": "Adicionadas",
+  "wordStudyOtherUsageInstructions": "Escolha um resultado abaixo para adicionar a referência.",
+  "wordStudyOtherUsageAddResult": "+ Adicionar",
+  "wordStudyContextualMeaningTitle": "Significado no contexto",
+  "wordStudyContextualMeaningHelp": "O que o autor quis dizer com esta palavra aqui, nesta passagem? Considere os versículos ao redor, e não apenas a palavra isolada.",
+  "wordStudyContextualMeaningHint": "O que significa aqui, nesta passagem?",
+  "wordStudyDeeperMeaningTitle": "Significado mais profundo",
+  "wordStudyDeeperMeaningHelp": "Há alguma ideia da língua original, de comentários bíblicos ou de outros estudos que dê mais profundidade além da definição básica? Como o resto das Escrituras molda o seu sentido? Uma concordância de Strong ou o Blue Letter Bible podem ajudar aqui.",
+  "wordStudyDeeperMeaningHint": "Como o resto das Escrituras molda o seu sentido?",
+  "wordStudyApplicationTitle": "Aplicação",
+  "wordStudyApplicationHelp": "Como esta verdade deve moldar a sua vida? Seja específico, pessoal e prático.",
+  "wordStudyApplicationHint": "O que vai fazer com isso?",
+  "wordStudyDoneTitle": "Estudo de palavra concluído",
+  "wordStudySectionHelpSemantics": "{title}, sobre esta parte",
+  "@wordStudySectionHelpSemantics": {
+    "description": "Screen reader label for a section title that opens its help text.",
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Definition",
+        "description": "The section's title."
+      }
+    }
+  },
+  "lectureTimeMarkNoRecording": "Esta anotação não tem gravação para reproduzir.",
+  "lectureTimeMarkStopRecordingFirst": "Pare a gravação para reproduzir a partir de uma marca de tempo.",
+  "lectureTimeMarkPastEnd": "Essa marca de tempo está depois do fim da gravação.",
+  "onboardingSkip": "Pular",
+  "onboardingBack": "Voltar",
+  "onboardingNext": "Avançar",
+  "onboardingWelcomeOverline": "Boas-vindas",
+  "onboardingWelcomeTitle": "Estude a Bíblia, uma passagem de cada vez",
+  "onboardingWelcomeBody": "O Homiletics ajuda a fazer a sua homilética, tomar notas da palestra e fazer estudos de palavra — sempre com a passagem aberta ao lado, no seu idioma e na sua tradução da Bíblia.",
+  "onboardingMethodOverline": "O método",
+  "onboardingMethodTitle": "O que é uma homilética?",
+  "onboardingMethodBody": "A homilética é uma forma breve de estudar uma passagem: encontrar a mensagem principal e depois pensar em como vivê-la. São seis passos — e não precisa ficar perfeita. Fica mais fácil a cada semana.",
+  "onboardingStepsOverline": "Passo a passo",
+  "onboardingStepsTitle": "Os seis passos",
+  "onboardingStepContent": "Resuma a passagem em 10 a 20 trechos curtos, com as suas próprias palavras.",
+  "onboardingStepDivisions": "Agrupe esses trechos em 2 a 4 seções.",
+  "onboardingStepSummary": "A passagem inteira em 10 palavras ou menos.",
+  "onboardingStepFcf": "Foco na Condição Caída: a necessidade ou quebrantamento humano que a passagem aborda.",
+  "onboardingStepAim": "A principal verdade que deseja que os ouvintes aprendam.",
+  "onboardingStepApplication": "Perguntas que levam a passagem para a vida diária.",
+  "onboardingLecturesOverline": "Palestras e estudos de palavra",
+  "onboardingLecturesTitle": "Ouça com atenção, aprofunde-se",
+  "onboardingLecturesBody": "Grave a palestra — a gravação continua mesmo com o aparelho bloqueado e a transcrição é feita no próprio aparelho. Tome notas enquanto ouve e adicione marcas de tempo para encontrar um momento depois.",
+  "onboardingWordStudyBody": "Uma palavra chamou a atenção? Comece um estudo de palavra e aprofunde o que ela significa na passagem.",
+  "onboardingStartOverline": "Comece",
+  "onboardingStartTitle": "Tudo pronto para começar",
+  "onboardingStartBody": "Comece pela passagem desta semana ou explore primeiro. Cada passo que escrever é guardado automaticamente.",
+  "onboardingReopenHint": "Pode abrir este guia novamente a qualquer momento em Configurações.",
+  "onboardingStartThisWeek": "Começar a homilética desta semana",
+  "onboardingExplore": "Explorar por conta própria",
+  "onboardingThisWeekPassage": "Esta semana: {passage}",
+  "onboardingSettingsRow": "Como funciona a homilética",
+  "bibleOfflineSize": "Off-line · {size}",
+  "bibleDownloadedSize": "Baixada · {size}",
+  "bibleDownloadAction": "Baixar para usar off-line",
+  "bibleDownloading": "Baixando…",
+  "bibleRemoveDownload": "Remover download",
+  "bibleDownloadFailed": "Não foi possível baixar {translation}. Verifique sua conexão e tente de novo.",
+  "bibleOfflineTitle": "Sem conexão",
+  "bibleOfflineMessage": "Esta passagem vem do Bible Gateway, que precisa de internet. Baixe {translation} para ler em qualquer lugar.",
+  "bibleOfflineNoDownloadMessage": "Esta passagem vem do Bible Gateway, que precisa de internet. Conecte-se e tente de novo.",
+  "bibleTryAgain": "Tentar de novo",
+  "bibleNeedsDownloadTitle": "Baixar {translation}",
+  "bibleNeedsDownloadMessage": "Esta Bíblia é lida do seu aparelho. Baixe-a uma vez (cerca de {size}) para ver a passagem.",
+  "bibleNotInTranslation": "Não foi possível encontrar esta passagem em {translation}.",
+  "bibleVerseTapTip": "Dica: toque no número de um versículo para começar um resumo ali.",
+  "bibleVerseTapLabel": "Começar um resumo no versículo {verse}"
+}

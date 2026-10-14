@@ -1,0 +1,1826 @@
+{
+  "@@locale": "en",
+  "prefsTitle": "Preferences",
+  "@prefsTitle": {
+    "description": "Heading of the preferences dialog."
+  },
+  "prefsAppLanguage": "Preferred language",
+  "@prefsAppLanguage": {
+    "description": "Preferences row / sheet title for choosing the app's interface language."
+  },
+  "prefsBibleVersion": "Preferred Bible version",
+  "@prefsBibleVersion": {
+    "description": "Preferences row / sheet title for choosing the Bible translation shown in the passage view."
+  },
+  "bibleNewTestamentOnly": "New Testament only",
+  "@bibleNewTestamentOnly": {
+    "description": "Note under a Bible translation that only contains the New Testament."
+  },
+  "appTitle": "Homiletics",
+  "@appTitle": {
+    "description": "App name shown in the header and task switcher."
+  },
+  "commonCancel": "Cancel",
+  "commonOk": "Ok",
+  "commonDelete": "Delete",
+  "commonDone": "Done",
+  "commonSave": "Save",
+  "commonClose": "Close",
+  "commonRetry": "Retry",
+  "commonSomethingWentWrong": "Something went wrong. Try again soon.",
+  "languageSystemDefault": "Phone language",
+  "@languageSystemDefault": {
+    "description": "Option in the app-language picker meaning 'follow the phone's language setting'."
+  },
+  "stepContent": "Content",
+  "@stepContent": {
+    "description": "Homiletic step 1: verse-by-verse content summaries of the passage."
+  },
+  "stepDivisions": "Divisions",
+  "@stepDivisions": {
+    "description": "Homiletic step 2: grouping the content into 2-4 major sections."
+  },
+  "stepSummary": "Summary sentence",
+  "@stepSummary": {
+    "description": "Homiletic step 3: the whole passage summarized in 10 words or fewer."
+  },
+  "stepFcf": "FCF",
+  "@stepFcf": {
+    "description": "Homiletic step 4: 'Fallen Condition Focus', the human need the passage addresses. Keep the abbreviation if no common equivalent exists."
+  },
+  "stepAim": "Aim",
+  "@stepAim": {
+    "description": "Homiletic step 5: the main takeaway the teacher wants the audience to learn."
+  },
+  "stepApplication": "Application",
+  "@stepApplication": {
+    "description": "Homiletic step 6: application questions for personal response."
+  },
+  "stepShortContent": "Content",
+  "@stepShortContent": {
+    "description": "Very short (1 word, ~8 chars) label under a progress bar segment for step 1."
+  },
+  "stepShortDivisions": "Divide",
+  "@stepShortDivisions": {
+    "description": "Very short (1 word, ~8 chars) progress label for step 2."
+  },
+  "stepShortSummary": "Summary",
+  "@stepShortSummary": {
+    "description": "Very short progress label for step 3."
+  },
+  "stepShortFcf": "FCF",
+  "@stepShortFcf": {
+    "description": "Very short progress label for step 4."
+  },
+  "stepShortAim": "Aim",
+  "@stepShortAim": {
+    "description": "Very short progress label for step 5."
+  },
+  "stepShortApplication": "Apply",
+  "@stepShortApplication": {
+    "description": "Very short progress label for step 6."
+  },
+  "commonShare": "Share",
+  "commonPrint": "Print",
+  "commonPreferences": "Preferences",
+  "commonUntitled": "Untitled",
+  "homeSearchIntro": "Search your homiletics, divisions, applications, lecture notes and word studies.",
+  "@homeSearchIntro": {
+    "description": "Hint shown on the home screen while the search field is open but empty."
+  },
+  "homeSearchFieldHint": "Search lessons, passages, notes…",
+  "@homeSearchFieldHint": {
+    "description": "Placeholder inside the home screen's search field. Keep short (~35 chars)."
+  },
+  "homeSearchTooltip": "Search",
+  "@homeSearchTooltip": {
+    "description": "Tooltip / accessibility label of the search icon button in the home header."
+  },
+  "homeCloseSearch": "Close search",
+  "@homeCloseSearch": {
+    "description": "Tooltip of the X button that closes the home search field."
+  },
+  "homeAllStudies": "All studies",
+  "@homeAllStudies": {
+    "description": "Filter pill / menu option on the weekly passage card meaning 'show passages from every study'. Short (~16 chars)."
+  },
+  "homeFilterByStudy": "Filter by study",
+  "@homeFilterByStudy": {
+    "description": "Tooltip of the study filter pill on the weekly passage card."
+  },
+  "homeOpenStudySite": "Open study website",
+  "@homeOpenStudySite": {
+    "description": "Menu item that opens the current study's website in the browser."
+  },
+  "homeThisWeek": "This week",
+  "@homeThisWeek": {
+    "description": "Overline above the passage card for the current week's lesson. Shown in upper case."
+  },
+  "homeEarlier": "Earlier",
+  "@homeEarlier": {
+    "description": "Overline above a passage card for a lesson from a past week. Shown in upper case."
+  },
+  "homeComingUp": "Coming up",
+  "@homeComingUp": {
+    "description": "Overline above a passage card for a lesson in a future week. Shown in upper case."
+  },
+  "homeWeekOverline": "{when} · {lesson}",
+  "@homeWeekOverline": {
+    "description": "Overline on a passage card: the week label (This week / Earlier / Coming up) followed by the lesson name from the study schedule. Shown in upper case on one line.",
+    "placeholders": {
+      "when": {
+        "type": "String"
+      },
+      "lesson": {
+        "type": "String"
+      }
+    }
+  },
+  "homeStartHomiletics": "Start homiletics",
+  "@homeStartHomiletics": {
+    "description": "Main button on a passage card when no homiletic exists for the passage yet."
+  },
+  "homeContinueHomiletics": "Continue homiletics",
+  "@homeContinueHomiletics": {
+    "description": "Main button on a passage card when a homiletic is partly done."
+  },
+  "homeOpenHomiletics": "Open homiletics",
+  "@homeOpenHomiletics": {
+    "description": "Main button on a passage card when all homiletic steps are done."
+  },
+  "homeLoadingPassages": "Loading suggested passages…",
+  "@homeLoadingPassages": {
+    "description": "Shown on the placeholder card while this week's suggested passages load."
+  },
+  "homeContinue": "Continue",
+  "@homeContinue": {
+    "description": "Heading of the home section listing recently edited studies."
+  },
+  "homeSeeAll": "See all",
+  "@homeSeeAll": {
+    "description": "Link next to a home section heading that opens the full list."
+  },
+  "homeLivingItOut": "Living it out",
+  "@homeLivingItOut": {
+    "description": "Heading of the home section (and title of the full page) listing the user's application questions."
+  },
+  "homeKindTileHomiletic": "H",
+  "@homeKindTileHomiletic": {
+    "description": "Single letter on the small tile marking a homiletic in study lists (initial of 'Homiletics'). One character."
+  },
+  "homeKindTileWordStudy": "W",
+  "@homeKindTileWordStudy": {
+    "description": "Single letter on the small tile marking a word study in study lists (initial of 'Word study'). One character."
+  },
+  "homeProgressNoneDone": "No steps done yet",
+  "@homeProgressNoneDone": {
+    "description": "Screen-reader label for the homiletic step progress bar when no step is done."
+  },
+  "homeProgressDone": "Done: {steps}",
+  "@homeProgressDone": {
+    "description": "Screen-reader label for the homiletic step progress bar; {steps} is a comma-separated list of completed step names.",
+    "placeholders": {
+      "steps": {
+        "type": "String"
+      }
+    }
+  },
+  "homePageOf": "Page {page} of {count}",
+  "@homePageOf": {
+    "description": "Screen-reader label for the dots under the swipeable passage cards.",
+    "placeholders": {
+      "page": {
+        "type": "int"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homePageFraction": "{page} / {count}",
+  "@homePageFraction": {
+    "description": "Compact page indicator under the passage cards when there are too many pages for dots, e.g. '3 / 12'.",
+    "placeholders": {
+      "page": {
+        "type": "int"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "studiesTitle": "Your studies",
+  "@studiesTitle": {
+    "description": "Title of the page listing every saved study."
+  },
+  "studiesTabHomiletics": "Homiletics",
+  "@studiesTabHomiletics": {
+    "description": "Tab on the 'Your studies' page listing homiletics."
+  },
+  "studiesTabLectures": "Lectures",
+  "@studiesTabLectures": {
+    "description": "Tab on the 'Your studies' page listing lecture notes."
+  },
+  "studiesTabWordStudies": "Word studies",
+  "@studiesTabWordStudies": {
+    "description": "Tab on the 'Your studies' page listing word studies."
+  },
+  "studiesNoHomiletics": "No homiletics yet.",
+  "@studiesNoHomiletics": {
+    "description": "Empty-state message in the homiletics list."
+  },
+  "studiesNoLectureNotes": "No lecture notes yet.",
+  "@studiesNoLectureNotes": {
+    "description": "Empty-state message in the lecture notes list."
+  },
+  "studiesNoWordStudies": "No word studies yet.",
+  "@studiesNoWordStudies": {
+    "description": "Empty-state message in the word studies list."
+  },
+  "studiesNoApplications": "No application questions yet.",
+  "@studiesNoApplications": {
+    "description": "Empty-state message on the 'Living it out' page."
+  },
+  "studiesProgressNotStarted": "Not started",
+  "@studiesProgressNotStarted": {
+    "description": "Homiletic progress summary when no homiletic exists yet. Short."
+  },
+  "studiesProgressAll": "All {total} steps",
+  "@studiesProgressAll": {
+    "description": "Homiletic progress summary when every step is done, e.g. 'All 6 steps'. Short.",
+    "placeholders": {
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "studiesProgressSome": "{done} of {total} steps",
+  "@studiesProgressSome": {
+    "description": "Homiletic progress summary, e.g. '2 of 6 steps'. Short.",
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "studiesHomileticSubtitle": "Homiletics · {progress} · {time}",
+  "@studiesHomileticSubtitle": {
+    "description": "Subtitle of a homiletic in a study list: kind, progress (e.g. '2 of 6 steps') and relative time (e.g. '3 days ago'). One line.",
+    "placeholders": {
+      "progress": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "studiesHomileticSubtitleNoProgress": "Homiletics · {time}",
+  "@studiesHomileticSubtitleNoProgress": {
+    "description": "Subtitle of a homiletic in a study list while its progress loads; {time} is a relative time like '3 days ago'.",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "studiesLectureTitle": "{passage} lecture",
+  "@studiesLectureTitle": {
+    "description": "Title of a lecture note in a study list; {passage} is a Bible reference like 'John 3:1-21'.",
+    "placeholders": {
+      "passage": {
+        "type": "String"
+      }
+    }
+  },
+  "studiesLectureUntitled": "Lecture",
+  "@studiesLectureUntitled": {
+    "description": "Title of a lecture note in a study list when it has no passage."
+  },
+  "studiesLectureSubtitle": "Lecture notes · {time}",
+  "@studiesLectureSubtitle": {
+    "description": "Subtitle of a lecture note in a study list; {time} is a relative time like '3 days ago'.",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "studiesWordStudyUntitled": "Word study",
+  "@studiesWordStudyUntitled": {
+    "description": "Title of a word study in a study list when it has no word or passage."
+  },
+  "studiesWordStudySubtitle": "Word study · {time}",
+  "@studiesWordStudySubtitle": {
+    "description": "Subtitle of a word study in a study list; {time} is a relative time like '3 days ago'.",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "studiesWordStudySubtitleWithPassage": "Word study · {passage} · {time}",
+  "@studiesWordStudySubtitleWithPassage": {
+    "description": "Subtitle of a word study in a study list; {passage} is a Bible reference, {time} a relative time like '3 days ago'.",
+    "placeholders": {
+      "passage": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "searchHint": "Search",
+  "@searchHint": {
+    "description": "Placeholder in a generic search field."
+  },
+  "searchSectionContentSummaries": "Content Summaries",
+  "@searchSectionContentSummaries": {
+    "description": "Heading of search results found in content summaries (homiletic step 1). Shown in upper case."
+  },
+  "searchSectionDivisions": "Divisions",
+  "@searchSectionDivisions": {
+    "description": "Heading of search results found in divisions (homiletic step 2). Shown in upper case."
+  },
+  "searchSectionApplications": "Applications",
+  "@searchSectionApplications": {
+    "description": "Heading of search results found in application questions. Shown in upper case."
+  },
+  "searchSectionAims": "Aims",
+  "@searchSectionAims": {
+    "description": "Heading of search results found in homiletic aims. Shown in upper case."
+  },
+  "searchSectionSummarySentences": "Summary Sentences",
+  "@searchSectionSummarySentences": {
+    "description": "Heading of search results found in summary sentences. Shown in upper case."
+  },
+  "searchSectionPassages": "Homiletics Passages",
+  "@searchSectionPassages": {
+    "description": "Heading of search results matching a homiletic's Bible passage. Shown in upper case."
+  },
+  "searchSectionLectureNotes": "Lecture Notes",
+  "@searchSectionLectureNotes": {
+    "description": "Heading of search results found in lecture notes. Shown in upper case."
+  },
+  "searchSectionWordStudies": "Word Studies",
+  "@searchSectionWordStudies": {
+    "description": "Heading of search results found in word studies. Shown in upper case."
+  },
+  "searchOpenFailed": "Couldn't open that result. It may have been deleted.",
+  "@searchOpenFailed": {
+    "description": "Snackbar when a tapped search result can't be opened."
+  },
+  "settingsTitle": "Settings",
+  "@settingsTitle": {
+    "description": "Title of the settings page; also the tooltip of the gear button on the home screen."
+  },
+  "settingsSectionLanguage": "Language",
+  "@settingsSectionLanguage": {
+    "description": "Section heading on the settings page above the app-language row. Shown in upper case."
+  },
+  "settingsAppLanguage": "App language",
+  "@settingsAppLanguage": {
+    "description": "Settings row (and picker title) for choosing the language of the app's interface (not the Bible translation)."
+  },
+  "settingsSectionReading": "Reading",
+  "@settingsSectionReading": {
+    "description": "Section heading on the settings page above Bible translation / reading options. Shown in upper case."
+  },
+  "settingsSectionModels": "On-device models",
+  "@settingsSectionModels": {
+    "description": "Section heading on the settings page above the speech and formatting model downloads. Shown in upper case."
+  },
+  "settingsSectionHelp": "Help",
+  "@settingsSectionHelp": {
+    "description": "Section heading on the settings page above the feedback row. Shown in upper case."
+  },
+  "settingsCopyright": "Copyright (C) {year} 13one.org · All rights reserved",
+  "@settingsCopyright": {
+    "description": "Copyright line at the bottom of the settings page. Keep '13one.org' unchanged.",
+    "placeholders": {
+      "year": {
+        "type": "String"
+      }
+    }
+  },
+  "helpRequestFeedback": "Request help / leave feedback",
+  "@helpRequestFeedback": {
+    "description": "Link / row that opens the help and feedback form."
+  },
+  "helpCopyright": "Copyright (C) {year} 13one.org",
+  "@helpCopyright": {
+    "description": "Copyright line at the foot of the home screen. Keep '13one.org' unchanged.",
+    "placeholders": {
+      "year": {
+        "type": "String"
+      }
+    }
+  },
+  "helpAllRightsReserved": "All rights reserved",
+  "@helpAllRightsReserved": {
+    "description": "Second copyright line at the foot of the home screen."
+  },
+  "feedbackTitle": "Leave some feedback",
+  "@feedbackTitle": {
+    "description": "Title of the feedback form sheet."
+  },
+  "feedbackPublicNotice": "Your feedback is submitted as a public GitHub issue—anyone on the internet can read it. Do not include passwords or other private information. Your email is partially hidden on GitHub; we may keep the full address on our servers only to follow up.",
+  "@feedbackPublicNotice": {
+    "description": "Privacy notice under the feedback form title. Keep 'GitHub' unchanged."
+  },
+  "feedbackTypeGeneral": "Help or feedback",
+  "@feedbackTypeGeneral": {
+    "description": "Feedback form option: a general question or comment. Short (~18 chars), shown in a two-option segmented control."
+  },
+  "feedbackTypeTranslation": "Translation issue",
+  "@feedbackTypeTranslation": {
+    "description": "Feedback form option: report wrong or awkward wording in the app's translation. Short (~18 chars), shown in a two-option segmented control."
+  },
+  "feedbackTranslationHint": "Tell us which words look wrong and what they should say. We'll include your app language and Bible translation.",
+  "@feedbackTranslationHint": {
+    "description": "Help text shown when 'Translation issue' is selected in the feedback form."
+  },
+  "feedbackNameLabel": "Name",
+  "@feedbackNameLabel": {
+    "description": "Label of the name field in the feedback form."
+  },
+  "feedbackEmailLabel": "Email (optional)",
+  "@feedbackEmailLabel": {
+    "description": "Label of the email field in the feedback form."
+  },
+  "feedbackContentLabel": "Feedback",
+  "@feedbackContentLabel": {
+    "description": "Label of the message field in the feedback form."
+  },
+  "feedbackSubmit": "Submit",
+  "@feedbackSubmit": {
+    "description": "Button that sends the feedback form."
+  },
+  "feedbackEmpty": "Please enter your feedback first.",
+  "@feedbackEmpty": {
+    "description": "Snackbar when the user taps Submit with an empty message."
+  },
+  "feedbackSubmittedIssue": "Submitted. Open the issue on GitHub anytime to add comments (sign-in optional).",
+  "@feedbackSubmittedIssue": {
+    "description": "Snackbar after feedback was filed as a GitHub issue."
+  },
+  "feedbackOpenIssue": "Open",
+  "@feedbackOpenIssue": {
+    "description": "Snackbar action that opens the newly created GitHub issue. Very short."
+  },
+  "feedbackSubmitted": "Successfully submitted feedback",
+  "@feedbackSubmitted": {
+    "description": "Snackbar after feedback was sent."
+  },
+  "feedbackBadRequest": "Could not submit that request. Check your message and try again.",
+  "@feedbackBadRequest": {
+    "description": "Snackbar when the server rejected the feedback."
+  },
+  "feedbackServerUnreachableTitle": "Could not reach the server",
+  "@feedbackServerUnreachableTitle": {
+    "description": "Title of the dialog shown when feedback couldn't be sent."
+  },
+  "feedbackServerUnreachableBody": "Open GitHub in your browser to file this report instead. You may need to sign in there to submit the issue.",
+  "@feedbackServerUnreachableBody": {
+    "description": "Body of the dialog shown when feedback couldn't be sent."
+  },
+  "feedbackNotNow": "Not now",
+  "@feedbackNotNow": {
+    "description": "Dialog button that dismisses the 'could not reach the server' dialog."
+  },
+  "feedbackOpenGitHub": "Open GitHub",
+  "@feedbackOpenGitHub": {
+    "description": "Dialog button that opens GitHub in the browser to file the report."
+  },
+  "feedbackBrowserFailed": "Could not open the browser.",
+  "@feedbackBrowserFailed": {
+    "description": "Snackbar when no app could open a web link."
+  },
+  "startHomiletics": "Homiletics",
+  "@startHomiletics": {
+    "description": "Button that starts a homiletic on the typed passage. Short (3 buttons share a row)."
+  },
+  "startLecture": "Lecture",
+  "@startLecture": {
+    "description": "Button that starts lecture notes on a passage. Short (2-3 buttons share a row)."
+  },
+  "startWordStudy": "Word study",
+  "@startWordStudy": {
+    "description": "Button that starts a word study on a passage. Short (2-3 buttons share a row)."
+  },
+  "startPassageHint": "Study another passage…",
+  "@startPassageHint": {
+    "description": "Placeholder of the field at the bottom of the home screen where the user types a Bible reference to study."
+  },
+  "startClear": "Clear",
+  "@startClear": {
+    "description": "Tooltip of the X button that clears the passage field."
+  },
+  "startOtherStudy": "Other study",
+  "@startOtherStudy": {
+    "description": "Button that opens a menu of non-homiletic study types."
+  },
+  "startMenuLectureNote": "Lecture Note",
+  "@startMenuLectureNote": {
+    "description": "Menu item that starts lecture notes on the passage."
+  },
+  "startMenuWordStudy": "Word Study",
+  "@startMenuWordStudy": {
+    "description": "Menu item that starts a word study on the passage."
+  },
+  "startDuplicateHomileticTitle": "Already have a homiletic for this passage?",
+  "@startDuplicateHomileticTitle": {
+    "description": "Title of the dialog shown when starting a homiletic on a passage that already has one."
+  },
+  "startDuplicateHomileticMany": "{passage}\n\nYou have {count} homiletics for this passage; opening the most recent.",
+  "@startDuplicateHomileticMany": {
+    "description": "Body of the duplicate-homiletic dialog when there are several; {passage} is a Bible reference. 'Edit existing' opens the most recent.",
+    "placeholders": {
+      "passage": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "startDuplicateLectureTitle": "Already have lecture notes for this passage?",
+  "@startDuplicateLectureTitle": {
+    "description": "Title of the dialog shown when starting lecture notes on a passage that already has some."
+  },
+  "startDuplicateLectureMany": "{passage}\n\nYou have {count} lecture notes for this passage; opening the most recent.",
+  "@startDuplicateLectureMany": {
+    "description": "Body of the duplicate-lecture-notes dialog when there are several; {passage} is a Bible reference.",
+    "placeholders": {
+      "passage": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "startDuplicateWordStudyTitle": "Already have a word study for this passage?",
+  "@startDuplicateWordStudyTitle": {
+    "description": "Title of the dialog shown when starting a word study on a passage that already has one."
+  },
+  "startDuplicateWordStudyMany": "{passage}\n\nYou have {count} word studies for this passage; opening the most recent.",
+  "@startDuplicateWordStudyMany": {
+    "description": "Body of the duplicate-word-study dialog when there are several; {passage} is a Bible reference.",
+    "placeholders": {
+      "passage": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "startCreateNew": "Create new",
+  "@startCreateNew": {
+    "description": "Duplicate-passage dialog button: create another study on the same passage."
+  },
+  "startEditExisting": "Edit existing",
+  "@startEditExisting": {
+    "description": "Duplicate-passage dialog button: open the existing study."
+  },
+  "homileticHeaderLabel": "Homiletics · Passage",
+  "@homileticHeaderLabel": {
+    "description": "Small label above the Bible passage pane in the homiletics editor. 'Homiletics' is the study method; keep short (~25 chars)."
+  },
+  "homileticItemName": "Homiletics lesson",
+  "@homileticItemName": {
+    "description": "Name of the item used in the delete confirmation of the homiletics editor (e.g. 'Delete this Homiletics lesson?'). A 'homiletics' lesson is a structured six-step Bible-passage study (Content, Divisions, Summary sentence, FCF, Aim, Application). "
+  },
+  "homileticDeletedMessage": "Homiletics Deleted",
+  "@homileticDeletedMessage": {
+    "description": "Snackbar shown after a homiletics lesson is deleted."
+  },
+  "homileticLoadError": "Something went wrong loading this lesson.",
+  "@homileticLoadError": {
+    "description": "Snackbar shown when a homiletics lesson fails to load."
+  },
+  "homileticPdfShared": "PDF shared successfully.",
+  "@homileticPdfShared": {
+    "description": "Snackbar after the homiletics lesson was exported to PDF and shared."
+  },
+  "homileticPdfShareFailed": "Something went wrong sharing your PDF. Try again soon.",
+  "@homileticPdfShareFailed": {
+    "description": "Snackbar when sharing the homiletics PDF fails."
+  },
+  "homileticPdfPrinted": "PDF printed successfully.",
+  "@homileticPdfPrinted": {
+    "description": "Snackbar after the homiletics lesson PDF was sent to the printer."
+  },
+  "homileticPdfPrintFailed": "Something went wrong creating your PDF. Try again soon.",
+  "@homileticPdfPrintFailed": {
+    "description": "Snackbar when creating/printing the homiletics PDF fails."
+  },
+  "homileticCompleteTitle": "All six steps done",
+  "@homileticCompleteTitle": {
+    "description": "Title of the card shown at the bottom of the homiletics editor once all six steps have something written. Keep short (~25 chars)."
+  },
+  "homileticCompleteMessage": "Print it for class, or share it with your group.",
+  "@homileticCompleteMessage": {
+    "description": "Message under 'All six steps done', above Print and Share buttons."
+  },
+  "homileticContentEmptySummary": "Verses + summary",
+  "@homileticContentEmptySummary": {
+    "description": "Short muted hint on the right of the collapsed Content step when nothing is written yet. Each content row is a verse range plus a summary. Max ~20 chars."
+  },
+  "homileticDivisionsEmptySummary": "2–4 groupings",
+  "@homileticDivisionsEmptySummary": {
+    "description": "Short muted hint on the collapsed Divisions step when empty: a passage is split into 2 to 4 groups of verses. Max ~20 chars."
+  },
+  "homileticSummaryEmptySummary": "≤ 10 words",
+  "@homileticSummaryEmptySummary": {
+    "description": "Short muted hint on the collapsed Summary sentence step when empty: the sentence must be at most 10 words. Max ~15 chars."
+  },
+  "homileticFcfEmptySummary": "Fallen condition focus",
+  "@homileticFcfEmptySummary": {
+    "description": "Short muted hint on the collapsed FCF step when empty; spells out the abbreviation FCF (the fallen human condition the passage addresses). Max ~25 chars."
+  },
+  "homileticAimEmptySummary": "The main takeaway",
+  "@homileticAimEmptySummary": {
+    "description": "Short muted hint on the collapsed Aim step when empty. Max ~20 chars."
+  },
+  "homileticApplicationEmptySummary": "How can I…",
+  "@homileticApplicationEmptySummary": {
+    "description": "Short muted hint on the collapsed Application step when empty: application questions typically start this way. Max ~15 chars."
+  },
+  "homileticStepStatusDone": "done",
+  "@homileticStepStatusDone": {
+    "description": "Screen-reader status of a homiletic step that has something written. Inserted as {status} in homileticStepTileLabel."
+  },
+  "homileticStepStatusToDo": "to do",
+  "@homileticStepStatusToDo": {
+    "description": "Screen-reader status of a homiletic step that is still empty. Inserted as {status} in homileticStepTileLabel."
+  },
+  "homileticStepCollapseLabel": "{title}, collapse",
+  "@homileticStepCollapseLabel": {
+    "description": "Screen-reader label of an open step's header; tapping it closes the step.",
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Divisions"
+      }
+    }
+  },
+  "homileticStepHelpLabel": "About {title}",
+  "@homileticStepHelpLabel": {
+    "description": "Tooltip and screen-reader label of the '?' button that explains a homiletic step.",
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Divisions"
+      }
+    }
+  },
+  "homileticVersesLabel": "Verses",
+  "@homileticVersesLabel": {
+    "description": "Screen-reader label of the verse-range field at the start of a Content or Divisions row."
+  },
+  "homileticVersesHint": "v.",
+  "@homileticVersesHint": {
+    "description": "Placeholder in the narrow verse-range field (abbreviation of 'verses'). Max 3 chars; the field is only ~40px wide."
+  },
+  "homileticAddButtonLabel": "+ {label}",
+  "@homileticAddButtonLabel": {
+    "description": "Text of the dashed add button under a list step; {label} is e.g. 'Add summary'. Keep the plus sign unless your language puts it elsewhere.",
+    "placeholders": {
+      "label": {
+        "type": "String",
+        "example": "Add summary"
+      }
+    }
+  },
+  "homileticRemoveRowMessage": "What you've written here will be deleted.",
+  "@homileticRemoveRowMessage": {
+    "description": "Body of the dialog asking to confirm removing a row that has text in it."
+  },
+  "homileticRemoveRowConfirm": "Remove",
+  "@homileticRemoveRowConfirm": {
+    "description": "Destructive button in the dialog that removes a row from a homiletic step."
+  },
+  "homileticContentSummaryHint": "Summary…",
+  "@homileticContentSummaryHint": {
+    "description": "Placeholder of a Content row's summary field (the user's own-words summary of a few verses)."
+  },
+  "homileticAddContentSummary": "Add summary",
+  "@homileticAddContentSummary": {
+    "description": "Label of the dashed button that adds a content-summary row. Shown after '+'."
+  },
+  "homileticRemoveContentSummaryTooltip": "Remove content summary",
+  "@homileticRemoveContentSummaryTooltip": {
+    "description": "Tooltip of the × button on a Content row."
+  },
+  "homileticRemoveContentSummaryTitle": "Remove this content summary?",
+  "@homileticRemoveContentSummaryTitle": {
+    "description": "Title of the dialog confirming removal of a Content row that has text."
+  },
+  "homileticRemoveContentSummaryFailed": "Removing that Content Summary didn't work",
+  "@homileticRemoveContentSummaryFailed": {
+    "description": "Snackbar when removing a Content row fails."
+  },
+  "homileticDivisionHint": "Division sentence…",
+  "@homileticDivisionHint": {
+    "description": "Placeholder of a Divisions row's text field: one sentence describing a group of verses."
+  },
+  "homileticAddDivision": "Add division",
+  "@homileticAddDivision": {
+    "description": "Label of the dashed button that adds a division row. Shown after '+'."
+  },
+  "homileticRemoveDivisionTooltip": "Remove division",
+  "@homileticRemoveDivisionTooltip": {
+    "description": "Tooltip of the × button on a Divisions row."
+  },
+  "homileticRemoveDivisionTitle": "Remove this division?",
+  "@homileticRemoveDivisionTitle": {
+    "description": "Title of the dialog confirming removal of a Divisions row that has text."
+  },
+  "homileticRemoveDivisionFailed": "Removing that Division didn't work",
+  "@homileticRemoveDivisionFailed": {
+    "description": "Snackbar when removing a Divisions row fails."
+  },
+  "homileticApplicationHint": "How can I…",
+  "@homileticApplicationHint": {
+    "description": "Placeholder of an application-question field: questions that help people apply the passage to their lives often start this way."
+  },
+  "homileticAddApplication": "Add question",
+  "@homileticAddApplication": {
+    "description": "Label of the dashed button that adds an application question. Shown after '+'."
+  },
+  "homileticRemoveApplicationTooltip": "Remove application question",
+  "@homileticRemoveApplicationTooltip": {
+    "description": "Tooltip of the × button on an Application row."
+  },
+  "homileticRemoveApplicationTitle": "Remove this application question?",
+  "@homileticRemoveApplicationTitle": {
+    "description": "Title of the dialog confirming removal of an Application row that has text."
+  },
+  "homileticRemoveApplicationFailed": "Removing that Application didn't work",
+  "@homileticRemoveApplicationFailed": {
+    "description": "Snackbar when removing an Application row fails."
+  },
+  "homileticSummaryHint": "Summarize: 10 words or fewer",
+  "@homileticSummaryHint": {
+    "description": "Placeholder of the Summary sentence field: the whole passage summarized in at most 10 words."
+  },
+  "homileticFcfHint": "Fallen/Frail/Feeble/Fickle",
+  "@homileticFcfHint": {
+    "description": "Placeholder of the FCF (Fallen Condition Focus) field, listing example words for the human weakness the passage addresses. The English alliterates on F; translate the meaning, alliteration optional."
+  },
+  "homileticAimHint": "Cause the audience to learn that…",
+  "@homileticAimHint": {
+    "description": "Placeholder of the Aim field: the user completes the sentence with the main truth to teach."
+  },
+  "homileticContentHelpTitle": "Content Summaries",
+  "@homileticContentHelpTitle": {
+    "description": "Title of the help dialog for the Content step."
+  },
+  "homileticContentHelpText": "A content summary is a summary of a section of the Bible. It doesn't need to be a sentence, it can also be more than one sentence. It should be a summary, in your own words, of the content of the passage.\nYou should have at least 10, but no more than 20 content summaries. Generally, depending on the length of the passage, you will divide your passage into chunks of an approximate size to hit the 10-20 mark. So, if your passage is 30 verses, I'd try for 3 verses per content summary on average.",
+  "@homileticContentHelpText": {
+    "description": "Help dialog text for the Content step. Keep the line break."
+  },
+  "homileticDivisionsHelpText": "Divisions are groupings of verses that are related. There should be at least two and no more than four.",
+  "@homileticDivisionsHelpText": {
+    "description": "Help dialog text for the Divisions step."
+  },
+  "homileticSummaryHelpTitle": "Summary Sentence",
+  "@homileticSummaryHelpTitle": {
+    "description": "Title of the help dialog for the Summary sentence step."
+  },
+  "homileticSummaryHelpText": "The Summary Sentence is a concise, memorable statement that encapsulates the most relevant facts. A good way of thinking of it is the 2am test: if someone were to wake you up at 2am and ask you what the sermon was about, what would you say? You'd say the Summary Sentence.\nIt should be 10 words or fewer. If you're feeling frisky, you can try to make an alliteration.",
+  "@homileticSummaryHelpText": {
+    "description": "Help dialog text for the Summary sentence step. Keep the line break; the word limit may be adapted for languages where 10 words is unnatural."
+  },
+  "homileticFcfHelpText": "The FCF (Fallen Condition Focus) is the part of humanity that is the most illustrated or referenced in the passage. It is the condition that the audience is in, the reason that the audience needs to be saved.",
+  "@homileticFcfHelpText": {
+    "description": "Help dialog text for the FCF step."
+  },
+  "homileticAimHelpText": "The Aim is the key point, the one main takeaway truth you want yourself or an audience to walk away with. It may be derivable from the FCF, and will likely influence the Application Questions.",
+  "@homileticAimHelpText": {
+    "description": "Help dialog text for the Aim step."
+  },
+  "homileticApplicationHelpTitle": "Application Questions",
+  "@homileticApplicationHelpTitle": {
+    "description": "Title of the help dialog for the Application step."
+  },
+  "homileticApplicationHelpText": "These are questions that help the audience apply what they've just heard to their own lives. They should be specific, personal, open-ended, and thought-provoking.",
+  "@homileticApplicationHelpText": {
+    "description": "Help dialog text for the Application step."
+  },
+  "homileticSummaryCount": "{count, plural, =1{1 summary} other{{count} summaries}}",
+  "@homileticSummaryCount": {
+    "description": "Shown on the collapsed Content step: how many content summaries are written.",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "homileticDivisionCount": "{count, plural, =1{1 division} other{{count} divisions}}",
+  "@homileticDivisionCount": {
+    "description": "Shown on the collapsed Divisions step: how many divisions are written.",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "homileticQuestionCount": "{count, plural, =1{1 question} other{{count} questions}}",
+  "@homileticQuestionCount": {
+    "description": "Shown on the collapsed Application step: how many application questions are written.",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "homileticStepTileLabel": "{title}, {status}",
+  "@homileticStepTileLabel": {
+    "description": "Screen-reader label of a collapsed step in compact layout. {status} is 'done' or 'to do'.",
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Aim"
+      },
+      "status": {
+        "type": "String",
+        "example": "done"
+      }
+    }
+  },
+  "homileticStepTileLabelWithSummary": "{title}, {status}, {summary}",
+  "@homileticStepTileLabelWithSummary": {
+    "description": "Screen-reader label of a collapsed step. {status} is 'done' or 'to do'; {summary} is the short text on the right (e.g. '3 summaries' or the user's text).",
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Content"
+      },
+      "status": {
+        "type": "String",
+        "example": "done"
+      },
+      "summary": {
+        "type": "String",
+        "example": "3 summaries"
+      }
+    }
+  },
+  "lectureItemName": "Lecture Note",
+  "@lectureItemName": {
+    "description": "Name of a lecture note item, used in the delete confirmation (e.g. 'Delete Lecture Note?')."
+  },
+  "lectureDeleted": "Lecture Note Deleted",
+  "@lectureDeleted": {
+    "description": "Snackbar shown after a lecture note is deleted."
+  },
+  "lecturePassageHint": "Passage",
+  "@lecturePassageHint": {
+    "description": "Hint in the Bible passage field of a lecture note (e.g. 'John 3:1-16')."
+  },
+  "lectureHeaderLabel": "Lecture · Passage",
+  "@lectureHeaderLabel": {
+    "description": "Small uppercase-style header label above the passage field in the lecture note editor. Keep short (~20 chars)."
+  },
+  "lectureNotesPlaceholder": "Notes",
+  "@lectureNotesPlaceholder": {
+    "description": "Placeholder in the empty rich-text notes editor."
+  },
+  "lectureToolbarBold": "Bold",
+  "@lectureToolbarBold": {
+    "description": "Tooltip for the bold formatting button in the notes toolbar."
+  },
+  "lectureToolbarItalic": "Italic",
+  "@lectureToolbarItalic": {
+    "description": "Tooltip for the italic formatting button in the notes toolbar."
+  },
+  "lectureToolbarBulletedList": "Bulleted list",
+  "@lectureToolbarBulletedList": {
+    "description": "Tooltip for the bulleted-list formatting button in the notes toolbar."
+  },
+  "lectureToolbarNumberedList": "Numbered list",
+  "@lectureToolbarNumberedList": {
+    "description": "Tooltip for the numbered-list formatting button in the notes toolbar."
+  },
+  "lectureReplaceTitle": "Replace existing recording?",
+  "@lectureReplaceTitle": {
+    "description": "Title of the dialog confirming a new recording will replace the old one."
+  },
+  "lectureReplaceMessage": "The old audio and transcript will be deleted.",
+  "@lectureReplaceMessage": {
+    "description": "Body of the replace-recording confirmation dialog."
+  },
+  "lectureReplaceConfirm": "Replace",
+  "@lectureReplaceConfirm": {
+    "description": "Button confirming the existing recording should be replaced."
+  },
+  "lectureMicPermissionRequired": "Microphone permission is required to record.",
+  "@lectureMicPermissionRequired": {
+    "description": "Snackbar shown when microphone permission was denied."
+  },
+  "lectureNotificationTitle": "Recording lecture",
+  "@lectureNotificationTitle": {
+    "description": "Title of the Android ongoing notification shown while a lecture is recording in the background."
+  },
+  "lectureNotificationContent": "{appName} is recording audio",
+  "@lectureNotificationContent": {
+    "description": "Text of the Android ongoing notification shown while recording.",
+    "placeholders": {
+      "appName": {
+        "type": "String",
+        "example": "Homiletics"
+      }
+    }
+  },
+  "lectureStartFailed": "Couldn't start recording. The microphone may be in use by another app.",
+  "@lectureStartFailed": {
+    "description": "Snackbar shown when the recorder fails to start."
+  },
+  "lectureTranscriptionModelTitle": "Download offline transcription model?",
+  "@lectureTranscriptionModelTitle": {
+    "description": "Title of the dialog offering to download the speech-to-text model."
+  },
+  "lectureTranscriptionModelMessage": "A one-time ~140MB download lets your recordings be automatically transcribed and searched. You can skip this and download it later from Settings.",
+  "@lectureTranscriptionModelMessage": {
+    "description": "Body of the transcription-model download dialog. 'Settings' is the app's settings screen."
+  },
+  "lectureNotNow": "Not now",
+  "@lectureNotNow": {
+    "description": "Dialog button declining a model download for now."
+  },
+  "lectureDownload": "Download",
+  "@lectureDownload": {
+    "description": "Dialog button starting a model download."
+  },
+  "lectureModelDownloadFailed": "Something went wrong downloading the model. You can try again from Settings.",
+  "@lectureModelDownloadFailed": {
+    "description": "Snackbar shown when a model download fails."
+  },
+  "lectureRecordingFileNotFound": "The recording file couldn't be found.",
+  "@lectureRecordingFileNotFound": {
+    "description": "Snackbar shown when the saved audio file is missing."
+  },
+  "lectureTranscriptionEmpty": "Transcription didn't produce any text.",
+  "@lectureTranscriptionEmpty": {
+    "description": "Snackbar shown when transcription finished but produced no text."
+  },
+  "lectureFormattingModelTitle": "Download transcript formatting model?",
+  "@lectureFormattingModelTitle": {
+    "description": "Title of the dialog offering to download the on-device model that formats transcripts into paragraphs."
+  },
+  "lectureFormattingModelMessage": "A one-time {size} download lets transcripts be cleaned up into readable paragraphs, entirely on your device. Wi-Fi recommended. You can also do this later from Settings.",
+  "@lectureFormattingModelMessage": {
+    "description": "Body of the formatting-model download dialog. {size} is the approximate download size.",
+    "placeholders": {
+      "size": {
+        "type": "String",
+        "example": "~1.6GB"
+      }
+    }
+  },
+  "lectureFormattingModelMissing": "The formatting model isn't downloaded.",
+  "@lectureFormattingModelMissing": {
+    "description": "Snackbar shown when formatting failed because the model is missing."
+  },
+  "lectureFormattingFailed": "Couldn't format the transcript.",
+  "@lectureFormattingFailed": {
+    "description": "Snackbar shown when transcript formatting failed."
+  },
+  "lecturePlaybackFailed": "Couldn't play the recording.",
+  "@lecturePlaybackFailed": {
+    "description": "Snackbar shown when audio playback fails."
+  },
+  "lectureDownloadingModel": "Downloading model {percent}%",
+  "@lectureDownloadingModel": {
+    "description": "Progress line on the recording bar while a model downloads. Keep short (~30 chars).",
+    "placeholders": {
+      "percent": {
+        "type": "String",
+        "example": "42"
+      }
+    }
+  },
+  "lectureTranscribingProgress": "Transcribing {percent}%",
+  "@lectureTranscribingProgress": {
+    "description": "Progress line on the recording bar while the recording is transcribed. Keep short (~30 chars).",
+    "placeholders": {
+      "percent": {
+        "type": "int",
+        "example": "42"
+      }
+    }
+  },
+  "lectureFormattingProgress": "Formatting transcript {done}/{total}",
+  "@lectureFormattingProgress": {
+    "description": "Progress line while the transcript is formatted, in chunks done/total. Keep short (~30 chars).",
+    "placeholders": {
+      "done": {
+        "type": "int",
+        "example": "3"
+      },
+      "total": {
+        "type": "int",
+        "example": "8"
+      }
+    }
+  },
+  "lectureFormattingIndeterminate": "Formatting transcript…",
+  "@lectureFormattingIndeterminate": {
+    "description": "Progress line while the transcript is formatted and the number of chunks isn't known yet."
+  },
+  "lectureRecordingSemantics": "Recording, {time}",
+  "@lectureRecordingSemantics": {
+    "description": "Screen-reader label for the live recording clock. {time} is elapsed mm:ss.",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "example": "14:02"
+      }
+    }
+  },
+  "lectureRecordingSubtitle": "Recording · keeps going with the screen off",
+  "@lectureRecordingSubtitle": {
+    "description": "Subtitle under the running clock on the recording bar. One line, keep short (~45 chars)."
+  },
+  "lectureStopRecording": "Stop recording",
+  "@lectureStopRecording": {
+    "description": "Tooltip for the stop button on the recording bar."
+  },
+  "lectureRecordLecture": "Record lecture",
+  "@lectureRecordLecture": {
+    "description": "Tooltip and title of the idle recording bar that starts a recording. Keep short (~20 chars)."
+  },
+  "lectureRecordIdleSubtitle": "Keeps recording with the screen off",
+  "@lectureRecordIdleSubtitle": {
+    "description": "Subtitle under 'Record lecture' on the idle recording bar. One line, keep short (~40 chars)."
+  },
+  "lecturePause": "Pause",
+  "@lecturePause": {
+    "description": "Tooltip for the pause playback button."
+  },
+  "lecturePlayRecording": "Play recording",
+  "@lecturePlayRecording": {
+    "description": "Tooltip for the play button on the recording bar."
+  },
+  "lectureRecordAgain": "Record again",
+  "@lectureRecordAgain": {
+    "description": "Tooltip for the button that records a new lecture, replacing the current one."
+  },
+  "lectureNotTranscribedYet": "Not transcribed yet",
+  "@lectureNotTranscribedYet": {
+    "description": "Caption on the recording bar when the recording has no transcript."
+  },
+  "lectureTranscribe": "Transcribe",
+  "@lectureTranscribe": {
+    "description": "Button that transcribes the recording into text."
+  },
+  "lectureTimeMark": "+ Time mark",
+  "@lectureTimeMark": {
+    "description": "Button (shown while recording) that inserts the current recording time into the notes. Keep short (~14 chars)."
+  },
+  "lectureTranscriptEmptyRecording": "The lecture is transcribed on this phone after you stop recording.",
+  "@lectureTranscriptEmptyRecording": {
+    "description": "Transcript tab empty-state message while recording."
+  },
+  "lectureTranscriptEmptyPending": "The transcript will appear here when it's ready.",
+  "@lectureTranscriptEmptyPending": {
+    "description": "Transcript tab empty-state message while the model downloads or transcription runs."
+  },
+  "lectureTranscriptEmptyNotTranscribed": "Transcribe the recording to read and search it here.",
+  "@lectureTranscriptEmptyNotTranscribed": {
+    "description": "Transcript tab empty-state message when a recording exists but has no transcript."
+  },
+  "lectureTranscriptEmptyNoRecording": "Record the lecture and it's transcribed on this phone after you stop.",
+  "@lectureTranscriptEmptyNoRecording": {
+    "description": "Transcript tab empty-state message when there is no recording yet."
+  },
+  "lectureTranscribing": "Transcribing…",
+  "@lectureTranscribing": {
+    "description": "Transcript tab empty-state title while transcription runs."
+  },
+  "lectureNoTranscriptYet": "No transcript yet",
+  "@lectureNoTranscriptYet": {
+    "description": "Transcript tab empty-state title."
+  },
+  "lectureFormatted": "Formatted",
+  "@lectureFormatted": {
+    "description": "Segment of a toggle showing the cleaned-up (paragraphed) transcript. Keep short (~12 chars)."
+  },
+  "lectureRaw": "Raw",
+  "@lectureRaw": {
+    "description": "Segment of a toggle showing the unedited transcript. Keep short (~12 chars)."
+  },
+  "lectureFormatTranscript": "Format transcript",
+  "@lectureFormatTranscript": {
+    "description": "Button that formats the raw transcript into readable paragraphs."
+  },
+  "lectureTabMyNotes": "My notes",
+  "@lectureTabMyNotes": {
+    "description": "Tab label for the user's own notes in the lecture editor. Keep short (~14 chars)."
+  },
+  "lectureTabTranscript": "Transcript",
+  "@lectureTabTranscript": {
+    "description": "Tab label for the recording transcript in the lecture editor. Keep short (~14 chars)."
+  },
+  "modelTranscriptionTitle": "Offline transcription model",
+  "@modelTranscriptionTitle": {
+    "description": "Settings card title for the downloadable on-device speech-to-text (Whisper) model."
+  },
+  "modelTranscriptionEnglishNeeded": "English model, needed for {language}",
+  "@modelTranscriptionEnglishNeeded": {
+    "description": "Settings card detail: this is the English-only speech-to-text model, and it is the one the current app language uses.",
+    "placeholders": {
+      "language": {
+        "type": "String",
+        "example": "English"
+      }
+    }
+  },
+  "modelTranscriptionEnglishNotNeeded": "English model, not needed for {language}",
+  "@modelTranscriptionEnglishNotNeeded": {
+    "description": "Settings card detail: this is the English-only speech-to-text model, which the current app language does not use (it can be deleted to save space).",
+    "placeholders": {
+      "language": {
+        "type": "String",
+        "example": "Español"
+      }
+    }
+  },
+  "modelTranscriptionMultilingualNeeded": "Multilingual model, needed for {language}",
+  "@modelTranscriptionMultilingualNeeded": {
+    "description": "Settings card detail: this is the multilingual speech-to-text model, and it is the one the current app language uses.",
+    "placeholders": {
+      "language": {
+        "type": "String",
+        "example": "Español"
+      }
+    }
+  },
+  "modelTranscriptionMultilingualNotNeeded": "Multilingual model, not needed for {language}",
+  "@modelTranscriptionMultilingualNotNeeded": {
+    "description": "Settings card detail: this is the multilingual speech-to-text model, which the current app language does not use (it can be deleted to save space).",
+    "placeholders": {
+      "language": {
+        "type": "String",
+        "example": "English"
+      }
+    }
+  },
+  "modelFormattingTitle": "Transcript formatting model",
+  "@modelFormattingTitle": {
+    "description": "Settings card title for the downloadable on-device AI model that cleans up transcripts into readable paragraphs."
+  },
+  "modelAppleIntelligenceStatus": "Using Apple Intelligence (no download needed)",
+  "@modelAppleIntelligenceStatus": {
+    "description": "Status on the formatting-model card when the iPhone's built-in Apple Intelligence is used instead of a download. Keep 'Apple Intelligence' as Apple's product name."
+  },
+  "modelStatusChecking": "Checking…",
+  "@modelStatusChecking": {
+    "description": "Model card status while checking whether the model is downloaded."
+  },
+  "modelStatusNotDownloaded": "Not downloaded ({size})",
+  "@modelStatusNotDownloaded": {
+    "description": "Model card status when the model is not downloaded; size is the approximate download size.",
+    "placeholders": {
+      "size": {
+        "type": "String",
+        "example": "~140MB"
+      }
+    }
+  },
+  "modelStatusDownloading": "Downloading… {percent}%",
+  "@modelStatusDownloading": {
+    "description": "Model card status while the model downloads.",
+    "placeholders": {
+      "percent": {
+        "type": "String",
+        "example": "42"
+      }
+    }
+  },
+  "modelStatusDownloaded": "Downloaded",
+  "@modelStatusDownloaded": {
+    "description": "Model card status when the model is downloaded and its size is unknown."
+  },
+  "modelStatusDownloadedSize": "Downloaded ({megabytes}MB)",
+  "@modelStatusDownloadedSize": {
+    "description": "Model card status when the model is downloaded, with its size on the device in megabytes.",
+    "placeholders": {
+      "megabytes": {
+        "type": "String",
+        "example": "142"
+      }
+    }
+  },
+  "modelDownload": "Download",
+  "@modelDownload": {
+    "description": "Button on a model card that starts downloading the model."
+  },
+  "modelDelete": "Delete",
+  "@modelDelete": {
+    "description": "Button on a model card that deletes the downloaded model from the device."
+  },
+  "modelDownloadFailed": "Something went wrong downloading the model. Try again soon.",
+  "@modelDownloadFailed": {
+    "description": "Snackbar shown in Settings when a model download fails."
+  },
+  "modelDeleteFailed": "Something went wrong deleting the model.",
+  "@modelDeleteFailed": {
+    "description": "Snackbar shown in Settings when deleting a model fails."
+  },
+  "pdfOverlineHomiletics": "HOMILETICS",
+  "@pdfOverlineHomiletics": {
+    "description": "Small all-caps label above the passage title on a printed homiletic handout (PDF). Use capitals where the script has them."
+  },
+  "pdfOverlineWordStudy": "WORD STUDY",
+  "@pdfOverlineWordStudy": {
+    "description": "Small all-caps label above the word on a printed word-study handout (PDF). Use capitals where the script has them."
+  },
+  "pdfUntitledPassage": "Untitled passage",
+  "@pdfUntitledPassage": {
+    "description": "Title of a printed homiletic handout when no Bible passage has been entered."
+  },
+  "pdfUntitledWord": "Untitled word",
+  "@pdfUntitledWord": {
+    "description": "Title of a printed word-study handout when no word has been entered."
+  },
+  "pdfHomileticLabel": "Homiletics · {passage}",
+  "@pdfHomileticLabel": {
+    "description": "Document title and running page footer of a printed homiletic handout. 'Homiletics' is the app name / method name.",
+    "placeholders": {
+      "passage": {
+        "type": "String",
+        "example": "Revelation 2:1–11"
+      }
+    }
+  },
+  "pdfWordStudyLabel": "Word study · {word}",
+  "@pdfWordStudyLabel": {
+    "description": "Document title and running page footer of a printed word-study handout with no passage.",
+    "placeholders": {
+      "word": {
+        "type": "String",
+        "example": "Lampstand"
+      }
+    }
+  },
+  "pdfWordStudyLabelWithPassage": "Word study · {word} · {passage}",
+  "@pdfWordStudyLabelWithPassage": {
+    "description": "Document title and running page footer of a printed word-study handout: the word studied and the Bible passage it comes from.",
+    "placeholders": {
+      "word": {
+        "type": "String",
+        "example": "Lampstand"
+      },
+      "passage": {
+        "type": "String",
+        "example": "Revelation 2:1–7"
+      }
+    }
+  },
+  "pdfPageOf": "page {current} of {total}",
+  "@pdfPageOf": {
+    "description": "Page number in the footer of a printed handout (lowercase in English).",
+    "placeholders": {
+      "current": {
+        "type": "int",
+        "example": "1"
+      },
+      "total": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "pdfFcfCaption": "Fallen Condition Focus",
+  "@pdfFcfCaption": {
+    "description": "Italic caption next to the 'FCF' step heading on a printed homiletic, spelling out the abbreviation: the human need or brokenness the passage addresses."
+  },
+  "pdfAimLeadIn": "Cause the audience to learn that ",
+  "@pdfAimLeadIn": {
+    "description": "Fixed sentence opening printed before the user's Aim statement, which completes it (e.g. '...learn that the risen Christ sees our labor'). Keep the trailing space if your language separates words with spaces."
+  },
+  "pdfEmptyHomiletic": "Nothing has been written for this passage yet.",
+  "@pdfEmptyHomiletic": {
+    "description": "Note printed on a homiletic handout that has no content in any step."
+  },
+  "pdfEmptyWordStudy": "Nothing has been written for this word study yet.",
+  "@pdfEmptyWordStudy": {
+    "description": "Note printed on a word-study handout that has no content in any section."
+  },
+  "pdfWordStudyDefinition": "Definition",
+  "@pdfWordStudyDefinition": {
+    "description": "Section heading on a printed word study: the dictionary definition of the word."
+  },
+  "pdfWordStudyOtherUsage": "Other usage",
+  "@pdfWordStudyOtherUsage": {
+    "description": "Section heading on a printed word study: other Bible verses where the word is used."
+  },
+  "pdfWordStudyContextualMeaning": "Contextual meaning",
+  "@pdfWordStudyContextualMeaning": {
+    "description": "Section heading on a printed word study: what the word means in this passage."
+  },
+  "pdfWordStudyDeeperMeaning": "Deeper meaning",
+  "@pdfWordStudyDeeperMeaning": {
+    "description": "Section heading on a printed word study: original-language and theological meaning."
+  },
+  "pdfWordStudyApplication": "Application",
+  "@pdfWordStudyApplication": {
+    "description": "Section heading on a printed word study: how the word applies to the reader's life."
+  },
+  "editorSaveAndClose": "Save and close",
+  "@editorSaveAndClose": {
+    "description": "Study editor menu item: save the study (it autosaves) and close the editor."
+  },
+  "editorDeleteConfirmTitle": "Are you sure?",
+  "@editorDeleteConfirmTitle": {
+    "description": "Title of the dialog confirming deletion of a study."
+  },
+  "editorDeleteConfirmMessage": "Deleting this {itemName} is permanent and cannot be undone. Are you sure you wish to proceed?",
+  "@editorDeleteConfirmMessage": {
+    "description": "Body of the delete confirmation dialog in a study editor.",
+    "placeholders": {
+      "itemName": {
+        "type": "String",
+        "example": "Word Study",
+        "description": "Name of the kind of study being deleted, e.g. 'Word Study' or 'Lecture Note' (already localized)."
+      }
+    }
+  },
+  "editorPassageLabel": "Passage",
+  "@editorPassageLabel": {
+    "description": "Default small uppercase label above the Bible passage field in a study editor."
+  },
+  "editorAddPassageHint": "Add a passage",
+  "@editorAddPassageHint": {
+    "description": "Placeholder in the empty Bible passage field at the top of a study editor (e.g. the user types 'John 3:16')."
+  },
+  "editorBack": "Back",
+  "@editorBack": {
+    "description": "Tooltip / screen reader label for the back arrow in a study editor."
+  },
+  "editorMoreOptions": "More options",
+  "@editorMoreOptions": {
+    "description": "Tooltip / screen reader label for the three-dot menu in a study editor."
+  },
+  "editorChangeTranslation": "Change translation",
+  "@editorChangeTranslation": {
+    "description": "Screen reader label for the button above the Bible text that changes the Bible translation."
+  },
+  "editorStudyCompleteMessage": "Print it for class, or share it with your group.",
+  "@editorStudyCompleteMessage": {
+    "description": "Default message on the card shown when a study is finished, above Print and Share buttons."
+  },
+  "wordStudyItemName": "Word Study",
+  "@wordStudyItemName": {
+    "description": "Name of a word study, inserted into the delete confirmation ('Deleting this Word Study is permanent...')."
+  },
+  "wordStudyDeleted": "Word Study Deleted",
+  "@wordStudyDeleted": {
+    "description": "Snack bar shown after a word study is deleted."
+  },
+  "wordStudyHeaderLabel": "Word study · Passage",
+  "@wordStudyHeaderLabel": {
+    "description": "Small label above the passage field in the word study editor."
+  },
+  "wordStudyPdfShared": "PDF shared successfully.",
+  "@wordStudyPdfShared": {
+    "description": "Snack bar after a word study PDF is shared."
+  },
+  "wordStudyPdfShareFailed": "Something went wrong sharing your PDF. Try again soon.",
+  "@wordStudyPdfShareFailed": {
+    "description": "Snack bar when sharing a word study PDF fails."
+  },
+  "wordStudyPdfPrinted": "PDF printed successfully.",
+  "@wordStudyPdfPrinted": {
+    "description": "Snack bar after a word study PDF is printed."
+  },
+  "wordStudyPdfPrintFailed": "Something went wrong creating your PDF. Try again soon.",
+  "@wordStudyPdfPrintFailed": {
+    "description": "Snack bar when creating a word study PDF for printing fails."
+  },
+  "wordStudyWordTitle": "Word",
+  "@wordStudyWordTitle": {
+    "description": "Label (shown uppercase) on the top card of a word study, where the user types the word being studied."
+  },
+  "wordStudyWordHelp": "The specific word or short phrase you're studying. Once you've entered it, Definition and Other Usage can suggest content for you.",
+  "@wordStudyWordHelp": {
+    "description": "Help text for the Word card of a word study. 'Definition' and 'Other Usage' are section names."
+  },
+  "wordStudyWordHint": "Add a word",
+  "@wordStudyWordHint": {
+    "description": "Placeholder in the empty word field of a word study."
+  },
+  "wordStudyEnterWordFirst": "Enter a word above first.",
+  "@wordStudyEnterWordFirst": {
+    "description": "Snack bar when the user asks for suggestions before typing a word."
+  },
+  "wordStudyDefinitionTitle": "Definition",
+  "@wordStudyDefinitionTitle": {
+    "description": "Word study section title (shown uppercase): the plain meaning of the word."
+  },
+  "wordStudyDefinitionHelp": "What does this word mean, in plain terms? Tap \"+\" for candidate definitions pulled from a dictionary, or write your own.",
+  "@wordStudyDefinitionHelp": {
+    "description": "Help text for the Definition section when dictionary suggestions are available. '+' refers to the add button on the card."
+  },
+  "wordStudyDefinitionHelpNoSuggest": "What does this word mean, in plain terms? Write your own.",
+  "@wordStudyDefinitionHelpNoSuggest": {
+    "description": "Help text for the Definition section when dictionary suggestions are not available (non-English Bible translation)."
+  },
+  "wordStudyDefinitionHint": "What does it mean, in plain terms?",
+  "@wordStudyDefinitionHint": {
+    "description": "Placeholder question in the empty Definition field."
+  },
+  "wordStudySuggestDefinition": "Suggest a definition",
+  "@wordStudySuggestDefinition": {
+    "description": "Tooltip of the '+' button on the Definition card, and the small heading of the definition suggestions sheet."
+  },
+  "wordStudyDefinitionsFor": "Definitions for “{word}”",
+  "@wordStudyDefinitionsFor": {
+    "description": "Title of the sheet listing dictionary definitions.",
+    "placeholders": {
+      "word": {
+        "type": "String",
+        "example": "grace",
+        "description": "The word being studied, as typed by the user."
+      }
+    }
+  },
+  "wordStudyDefinitionsTapToUse": "Tap one to use it.",
+  "@wordStudyDefinitionsTapToUse": {
+    "description": "Instruction under the definitions sheet title."
+  },
+  "wordStudyDefinitionsLoadError": "Couldn't load definitions. Try again soon.",
+  "@wordStudyDefinitionsLoadError": {
+    "description": "Shown in the definitions sheet when the dictionary request fails; a Retry button follows."
+  },
+  "wordStudyNoDefinitions": "No definitions found for this word.",
+  "@wordStudyNoDefinitions": {
+    "description": "Shown in the definitions sheet when the dictionary has no entries."
+  },
+  "wordStudyReplaceDefinitionTitle": "Replace your definition?",
+  "@wordStudyReplaceDefinitionTitle": {
+    "description": "Title of the dialog shown when picking a suggested definition while one is already written."
+  },
+  "wordStudyReplaceDefinitionMessage": "You've already written a definition. Replace it with the suggestion, or add the suggestion below it?",
+  "@wordStudyReplaceDefinitionMessage": {
+    "description": "Body of the replace-or-append definition dialog."
+  },
+  "wordStudyAddBelow": "Add below",
+  "@wordStudyAddBelow": {
+    "description": "Dialog button: append the suggested definition below the existing one."
+  },
+  "wordStudyReplace": "Replace",
+  "@wordStudyReplace": {
+    "description": "Dialog button: replace the existing definition with the suggestion."
+  },
+  "wordStudyOtherUsageTitle": "Other usage",
+  "@wordStudyOtherUsageTitle": {
+    "description": "Word study section title (shown uppercase) and sheet heading: other places in Scripture the word appears."
+  },
+  "wordStudyOtherUsageHelp": "Where else does this word or concept appear in Scripture? Tap \"+\" to search Bible Gateway and add references you find, or write your own.",
+  "@wordStudyOtherUsageHelp": {
+    "description": "Help text for the Other usage section. 'Bible Gateway' is a website name; '+' is the add button on the card."
+  },
+  "wordStudyOtherUsageHint": "Where else does it appear in Scripture?",
+  "@wordStudyOtherUsageHint": {
+    "description": "Placeholder question in the empty Other usage field."
+  },
+  "wordStudyFindOtherUsages": "Find other usages",
+  "@wordStudyFindOtherUsages": {
+    "description": "Tooltip of the '+' button on the Other usage card."
+  },
+  "wordStudyOtherUsageSheetTitle": "Where else “{word}” appears",
+  "@wordStudyOtherUsageSheetTitle": {
+    "description": "Title of the Bible search sheet for other usages of the word.",
+    "placeholders": {
+      "word": {
+        "type": "String",
+        "example": "grace",
+        "description": "The word being studied, as typed by the user."
+      }
+    }
+  },
+  "wordStudyOtherUsageAdded": "Added",
+  "@wordStudyOtherUsageAdded": {
+    "description": "Label before the list of verse references already added from the search sheet."
+  },
+  "wordStudyOtherUsageInstructions": "Tap a result below to add its reference.",
+  "@wordStudyOtherUsageInstructions": {
+    "description": "Instruction above the Bible search results."
+  },
+  "wordStudyOtherUsageAddResult": "+ Add",
+  "@wordStudyOtherUsageAddResult": {
+    "description": "Small badge next to each Bible search result reference; tapping adds the reference. Keep very short."
+  },
+  "wordStudyContextualMeaningTitle": "Contextual meaning",
+  "@wordStudyContextualMeaningTitle": {
+    "description": "Word study section title (shown uppercase): what the word means in this passage."
+  },
+  "wordStudyContextualMeaningHelp": "What did the author intend this word to mean here, in this passage? Consider the surrounding verses, not just the word alone.",
+  "@wordStudyContextualMeaningHelp": {
+    "description": "Help text for the Contextual meaning section."
+  },
+  "wordStudyContextualMeaningHint": "What does it mean here, in this passage?",
+  "@wordStudyContextualMeaningHint": {
+    "description": "Placeholder question in the empty Contextual meaning field."
+  },
+  "wordStudyDeeperMeaningTitle": "Deeper meaning",
+  "@wordStudyDeeperMeaningTitle": {
+    "description": "Word study section title (shown uppercase): insight beyond the basic definition."
+  },
+  "wordStudyDeeperMeaningHelp": "Any insight from the original language, commentary, or outside study that adds depth beyond the basic definition? How does the rest of Scripture shape it? A Strong's concordance or Blue Letter Bible can help here.",
+  "@wordStudyDeeperMeaningHelp": {
+    "description": "Help text for the Deeper meaning section. 'Strong's concordance' and 'Blue Letter Bible' are names of study resources."
+  },
+  "wordStudyDeeperMeaningHint": "How does the rest of Scripture shape it?",
+  "@wordStudyDeeperMeaningHint": {
+    "description": "Placeholder question in the empty Deeper meaning field."
+  },
+  "wordStudyApplicationTitle": "Application",
+  "@wordStudyApplicationTitle": {
+    "description": "Word study section title (shown uppercase): how the truth applies to the reader's life."
+  },
+  "wordStudyApplicationHelp": "How should this truth shape your life? Be specific, personal, and practical.",
+  "@wordStudyApplicationHelp": {
+    "description": "Help text for the Application section of a word study."
+  },
+  "wordStudyApplicationHint": "What will you do with it?",
+  "@wordStudyApplicationHint": {
+    "description": "Placeholder question in the empty Application field."
+  },
+  "wordStudyDoneTitle": "Word study done",
+  "@wordStudyDoneTitle": {
+    "description": "Title of the card shown when every word study section is filled in."
+  },
+  "wordStudySectionHelpSemantics": "{title}, about this section",
+  "@wordStudySectionHelpSemantics": {
+    "description": "Screen reader label for a section title that opens its help text.",
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Definition",
+        "description": "The section's title."
+      }
+    }
+  },
+  "lectureTimeMarkNoRecording": "This note has no recording to play.",
+  "@lectureTimeMarkNoRecording": {
+    "description": "Snackbar when the user taps a time mark like [14:02] in lecture notes but the note has no recording."
+  },
+  "lectureTimeMarkStopRecordingFirst": "Stop recording to play from a time mark.",
+  "@lectureTimeMarkStopRecordingFirst": {
+    "description": "Snackbar when the user taps a time mark in lecture notes while a recording is still in progress."
+  },
+  "lectureTimeMarkPastEnd": "That time mark is past the end of the recording.",
+  "@lectureTimeMarkPastEnd": {
+    "description": "Snackbar when a tapped time mark in lecture notes is later than the length of the note's recording (e.g. the lecture was recorded again)."
+  },
+  "onboardingSkip": "Skip",
+  "@onboardingSkip": {
+    "description": "First-run guide: button that closes the guide early."
+  },
+  "onboardingBack": "Back",
+  "@onboardingBack": {
+    "description": "First-run guide: button to go to the previous page."
+  },
+  "onboardingNext": "Next",
+  "@onboardingNext": {
+    "description": "First-run guide: button to go to the next page."
+  },
+  "onboardingWelcomeOverline": "Welcome",
+  "@onboardingWelcomeOverline": {
+    "description": "First-run guide, page 1: small uppercase label above the title."
+  },
+  "onboardingWelcomeTitle": "Study the Bible, one passage at a time",
+  "@onboardingWelcomeTitle": {
+    "description": "First-run guide, page 1: serif title."
+  },
+  "onboardingWelcomeBody": "Homiletics helps you write your homiletics, take lecture notes and do word studies — all with the passage open beside you, in your language and your Bible translation.",
+  "@onboardingWelcomeBody": {
+    "description": "First-run guide, page 1: what the app helps with. 'Homiletics' here is the BSF study method."
+  },
+  "onboardingMethodOverline": "The method",
+  "@onboardingMethodOverline": {
+    "description": "First-run guide, page 2: small uppercase label above the title."
+  },
+  "onboardingMethodTitle": "What is a homiletic?",
+  "@onboardingMethodTitle": {
+    "description": "First-run guide, page 2: serif title. 'A homiletic' is one study written with the BSF homiletics method."
+  },
+  "onboardingMethodBody": "A homiletic is a short way of studying a passage: you find its main message, then think about how to live it out. It takes six steps — and it doesn't have to be perfect. It gets easier every week.",
+  "@onboardingMethodBody": {
+    "description": "First-run guide, page 2: short explanation of the homiletics method."
+  },
+  "onboardingStepsOverline": "Step by step",
+  "@onboardingStepsOverline": {
+    "description": "First-run guide, page 3: small uppercase label above the title."
+  },
+  "onboardingStepsTitle": "The six steps",
+  "@onboardingStepsTitle": {
+    "description": "First-run guide, page 3: serif title over the list of the six homiletic steps."
+  },
+  "onboardingStepContent": "Summarize the passage in 10–20 short chunks, in your own words.",
+  "@onboardingStepContent": {
+    "description": "First-run guide, page 3: one-line description of the Content step (shown after its name)."
+  },
+  "onboardingStepDivisions": "Group those chunks into 2–4 sections.",
+  "@onboardingStepDivisions": {
+    "description": "First-run guide, page 3: one-line description of the Divisions step."
+  },
+  "onboardingStepSummary": "The whole passage in 10 words or fewer.",
+  "@onboardingStepSummary": {
+    "description": "First-run guide, page 3: one-line description of the Summary sentence step. Chinese uses 20 characters instead of 10 words, like the step's help text."
+  },
+  "onboardingStepFcf": "Fallen Condition Focus: the human need or brokenness the passage speaks to.",
+  "@onboardingStepFcf": {
+    "description": "First-run guide, page 3: one-line description of the FCF step; spells out the abbreviation (use the FCF gloss from docs/TRANSLATIONS.md)."
+  },
+  "onboardingStepAim": "The one main truth you want your hearers to learn.",
+  "@onboardingStepAim": {
+    "description": "First-run guide, page 3: one-line description of the Aim step."
+  },
+  "onboardingStepApplication": "Questions that turn the passage into everyday life.",
+  "@onboardingStepApplication": {
+    "description": "First-run guide, page 3: one-line description of the Application step."
+  },
+  "onboardingLecturesOverline": "Lectures & word studies",
+  "@onboardingLecturesOverline": {
+    "description": "First-run guide, page 4: small uppercase label above the title."
+  },
+  "onboardingLecturesTitle": "Listen closely, dig deeper",
+  "@onboardingLecturesTitle": {
+    "description": "First-run guide, page 4: serif title."
+  },
+  "onboardingLecturesBody": "Record the lecture — it keeps going with the screen off and is transcribed right on your phone. Take notes as you listen and add time marks to find a moment again.",
+  "@onboardingLecturesBody": {
+    "description": "First-run guide, page 4: what lecture notes do. Transcription happens on the device, not online."
+  },
+  "onboardingWordStudyBody": "Curious about one word? Start a word study and dig into what it means in the passage.",
+  "@onboardingWordStudyBody": {
+    "description": "First-run guide, page 4: what a word study is."
+  },
+  "onboardingStartOverline": "Get started",
+  "@onboardingStartOverline": {
+    "description": "First-run guide, last page: small uppercase label above the title."
+  },
+  "onboardingStartTitle": "You're ready to begin",
+  "@onboardingStartTitle": {
+    "description": "First-run guide, last page: serif title."
+  },
+  "onboardingStartBody": "Begin with this week's passage, or take a look around first. Every step you write is saved as you go.",
+  "@onboardingStartBody": {
+    "description": "First-run guide, last page: encouragement before the start buttons."
+  },
+  "onboardingReopenHint": "You can open this guide again anytime from Settings.",
+  "@onboardingReopenHint": {
+    "description": "First-run guide, last page: small note on where to find the guide again (Settings > Help > How homiletics works)."
+  },
+  "onboardingStartThisWeek": "Start this week's homiletic",
+  "@onboardingStartThisWeek": {
+    "description": "First-run guide, last page: main button that opens a homiletic on this week's passage."
+  },
+  "onboardingExplore": "Explore on my own",
+  "@onboardingExplore": {
+    "description": "First-run guide, last page: button that closes the guide and shows the home screen."
+  },
+  "onboardingThisWeekPassage": "This week: {passage}",
+  "@onboardingThisWeekPassage": {
+    "description": "First-run guide, last page: line above the start button naming this week's passage, e.g. 'This week: John 3:1–21'.",
+    "placeholders": {
+      "passage": {
+        "type": "String"
+      }
+    }
+  },
+  "onboardingSettingsRow": "How homiletics works",
+  "@onboardingSettingsRow": {
+    "description": "Settings > Help: row that reopens the first-run guide explaining the homiletics method."
+  },
+  "bibleOfflineSize": "Offline · {size}",
+  "@bibleOfflineSize": {
+    "description": "Picker subtitle for a Bible translation that can be downloaded to read without internet.",
+    "placeholders": {
+      "size": {
+        "type": "String",
+        "example": "1.3 MB",
+        "description": "Download size, already formatted, e.g. \"1.3 MB\"."
+      }
+    }
+  },
+  "bibleDownloadedSize": "Downloaded · {size}",
+  "@bibleDownloadedSize": {
+    "description": "Picker subtitle for a Bible translation already downloaded to the device.",
+    "placeholders": {
+      "size": {
+        "type": "String",
+        "example": "1.3 MB",
+        "description": "Download size, already formatted, e.g. \"1.3 MB\"."
+      }
+    }
+  },
+  "bibleDownloadAction": "Download for offline",
+  "@bibleDownloadAction": {
+    "description": "Button / tooltip: download this Bible translation so passages show without internet."
+  },
+  "bibleDownloading": "Downloading…",
+  "@bibleDownloading": {
+    "description": "Shown while a Bible translation is downloading."
+  },
+  "bibleRemoveDownload": "Remove download",
+  "@bibleRemoveDownload": {
+    "description": "Tooltip: delete the downloaded copy of a Bible translation (it can be downloaded again)."
+  },
+  "bibleDownloadFailed": "Couldn't download {translation}. Check your connection and try again.",
+  "@bibleDownloadFailed": {
+    "description": "Snack bar when downloading a Bible translation fails.",
+    "placeholders": {
+      "translation": {
+        "type": "String",
+        "example": "NIV",
+        "description": "Short code or name of the Bible translation, e.g. \"WEB\" (not localized)."
+      }
+    }
+  },
+  "bibleOfflineTitle": "No connection",
+  "@bibleOfflineTitle": {
+    "description": "Title in the verse panel when the passage cannot load because the phone is offline."
+  },
+  "bibleOfflineMessage": "This passage comes from Bible Gateway, which needs the internet. Download {translation} to read it anywhere.",
+  "@bibleOfflineMessage": {
+    "description": "Verse panel message when offline and the current Bible translation can be downloaded.",
+    "placeholders": {
+      "translation": {
+        "type": "String",
+        "example": "NIV",
+        "description": "Short code or name of the Bible translation, e.g. \"WEB\" (not localized)."
+      }
+    }
+  },
+  "bibleOfflineNoDownloadMessage": "This passage comes from Bible Gateway, which needs the internet. Connect and try again.",
+  "@bibleOfflineNoDownloadMessage": {
+    "description": "Verse panel message when offline and the current Bible translation cannot be downloaded."
+  },
+  "bibleTryAgain": "Try again",
+  "@bibleTryAgain": {
+    "description": "Button in the verse panel to reload the passage."
+  },
+  "bibleNeedsDownloadTitle": "Download {translation}",
+  "@bibleNeedsDownloadTitle": {
+    "description": "Title in the verse panel for a Bible translation that is only available as a download.",
+    "placeholders": {
+      "translation": {
+        "type": "String",
+        "example": "NIV",
+        "description": "Short code or name of the Bible translation, e.g. \"WEB\" (not localized)."
+      }
+    }
+  },
+  "bibleNeedsDownloadMessage": "This Bible is read from your device. Download it once (about {size}) to see the passage.",
+  "@bibleNeedsDownloadMessage": {
+    "description": "Verse panel message for a Bible translation that must be downloaded before it can be shown.",
+    "placeholders": {
+      "size": {
+        "type": "String",
+        "example": "1.3 MB",
+        "description": "Download size, already formatted, e.g. \"1.3 MB\"."
+      }
+    }
+  },
+  "bibleNotInTranslation": "This passage couldn't be found in {translation}.",
+  "@bibleNotInTranslation": {
+    "description": "Verse panel message when the passage reference is not in the downloaded Bible text and there is no web fallback.",
+    "placeholders": {
+      "translation": {
+        "type": "String",
+        "example": "NIV",
+        "description": "Short code or name of the Bible translation, e.g. \"WEB\" (not localized)."
+      }
+    }
+  },
+  "bibleVerseTapTip": "Tip: tap a verse number to start a summary there.",
+  "@bibleVerseTapTip": {
+    "description": "Small hint under the Content step of a homiletics study: tapping a verse number in the passage adds a content summary starting at that verse."
+  },
+  "bibleVerseTapLabel": "Start a summary at verse {verse}",
+  "@bibleVerseTapLabel": {
+    "description": "Screen-reader label for a tappable verse number in the passage.",
+    "placeholders": {
+      "verse": {
+        "type": "String",
+        "example": "4",
+        "description": "Verse number, e.g. \"4\" or \"3:4\"."
+      }
+    }
+  }
+}

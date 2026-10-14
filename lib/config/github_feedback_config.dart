@@ -18,31 +18,58 @@ Uri prefilledGitHubNewIssueUri({
   required String feedback,
 }) {
   final parts = kGitHubFeedbackRepo.split('/');
-  if (parts.length != 2 ||
-      parts[0].isEmpty ||
-      parts[1].isEmpty) {
+  if (parts.length != 2 || parts[0].isEmpty || parts[1].isEmpty) {
     throw StateError('Invalid kGitHubFeedbackRepo: $kGitHubFeedbackRepo');
   }
   final path = '/${parts[0]}/${parts[1]}/issues/new';
-  var title = _issueTitle(feedback);
-  var body = _issueBody(name: name, email: email, feedback: feedback);
+  final title = _issueTitle(feedback);
+  final safeName = _cap(name.trim(), _maxNameChars);
+  final safeEmail = _cap(email.trim(), _maxEmailChars);
+
+  Uri build(String feedbackText) => Uri.https('github.com', path, {
+        'title': title,
+        'body': _issueBody(
+            name: safeName, email: safeEmail, feedback: feedbackText),
+      });
 
   // Browsers/servers differ; keep the whole URL bounded.
-  const maxUriChars = 7500;
-  var uri = Uri.https('github.com', path, {'title': title, 'body': body});
-  var bodyText = feedback;
-  while (uri.toString().length > maxUriChars && bodyText.isNotEmpty) {
-    bodyText = bodyText.substring(0, bodyText.length > 50 ? bodyText.length - 50 : 0);
-    body = _issueBody(
-      name: name,
-      email: email,
-      feedback: bodyText.isEmpty
-          ? '…(truncated; server was unreachable)'
-          : '$bodyText\n\n…(truncated; server was unreachable)',
-    );
-    uri = Uri.https('github.com', path, {'title': title, 'body': body});
+  final full = build(feedback);
+  if (full.toString().length <= _maxUriChars) return full;
+
+  // Too long: keep the longest prefix of the feedback that fits. Query
+  // encoding is per character, so the encoded length of a prefix is the sum
+  // of each character's encoded length — computed in a single pass.
+  const marker = 'X';
+  final overhead =
+      build('$marker\n\n$_truncationNote').toString().length - marker.length;
+  final budget = _maxUriChars - overhead;
+  final text = feedback.trim();
+  var used = 0;
+  var end = 0;
+  for (final rune in text.runes) {
+    final encodedLength =
+        Uri.encodeQueryComponent(String.fromCharCode(rune)).length;
+    if (used + encodedLength > budget) break;
+    used += encodedLength;
+    end += rune > 0xFFFF ? 2 : 1;
   }
-  return uri;
+  final kept = text.substring(0, end);
+  return build(kept.isEmpty ? _truncationNote : '$kept\n\n$_truncationNote');
+}
+
+const int _maxUriChars = 7500;
+const int _maxNameChars = 100;
+// RFC 5321 maximum address length.
+const int _maxEmailChars = 254;
+const String _truncationNote = '…(truncated; server was unreachable)';
+
+String _cap(String value, int maxChars) {
+  if (value.length <= maxChars) return value;
+  // Avoid splitting a surrogate pair.
+  var end = maxChars;
+  final unit = value.codeUnitAt(end - 1);
+  if (unit >= 0xD800 && unit <= 0xDBFF) end--;
+  return '${value.substring(0, end)}…';
 }
 
 String _issueTitle(String feedback) {

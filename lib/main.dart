@@ -1,41 +1,83 @@
+import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:homiletics/theme/app_theme.dart';
+import 'package:homiletics/classes/language.dart';
+import 'package:homiletics/l10n/generated/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_quill/flutter_quill.dart' show FlutterQuillLocalizations;
+import 'package:flutter_quill/flutter_quill.dart'
+    show FlutterQuillLocalizations;
 import 'package:hive/hive.dart';
 import 'package:homiletics/classes/preferences.dart';
+import 'package:homiletics/common/report_error.dart';
 import 'package:homiletics/pages/home.dart';
 import 'package:homiletics/services/transcript_formatter_service.dart';
+import 'package:homiletics/services/whisper_model_service.dart';
 import 'package:homiletics/services/suggested_passages_repository.dart';
+import 'package:homiletics/storage/app_storage.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // Hive must be initialized and the preferences box opened before runApp —
+  // the UI reads Preferences synchronously on first frame. Without it the app
+  // can't work, so show an error screen instead of crashing later.
   try {
-    // if the /hive directory does not exist, make it
-    Directory appDir = await getApplicationDocumentsDirectory();
-    Directory hiveDir = Directory(path.join(appDir.path, 'hive'));
-
-    // create a hive directory if it does not exist
+    final Directory appDir = await getApplicationDocumentsDirectory();
+    final Directory hiveDir = Directory(path.join(appDir.path, 'hive'));
     if (!(await hiveDir.exists())) {
       await hiveDir.create(recursive: true);
     }
-
-    // Hive must be initialized and boxes opened before runApp — UI reads Hive on first frame.
     Hive.init(hiveDir.path);
+  } catch (error) {
+    sendError(error, "main: Hive init");
+    runApp(const StartupErrorApp());
+    return;
+  }
 
+  try {
     await Preferences.init();
+  } catch (error) {
+    sendError(error, "main: Preferences.init");
+    runApp(const StartupErrorApp());
+    return;
+  }
+
+  // Opens the single database and, on the first launch after the upgrade,
+  // copies the old per-table files into it. Must finish before any screen
+  // reads data. A failed copy doesn't throw (the app keeps using the old
+  // files and retries next launch); this only throws if the new database
+  // exists but can't be read, when no safe fallback exists.
+  if (!kIsWeb) {
+    try {
+      await AppStorage.init();
+    } catch (error) {
+      sendError(error, "main: AppStorage.init");
+      runApp(const StartupErrorApp());
+      return;
+    }
+  }
+
+  // Non-fatal: the repository reopens its box lazily if this fails.
+  try {
     await SuggestedPassagesRepository.init();
-    await TranscriptFormatterService.initialize();
-  } catch (e) {
-    // print(e);
+  } catch (error) {
+    sendError(error, "main: SuggestedPassagesRepository.init");
   }
 
   runApp(const MyApp());
+
+  // Not needed for the first frame (only the recording / model settings UI
+  // uses it), so don't delay startup. Reports its own errors.
+  unawaited(WhisperModelService.cleanUpConversionFiles());
+  unawaited(TranscriptFormatterService.initialize());
 }
+
+ThemeData _buildTheme(Brightness brightness) => buildAppTheme(brightness);
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -43,30 +85,71 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    return ValueListenableBuilder<Language?>(
+      valueListenable: Preferences.appLanguageNotifier,
+      builder: (context, language, _) => MaterialApp(
+        onGenerateTitle: (context) => AppLocalizations.of(context).appTitle,
+        debugShowCheckedModeBanner: false,
+        locale: language?.locale,
+        supportedLocales: [for (final l in Language.all) l.locale],
+        localeResolutionCallback: (locale, _) =>
+            Language.match(locale ?? const Locale('en')).locale,
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          FlutterQuillLocalizations.delegate,
+        ],
+        theme: _buildTheme(Brightness.light),
+        darkTheme: _buildTheme(Brightness.dark),
+        themeMode: ThemeMode.system,
+        home: const Home(),
+      ),
+    );
+  }
+}
+
+/// Shown when local storage can't be initialized, so the app can't run.
+class StartupErrorApp extends StatelessWidget {
+  const StartupErrorApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Homiletics',
       debugShowCheckedModeBanner: false,
-      localizationsDelegates: const [
-        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        FlutterQuillLocalizations.delegate,
-      ],
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        useMaterial3: true,
-        primarySwatch: Colors.blue,
-        brightness: MediaQuery.of(context).platformBrightness,
+      theme: _buildTheme(Brightness.light),
+      darkTheme: _buildTheme(Brightness.dark),
+      themeMode: ThemeMode.system,
+      home: const Scaffold(
+        body: SafeArea(
+          child: Center(
+            child: Padding(
+              padding: EdgeInsets.all(24),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.error_outline, size: 48),
+                  SizedBox(height: 16),
+                  Text(
+                    'Homiletics could not start',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    'Your saved data could not be opened. Please close and '
+                    'reopen the app. If this keeps happening, make sure your '
+                    'device has free storage space.',
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
       ),
-      home: const Home(),
     );
   }
 }

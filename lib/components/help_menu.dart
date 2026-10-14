@@ -1,37 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:homiletics/l10n/l10n.dart';
 import 'package:homiletics/components/feedback_form.dart';
-// import 'package:url_launcher/url_launcher.dart';
+import 'package:homiletics/theme/app_theme.dart';
 
+/// Opens the help / feedback form in a bottom sheet.
+Future<void> showFeedbackSheet(BuildContext context) {
+  return showModalBottomSheet<void>(
+      isScrollControlled: true,
+      context: context,
+      builder: (context) {
+        return const Padding(
+          padding: EdgeInsets.fromLTRB(20, 0, 20, 12),
+          child: FeedbackForm(),
+        );
+      });
+}
+
+/// Copyright line and the help / feedback link at the foot of a page.
 class HelpMenu extends StatelessWidget {
   const HelpMenu({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final TextStyle footnote =
+        AppText.caption.copyWith(color: AppColors.of(context).muted);
+    final AppLocalizations l = context.l10n;
     return Container(
-        padding: const EdgeInsets.only(top: 20, bottom: 10),
+        padding: const EdgeInsets.only(top: 28, bottom: 10),
         child: Column(children: [
           Center(
-              child: Text("Copyright (C) ${DateTime.now().year} 13one.org",
-                  style: const TextStyle(color: Colors.grey))),
-          const Center(
-              child: Text("All rights reserved",
-                  style: TextStyle(color: Colors.grey))),
+              child: Text(l.helpCopyright('${DateTime.now().year}'),
+                  style: footnote)),
+          Center(child: Text(l.helpAllRightsReserved, style: footnote)),
+          const SizedBox(height: 4),
           TextButton(
-              onPressed: () {
-                showModalBottomSheet(
-                    shape: const RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.vertical(top: Radius.circular(25.0))),
-                    isScrollControlled: true,
-                    context: context,
-                    builder: (context) {
-                      return const Padding(
-                        padding: EdgeInsets.all(12),
-                        child: FeedbackForm(),
-                      );
-                    });
-              },
-              child: const Text("Request Help / Leave Feedback?"))
+              onPressed: () => showFeedbackSheet(context),
+              style: TextButton.styleFrom(minimumSize: const Size(0, 44)),
+              child: Text(l.helpRequestFeedback))
         ]));
   }
 }

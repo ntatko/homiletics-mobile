@@ -23,30 +23,22 @@ class Passage {
         text: json['text'],
         book: json['book_name']);
   }
-
-  factory Passage.fromQuery(String key, String value) {
-    return Passage(
-        chapter: int.parse(key.split(' ')[1].split(':')[0]),
-        verse: int.parse(key.split(' ')[1].split(':')[1]),
-        text: value.replaceAll("<b>", "").replaceAll("</b>", ""),
-        book: key.split(' ')[0]);
-  }
 }
 
 Future<PassageResponse> fetchPassage(
     String reference, Translation? version) async {
-  try {
-    var response = await http.get(Uri.parse(
-        '$kHomileticsApiBase/passages?passage=$reference&version=${version?.code ?? 'web'}'));
+  final Uri uri = Uri.parse('$kHomileticsApiBase/passages').replace(
+      queryParameters: {
+        'passage': reference,
+        'version': version?.code ?? 'web'
+      });
+  final http.Response response = await http.get(uri);
 
-    if (response.statusCode == 200) {
-      return PassageResponse.fromJson(jsonDecode(response.body));
-    } else {
-      throw Exception('Failed to load passage');
-    }
-  } catch (e) {
-    throw Exception('Failed to load passage');
+  if (response.statusCode != 200) {
+    throw Exception(
+        'Failed to load passage "$reference": HTTP ${response.statusCode}');
   }
+  return PassageResponse.fromJson(jsonDecode(response.body));
 }
 
 class PassageResponse {
@@ -72,7 +64,7 @@ class PassageResponse {
           text: json['text'].toString(),
           versionCode: json['translation_id'].toString());
     } catch (error) {
-      throw Exception('Failed to load passage');
+      throw Exception('Failed to parse passage response: $error');
     }
   }
 }

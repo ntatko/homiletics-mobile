@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:homiletics/l10n/l10n.dart';
 
-// ignore: must_be_immutable
 class SearchBar extends StatelessWidget {
   final void Function()? onTap;
   final void Function(String)? onChanged;
@@ -12,7 +12,7 @@ class SearchBar extends StatelessWidget {
     Key? key,
     this.onTap,
     this.onChanged,
-    this.icon = const Icon(Icons.search),
+    this.icon = const Icon(Icons.search_rounded),
     this.onIconPressed,
     this.autofocus = false,
     this.enabled = false,
@@ -28,18 +28,13 @@ class SearchBar extends StatelessWidget {
         autofocus: autofocus,
         onChanged: onChanged,
         decoration: InputDecoration(
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(50.0),
-            ),
-            filled: true,
-            labelText: 'Search',
+            hintText: context.l10n.searchHint,
             prefixIcon: onIconPressed == null
                 ? icon
                 : IconButton(
                     icon: icon,
                     onPressed: onIconPressed,
-                  ),
-            fillColor: const Color.fromARGB(255, 206, 231, 255)),
+                  )),
       ),
     );
   }

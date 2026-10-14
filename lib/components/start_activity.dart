@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:homiletics/common/other_study_menu_button.dart';
+import 'package:homiletics/l10n/l10n.dart';
 import 'package:homiletics/common/start_passage_item_flow.dart';
+import 'package:homiletics/theme/app_theme.dart';
 
+/// Home's pinned "＋ Study another passage…" field. Once a reference is
+/// typed, buttons to start a homiletic, lecture note or word study on it
+/// appear above the field; the keyboard's go key starts a homiletic.
 class StartActivity extends StatefulWidget {
   const StartActivity({Key? key}) : super(key: key);
 
@@ -10,75 +14,103 @@ class StartActivity extends StatefulWidget {
 }
 
 class _StartActivityState extends State<StartActivity> {
+  final TextEditingController _controller = TextEditingController();
   String _passageReference = "";
+
+  String get _passage => _passageReference.trim();
+
+  void _start(Future<void> Function(BuildContext, String) flow) {
+    if (_passage.isEmpty) return;
+    FocusScope.of(context).unfocus();
+    flow(context, _passage);
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(top: 20, left: 8, right: 8),
-      child: Card(
-        color: Theme.of(context).brightness == Brightness.dark
-            ? Colors.blueGrey[900]
-            : Colors.blueGrey[100],
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                "Start with your own passage",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                onChanged: (value) => setState(() {
-                  _passageReference = value;
-                }),
-                decoration: InputDecoration(
-                  labelText: "Enter Bible passage reference",
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(
-                        20), // Increased border radius for a rounder look
+    final AppColors c = AppColors.of(context);
+    final bool hasPassage = _passage.isNotEmpty;
+    final AppLocalizations l = context.l10n;
+    OutlineInputBorder border(Color color, [double width = 1]) =>
+        OutlineInputBorder(
+          borderRadius: BorderRadius.circular(AppRadius.tile),
+          borderSide: BorderSide(color: color, width: width),
+        );
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        AnimatedSize(
+          duration: const Duration(milliseconds: 180),
+          alignment: Alignment.bottomCenter,
+          child: hasPassage
+              ? Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: FilledButton(
+                          onPressed: () => _start(startHomileticForPassage),
+                          child: Text(l.startHomiletics,
+                              maxLines: 1, overflow: TextOverflow.ellipsis),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: () => _start(startLectureNoteForPassage),
+                          child: Text(l.startLecture,
+                              maxLines: 1, overflow: TextOverflow.ellipsis),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: () => _start(startWordStudyForPassage),
+                          child: Text(l.startWordStudy,
+                              maxLines: 1, overflow: TextOverflow.ellipsis),
+                        ),
+                      ),
+                    ],
                   ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    borderSide: BorderSide(color: Colors.grey.shade400),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    borderSide:
-                        BorderSide(color: Theme.of(context).primaryColor),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-              Wrap(
-                alignment: WrapAlignment.start,
-                spacing: 10,
-                runSpacing: 10,
-                children: [
-                  ElevatedButton(
-                    onPressed: _passageReference.isNotEmpty
-                        ? () => startHomileticForPassage(
-                              context,
-                              _passageReference,
-                            )
-                        : null,
-                    child: const Text(
-                      "Homiletics",
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  OtherStudyMenuButton(
-                    passage: _passageReference,
-                    enabled: _passageReference.isNotEmpty,
-                  ),
-                ],
-              ),
-            ],
+                )
+              : const SizedBox(width: double.infinity),
+        ),
+        TextField(
+          controller: _controller,
+          onChanged: (value) => setState(() {
+            _passageReference = value;
+          }),
+          onSubmitted: (_) => _start(startHomileticForPassage),
+          textInputAction: TextInputAction.go,
+          style: AppText.body.copyWith(color: c.ink),
+          decoration: InputDecoration(
+            hintText: l.startPassageHint,
+            prefixIcon: Icon(Icons.add_rounded, size: 20, color: c.muted),
+            suffixIcon: hasPassage
+                ? IconButton(
+                    tooltip: l.startClear,
+                    icon: Icon(Icons.close_rounded, size: 20, color: c.muted),
+                    onPressed: () {
+                      _controller.clear();
+                      setState(() => _passageReference = '');
+                    },
+                  )
+                : null,
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            border: border(c.line),
+            enabledBorder: border(c.line),
+            focusedBorder: border(c.accent, 1.5),
           ),
         ),
-      ),
+      ],
     );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 }

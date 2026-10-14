@@ -2,33 +2,18 @@ import 'dart:async';
 
 import 'package:homiletics/classes/Division.dart';
 import 'package:homiletics/common/report_error.dart';
-import 'package:path/path.dart';
+import 'package:homiletics/storage/app_storage.dart';
 import 'package:sqflite/sqflite.dart';
 
-final Future<Database> database = getDatabasesPath().then((String path) {
-  return openDatabase(
-    join(path, 'divisions.db'),
-    onCreate: (db, version) {
-      return db.execute('''
-            CREATE TABLE divisions (
-              id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-              title TEXT,
-              passage TEXT,
-              sort INTEGER,
-              homiletic_id INTEGER
-            )
-            ''');
-    },
-    version: 1,
-  );
-});
+/// The database holding the `divisions` table (see [AppStorage]).
+Future<Database> _db() => AppStorage.database('divisions');
 
 Future<List<Division>> getDivisionsByHomileticId(int? id) async {
   try {
-    final Database db = await database;
+    final Database db = await _db();
 
-    final List<Map<String, dynamic>> maps =
-        await db.query('divisions', where: 'homiletic_id = ?', whereArgs: [id]);
+    final List<Map<String, dynamic>> maps = await db.query('divisions',
+        where: 'homiletic_id = ?', whereArgs: [id], orderBy: 'id');
 
     if (maps.isEmpty) {
       return [];
@@ -41,28 +26,9 @@ Future<List<Division>> getDivisionsByHomileticId(int? id) async {
   }
 }
 
-Future<void> resetDivisionsTable() async {
-  try {
-    final Database db = await database;
-    await db.execute("DROP TABLE IF EXISTS divisions ");
-    await db.execute('''
-            CREATE TABLE divisions (
-              id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-              title TEXT,
-              passage TEXT,
-              sort INTEGER,
-              homiletic_id INTEGER
-            )
-            ''');
-  } catch (error) {
-    sendError(error, "resetDivisionsTable");
-    throw Exception("Failed to reset divisions table");
-  }
-}
-
 Future<int> insertDivision(Division division) async {
   try {
-    final Database db = await database;
+    final Database db = await _db();
 
     return await db.insert('divisions', division.toJson(),
         conflictAlgorithm: ConflictAlgorithm.replace);
@@ -74,7 +40,7 @@ Future<int> insertDivision(Division division) async {
 
 Future<void> updateDivision(Division division) async {
   try {
-    final Database db = await database;
+    final Database db = await _db();
 
     await db.update('divisions', division.toJson()..remove('id'),
         where: 'id = ?', whereArgs: [division.id]);
@@ -86,7 +52,7 @@ Future<void> updateDivision(Division division) async {
 
 Future<void> deleteDivision(Division division) async {
   try {
-    final Database db = await database;
+    final Database db = await _db();
 
     await db.delete('divisions', where: 'id = ?', whereArgs: [division.id]);
   } catch (error) {
@@ -95,14 +61,11 @@ Future<void> deleteDivision(Division division) async {
   }
 }
 
-Future<List<Division>> deleteDivisionByHomileticId(int id) async {
+Future<void> deleteDivisionByHomileticId(int id) async {
   try {
-    final Database db = await database;
-
-    List<Division> divisions = await getDivisionsByHomileticId(id);
+    final Database db = await _db();
 
     await db.delete('divisions', where: 'homiletic_id = ?', whereArgs: [id]);
-    return divisions;
   } catch (error) {
     sendError(error, "deleteDivisionByHomileticId");
     throw Exception("Failed to delete divisions by homiletics");
@@ -111,7 +74,7 @@ Future<List<Division>> deleteDivisionByHomileticId(int id) async {
 
 Future<List<Division>> getDivisionByText(String text) async {
   try {
-    final Database db = await database;
+    final Database db = await _db();
 
     final List<Map<String, dynamic>> maps = await db
         .query('divisions', where: 'title LIKE ?', whereArgs: ['%$text%']);

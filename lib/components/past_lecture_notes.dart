@@ -1,42 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:homiletics/l10n/l10n.dart';
 import 'package:homiletics/classes/lecture_note.dart';
-import 'package:homiletics/common/home_header.dart';
 import 'package:homiletics/common/notes_list_item.dart';
+import 'package:homiletics/common/study_data_builder.dart';
+import 'package:homiletics/components/past_lessons.dart';
 import 'package:homiletics/storage/lecture_note_storage.dart';
 import 'package:loggy/loggy.dart';
 
+/// Every saved lecture note, newest first (the "Lectures" tab of
+/// [LessonPage]).
 class PastLectureNotes extends StatelessWidget {
   const PastLectureNotes({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<LectureNote>>(
-      future: getLectureNotes(),
+    return StudyDataBuilder<List<LectureNote>>(
+      load: getLectureNotes,
       builder: (context, snapshot) {
         if (snapshot.hasError) logError("${snapshot.error}");
+        if (!snapshot.hasData) return const StudyListLoading();
 
-        List<LectureNote> notes = snapshot.data?.reversed.toList() ?? [];
-
-        return snapshot.hasData && notes.isNotEmpty
-            ? Container(
-                padding: const EdgeInsets.only(
-                    left: 10, right: 10, top: 20, bottom: 10),
-                child: Card(
-                    color: Theme.of(context).brightness == Brightness.dark
-                        ? Colors.blueGrey[900]
-                        : Colors.blueGrey[100],
-                    child: Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Column(
-                          children: [
-                            const HomeHeader(
-                                title: "Past Notes", onExpand: null),
-                            ...notes.map((note) {
-                              return NotesListItem(note: note);
-                            })
-                          ],
-                        ))))
-            : const SizedBox.shrink();
+        final List<LectureNote> notes = snapshot.data!.reversed.toList();
+        if (notes.isEmpty) {
+          return StudyListEmpty(context.l10n.studiesNoLectureNotes);
+        }
+        return ListView.builder(
+          padding: studyListPadding,
+          itemCount: notes.length,
+          itemBuilder: (context, index) => NotesListItem(
+            note: notes[index],
+            divider: index < notes.length - 1,
+          ),
+        );
       },
     );
   }
