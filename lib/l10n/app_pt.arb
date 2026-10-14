@@ -881,5 +881,20 @@
   "restoreFailed": "Não foi possível restaurar a cópia. Tente novamente.",
   "restoreNotABackup": "Esse ficheiro não é uma cópia do Homiletics.",
   "restoreDamaged": "Essa cópia parece danificada e não pode ser lida.",
-  "restoreNewerVersion": "Esta cópia foi feita por uma versão mais recente do Homiletics. Atualize a aplicação e tente novamente."
+  "restoreNewerVersion": "Esta cópia foi feita por uma versão mais recente do Homiletics. Atualize a aplicação e tente novamente.",
+  "settingsCheckForUpdates": "Procurar atualizações",
+  "settingsVersion": "Versão {version}",
+  "updateAvailableTitle": "Homiletics {version} está disponível",
+  "updateAvailableMessage": "Versão instalada: {current}. Novidades:",
+  "updateNow": "Atualizar agora",
+  "updateDownload": "Download",
+  "updateLater": "Mais tarde",
+  "updateSkipVersion": "Ignorar esta versão",
+  "updateDownloading": "A transferir a atualização…",
+  "updateInstalling": "A instalar. O Homiletics vai reabrir dentro de momentos.",
+  "updateFailed": "Não foi possível transferir a atualização. Tente novamente ou faça o download em homiletics.app.",
+  "updateTryAgain": "Tentar novamente",
+  "updatePortableNote": "Esta cópia não foi instalada com o instalador; faça o download da nova versão em homiletics.app.",
+  "updateUpToDate": "Já tem a versão mais recente (Homiletics {version}).",
+  "updateCheckFailed": "Não foi possível procurar atualizações. Verifique a ligação à internet e tente novamente."
 }

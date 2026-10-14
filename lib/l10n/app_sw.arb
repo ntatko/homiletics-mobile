@@ -881,5 +881,20 @@
   "restoreFailed": "Imeshindikana kurejesha nakala. Tafadhali jaribu tena.",
   "restoreNotABackup": "Faili hiyo si nakala ya Homiletics.",
   "restoreDamaged": "Nakala hiyo inaonekana kuharibika na haisomeki.",
-  "restoreNewerVersion": "Nakala hii iliundwa na toleo jipya la Homiletics. Sasisha programu, kisha ujaribu tena."
+  "restoreNewerVersion": "Nakala hii iliundwa na toleo jipya la Homiletics. Sasisha programu, kisha ujaribu tena.",
+  "settingsCheckForUpdates": "Angalia masasisho",
+  "settingsVersion": "Toleo {version}",
+  "updateAvailableTitle": "Homiletics {version} inapatikana",
+  "updateAvailableMessage": "Una toleo {current}. Mapya:",
+  "updateNow": "Sasisha sasa",
+  "updateDownload": "Pakua",
+  "updateLater": "Baadaye",
+  "updateSkipVersion": "Ruka toleo hili",
+  "updateDownloading": "Inapakua sasisho…",
+  "updateInstalling": "Inasakinisha. Homiletics itafunguka tena baada ya muda mfupi.",
+  "updateFailed": "Sasisho halikuweza kupakuliwa. Jaribu tena, au lipakue kutoka homiletics.app.",
+  "updateTryAgain": "Jaribu tena",
+  "updatePortableNote": "Nakala hii haikusakinishwa kwa kisakinishi, kwa hiyo pakua toleo jipya kutoka homiletics.app.",
+  "updateUpToDate": "Una toleo la karibuni (Homiletics {version}).",
+  "updateCheckFailed": "Haikuweza kuangalia masasisho. Angalia muunganisho wako wa intaneti kisha ujaribu tena."
 }

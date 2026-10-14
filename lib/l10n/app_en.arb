@@ -2112,5 +2112,85 @@
   "restoreNewerVersion": "This backup was made by a newer version of Homiletics. Update the app, then try again.",
   "@restoreNewerVersion": {
     "description": "Snackbar when the backup was made by a newer app version."
+  },
+  "settingsCheckForUpdates": "Check for updates",
+  "@settingsCheckForUpdates": {
+    "description": "Windows only: Settings row that checks GitHub for a newer version."
+  },
+  "settingsVersion": "Version {version}",
+  "@settingsVersion": {
+    "description": "Value next to the Check for updates row, e.g. 'Version 3.0.0'.",
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "updateAvailableTitle": "Homiletics {version} is available",
+  "@updateAvailableTitle": {
+    "description": "Title of the prompt when a newer Windows version exists.",
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "updateAvailableMessage": "You have version {current}. What's new:",
+  "@updateAvailableMessage": {
+    "description": "Under the update title, before the release notes.",
+    "placeholders": {
+      "current": {
+        "type": "String"
+      }
+    }
+  },
+  "updateNow": "Update now",
+  "@updateNow": {
+    "description": "Button: download and install the update."
+  },
+  "updateDownload": "Download",
+  "@updateDownload": {
+    "description": "Button for portable (zip) copies: opens the download page."
+  },
+  "updateLater": "Later",
+  "@updateLater": {
+    "description": "Button: dismiss the update prompt for now."
+  },
+  "updateSkipVersion": "Skip this version",
+  "@updateSkipVersion": {
+    "description": "Button: don't offer this version again at launch."
+  },
+  "updateDownloading": "Downloading the update…",
+  "@updateDownloading": {
+    "description": "Shown with a progress bar while the update downloads."
+  },
+  "updateInstalling": "Installing. Homiletics will reopen in a moment.",
+  "@updateInstalling": {
+    "description": "Shown just before the app closes to install the update."
+  },
+  "updateFailed": "The update couldn't be downloaded. Try again, or download it from homiletics.app.",
+  "@updateFailed": {
+    "description": "The update download or install failed."
+  },
+  "updateTryAgain": "Try again",
+  "@updateTryAgain": {
+    "description": "Button: retry the update download."
+  },
+  "updatePortableNote": "This copy wasn't installed with the installer, so download the new version from homiletics.app.",
+  "@updatePortableNote": {
+    "description": "For copies run from the zip (not installed): explains the Download button."
+  },
+  "updateUpToDate": "You're up to date (Homiletics {version}).",
+  "@updateUpToDate": {
+    "description": "Snackbar after a manual check finds nothing newer.",
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "updateCheckFailed": "Couldn't check for updates. Check your internet connection and try again.",
+  "@updateCheckFailed": {
+    "description": "Snackbar when a manual update check can't reach the server."
   }
 }

@@ -1532,4 +1532,61 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get restoreNewerVersion =>
       'This backup was made by a newer version of Homiletics. Update the app, then try again.';
+
+  @override
+  String get settingsCheckForUpdates => 'Check for updates';
+
+  @override
+  String settingsVersion(String version) {
+    return 'Version $version';
+  }
+
+  @override
+  String updateAvailableTitle(String version) {
+    return 'Homiletics $version is available';
+  }
+
+  @override
+  String updateAvailableMessage(String current) {
+    return 'You have version $current. What\'s new:';
+  }
+
+  @override
+  String get updateNow => 'Update now';
+
+  @override
+  String get updateDownload => 'Download';
+
+  @override
+  String get updateLater => 'Later';
+
+  @override
+  String get updateSkipVersion => 'Skip this version';
+
+  @override
+  String get updateDownloading => 'Downloading the update…';
+
+  @override
+  String get updateInstalling =>
+      'Installing. Homiletics will reopen in a moment.';
+
+  @override
+  String get updateFailed =>
+      'The update couldn\'t be downloaded. Try again, or download it from homiletics.app.';
+
+  @override
+  String get updateTryAgain => 'Try again';
+
+  @override
+  String get updatePortableNote =>
+      'This copy wasn\'t installed with the installer, so download the new version from homiletics.app.';
+
+  @override
+  String updateUpToDate(String version) {
+    return 'You\'re up to date (Homiletics $version).';
+  }
+
+  @override
+  String get updateCheckFailed =>
+      'Couldn\'t check for updates. Check your internet connection and try again.';
 }
