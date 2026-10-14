@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+import 'dart:io';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -6,6 +8,7 @@ import 'package:homiletics/components/bible/bible_passage_view.dart';
 import 'package:homiletics/l10n/l10n.dart';
 import 'package:homiletics/services/bible_text.dart';
 import 'package:homiletics/services/bible_text_service.dart';
+import 'package:homiletics/common/web_view_scroll.dart';
 import 'package:homiletics/theme/app_theme.dart';
 import 'package:homiletics/classes/preferences.dart';
 import 'package:homiletics/classes/translation.dart';
@@ -125,6 +128,12 @@ String _readingCss(AppColors c) => """
     color: ${_hex(c.muted)} !important;
   }
   a, a * { color: ${_hex(c.accent)} !important; }
+  /* Bible Gateway adds a cookie/tracking notice and other overlays after
+     load; once the scripture has been moved into #homiletics-reader, hide
+     everything else at the top level, including anything added later. */
+  body:has(#homiletics-reader) > *:not(#homiletics-reader) {
+    display: none !important;
+  }
   #homiletics-reader-header {
     display: flex; align-items: center; justify-content: space-between;
     gap: 12px; padding: 12px 0 6px;
@@ -175,6 +184,14 @@ enum _PanelMode {
 
 /// Matches Bible Gateway's per-verse class, e.g. "text Rom-3-4".
 const String _verseClassPattern = r'(?:^|\s)([A-Za-z0-9]+)-(\d+)-(\d+)(?:\s|$)';
+
+/// Sets a web view's background, which webview_flutter doesn't support on
+/// macOS ("opaque is not implemented"); there the page's own background
+/// (set by the reading stylesheet) shows instead.
+void setWebViewBackground(WebViewController controller, Color color) {
+  if (!kIsWeb && Platform.isMacOS) return;
+  controller.setBackgroundColor(color).catchError((Object _) {});
+}
 
 class VerseContainerState extends State<VerseContainer> {
   WebViewController? _controller;
@@ -246,7 +263,10 @@ class VerseContainerState extends State<VerseContainer> {
     if (!_colorsApplied || colors != _colors) {
       _colorsApplied = true;
       _colors = colors;
-      _controller?.setBackgroundColor(colors.surface);
+      final WebViewController? controller = _controller;
+      if (controller != null) {
+        setWebViewBackground(controller, colors.surface);
+      }
       // Restyle an already-loaded page when the system theme changes.
       if (_mode == _PanelMode.web && !_isLoading) _applyReadingStyle();
     }
@@ -338,19 +358,24 @@ class VerseContainerState extends State<VerseContainer> {
 
   void _showWeb(Translation translation, {bool force = false}) {
     final bool wasWeb = _mode == _PanelMode.web;
+    // The controller must exist before the web mode builds a WebViewWidget.
+    _ensureController();
     setState(() {
       _mode = _PanelMode.web;
       _chapters = null;
     });
-    _ensureController();
     _loadPassage(translation, force: force || !wasWeb);
   }
 
   void _ensureController() {
     if (_controller != null) return;
+    _createController();
+    setWebViewBackground(_controller!, _colors.surface);
+  }
+
+  void _createController() {
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..setBackgroundColor(_colors.surface)
       ..addJavaScriptChannel('HomileticsReader',
           onMessageReceived: _onReaderMessage)
       ..setNavigationDelegate(
@@ -665,7 +690,10 @@ class VerseContainerState extends State<VerseContainer> {
           children: [
             Opacity(
               opacity: _styled ? 1 : 0,
-              child: WebViewWidget(controller: _controller!),
+              child: WebViewScrollForwarder(
+                controller: _controller!,
+                child: WebViewWidget(controller: _controller!),
+              ),
             ),
             if (!_styled) _spinner(),
           ],

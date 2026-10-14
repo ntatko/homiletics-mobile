@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:homiletics/classes/translation.dart';
 import 'package:homiletics/common/verse_container.dart';
+import 'package:homiletics/common/web_view_scroll.dart';
 import 'package:homiletics/l10n/l10n.dart';
 import 'package:homiletics/theme/app_theme.dart';
 import 'package:homiletics/theme/widgets.dart';
@@ -215,7 +216,7 @@ class _OtherUsageSearchSheetState extends State<_OtherUsageSearchSheet> {
 
   Future<void> _applyReader() async {
     final AppColors c = AppColors.of(context);
-    _controller.setBackgroundColor(c.surface);
+    setWebViewBackground(_controller, c.surface);
     try {
       await _controller.runJavaScript(_readerScript(
           c,
@@ -307,15 +308,18 @@ class _OtherUsageSearchSheetState extends State<_OtherUsageSearchSheet> {
                   children: [
                     Opacity(
                       opacity: _styled ? 1 : 0,
-                      child: WebViewWidget(
+                      child: WebViewScrollForwarder(
                         controller: _controller,
-                        // Claim drags right away; otherwise the bottom
-                        // sheet's own drag-to-dismiss wins every vertical
-                        // swipe and the results can't be scrolled.
-                        gestureRecognizers: {
-                          Factory<OneSequenceGestureRecognizer>(
-                              () => EagerGestureRecognizer()),
-                        },
+                        child: WebViewWidget(
+                          controller: _controller,
+                          // Claim drags right away; otherwise the bottom
+                          // sheet's own drag-to-dismiss wins every vertical
+                          // swipe and the results can't be scrolled.
+                          gestureRecognizers: {
+                            Factory<OneSequenceGestureRecognizer>(
+                                () => EagerGestureRecognizer()),
+                          },
+                        ),
                       ),
                     ),
                     if (_isLoading || !_styled)
