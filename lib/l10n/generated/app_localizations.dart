@@ -2559,6 +2559,138 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Search results opened in your browser. Type or paste the references you want to keep here.'**
   String get wordStudyOtherUsageOpenedInBrowser;
+
+  /// Section heading on the settings page above the lecture recording storage controls. Shown in upper case.
+  ///
+  /// In en, this message translates to:
+  /// **'Storage'**
+  String get settingsSectionStorage;
+
+  /// Title of the settings card showing how much space lecture recordings take.
+  ///
+  /// In en, this message translates to:
+  /// **'Lecture recordings'**
+  String get storageRecordingsTitle;
+
+  /// Shown on the recordings storage card while the app adds up the size of the recordings.
+  ///
+  /// In en, this message translates to:
+  /// **'Checking…'**
+  String get storageChecking;
+
+  /// Recordings storage card: how many lecture recordings are on the device and the space they take, e.g. "34 recordings · 1.2 GB".
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No recordings stored} =1{1 recording · {size}} other{{count} recordings · {size}}}'**
+  String storageRecordingsSummary(int count, String size);
+
+  /// Label next to the age picker (1 month, 3 months, …) on the recordings storage card.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove recordings older than'**
+  String get storageRemoveOlderThan;
+
+  /// Age option for removing old recordings.
+  ///
+  /// In en, this message translates to:
+  /// **'1 month'**
+  String get storageAgeOneMonth;
+
+  /// Age option for removing old recordings.
+  ///
+  /// In en, this message translates to:
+  /// **'3 months'**
+  String get storageAgeThreeMonths;
+
+  /// Age option for removing old recordings.
+  ///
+  /// In en, this message translates to:
+  /// **'6 months'**
+  String get storageAgeSixMonths;
+
+  /// Age option for removing old recordings.
+  ///
+  /// In en, this message translates to:
+  /// **'1 year'**
+  String get storageAgeOneYear;
+
+  /// Under the age picker: how many recordings are older than the chosen age and how much space removing them frees.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{None that old} =1{1 recording · {size}} other{{count} recordings · {size}}}'**
+  String storageOlderSummary(int count, String size);
+
+  /// Button that removes the old recordings (after a confirmation).
+  ///
+  /// In en, this message translates to:
+  /// **'Free up space'**
+  String get storageFreeUpSpace;
+
+  /// Title of the confirmation before removing old recordings.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Remove 1 recording?} other{Remove {count} recordings?}}'**
+  String storageConfirmTitle(int count);
+
+  /// Confirmation body before removing old recordings. Make clear only the audio goes and the written notes/transcripts stay.
+  ///
+  /// In en, this message translates to:
+  /// **'This frees about {size}. Your notes, transcripts and time marks are kept; only the audio is deleted, and it can’t be brought back.'**
+  String storageConfirmMessage(String size);
+
+  /// Extra line in the removal confirmation when some of the recordings have no transcript.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 of them was never transcribed, so only your notes will be left of it.} other{{count} of them were never transcribed, so only your notes will be left of them.}}'**
+  String storageConfirmUntranscribed(int count);
+
+  /// Destructive button in the confirmation that removes the old recordings.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get storageConfirmRemove;
+
+  /// Snackbar after old recordings were removed.
+  ///
+  /// In en, this message translates to:
+  /// **'Freed {size}.'**
+  String storageFreed(String size);
+
+  /// Snackbar when removing some recordings failed.
+  ///
+  /// In en, this message translates to:
+  /// **'Some recordings couldn’t be removed. Try again.'**
+  String get storageRemoveFailed;
+
+  /// Switch on the recordings storage card that removes old recordings once a day.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove automatically'**
+  String get storageAutoRemove;
+
+  /// Under the "Remove automatically" switch. {age} is one of the age options, e.g. "3 months".
+  ///
+  /// In en, this message translates to:
+  /// **'Once a day, removes recordings older than {age} that have a transcript.'**
+  String storageAutoRemoveDetail(String age);
+
+  /// Shown on the lecture recording bar in place of the player when the audio was removed by "Free up space".
+  ///
+  /// In en, this message translates to:
+  /// **'Recording removed to save space'**
+  String get lectureRecordingRemovedTitle;
+
+  /// Second line on the recording bar under "Recording removed to save space".
+  ///
+  /// In en, this message translates to:
+  /// **'Your notes and transcript are kept'**
+  String get lectureRecordingRemovedSubtitle;
+
+  /// Transcript tab when the recording was removed by "Free up space" and never transcribed.
+  ///
+  /// In en, this message translates to:
+  /// **'The recording was removed to save space before it was transcribed.'**
+  String get lectureTranscriptEmptyRecordingRemoved;
 }
 
 class _AppLocalizationsDelegate

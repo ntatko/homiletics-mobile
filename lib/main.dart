@@ -15,6 +15,7 @@ import 'package:homiletics/common/report_error.dart';
 import 'package:homiletics/pages/home.dart';
 import 'package:homiletics/services/incoming_links.dart';
 import 'package:homiletics/services/transcript_formatter_service.dart';
+import 'package:homiletics/services/recording_storage_service.dart';
 import 'package:homiletics/services/whisper_model_service.dart';
 import 'package:homiletics/services/suggested_passages_repository.dart';
 import 'package:homiletics/storage/app_storage.dart';
@@ -33,6 +34,8 @@ void main() async {
   // Not needed for the first frame (only the recording / model settings UI
   // uses it), so don't delay startup. Reports its own errors.
   unawaited(WhisperModelService.cleanUpConversionFiles());
+  // "Remove automatically" (off by default); at most once a day.
+  if (!kIsWeb) unawaited(RecordingStorageService.runAutomaticCleanupIfDue());
   unawaited(TranscriptFormatterService.initialize());
 }
 

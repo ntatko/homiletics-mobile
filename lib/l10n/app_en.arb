@@ -1996,5 +1996,143 @@
   "wordStudyOtherUsageOpenedInBrowser": "Search results opened in your browser. Type or paste the references you want to keep here.",
   "@wordStudyOtherUsageOpenedInBrowser": {
     "description": "Windows only: snackbar after the 'other usage' Bible Gateway search was opened in the web browser (it can't be shown in the app there); the user types or pastes references into the field themselves."
+  },
+  "settingsSectionStorage": "Storage",
+  "@settingsSectionStorage": {
+    "description": "Section heading on the settings page above the lecture recording storage controls. Shown in upper case."
+  },
+  "storageRecordingsTitle": "Lecture recordings",
+  "@storageRecordingsTitle": {
+    "description": "Title of the settings card showing how much space lecture recordings take."
+  },
+  "storageChecking": "Checking…",
+  "@storageChecking": {
+    "description": "Shown on the recordings storage card while the app adds up the size of the recordings."
+  },
+  "storageRecordingsSummary": "{count, plural, =0{No recordings stored} =1{1 recording · {size}} other{{count} recordings · {size}}}",
+  "@storageRecordingsSummary": {
+    "description": "Recordings storage card: how many lecture recordings are on the device and the space they take, e.g. \"34 recordings · 1.2 GB\".",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "34"
+      },
+      "size": {
+        "type": "String",
+        "example": "1.2 GB"
+      }
+    }
+  },
+  "storageRemoveOlderThan": "Remove recordings older than",
+  "@storageRemoveOlderThan": {
+    "description": "Label next to the age picker (1 month, 3 months, …) on the recordings storage card."
+  },
+  "storageAgeOneMonth": "1 month",
+  "@storageAgeOneMonth": {
+    "description": "Age option for removing old recordings."
+  },
+  "storageAgeThreeMonths": "3 months",
+  "@storageAgeThreeMonths": {
+    "description": "Age option for removing old recordings."
+  },
+  "storageAgeSixMonths": "6 months",
+  "@storageAgeSixMonths": {
+    "description": "Age option for removing old recordings."
+  },
+  "storageAgeOneYear": "1 year",
+  "@storageAgeOneYear": {
+    "description": "Age option for removing old recordings."
+  },
+  "storageOlderSummary": "{count, plural, =0{None that old} =1{1 recording · {size}} other{{count} recordings · {size}}}",
+  "@storageOlderSummary": {
+    "description": "Under the age picker: how many recordings are older than the chosen age and how much space removing them frees.",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "12"
+      },
+      "size": {
+        "type": "String",
+        "example": "480 MB"
+      }
+    }
+  },
+  "storageFreeUpSpace": "Free up space",
+  "@storageFreeUpSpace": {
+    "description": "Button that removes the old recordings (after a confirmation)."
+  },
+  "storageConfirmTitle": "{count, plural, =1{Remove 1 recording?} other{Remove {count} recordings?}}",
+  "@storageConfirmTitle": {
+    "description": "Title of the confirmation before removing old recordings.",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "12"
+      }
+    }
+  },
+  "storageConfirmMessage": "This frees about {size}. Your notes, transcripts and time marks are kept; only the audio is deleted, and it can’t be brought back.",
+  "@storageConfirmMessage": {
+    "description": "Confirmation body before removing old recordings. Make clear only the audio goes and the written notes/transcripts stay.",
+    "placeholders": {
+      "size": {
+        "type": "String",
+        "example": "480 MB"
+      }
+    }
+  },
+  "storageConfirmUntranscribed": "{count, plural, =1{1 of them was never transcribed, so only your notes will be left of it.} other{{count} of them were never transcribed, so only your notes will be left of them.}}",
+  "@storageConfirmUntranscribed": {
+    "description": "Extra line in the removal confirmation when some of the recordings have no transcript.",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "storageConfirmRemove": "Remove",
+  "@storageConfirmRemove": {
+    "description": "Destructive button in the confirmation that removes the old recordings."
+  },
+  "storageFreed": "Freed {size}.",
+  "@storageFreed": {
+    "description": "Snackbar after old recordings were removed.",
+    "placeholders": {
+      "size": {
+        "type": "String",
+        "example": "480 MB"
+      }
+    }
+  },
+  "storageRemoveFailed": "Some recordings couldn’t be removed. Try again.",
+  "@storageRemoveFailed": {
+    "description": "Snackbar when removing some recordings failed."
+  },
+  "storageAutoRemove": "Remove automatically",
+  "@storageAutoRemove": {
+    "description": "Switch on the recordings storage card that removes old recordings once a day."
+  },
+  "storageAutoRemoveDetail": "Once a day, removes recordings older than {age} that have a transcript.",
+  "@storageAutoRemoveDetail": {
+    "description": "Under the \"Remove automatically\" switch. {age} is one of the age options, e.g. \"3 months\".",
+    "placeholders": {
+      "age": {
+        "type": "String",
+        "example": "3 months"
+      }
+    }
+  },
+  "lectureRecordingRemovedTitle": "Recording removed to save space",
+  "@lectureRecordingRemovedTitle": {
+    "description": "Shown on the lecture recording bar in place of the player when the audio was removed by \"Free up space\"."
+  },
+  "lectureRecordingRemovedSubtitle": "Your notes and transcript are kept",
+  "@lectureRecordingRemovedSubtitle": {
+    "description": "Second line on the recording bar under \"Recording removed to save space\"."
+  },
+  "lectureTranscriptEmptyRecordingRemoved": "The recording was removed to save space before it was transcribed.",
+  "@lectureTranscriptEmptyRecordingRemoved": {
+    "description": "Transcript tab when the recording was removed by \"Free up space\" and never transcribed."
   }
 }

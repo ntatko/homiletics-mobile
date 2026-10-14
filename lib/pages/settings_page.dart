@@ -4,6 +4,7 @@ import 'package:homiletics/classes/preferences.dart';
 import 'package:homiletics/components/help_menu.dart';
 import 'package:homiletics/components/preferences_modal.dart';
 import 'package:homiletics/components/model_settings.dart';
+import 'package:homiletics/components/settings/storage_section.dart';
 import 'package:homiletics/l10n/l10n.dart';
 import 'package:homiletics/pages/onboarding/onboarding_launcher.dart';
 import 'package:homiletics/theme/app_theme.dart';
@@ -48,6 +49,8 @@ class SettingsPage extends StatelessWidget {
                 heading(l.settingsSectionModels),
                 const WhisperModelSettings(),
                 const FormattingModelSettings(),
+                heading(l.settingsSectionStorage),
+                const RecordingStorageSettings(),
                 heading(l.settingsSectionHelp),
                 _SettingsRow(
                   key: const ValueKey('settingsOnboarding'),

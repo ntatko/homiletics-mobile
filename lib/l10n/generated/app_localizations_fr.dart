@@ -1469,4 +1469,117 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get wordStudyOtherUsageOpenedInBrowser =>
       'Les résultats se sont ouverts dans votre navigateur. Tapez ou collez ici les références à conserver.';
+
+  @override
+  String get settingsSectionStorage => 'Stockage';
+
+  @override
+  String get storageRecordingsTitle => 'Enregistrements des exposés';
+
+  @override
+  String get storageChecking => 'Vérification…';
+
+  @override
+  String storageRecordingsSummary(int count, String size) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count enregistrements · $size',
+      one: '1 enregistrement · $size',
+      zero: 'Aucun enregistrement',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get storageRemoveOlderThan =>
+      'Supprimer les enregistrements de plus de';
+
+  @override
+  String get storageAgeOneMonth => '1 mois';
+
+  @override
+  String get storageAgeThreeMonths => '3 mois';
+
+  @override
+  String get storageAgeSixMonths => '6 mois';
+
+  @override
+  String get storageAgeOneYear => '1 an';
+
+  @override
+  String storageOlderSummary(int count, String size) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count enregistrements · $size',
+      one: '1 enregistrement · $size',
+      zero: 'Aucun aussi ancien',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get storageFreeUpSpace => 'Libérer de l’espace';
+
+  @override
+  String storageConfirmTitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Supprimer $count enregistrements ?',
+      one: 'Supprimer 1 enregistrement ?',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String storageConfirmMessage(String size) {
+    return 'Cela libère environ $size. Vos notes, transcriptions et repères de temps sont conservés ; seul l’audio est supprimé, sans retour possible.';
+  }
+
+  @override
+  String storageConfirmUntranscribed(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          '$count d’entre eux n’ont jamais été transcrits : il n’en restera que vos notes.',
+      one:
+          '1 d’entre eux n’a jamais été transcrit : il n’en restera que vos notes.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get storageConfirmRemove => 'Supprimer';
+
+  @override
+  String storageFreed(String size) {
+    return '$size libérés.';
+  }
+
+  @override
+  String get storageRemoveFailed =>
+      'Certains enregistrements n’ont pas pu être supprimés. Réessayez.';
+
+  @override
+  String get storageAutoRemove => 'Supprimer automatiquement';
+
+  @override
+  String storageAutoRemoveDetail(String age) {
+    return 'Une fois par jour, supprime les enregistrements de plus de $age déjà transcrits.';
+  }
+
+  @override
+  String get lectureRecordingRemovedTitle =>
+      'Enregistrement supprimé pour libérer de l’espace';
+
+  @override
+  String get lectureRecordingRemovedSubtitle =>
+      'Vos notes et la transcription sont conservées';
+
+  @override
+  String get lectureTranscriptEmptyRecordingRemoved =>
+      'L’enregistrement a été supprimé pour libérer de l’espace avant d’être transcrit.';
 }

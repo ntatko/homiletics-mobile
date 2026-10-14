@@ -7,6 +7,7 @@ import 'package:homiletics/classes/lecture_note.dart';
 import 'package:homiletics/classes/preferences.dart';
 import 'package:homiletics/common/report_error.dart';
 import 'package:homiletics/l10n/l10n.dart';
+import 'package:homiletics/services/recording_storage_service.dart';
 import 'package:homiletics/services/transcript_formatter_service.dart';
 import 'package:homiletics/services/whisper_model_service.dart';
 import 'package:homiletics/theme/app_theme.dart';
@@ -251,9 +252,13 @@ class _RecordingSectionState extends State<RecordingSection>
           RecordConfig(
             // whisper_ggml can't convert audio on Windows (no ffmpeg_kit
             // there) but reads a 16 kHz mono WAV as is, so record that.
+            // Elsewhere: speech-quality AAC (about 15 MB an hour, a quarter
+            // of music-quality stereo). Whisper only hears 16 kHz mono, so
+            // transcripts don't lose anything.
             encoder: Platform.isWindows ? AudioEncoder.wav : AudioEncoder.aacLc,
-            sampleRate: Platform.isWindows ? 16000 : 44100,
-            numChannels: Platform.isWindows ? 1 : 2,
+            sampleRate: Platform.isWindows ? 16000 : 22050,
+            bitRate: 32000,
+            numChannels: 1,
             // Runs recording in an Android foreground service (with an
             // ongoing notification) so it keeps going with the screen off.
             // iOS gets the same via UIBackgroundModes=audio in Info.plist.
@@ -282,6 +287,7 @@ class _RecordingSectionState extends State<RecordingSection>
       // transcript) so leaving the editor mid-lecture keeps the audio.
       try {
         await widget.note.updateRecordingPath(fileName);
+        await Preferences.clearRecordingRemoved(widget.note.id);
       } catch (error) {
         // _stopRecording saves it again.
         sendError(error, "RecordingSection save recording");
@@ -599,7 +605,9 @@ class _RecordingSectionState extends State<RecordingSection>
       return;
     }
     if (widget.note.recordingPath == null) {
-      tell(l10n.lectureTimeMarkNoRecording);
+      tell(RecordingStorageService.wasRemoved(widget.note)
+          ? l10n.lectureRecordingRemovedTitle
+          : l10n.lectureTimeMarkNoRecording);
       return;
     }
     final Duration? total = _recordingDuration ?? _playerDuration;
@@ -702,6 +710,37 @@ class _RecordingSectionState extends State<RecordingSection>
     }
 
     final Widget? progress = _progressLine();
+
+    if (!hasRecording && RecordingStorageService.wasRemoved(widget.note)) {
+      // Not tappable as a whole: recording over an old lecture's notes
+      // should take a deliberate tap on "Record again".
+      return RecordingBar(
+        child: Row(
+          children: [
+            SizedBox(
+              width: 44,
+              height: 44,
+              child: Icon(Icons.music_off_outlined,
+                  size: 22, color: recordingBarMuted(c)),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: RecordingBarTitle(
+                title: l10n.lectureRecordingRemovedTitle,
+                subtitle: l10n.lectureRecordingRemovedSubtitle,
+              ),
+            ),
+            const SizedBox(width: 12),
+            RecordingBarButton(
+              tooltip: l10n.lectureRecordAgain,
+              filled: false,
+              onPressed: canRecord ? _startRecording : null,
+              child: const RecordGlyph(size: 12),
+            ),
+          ],
+        ),
+      );
+    }
 
     if (!hasRecording) {
       return RecordingBar(
@@ -840,6 +879,8 @@ class _RecordingSectionState extends State<RecordingSection>
         message = l10n.lectureTranscriptEmptyPending;
       } else if (widget.note.recordingPath != null) {
         message = l10n.lectureTranscriptEmptyNotTranscribed;
+      } else if (RecordingStorageService.wasRemoved(widget.note)) {
+        message = l10n.lectureTranscriptEmptyRecordingRemoved;
       } else {
         message = l10n.lectureTranscriptEmptyNoRecording;
       }

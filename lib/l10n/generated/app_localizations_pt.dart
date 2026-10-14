@@ -1461,4 +1461,115 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get wordStudyOtherUsageOpenedInBrowser =>
       'Os resultados foram abertos no navegador. Digite ou cole aqui as referências que deseja guardar.';
+
+  @override
+  String get settingsSectionStorage => 'Armazenamento';
+
+  @override
+  String get storageRecordingsTitle => 'Gravações das palestras';
+
+  @override
+  String get storageChecking => 'Verificando…';
+
+  @override
+  String storageRecordingsSummary(int count, String size) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count gravações · $size',
+      one: '1 gravação · $size',
+      zero: 'Nenhuma gravação guardada',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get storageRemoveOlderThan => 'Apagar gravações com mais de';
+
+  @override
+  String get storageAgeOneMonth => '1 mês';
+
+  @override
+  String get storageAgeThreeMonths => '3 meses';
+
+  @override
+  String get storageAgeSixMonths => '6 meses';
+
+  @override
+  String get storageAgeOneYear => '1 ano';
+
+  @override
+  String storageOlderSummary(int count, String size) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count gravações · $size',
+      one: '1 gravação · $size',
+      zero: 'Nenhuma tão antiga',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get storageFreeUpSpace => 'Libertar espaço';
+
+  @override
+  String storageConfirmTitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Apagar $count gravações?',
+      one: 'Apagar 1 gravação?',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String storageConfirmMessage(String size) {
+    return 'Isto liberta cerca de $size. As anotações, transcrições e marcas de tempo ficam; só o áudio é apagado, sem possibilidade de recuperação.';
+  }
+
+  @override
+  String storageConfirmUntranscribed(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          '$count delas nunca foram transcritas; delas ficam só as anotações.',
+      one: '1 delas nunca foi transcrita; dela ficam só as anotações.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get storageConfirmRemove => 'Apagar';
+
+  @override
+  String storageFreed(String size) {
+    return '$size libertados.';
+  }
+
+  @override
+  String get storageRemoveFailed =>
+      'Não foi possível apagar algumas gravações. Tente novamente.';
+
+  @override
+  String get storageAutoRemove => 'Apagar automaticamente';
+
+  @override
+  String storageAutoRemoveDetail(String age) {
+    return 'Uma vez por dia, apaga as gravações com mais de $age que já têm transcrição.';
+  }
+
+  @override
+  String get lectureRecordingRemovedTitle =>
+      'Gravação apagada para poupar espaço';
+
+  @override
+  String get lectureRecordingRemovedSubtitle =>
+      'As anotações e a transcrição ficam guardadas';
+
+  @override
+  String get lectureTranscriptEmptyRecordingRemoved =>
+      'A gravação foi apagada para poupar espaço antes de ser transcrita.';
 }

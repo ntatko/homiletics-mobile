@@ -9,6 +9,7 @@ import 'package:homiletics/components/editor/passage_split_scaffold.dart';
 import 'package:homiletics/components/lecture/time_marks.dart';
 import 'package:homiletics/components/recording_section.dart';
 import 'package:homiletics/l10n/l10n.dart';
+import 'package:homiletics/services/recording_storage_service.dart';
 import 'package:homiletics/theme/app_theme.dart';
 import 'package:homiletics/theme/lecture_widgets.dart';
 
@@ -42,6 +43,9 @@ class _NotesState extends State<NotesEditor> {
     // Only a brand-new note needs saving up front; re-saving an existing one
     // would bump its time just for being opened.
     if (_thisNote.id == -1) _thisNote.update();
+    if (_thisNote.id != -1) {
+      RecordingStorageService.openNoteIds.add(_thisNote.id);
+    }
   }
 
   /// The note's rich text is stored as Quill Delta JSON in the same `note`
@@ -96,6 +100,7 @@ class _NotesState extends State<NotesEditor> {
 
   @override
   void dispose() {
+    RecordingStorageService.openNoteIds.remove(_thisNote.id);
     final bool hadPendingSave = _saveTimer?.isActive ?? false;
     _noteController.removeListener(_onNoteChanged);
     _noteController.dispose();
@@ -122,10 +127,14 @@ class _NotesState extends State<NotesEditor> {
 
   /// Plays the recording from a tapped time mark. Returns whether the tap
   /// was used, so a tap anywhere else (or any tap while recording, when
-  /// there's nothing to play yet) still places the cursor.
+  /// there's nothing to play yet, or once the audio was removed to save
+  /// space) still places the cursor.
   bool _onEditorTapUp(
       TapUpDetails details, TextPosition Function(Offset) positionAt) {
-    if (_recording.isRecording) return false;
+    if (_recording.isRecording ||
+        RecordingStorageService.wasRemoved(_thisNote)) {
+      return false;
+    }
     final TimeMark? mark = timeMarkInDocumentAt(
         _noteController.document, positionAt(details.globalPosition).offset);
     if (mark == null) return false;
@@ -188,7 +197,10 @@ class _NotesState extends State<NotesEditor> {
         placeholder: l10n.lectureNotesPlaceholder,
         // Time marks ("[14:02]") stay plain text in the Delta; they're
         // styled when drawn and found again when tapped.
-        textSpanBuilder: timeMarkSpanBuilder(timeMarkTextStyle(c)),
+        textSpanBuilder: timeMarkSpanBuilder(
+            RecordingStorageService.wasRemoved(_thisNote)
+                ? inactiveTimeMarkTextStyle(c)
+                : timeMarkTextStyle(c)),
         onTapUp: _onEditorTapUp,
         padding: const EdgeInsets.fromLTRB(24, 10, 24, 24),
         customStyles: DefaultStyles(

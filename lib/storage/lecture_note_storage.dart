@@ -53,6 +53,20 @@ Future<void> updateLectureNote(LectureNote note) async {
   }
 }
 
+/// Clears note [id]'s recording file name, leaving everything else —
+/// including its time, since the note itself didn't change.
+Future<void> clearLectureRecordingPath(int id) async {
+  try {
+    final Database db = await _db();
+
+    await db.update('lectures', {'recording_path': null},
+        where: 'id = ?', whereArgs: [id]);
+  } catch (error) {
+    sendError(error, "clearLectureRecordingPath");
+    throw Exception("failed to clear lecture recording path");
+  }
+}
+
 Future<void> deleteLectureNote(LectureNote note) async {
   try {
     final Database db = await _db();
