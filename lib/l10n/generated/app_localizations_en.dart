@@ -1566,4 +1566,138 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get lectureTranscriptEmptyRecordingRemoved =>
       'The recording was removed to save space before it was transcribed.';
+
+  @override
+  String get settingsSectionBackup => 'Backup & restore';
+
+  @override
+  String get backupExplainer =>
+      'Save all your studies in one file and keep it in Google Drive, Files or anywhere you like. The app doesn\'t upload it anywhere.';
+
+  @override
+  String get backupNow => 'Back up now';
+
+  @override
+  String backupLastTime(String time) {
+    return 'Last backup: $time';
+  }
+
+  @override
+  String get backupNever => 'Not backed up yet';
+
+  @override
+  String backupIncludeRecordings(String size) {
+    return 'Include lecture recordings ($size)';
+  }
+
+  @override
+  String get backupSaved => 'Backup saved';
+
+  @override
+  String get backupFailed => 'Couldn\'t make the backup. Please try again.';
+
+  @override
+  String get restoreFromBackup => 'Restore from backup';
+
+  @override
+  String get restorePreviewTitle => 'Restore this backup?';
+
+  @override
+  String restorePreviewCreated(String date) {
+    return 'Made $date';
+  }
+
+  @override
+  String get restoreCountHomiletics => 'Homiletics';
+
+  @override
+  String get restoreCountLectureNotes => 'Lecture notes';
+
+  @override
+  String get restoreCountWordStudies => 'Word studies';
+
+  @override
+  String get restoreCountRecordings => 'Recordings';
+
+  @override
+  String get restorePreviewNote =>
+      'Anything you don\'t already have is added. Nothing on this device is changed or deleted.';
+
+  @override
+  String get restoreConfirm => 'Restore';
+
+  @override
+  String restoreDone(String added, String skipped) {
+    return 'Restore finished. Added: $added · Already here: $skipped';
+  }
+
+  @override
+  String get restoreFailed => 'Couldn\'t restore the backup. Please try again.';
+
+  @override
+  String get restoreNotABackup => 'That file isn\'t a Homiletics backup.';
+
+  @override
+  String get restoreDamaged => 'That backup looks damaged and can\'t be read.';
+
+  @override
+  String get restoreNewerVersion =>
+      'This backup was made by a newer version of Homiletics. Update the app, then try again.';
+
+  @override
+  String get settingsCheckForUpdates => 'Check for updates';
+
+  @override
+  String settingsVersion(String version) {
+    return 'Version $version';
+  }
+
+  @override
+  String updateAvailableTitle(String version) {
+    return 'Homiletics $version is available';
+  }
+
+  @override
+  String updateAvailableMessage(String current) {
+    return 'You have version $current. What\'s new:';
+  }
+
+  @override
+  String get updateNow => 'Update now';
+
+  @override
+  String get updateDownload => 'Download';
+
+  @override
+  String get updateLater => 'Later';
+
+  @override
+  String get updateSkipVersion => 'Skip this version';
+
+  @override
+  String get updateDownloading => 'Downloading the update…';
+
+  @override
+  String get updateInstalling =>
+      'Installing. Homiletics will reopen in a moment.';
+
+  @override
+  String get updateFailed =>
+      'The update couldn\'t be downloaded. Try again, or download it from homiletics.app.';
+
+  @override
+  String get updateTryAgain => 'Try again';
+
+  @override
+  String get updatePortableNote =>
+      'This copy wasn\'t installed with the installer, so download the new version from homiletics.app.';
+
+  @override
+  String updateUpToDate(String version) {
+    return 'You\'re up to date (Homiletics $version).';
+  }
+
+  @override
+  String get updateCheckFailed =>
+      'Couldn\'t check for updates. Check your internet connection and try again.';
 }

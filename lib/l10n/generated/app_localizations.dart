@@ -2691,6 +2691,228 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The recording was removed to save space before it was transcribed.'**
   String get lectureTranscriptEmptyRecordingRemoved;
+
+  /// Settings section heading for making and restoring backups.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup & restore'**
+  String get settingsSectionBackup;
+
+  /// Short explanation under the Backup & restore heading. The app never uploads the file itself.
+  ///
+  /// In en, this message translates to:
+  /// **'Save all your studies in one file and keep it in Google Drive, Files or anywhere you like. The app doesn\'t upload it anywhere.'**
+  String get backupExplainer;
+
+  /// Button that makes a backup file and opens the share sheet / save dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Back up now'**
+  String get backupNow;
+
+  /// Under the Back up button. {time} is a relative time such as "3 days ago".
+  ///
+  /// In en, this message translates to:
+  /// **'Last backup: {time}'**
+  String backupLastTime(String time);
+
+  /// Under the Back up button when no backup has been made on this device.
+  ///
+  /// In en, this message translates to:
+  /// **'Not backed up yet'**
+  String get backupNever;
+
+  /// Switch: whether the backup includes lecture audio. {size} is like "12 MB".
+  ///
+  /// In en, this message translates to:
+  /// **'Include lecture recordings ({size})'**
+  String backupIncludeRecordings(String size);
+
+  /// Snackbar after the backup file was saved (desktop).
+  ///
+  /// In en, this message translates to:
+  /// **'Backup saved'**
+  String get backupSaved;
+
+  /// Snackbar when making the backup failed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t make the backup. Please try again.'**
+  String get backupFailed;
+
+  /// Button that opens a file picker to restore a backup file.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore from backup'**
+  String get restoreFromBackup;
+
+  /// Title of the dialog shown before restoring a backup.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore this backup?'**
+  String get restorePreviewTitle;
+
+  /// In the restore dialog: when the backup was made. {date} is a date like "Oct 14, 2026".
+  ///
+  /// In en, this message translates to:
+  /// **'Made {date}'**
+  String restorePreviewCreated(String date);
+
+  /// Restore dialog row label, followed by a number.
+  ///
+  /// In en, this message translates to:
+  /// **'Homiletics'**
+  String get restoreCountHomiletics;
+
+  /// Restore dialog row label, followed by a number.
+  ///
+  /// In en, this message translates to:
+  /// **'Lecture notes'**
+  String get restoreCountLectureNotes;
+
+  /// Restore dialog row label, followed by a number.
+  ///
+  /// In en, this message translates to:
+  /// **'Word studies'**
+  String get restoreCountWordStudies;
+
+  /// Restore dialog row label, followed by a number.
+  ///
+  /// In en, this message translates to:
+  /// **'Recordings'**
+  String get restoreCountRecordings;
+
+  /// Restore dialog: reassures that restoring only adds.
+  ///
+  /// In en, this message translates to:
+  /// **'Anything you don\'t already have is added. Nothing on this device is changed or deleted.'**
+  String get restorePreviewNote;
+
+  /// Restore dialog confirm button.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore'**
+  String get restoreConfirm;
+
+  /// Snackbar after restoring. {added} and {skipped} are numbers of studies.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore finished. Added: {added} · Already here: {skipped}'**
+  String restoreDone(String added, String skipped);
+
+  /// Snackbar when restoring failed for an unexpected reason.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t restore the backup. Please try again.'**
+  String get restoreFailed;
+
+  /// Snackbar when the picked file is not a Homiletics backup.
+  ///
+  /// In en, this message translates to:
+  /// **'That file isn\'t a Homiletics backup.'**
+  String get restoreNotABackup;
+
+  /// Snackbar when the backup file is damaged.
+  ///
+  /// In en, this message translates to:
+  /// **'That backup looks damaged and can\'t be read.'**
+  String get restoreDamaged;
+
+  /// Snackbar when the backup was made by a newer app version.
+  ///
+  /// In en, this message translates to:
+  /// **'This backup was made by a newer version of Homiletics. Update the app, then try again.'**
+  String get restoreNewerVersion;
+
+  /// Windows only: Settings row that checks GitHub for a newer version.
+  ///
+  /// In en, this message translates to:
+  /// **'Check for updates'**
+  String get settingsCheckForUpdates;
+
+  /// Value next to the Check for updates row, e.g. 'Version 3.0.0'.
+  ///
+  /// In en, this message translates to:
+  /// **'Version {version}'**
+  String settingsVersion(String version);
+
+  /// Title of the prompt when a newer Windows version exists.
+  ///
+  /// In en, this message translates to:
+  /// **'Homiletics {version} is available'**
+  String updateAvailableTitle(String version);
+
+  /// Under the update title, before the release notes.
+  ///
+  /// In en, this message translates to:
+  /// **'You have version {current}. What\'s new:'**
+  String updateAvailableMessage(String current);
+
+  /// Button: download and install the update.
+  ///
+  /// In en, this message translates to:
+  /// **'Update now'**
+  String get updateNow;
+
+  /// Button for portable (zip) copies: opens the download page.
+  ///
+  /// In en, this message translates to:
+  /// **'Download'**
+  String get updateDownload;
+
+  /// Button: dismiss the update prompt for now.
+  ///
+  /// In en, this message translates to:
+  /// **'Later'**
+  String get updateLater;
+
+  /// Button: don't offer this version again at launch.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip this version'**
+  String get updateSkipVersion;
+
+  /// Shown with a progress bar while the update downloads.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloading the update…'**
+  String get updateDownloading;
+
+  /// Shown just before the app closes to install the update.
+  ///
+  /// In en, this message translates to:
+  /// **'Installing. Homiletics will reopen in a moment.'**
+  String get updateInstalling;
+
+  /// The update download or install failed.
+  ///
+  /// In en, this message translates to:
+  /// **'The update couldn\'t be downloaded. Try again, or download it from homiletics.app.'**
+  String get updateFailed;
+
+  /// Button: retry the update download.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get updateTryAgain;
+
+  /// For copies run from the zip (not installed): explains the Download button.
+  ///
+  /// In en, this message translates to:
+  /// **'This copy wasn\'t installed with the installer, so download the new version from homiletics.app.'**
+  String get updatePortableNote;
+
+  /// Snackbar after a manual check finds nothing newer.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re up to date (Homiletics {version}).'**
+  String updateUpToDate(String version);
+
+  /// Snackbar when a manual update check can't reach the server.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t check for updates. Check your internet connection and try again.'**
+  String get updateCheckFailed;
 }
 
 class _AppLocalizationsDelegate

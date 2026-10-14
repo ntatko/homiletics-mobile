@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:homiletics/classes/language.dart';
+import 'package:homiletics/components/backup_settings.dart';
 import 'package:homiletics/classes/preferences.dart';
 import 'package:homiletics/components/help_menu.dart';
 import 'package:homiletics/components/preferences_modal.dart';
 import 'package:homiletics/components/model_settings.dart';
 import 'package:homiletics/components/settings/storage_section.dart';
+import 'package:homiletics/components/update_prompt.dart';
 import 'package:homiletics/l10n/l10n.dart';
 import 'package:homiletics/pages/onboarding/onboarding_launcher.dart';
+import 'package:homiletics/services/update_service.dart';
 import 'package:homiletics/theme/app_theme.dart';
 import 'package:homiletics/theme/widgets.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 /// Full-screen settings (same controls as the editor preferences dialog),
-/// plus the app language, the on-device models and help / feedback.
+/// plus the app language, the on-device models, backup & restore and
+/// help / feedback.
 class SettingsPage extends StatelessWidget {
   const SettingsPage({Key? key, this.onTranslationChanged}) : super(key: key);
 
@@ -51,6 +56,8 @@ class SettingsPage extends StatelessWidget {
                 const FormattingModelSettings(),
                 heading(l.settingsSectionStorage),
                 const RecordingStorageSettings(),
+                heading(l.settingsSectionBackup),
+                const BackupSettings(),
                 heading(l.settingsSectionHelp),
                 _SettingsRow(
                   key: const ValueKey('settingsOnboarding'),
@@ -64,6 +71,10 @@ class SettingsPage extends StatelessWidget {
                   label: l.helpRequestFeedback,
                   onTap: () => showFeedbackSheet(context),
                 ),
+                if (UpdateService.isSupported) ...[
+                  const SizedBox(height: 10),
+                  const _CheckForUpdatesRow(),
+                ],
                 const SizedBox(height: 16),
                 Center(
                   child: Text(
@@ -178,6 +189,50 @@ class _AppLanguageRow extends StatelessWidget {
         value: language?.name ?? l.languageSystemDefault,
         onTap: () => _pick(context),
       ),
+    );
+  }
+}
+
+/// Windows only: "Check for updates — Version 3.0.0". Other platforms
+/// update through their stores.
+class _CheckForUpdatesRow extends StatefulWidget {
+  const _CheckForUpdatesRow();
+
+  @override
+  State<_CheckForUpdatesRow> createState() => _CheckForUpdatesRowState();
+}
+
+class _CheckForUpdatesRowState extends State<_CheckForUpdatesRow> {
+  String? _version;
+  bool _checking = false;
+
+  @override
+  void initState() {
+    super.initState();
+    PackageInfo.fromPlatform().then((info) {
+      if (mounted) setState(() => _version = info.version);
+    }).catchError((_) {});
+  }
+
+  Future<void> _check() async {
+    if (_checking) return;
+    setState(() => _checking = true);
+    try {
+      await checkForUpdatesManually(context);
+    } finally {
+      if (mounted) setState(() => _checking = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final AppLocalizations l = context.l10n;
+    return _SettingsRow(
+      key: const ValueKey('settingsCheckForUpdates'),
+      icon: Icons.system_update_alt_rounded,
+      label: l.settingsCheckForUpdates,
+      value: _version == null ? null : l.settingsVersion(_version!),
+      onTap: _check,
     );
   }
 }

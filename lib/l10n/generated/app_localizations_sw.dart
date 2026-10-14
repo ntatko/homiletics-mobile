@@ -1570,4 +1570,140 @@ class AppLocalizationsSw extends AppLocalizations {
   @override
   String get lectureTranscriptEmptyRecordingRemoved =>
       'Rekodi ilifutwa ili kuokoa nafasi kabla ya kunukuliwa.';
+
+  @override
+  String get settingsSectionBackup => 'Hifadhi na urejeshe';
+
+  @override
+  String get backupExplainer =>
+      'Hifadhi masomo yako yote katika faili moja na uiweke Google Drive, Faili au popote upendapo. Programu haiipakii popote.';
+
+  @override
+  String get backupNow => 'Hifadhi sasa';
+
+  @override
+  String backupLastTime(String time) {
+    return 'Mara ya mwisho: $time';
+  }
+
+  @override
+  String get backupNever => 'Bado hujahifadhi';
+
+  @override
+  String backupIncludeRecordings(String size) {
+    return 'Jumuisha rekodi za hotuba ($size)';
+  }
+
+  @override
+  String get backupSaved => 'Imehifadhiwa';
+
+  @override
+  String get backupFailed => 'Imeshindikana kuhifadhi. Tafadhali jaribu tena.';
+
+  @override
+  String get restoreFromBackup => 'Rejesha kutoka nakala';
+
+  @override
+  String get restorePreviewTitle => 'Rejesha nakala hii?';
+
+  @override
+  String restorePreviewCreated(String date) {
+    return 'Iliundwa $date';
+  }
+
+  @override
+  String get restoreCountHomiletics => 'Homiletiki';
+
+  @override
+  String get restoreCountLectureNotes => 'Maelezo ya hotuba';
+
+  @override
+  String get restoreCountWordStudies => 'Uchunguzi wa neno';
+
+  @override
+  String get restoreCountRecordings => 'Rekodi';
+
+  @override
+  String get restorePreviewNote =>
+      'Chochote usichokuwa nacho kitaongezwa. Hakuna kitakachobadilishwa au kufutwa kwenye kifaa hiki.';
+
+  @override
+  String get restoreConfirm => 'Rejesha';
+
+  @override
+  String restoreDone(String added, String skipped) {
+    return 'Imerejeshwa. Vilivyoongezwa: $added · Vilivyokuwepo: $skipped';
+  }
+
+  @override
+  String get restoreFailed =>
+      'Imeshindikana kurejesha nakala. Tafadhali jaribu tena.';
+
+  @override
+  String get restoreNotABackup => 'Faili hiyo si nakala ya Homiletics.';
+
+  @override
+  String get restoreDamaged =>
+      'Nakala hiyo inaonekana kuharibika na haisomeki.';
+
+  @override
+  String get restoreNewerVersion =>
+      'Nakala hii iliundwa na toleo jipya la Homiletics. Sasisha programu, kisha ujaribu tena.';
+
+  @override
+  String get settingsCheckForUpdates => 'Angalia masasisho';
+
+  @override
+  String settingsVersion(String version) {
+    return 'Toleo $version';
+  }
+
+  @override
+  String updateAvailableTitle(String version) {
+    return 'Homiletics $version inapatikana';
+  }
+
+  @override
+  String updateAvailableMessage(String current) {
+    return 'Una toleo $current. Mapya:';
+  }
+
+  @override
+  String get updateNow => 'Sasisha sasa';
+
+  @override
+  String get updateDownload => 'Pakua';
+
+  @override
+  String get updateLater => 'Baadaye';
+
+  @override
+  String get updateSkipVersion => 'Ruka toleo hili';
+
+  @override
+  String get updateDownloading => 'Inapakua sasisho…';
+
+  @override
+  String get updateInstalling =>
+      'Inasakinisha. Homiletics itafunguka tena baada ya muda mfupi.';
+
+  @override
+  String get updateFailed =>
+      'Sasisho halikuweza kupakuliwa. Jaribu tena, au lipakue kutoka homiletics.app.';
+
+  @override
+  String get updateTryAgain => 'Jaribu tena';
+
+  @override
+  String get updatePortableNote =>
+      'Nakala hii haikusakinishwa kwa kisakinishi, kwa hiyo pakua toleo jipya kutoka homiletics.app.';
+
+  @override
+  String updateUpToDate(String version) {
+    return 'Una toleo la karibuni (Homiletics $version).';
+  }
+
+  @override
+  String get updateCheckFailed =>
+      'Haikuweza kuangalia masasisho. Angalia muunganisho wako wa intaneti kisha ujaribu tena.';
 }

@@ -1572,4 +1572,141 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get lectureTranscriptEmptyRecordingRemoved =>
       'A gravação foi apagada para poupar espaço antes de ser transcrita.';
+
+  @override
+  String get settingsSectionBackup => 'Cópia de segurança';
+
+  @override
+  String get backupExplainer =>
+      'Guarde todos os estudos num único ficheiro e mantenha-o no Google Drive, em Arquivos ou onde preferir. A aplicação não o envia para lugar nenhum.';
+
+  @override
+  String get backupNow => 'Fazer cópia agora';
+
+  @override
+  String backupLastTime(String time) {
+    return 'Última cópia: $time';
+  }
+
+  @override
+  String get backupNever => 'Ainda sem cópias';
+
+  @override
+  String backupIncludeRecordings(String size) {
+    return 'Incluir gravações ($size)';
+  }
+
+  @override
+  String get backupSaved => 'Cópia guardada';
+
+  @override
+  String get backupFailed => 'Não foi possível fazer a cópia. Tente novamente.';
+
+  @override
+  String get restoreFromBackup => 'Restaurar cópia';
+
+  @override
+  String get restorePreviewTitle => 'Restaurar esta cópia?';
+
+  @override
+  String restorePreviewCreated(String date) {
+    return 'Feita em $date';
+  }
+
+  @override
+  String get restoreCountHomiletics => 'Homiléticas';
+
+  @override
+  String get restoreCountLectureNotes => 'Notas de palestra';
+
+  @override
+  String get restoreCountWordStudies => 'Estudos de palavra';
+
+  @override
+  String get restoreCountRecordings => 'Gravações';
+
+  @override
+  String get restorePreviewNote =>
+      'Tudo o que ainda não tem é adicionado. Nada neste dispositivo é alterado ou apagado.';
+
+  @override
+  String get restoreConfirm => 'Restaurar';
+
+  @override
+  String restoreDone(String added, String skipped) {
+    return 'Restauro concluído. Adicionados: $added · Já existentes: $skipped';
+  }
+
+  @override
+  String get restoreFailed =>
+      'Não foi possível restaurar a cópia. Tente novamente.';
+
+  @override
+  String get restoreNotABackup =>
+      'Esse ficheiro não é uma cópia do Homiletics.';
+
+  @override
+  String get restoreDamaged =>
+      'Essa cópia parece danificada e não pode ser lida.';
+
+  @override
+  String get restoreNewerVersion =>
+      'Esta cópia foi feita por uma versão mais recente do Homiletics. Atualize a aplicação e tente novamente.';
+
+  @override
+  String get settingsCheckForUpdates => 'Procurar atualizações';
+
+  @override
+  String settingsVersion(String version) {
+    return 'Versão $version';
+  }
+
+  @override
+  String updateAvailableTitle(String version) {
+    return 'Homiletics $version está disponível';
+  }
+
+  @override
+  String updateAvailableMessage(String current) {
+    return 'Versão instalada: $current. Novidades:';
+  }
+
+  @override
+  String get updateNow => 'Atualizar agora';
+
+  @override
+  String get updateDownload => 'Download';
+
+  @override
+  String get updateLater => 'Mais tarde';
+
+  @override
+  String get updateSkipVersion => 'Ignorar esta versão';
+
+  @override
+  String get updateDownloading => 'A transferir a atualização…';
+
+  @override
+  String get updateInstalling =>
+      'A instalar. O Homiletics vai reabrir dentro de momentos.';
+
+  @override
+  String get updateFailed =>
+      'Não foi possível transferir a atualização. Tente novamente ou faça o download em homiletics.app.';
+
+  @override
+  String get updateTryAgain => 'Tentar novamente';
+
+  @override
+  String get updatePortableNote =>
+      'Esta cópia não foi instalada com o instalador; faça o download da nova versão em homiletics.app.';
+
+  @override
+  String updateUpToDate(String version) {
+    return 'Já tem a versão mais recente (Homiletics $version).';
+  }
+
+  @override
+  String get updateCheckFailed =>
+      'Não foi possível procurar atualizações. Verifique a ligação à internet e tente novamente.';
 }

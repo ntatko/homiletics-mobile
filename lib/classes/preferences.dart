@@ -17,6 +17,9 @@ class Preferences {
   static const String _autoRemoveRecordingsKey = 'autoRemoveRecordings';
   static const String _recordingRemovalAgeDaysKey = 'recordingRemovalAgeDays';
   static const String _lastRecordingCleanupKey = 'lastRecordingCleanup';
+  static const String _lastBackupAtKey = 'lastBackupAt';
+  static const String _lastUpdateCheckKey = 'lastUpdateCheck';
+  static const String _skippedUpdateVersionKey = 'skippedUpdateVersion';
 
   /// The interface language the user picked, or null to follow the phone.
   /// MaterialApp listens to this so a change applies immediately.
@@ -121,4 +124,29 @@ class Preferences {
 
   static set lastRecordingCleanup(DateTime? at) =>
       Hive.box(_boxKey).put(_lastRecordingCleanupKey, at?.toIso8601String());
+
+  /// When the user last made a backup (Settings → Backup & restore), or
+  /// null if never.
+  static DateTime? get lastBackupAt =>
+      DateTime.tryParse(Hive.box(_boxKey).get(_lastBackupAtKey) as String? ?? '');
+
+  static set lastBackupAt(DateTime? time) =>
+      Hive.box(_boxKey).put(_lastBackupAtKey, time?.toIso8601String());
+
+  /// When the Windows update check last reached GitHub (see UpdateService).
+  static DateTime? get lastUpdateCheck {
+    final Object? ms = Hive.box(_boxKey).get(_lastUpdateCheckKey);
+    return ms is int ? DateTime.fromMillisecondsSinceEpoch(ms) : null;
+  }
+
+  static set lastUpdateCheck(DateTime? time) =>
+      Hive.box(_boxKey).put(_lastUpdateCheckKey, time?.millisecondsSinceEpoch);
+
+  /// A version the user chose to skip, so the launch check doesn't offer
+  /// it again ("3.1.0").
+  static String? get skippedUpdateVersion =>
+      Hive.box(_boxKey).get(_skippedUpdateVersionKey) as String?;
+
+  static set skippedUpdateVersion(String? version) =>
+      Hive.box(_boxKey).put(_skippedUpdateVersionKey, version);
 }

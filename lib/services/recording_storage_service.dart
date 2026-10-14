@@ -88,9 +88,10 @@ class RecordingStorageService {
   RecordingStorageService._();
 
   /// Recordings are saved as "lecture_<note id>_<milliseconds>.m4a" (".wav"
-  /// on Windows) in the documents directory.
+  /// on Windows) in the documents directory; a restored backup may add
+  /// "-restored-<n>" when the name was taken.
   static final RegExp _recordingFileName =
-      RegExp(r'^lecture_(\d+)_(\d+)\.(m4a|wav)$');
+      RegExp(r'^lecture_(\d+)_(\d+)(?:-restored-\d+)?\.(m4a|wav)$');
 
   /// Lecture notes open in an editor. Their recordings are left alone: the
   /// editor's copy of the note would save the old file name back.

@@ -94,6 +94,10 @@ void main() {
               _fileName(4, at, ext: 'wav')),
           at);
       expect(
+          RecordingStorageService.recordedAtFromFileName(
+              'lecture_4_${at.millisecondsSinceEpoch}-restored-2.m4a'),
+          at);
+      expect(
           RecordingStorageService.recordedAtFromFileName('notes.m4a'), isNull);
       expect(
           RecordingStorageService.recordedAtFromFileName(
