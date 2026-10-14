@@ -1,10 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:homiletics/classes/lecture_note.dart';
 import 'package:homiletics/classes/preferences.dart';
 import 'package:homiletics/classes/translation.dart';
 import 'package:homiletics/common/report_error.dart';
 import 'package:homiletics/common/verse_container.dart';
-import 'package:homiletics/components/help_menu.dart';
+import 'package:homiletics/components/recording_section.dart';
 import 'package:homiletics/pages/home.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
@@ -19,6 +22,7 @@ class NotesEditor extends StatefulWidget {
 
 class _NotesState extends State<NotesEditor> {
   late LectureNote _thisNote;
+  late QuillController _noteController;
   bool _isTrayOpen = false;
   String _translationVersion = 'web';
   final PanelController _controller = PanelController();
@@ -29,6 +33,33 @@ class _NotesState extends State<NotesEditor> {
   void initState() {
     super.initState();
     prepTheTable();
+  }
+
+  /// The note's rich text is stored as Quill Delta JSON in the same `note`
+  /// TEXT column older plain-text notes used, so old notes need a fallback:
+  /// if it doesn't parse as Delta JSON, treat it as a single plain-text run.
+  QuillController _buildNoteController(String note) {
+    Document document;
+    try {
+      document = Document.fromJson(jsonDecode(note) as List);
+    } catch (_) {
+      document = Document();
+      if (note.isNotEmpty) {
+        document.insert(0, note);
+      }
+    }
+    final controller = QuillController(
+      document: document,
+      selection: const TextSelection.collapsed(offset: 0),
+    );
+    controller.addListener(_onNoteChanged);
+    return controller;
+  }
+
+  void _onNoteChanged() {
+    final String json = jsonEncode(_noteController.document.toDelta().toJson());
+    _thisNote.note = json;
+    if (_thisNote.id != -1) _thisNote.update();
   }
 
   @override
@@ -51,8 +82,16 @@ class _NotesState extends State<NotesEditor> {
     setState(() {
       _thisNote = widget.note ?? LectureNote();
       _translationVersion = Preferences.preferredVersion;
+      _noteController = _buildNoteController(_thisNote.note);
     });
     await _thisNote.update();
+  }
+
+  @override
+  void dispose() {
+    _noteController.removeListener(_onNoteChanged);
+    _noteController.dispose();
+    super.dispose();
   }
 
   @override
@@ -284,28 +323,32 @@ class _NotesState extends State<NotesEditor> {
                       passage: _thisNote.passage,
                       translation: Preferences.translation))
             ]),
-            body: Center(
-                child: ListView(padding: const EdgeInsets.all(15), children: [
-              Container(
-                  margin: const EdgeInsets.only(top: 5, bottom: 10),
-                  child: const Text("Notes",
-                      style: TextStyle(
-                          fontSize: 22, fontWeight: FontWeight.bold))),
-              TextField(
-                keyboardType: TextInputType.multiline,
-                textCapitalization: TextCapitalization.sentences,
-                controller: TextEditingController(text: _thisNote.note),
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                ),
-                maxLines: null,
-                minLines: 6,
-                onChanged: (String value) async {
-                  _thisNote.note = value;
-                  if (_thisNote.id != -1) await _thisNote.update();
-                },
+            body: Column(children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: RecordingSection(note: _thisNote),
               ),
-              const HelpMenu()
-            ]))));
+              QuillSimpleToolbar(
+                controller: _noteController,
+                config: const QuillSimpleToolbarConfig(
+                  multiRowsDisplay: false,
+                  showFontFamily: false,
+                  showFontSize: false,
+                  showSearchButton: false,
+                ),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: QuillEditor.basic(
+                    controller: _noteController,
+                    config: const QuillEditorConfig(
+                      placeholder: 'Notes',
+                      padding: EdgeInsets.symmetric(vertical: 8),
+                    ),
+                  ),
+                ),
+              ),
+            ])));
   }
 }

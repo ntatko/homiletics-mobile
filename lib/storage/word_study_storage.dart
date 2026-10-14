@@ -129,3 +129,27 @@ Future<List<WordStudy>> getWordStudiesMatchingPassageReference(String passage) a
     throw Exception("failed to get word studies by passage reference");
   }
 }
+
+/// Word studies whose word, definition, other usage, contextual meaning,
+/// deeper meaning, or application contains [text].
+Future<List<WordStudy>> getWordStudiesByText(String text) async {
+  try {
+    final Database db = await database;
+
+    final String like = '%$text%';
+    final List<Map<String, dynamic>> maps = await db.query('word_studies',
+        where:
+            'word LIKE ? OR definition LIKE ? OR other_usage LIKE ? OR contextual_meaning LIKE ? OR deeper_meaning LIKE ? OR application LIKE ?',
+        whereArgs: [like, like, like, like, like, like]);
+
+    if (maps.isEmpty) {
+      return [];
+    }
+
+    return List.generate(
+        maps.length, (index) => WordStudy.fromJson(maps[index]));
+  } catch (error) {
+    sendError(error, "getWordStudiesByText");
+    throw Exception("failed to get word studies by text");
+  }
+}

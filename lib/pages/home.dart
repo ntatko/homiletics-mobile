@@ -212,6 +212,10 @@ class _HomeState extends State<Home> {
                                   SummarySentenceSearches(
                                       searchString: _searchString),
                                   PassageSearches(searchString: _searchString),
+                                  LectureNoteSearches(
+                                      searchString: _searchString),
+                                  WordStudySearches(
+                                      searchString: _searchString),
                                   const SizedBox(height: 16),
                                 ],
                               ),

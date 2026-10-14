@@ -3,11 +3,17 @@ import 'package:homiletics/classes/Division.dart';
 import 'package:homiletics/classes/application.dart';
 import 'package:homiletics/classes/content_summary.dart';
 import 'package:homiletics/classes/homiletic.dart';
+import 'package:homiletics/classes/lecture_note.dart';
+import 'package:homiletics/classes/word_study.dart';
 import 'package:homiletics/pages/homeletic_editor.dart';
+import 'package:homiletics/pages/notes_editor.dart';
+import 'package:homiletics/pages/word_study_editor.dart';
 import 'package:homiletics/storage/application_storage.dart';
 import 'package:homiletics/storage/content_summary_storage.dart';
 import 'package:homiletics/storage/division_storage.dart';
 import 'package:homiletics/storage/homiletic_storage.dart';
+import 'package:homiletics/storage/lecture_note_storage.dart';
+import 'package:homiletics/storage/word_study_storage.dart';
 
 // ignore: must_be_immutable
 class ContentSearches extends StatelessWidget {
@@ -253,6 +259,89 @@ class PassageSearches extends StatelessWidget {
                                 HomileticEditor(homiletic: homiletic)));
                   },
                   title: Text(homiletic.passage),
+                );
+              }).toList(),
+            ]);
+          } else {
+            return const SizedBox.shrink();
+          }
+        });
+  }
+}
+
+// ignore: must_be_immutable
+class LectureNoteSearches extends StatelessWidget {
+  String searchString;
+  LectureNoteSearches({Key? key, this.searchString = ''}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    if (searchString.isEmpty) {
+      return const SizedBox.shrink();
+    }
+    return FutureBuilder<List<LectureNote>>(
+        future: getLectureNotesByText(searchString),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+            return Column(children: [
+              const Text(
+                "Lecture Notes",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+              ),
+              ...snapshot.data!.map((note) {
+                return ListTile(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => NotesEditor(note: note)));
+                  },
+                  title:
+                      Text(note.passage.isNotEmpty ? note.passage : note.note),
+                );
+              }).toList(),
+            ]);
+          } else {
+            return const SizedBox.shrink();
+          }
+        });
+  }
+}
+
+// ignore: must_be_immutable
+class WordStudySearches extends StatelessWidget {
+  String searchString;
+  WordStudySearches({Key? key, this.searchString = ''}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    if (searchString.isEmpty) {
+      return const SizedBox.shrink();
+    }
+    return FutureBuilder<List<WordStudy>>(
+        future: getWordStudiesByText(searchString),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+            return Column(children: [
+              const Text(
+                "Word Studies",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+              ),
+              ...snapshot.data!.map((study) {
+                return ListTile(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                WordStudyEditor(study: study)));
+                  },
+                  title: Text(
+                      study.word.isNotEmpty ? study.word : study.passage),
                 );
               }).toList(),
             ]);

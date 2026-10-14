@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:homiletics/components/preferences_modal.dart';
+import 'package:homiletics/components/model_settings.dart';
 
 /// Full-screen settings (same controls as the editor preferences dialog).
 class SettingsPage extends StatelessWidget {
@@ -25,6 +26,8 @@ class SettingsPage extends StatelessWidget {
                   onTranslationChanged: onTranslationChanged,
                   showHeader: false,
                 ),
+                const WhisperModelSettings(),
+                const FormattingModelSettings(),
               ],
             ),
           ),

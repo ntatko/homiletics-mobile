@@ -1,9 +1,12 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_quill/flutter_quill.dart' show FlutterQuillLocalizations;
 import 'package:hive/hive.dart';
 import 'package:homiletics/classes/preferences.dart';
 import 'package:homiletics/pages/home.dart';
+import 'package:homiletics/services/transcript_formatter_service.dart';
 import 'package:homiletics/services/suggested_passages_repository.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
@@ -26,6 +29,7 @@ void main() async {
 
     await Preferences.init();
     await SuggestedPassagesRepository.init();
+    await TranscriptFormatterService.initialize();
   } catch (e) {
     // print(e);
   }
@@ -42,6 +46,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Homiletics',
       debugShowCheckedModeBanner: false,
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        FlutterQuillLocalizations.delegate,
+      ],
       theme: ThemeData(
         // This is the theme of your application.
         //
