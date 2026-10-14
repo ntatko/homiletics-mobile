@@ -1330,4 +1330,111 @@ class AppLocalizationsSw extends AppLocalizations {
   String bibleVerseTapLabel(String verse) {
     return 'Anza muhtasari kwenye mstari $verse';
   }
+
+  @override
+  String get shareSheetTitle => 'Shiriki somo hili';
+
+  @override
+  String get shareLink => 'Shiriki kiungo';
+
+  @override
+  String get shareLinkSubtitle =>
+      'Hufunguka kwenye programu, au kivinjari chochote';
+
+  @override
+  String get shareCopyLink => 'Nakili kiungo';
+
+  @override
+  String get shareLinkCopied => 'Kiungo kimenakiliwa';
+
+  @override
+  String get shareShowQr => 'Onyesha msimbo wa QR';
+
+  @override
+  String get shareSharePdf => 'Shiriki PDF';
+
+  @override
+  String get shareLinkFailed => 'Imeshindwa kushiriki kiungo.';
+
+  @override
+  String get shareLinkTooLongTitle => 'Kiungo hiki ni kirefu sana';
+
+  @override
+  String shareLinkTooLongMessage(int count) {
+    return 'Somo hili linatengeneza kiungo cha herufi $count. Baadhi ya programu zinaweza kukikata, na huenda kisifunguke. Ikitokea hivyo, shiriki PDF badala yake.';
+  }
+
+  @override
+  String get shareAnyway => 'Shiriki hata hivyo';
+
+  @override
+  String get shareQrTitle => 'Changanua ili kufungua';
+
+  @override
+  String get shareQrHint =>
+      'Elekeza kamera ya simu nyingine kwenye msimbo ili kufungua somo hili.';
+
+  @override
+  String get shareQrTooLong =>
+      'Somo hili ni refu mno kwa msimbo wa QR. Tumia Shiriki kiungo au Nakili kiungo badala yake.';
+
+  @override
+  String get shareQrSemantics => 'Msimbo wa QR unaoelekeza kwenye somo hili';
+
+  @override
+  String get importFromLink => 'Leta kutoka kiungo';
+
+  @override
+  String get importSheetMessage =>
+      'Bandika kiungo cha Homiletics ulichoshirikiwa. Unaweza kukipitia kabla ya kuhifadhi nakala.';
+
+  @override
+  String get importFieldHint => 'https://homiletics.app/view#…';
+
+  @override
+  String get importPaste => 'Bandika';
+
+  @override
+  String get importOpen => 'Fungua';
+
+  @override
+  String get importClipboardEmpty => 'Hakuna maandishi ya kubandika.';
+
+  @override
+  String get importInvalidLink =>
+      'Hiki si kiungo cha Homiletics, au sehemu yake imekosekana. Omba kiungo tena.';
+
+  @override
+  String get importNewerVersion =>
+      'Somo hili lilishirikiwa kutoka toleo jipya zaidi la Homiletics. Sasisha Homiletics ili kulifungua.';
+
+  @override
+  String get importCouldNotOpenTitle => 'Haiwezekani kufungua kiungo hiki';
+
+  @override
+  String get importPreviewHomiletic => 'Homiletiki iliyoshirikiwa';
+
+  @override
+  String get importPreviewWordStudy => 'Somo la neno lililoshirikiwa';
+
+  @override
+  String get importPreviewNote =>
+      'Mtu amekushirikisha hili. Kuhifadhi kunaongeza nakala kwenye masomo yako; hakuna kitu ulicho nacho kinachobadilishwa.';
+
+  @override
+  String importPreviewTranslation(String translation) {
+    return 'Imeandikwa kwa $translation';
+  }
+
+  @override
+  String get importSaveCopy => 'Hifadhi nakala';
+
+  @override
+  String get importSaved => 'Imehifadhiwa kwenye masomo yako';
+
+  @override
+  String get importSaveFailed => 'Imeshindwa kuhifadhi somo. Jaribu tena.';
+
+  @override
+  String get startOpenSharedStudy => 'Fungua somo lililoshirikiwa';
 }

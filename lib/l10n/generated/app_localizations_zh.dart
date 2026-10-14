@@ -1267,6 +1267,107 @@ class AppLocalizationsZh extends AppLocalizations {
   String bibleVerseTapLabel(String verse) {
     return '从第 $verse 节开始写摘要';
   }
+
+  @override
+  String get shareSheetTitle => '分享这份学习';
+
+  @override
+  String get shareLink => '分享链接';
+
+  @override
+  String get shareLinkSubtitle => '可在应用或任何浏览器中打开';
+
+  @override
+  String get shareCopyLink => '复制链接';
+
+  @override
+  String get shareLinkCopied => '链接已复制';
+
+  @override
+  String get shareShowQr => '显示二维码';
+
+  @override
+  String get shareSharePdf => '分享 PDF';
+
+  @override
+  String get shareLinkFailed => '无法分享链接。';
+
+  @override
+  String get shareLinkTooLongTitle => '这个链接很长';
+
+  @override
+  String shareLinkTooLongMessage(int count) {
+    return '这份学习生成的链接有 $count 个字符。有些应用可能会截断它，导致无法打开。如果发生这种情况，请改为分享 PDF。';
+  }
+
+  @override
+  String get shareAnyway => '仍然分享';
+
+  @override
+  String get shareQrTitle => '扫码打开';
+
+  @override
+  String get shareQrHint => '用另一部手机的相机对准二维码即可打开这份学习。';
+
+  @override
+  String get shareQrTooLong => '这份学习太长，无法生成二维码。请改用“分享链接”或“复制链接”。';
+
+  @override
+  String get shareQrSemantics => '指向这份学习的二维码';
+
+  @override
+  String get importFromLink => '从链接导入';
+
+  @override
+  String get importSheetMessage => '粘贴别人分享给你的 Homiletics 链接。保存副本前可以先查看内容。';
+
+  @override
+  String get importFieldHint => 'https://homiletics.app/view#…';
+
+  @override
+  String get importPaste => '粘贴';
+
+  @override
+  String get importOpen => '打开';
+
+  @override
+  String get importClipboardEmpty => '没有可粘贴的文字。';
+
+  @override
+  String get importInvalidLink => '这不是 Homiletics 链接，或链接不完整。请再向对方索取一次。';
+
+  @override
+  String get importNewerVersion =>
+      '这份学习来自较新版本的 Homiletics。请更新 Homiletics 后再打开。';
+
+  @override
+  String get importCouldNotOpenTitle => '无法打开此链接';
+
+  @override
+  String get importPreviewHomiletic => '分享的讲道大纲';
+
+  @override
+  String get importPreviewWordStudy => '分享的字词研究';
+
+  @override
+  String get importPreviewNote => '这是别人分享给你的。保存会在你的学习中新增一份副本，不会更改你已有的内容。';
+
+  @override
+  String importPreviewTranslation(String translation) {
+    return '使用 $translation 撰写';
+  }
+
+  @override
+  String get importSaveCopy => '保存副本';
+
+  @override
+  String get importSaved => '已保存到你的学习';
+
+  @override
+  String get importSaveFailed => '无法保存这份学习，请重试。';
+
+  @override
+  String get startOpenSharedStudy => '打开分享的学习';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hans`).
@@ -2532,6 +2633,107 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String bibleVerseTapLabel(String verse) {
     return '从第 $verse 节开始写摘要';
   }
+
+  @override
+  String get shareSheetTitle => '分享这份学习';
+
+  @override
+  String get shareLink => '分享链接';
+
+  @override
+  String get shareLinkSubtitle => '可在应用或任何浏览器中打开';
+
+  @override
+  String get shareCopyLink => '复制链接';
+
+  @override
+  String get shareLinkCopied => '链接已复制';
+
+  @override
+  String get shareShowQr => '显示二维码';
+
+  @override
+  String get shareSharePdf => '分享 PDF';
+
+  @override
+  String get shareLinkFailed => '无法分享链接。';
+
+  @override
+  String get shareLinkTooLongTitle => '这个链接很长';
+
+  @override
+  String shareLinkTooLongMessage(int count) {
+    return '这份学习生成的链接有 $count 个字符。有些应用可能会截断它，导致无法打开。如果发生这种情况，请改为分享 PDF。';
+  }
+
+  @override
+  String get shareAnyway => '仍然分享';
+
+  @override
+  String get shareQrTitle => '扫码打开';
+
+  @override
+  String get shareQrHint => '用另一部手机的相机对准二维码即可打开这份学习。';
+
+  @override
+  String get shareQrTooLong => '这份学习太长，无法生成二维码。请改用“分享链接”或“复制链接”。';
+
+  @override
+  String get shareQrSemantics => '指向这份学习的二维码';
+
+  @override
+  String get importFromLink => '从链接导入';
+
+  @override
+  String get importSheetMessage => '粘贴别人分享给你的 Homiletics 链接。保存副本前可以先查看内容。';
+
+  @override
+  String get importFieldHint => 'https://homiletics.app/view#…';
+
+  @override
+  String get importPaste => '粘贴';
+
+  @override
+  String get importOpen => '打开';
+
+  @override
+  String get importClipboardEmpty => '没有可粘贴的文字。';
+
+  @override
+  String get importInvalidLink => '这不是 Homiletics 链接，或链接不完整。请再向对方索取一次。';
+
+  @override
+  String get importNewerVersion =>
+      '这份学习来自较新版本的 Homiletics。请更新 Homiletics 后再打开。';
+
+  @override
+  String get importCouldNotOpenTitle => '无法打开此链接';
+
+  @override
+  String get importPreviewHomiletic => '分享的讲道大纲';
+
+  @override
+  String get importPreviewWordStudy => '分享的字词研究';
+
+  @override
+  String get importPreviewNote => '这是别人分享给你的。保存会在你的学习中新增一份副本，不会更改你已有的内容。';
+
+  @override
+  String importPreviewTranslation(String translation) {
+    return '使用 $translation 撰写';
+  }
+
+  @override
+  String get importSaveCopy => '保存副本';
+
+  @override
+  String get importSaved => '已保存到你的学习';
+
+  @override
+  String get importSaveFailed => '无法保存这份学习，请重试。';
+
+  @override
+  String get startOpenSharedStudy => '打开分享的学习';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).
@@ -3798,4 +4000,105 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String bibleVerseTapLabel(String verse) {
     return '從第 $verse 節開始寫摘要';
   }
+
+  @override
+  String get shareSheetTitle => '分享這份學習';
+
+  @override
+  String get shareLink => '分享連結';
+
+  @override
+  String get shareLinkSubtitle => '可在應用程式或任何瀏覽器中開啟';
+
+  @override
+  String get shareCopyLink => '複製連結';
+
+  @override
+  String get shareLinkCopied => '連結已複製';
+
+  @override
+  String get shareShowQr => '顯示 QR 碼';
+
+  @override
+  String get shareSharePdf => '分享 PDF';
+
+  @override
+  String get shareLinkFailed => '無法分享連結。';
+
+  @override
+  String get shareLinkTooLongTitle => '這個連結很長';
+
+  @override
+  String shareLinkTooLongMessage(int count) {
+    return '這份學習產生的連結有 $count 個字元。有些應用程式可能會截斷它，導致無法開啟。如果發生這種情況，請改為分享 PDF。';
+  }
+
+  @override
+  String get shareAnyway => '仍然分享';
+
+  @override
+  String get shareQrTitle => '掃描開啟';
+
+  @override
+  String get shareQrHint => '用另一支手機的相機對準 QR 碼即可開啟這份學習。';
+
+  @override
+  String get shareQrTooLong => '這份學習太長，無法產生 QR 碼。請改用「分享連結」或「複製連結」。';
+
+  @override
+  String get shareQrSemantics => '指向這份學習的 QR 碼';
+
+  @override
+  String get importFromLink => '從連結匯入';
+
+  @override
+  String get importSheetMessage => '貼上別人分享給你的 Homiletics 連結。儲存副本前可以先查看內容。';
+
+  @override
+  String get importFieldHint => 'https://homiletics.app/view#…';
+
+  @override
+  String get importPaste => '貼上';
+
+  @override
+  String get importOpen => '開啟';
+
+  @override
+  String get importClipboardEmpty => '沒有可貼上的文字。';
+
+  @override
+  String get importInvalidLink => '這不是 Homiletics 連結，或連結不完整。請再向對方索取一次。';
+
+  @override
+  String get importNewerVersion =>
+      '這份學習來自較新版本的 Homiletics。請更新 Homiletics 後再開啟。';
+
+  @override
+  String get importCouldNotOpenTitle => '無法開啟此連結';
+
+  @override
+  String get importPreviewHomiletic => '分享的講道大綱';
+
+  @override
+  String get importPreviewWordStudy => '分享的字詞研究';
+
+  @override
+  String get importPreviewNote => '這是別人分享給你的。儲存會在你的學習中新增一份副本，不會更改你已有的內容。';
+
+  @override
+  String importPreviewTranslation(String translation) {
+    return '使用 $translation 撰寫';
+  }
+
+  @override
+  String get importSaveCopy => '儲存副本';
+
+  @override
+  String get importSaved => '已儲存到你的學習';
+
+  @override
+  String get importSaveFailed => '無法儲存這份學習，請重試。';
+
+  @override
+  String get startOpenSharedStudy => '開啟分享的學習';
 }

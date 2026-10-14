@@ -13,6 +13,7 @@ import 'package:hive/hive.dart';
 import 'package:homiletics/classes/preferences.dart';
 import 'package:homiletics/common/report_error.dart';
 import 'package:homiletics/pages/home.dart';
+import 'package:homiletics/services/incoming_links.dart';
 import 'package:homiletics/services/transcript_formatter_service.dart';
 import 'package:homiletics/services/whisper_model_service.dart';
 import 'package:homiletics/services/suggested_passages_repository.dart';
@@ -25,6 +26,9 @@ void main() async {
   if (!await initializeApp()) return;
 
   runApp(const MyApp());
+
+  // Share links opened from other apps (and the one that launched us).
+  if (!kIsWeb) IncomingLinks.start();
 
   // Not needed for the first frame (only the recording / model settings UI
   // uses it), so don't delay startup. Reports its own errors.
@@ -102,6 +106,7 @@ class MyApp extends StatelessWidget {
     return ValueListenableBuilder<Language?>(
       valueListenable: Preferences.appLanguageNotifier,
       builder: (context, language, _) => MaterialApp(
+        navigatorKey: appNavigatorKey,
         onGenerateTitle: (context) => AppLocalizations.of(context).appTitle,
         debugShowCheckedModeBanner: false,
         locale: language?.locale,

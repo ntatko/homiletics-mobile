@@ -1328,4 +1328,110 @@ class AppLocalizationsEn extends AppLocalizations {
   String bibleVerseTapLabel(String verse) {
     return 'Start a summary at verse $verse';
   }
+
+  @override
+  String get shareSheetTitle => 'Share this study';
+
+  @override
+  String get shareLink => 'Share link';
+
+  @override
+  String get shareLinkSubtitle => 'Opens in the app, or in any browser';
+
+  @override
+  String get shareCopyLink => 'Copy link';
+
+  @override
+  String get shareLinkCopied => 'Link copied';
+
+  @override
+  String get shareShowQr => 'Show QR code';
+
+  @override
+  String get shareSharePdf => 'Share PDF';
+
+  @override
+  String get shareLinkFailed => 'Couldn\'t share the link.';
+
+  @override
+  String get shareLinkTooLongTitle => 'This link is very long';
+
+  @override
+  String shareLinkTooLongMessage(int count) {
+    return 'This study makes a link of $count characters. Some apps may cut it off, so it might not open. If that happens, share the PDF instead.';
+  }
+
+  @override
+  String get shareAnyway => 'Share anyway';
+
+  @override
+  String get shareQrTitle => 'Scan to open';
+
+  @override
+  String get shareQrHint =>
+      'Point another phone\'s camera at the code to open this study.';
+
+  @override
+  String get shareQrTooLong =>
+      'This study is too long for a QR code. Use Share link or Copy link instead.';
+
+  @override
+  String get shareQrSemantics => 'QR code linking to this study';
+
+  @override
+  String get importFromLink => 'Import from link';
+
+  @override
+  String get importSheetMessage =>
+      'Paste a Homiletics link someone shared with you. You can look it over before saving a copy.';
+
+  @override
+  String get importFieldHint => 'https://homiletics.app/view#…';
+
+  @override
+  String get importPaste => 'Paste';
+
+  @override
+  String get importOpen => 'Open';
+
+  @override
+  String get importClipboardEmpty => 'There is no text to paste.';
+
+  @override
+  String get importInvalidLink =>
+      'This isn\'t a Homiletics link, or part of it is missing. Ask for the link again.';
+
+  @override
+  String get importNewerVersion =>
+      'This study was shared from a newer version of Homiletics. Update Homiletics to open this.';
+
+  @override
+  String get importCouldNotOpenTitle => 'Can\'t open this link';
+
+  @override
+  String get importPreviewHomiletic => 'Shared homiletics';
+
+  @override
+  String get importPreviewWordStudy => 'Shared word study';
+
+  @override
+  String get importPreviewNote =>
+      'Someone shared this with you. Saving adds a copy to your studies; nothing you already have is changed.';
+
+  @override
+  String importPreviewTranslation(String translation) {
+    return 'Written with $translation';
+  }
+
+  @override
+  String get importSaveCopy => 'Save a copy';
+
+  @override
+  String get importSaved => 'Saved to your studies';
+
+  @override
+  String get importSaveFailed => 'Couldn\'t save the study. Try again.';
+
+  @override
+  String get startOpenSharedStudy => 'Open shared study';
 }

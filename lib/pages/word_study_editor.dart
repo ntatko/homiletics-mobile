@@ -5,11 +5,13 @@ import 'package:homiletics/common/report_error.dart';
 import 'package:homiletics/common/study_data_builder.dart';
 import 'package:homiletics/components/editor/passage_split_scaffold.dart';
 import 'package:homiletics/components/help_menu.dart';
+import 'package:homiletics/components/share/study_share_sheet.dart';
 import 'package:homiletics/components/word_study/definition_card.dart';
 import 'package:homiletics/components/word_study/other_usage_card.dart';
 import 'package:homiletics/components/word_study/word_hero_card.dart';
 import 'package:homiletics/components/word_study/word_study_section_card.dart';
 import 'package:homiletics/l10n/l10n.dart';
+import 'package:homiletics/services/share_link.dart';
 import 'package:homiletics/storage/pdf_generation.dart';
 import 'package:homiletics/theme/app_theme.dart';
 import 'package:homiletics/theme/widgets.dart';
@@ -134,7 +136,7 @@ class _WordStudyEditorState extends State<WordStudyEditor> {
     }
   }
 
-  Future<void> _share() => _runPdfAction(
+  Future<void> _sharePdf() => _runPdfAction(
       () => shareWordStudy(_thisStudy),
       (l) => l.wordStudyPdfShared,
       (l) => l.wordStudyPdfShareFailed,
@@ -145,6 +147,25 @@ class _WordStudyEditorState extends State<WordStudyEditor> {
       (l) => l.wordStudyPdfPrinted,
       (l) => l.wordStudyPdfPrintFailed,
       "Print word study PDF");
+
+  Future<void> _openShareSheet() {
+    final AppLocalizations l = context.l10n;
+    final String word = _thisStudy.word.trim();
+    final String passage = _thisStudy.passage.trim();
+    final String title = word.isEmpty
+        ? (passage.isEmpty ? l.pdfUntitledWord : passage)
+        : passage.isEmpty
+            ? l.pdfWordStudyLabel(word)
+            : l.pdfWordStudyLabelWithPassage(word, passage);
+    return showStudyShareSheet(
+      context,
+      buildLink: () => ShareLink.encodeWordStudy(_thisStudy,
+          translation: Preferences.preferredVersion),
+      title: title,
+      onSharePdf: _sharePdf,
+      onPrint: _print,
+    );
+  }
 
   @override
   void dispose() {
@@ -182,11 +203,7 @@ class _WordStudyEditorState extends State<WordStudyEditor> {
         EditorMenuAction(
             icon: Icons.ios_share_rounded,
             title: l.commonShare,
-            onSelected: _share),
-        EditorMenuAction(
-            icon: Icons.print_outlined,
-            title: l.commonPrint,
-            onSelected: _print),
+            onSelected: _openShareSheet),
       ],
       child: ListView(
         padding: const EdgeInsets.fromLTRB(12, 4, 12, 16),
@@ -257,7 +274,7 @@ class _WordStudyEditorState extends State<WordStudyEditor> {
             StudyCompleteCard(
               title: l.wordStudyDoneTitle,
               onPrint: _print,
-              onShare: _share,
+              onShare: _openShareSheet,
             ),
           ],
           const SizedBox(height: 12),

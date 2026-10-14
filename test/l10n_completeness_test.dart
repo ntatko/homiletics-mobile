@@ -32,8 +32,7 @@ void main() {
   final List<File> translations = Directory('lib/l10n')
       .listSync()
       .whereType<File>()
-      .where((f) =>
-          f.path.endsWith('.arb') && !f.path.endsWith('app_en.arb'))
+      .where((f) => f.path.endsWith('.arb') && !f.path.endsWith('app_en.arb'))
       .toList();
 
   test('there are translations to check', () {
@@ -42,8 +41,7 @@ void main() {
 
   for (final File file in translations) {
     final String name = file.uri.pathSegments.last;
-    final Map<String, dynamic> translated =
-        jsonDecode(file.readAsStringSync());
+    final Map<String, dynamic> translated = jsonDecode(file.readAsStringSync());
 
     test('$name has every English string', () {
       final List<String> missing =

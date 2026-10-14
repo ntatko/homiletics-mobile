@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:homiletics/l10n/l10n.dart';
 import 'package:homiletics/theme/app_theme.dart';
 
-/// Home's top bar: the serif "Homiletics" wordmark with search and settings
-/// buttons, or — while [searching] — a search field with a close button.
+/// Home's top bar: the serif "Homiletics" wordmark with import-from-link,
+/// search and settings buttons, or — while [searching] — a search field with a close button.
 class HomeHeader extends StatelessWidget {
   final bool searching;
   final TextEditingController searchController;
@@ -12,6 +12,7 @@ class HomeHeader extends StatelessWidget {
   final VoidCallback onCloseSearch;
   final ValueChanged<String> onSearchChanged;
   final VoidCallback onOpenSettings;
+  final VoidCallback onImportLink;
 
   const HomeHeader({
     Key? key,
@@ -22,6 +23,7 @@ class HomeHeader extends StatelessWidget {
     required this.onCloseSearch,
     required this.onSearchChanged,
     required this.onOpenSettings,
+    required this.onImportLink,
   }) : super(key: key);
 
   static const TextStyle _wordmark = TextStyle(
@@ -86,6 +88,13 @@ class HomeHeader extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                             style: _wordmark.copyWith(color: c.ink)),
                       ),
+                    ),
+                    IconButton(
+                      key: const ValueKey('homeImportLink'),
+                      tooltip: l.importFromLink,
+                      icon:
+                          Icon(Icons.add_link_rounded, size: 24, color: c.ink),
+                      onPressed: onImportLink,
                     ),
                     IconButton(
                       tooltip: l.homeSearchTooltip,
