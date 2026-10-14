@@ -5,27 +5,46 @@ class DictionaryApiService {
   static const String _baseUrl =
       'https://freedictionaryapi.com/api/v1/entries/en/';
 
-  /// Fetches candidate definitions for [word] from a free public dictionary
-  /// API. Returns a flat list of plain-English definition strings.
-  static Future<List<String>> fetchDefinitions(String word) async {
-    final response = await http.get(
-      Uri.parse('$_baseUrl${Uri.encodeComponent(word.trim().toLowerCase())}'),
-      headers: {'Content-Type': 'application/json'},
-    );
+  static const Duration _timeout = Duration(seconds: 15);
 
+  /// Fetches candidate definitions for [word] from a free public dictionary
+  /// API. Returns a flat list of plain-English definition strings, or an empty
+  /// list when the word is unknown (HTTP 404).
+  ///
+  /// Throws on network failure, timeout, other HTTP errors, or a malformed
+  /// response.
+  static Future<List<String>> fetchDefinitions(String word) async {
+    final trimmed = word.trim().toLowerCase();
+    if (trimmed.isEmpty) return [];
+
+    final response = await http.get(
+      Uri.parse('$_baseUrl${Uri.encodeComponent(trimmed)}'),
+      headers: {'Accept': 'application/json'},
+    ).timeout(_timeout);
+
+    if (response.statusCode == 404) {
+      return [];
+    }
     if (response.statusCode != 200) {
       throw Exception('Failed to load definitions: ${response.statusCode}');
     }
 
-    final Map<String, dynamic> data = json.decode(response.body);
-    final List<dynamic> entries = data['entries'] as List<dynamic>? ?? [];
+    final dynamic data = json.decode(response.body);
+    if (data is! Map) {
+      throw const FormatException('Unexpected dictionary response');
+    }
+    final dynamic entries = data['entries'];
+    if (entries is! List) return [];
 
     final List<String> definitions = [];
     for (final entry in entries) {
-      final List<dynamic> senses = entry['senses'] as List<dynamic>? ?? [];
+      if (entry is! Map) continue;
+      final dynamic senses = entry['senses'];
+      if (senses is! List) continue;
       for (final sense in senses) {
-        final String? definition = sense['definition'] as String?;
-        if (definition != null && definition.trim().isNotEmpty) {
+        if (sense is! Map) continue;
+        final dynamic definition = sense['definition'];
+        if (definition is String && definition.trim().isNotEmpty) {
           definitions.add(definition.trim());
         }
       }

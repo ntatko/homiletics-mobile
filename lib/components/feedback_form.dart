@@ -21,6 +21,7 @@ class _FeedbackFormState extends State<FeedbackForm> {
   String _name = '';
   String _email = '';
   String _content = '';
+  bool _submitting = false;
 
   @override
   Widget build(BuildContext context) {
@@ -106,111 +107,136 @@ class _FeedbackFormState extends State<FeedbackForm> {
             Padding(
               padding: const EdgeInsets.only(bottom: 15, top: 12),
               child: ElevatedButton(
-                child: const Text("Submit"),
-                onPressed: () async {
-                  if (_content.trim().isEmpty) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                          content: Text('Please enter your feedback first.')),
-                    );
-                    return;
-                  }
-                  final messenger = ScaffoldMessenger.of(context);
-                  try {
-                    final issueUrl =
-                        await submitFeedback(_name, _email, _content);
-                    if (!context.mounted) return;
-                    Navigator.pop(context);
-                    if (issueUrl != null) {
-                      messenger.showSnackBar(SnackBar(
-                        content: const Text(
-                          'Submitted. Open the issue on GitHub anytime to add comments (sign-in optional).',
-                        ),
-                        duration: const Duration(seconds: 8),
-                        action: SnackBarAction(
-                          label: 'Open',
-                          onPressed: () async {
-                            final uri = Uri.parse(issueUrl);
-                            if (await canLaunchUrl(uri)) {
-                              await launchUrl(
-                                uri,
-                                mode: LaunchMode.externalApplication,
-                              );
-                            }
-                          },
-                        ),
-                      ));
-                    } else {
-                      messenger.showSnackBar(SnackBar(
-                        content: const Text('Successfully submitted feedback'),
-                        action: SnackBarAction(
-                          onPressed: () {},
-                          label: 'Ok',
-                        ),
-                      ));
-                    }
-                  } on FeedbackBadRequest {
-                    if (!context.mounted) return;
-                    messenger.showSnackBar(const SnackBar(
-                      content: Text(
-                          'Could not submit that request. Check your message and try again.'),
-                    ));
-                  } catch (error) {
-                    if (!context.mounted) return;
-                    sendError(error, "Feedback Submission");
-                    final fallbackUri = prefilledGitHubNewIssueUri(
-                      name: _name,
-                      email: _email,
-                      feedback: _content,
-                    );
-                    await showDialog<void>(
-                      context: context,
-                      builder: (ctx) => AlertDialog(
-                        title: const Text('Could not reach the server'),
-                        content: const Text(
-                          'Open GitHub in your browser to file this report instead. '
-                          'You may need to sign in there to submit the issue.',
-                        ),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Navigator.pop(ctx),
-                            child: const Text('Not now'),
-                          ),
-                          TextButton(
-                            onPressed: () async {
-                              if (await canLaunchUrl(fallbackUri)) {
-                                await launchUrl(
-                                  fallbackUri,
-                                  mode: LaunchMode.externalApplication,
-                                );
-                              }
-                              if (ctx.mounted) Navigator.pop(ctx);
-                            },
-                            child: const Text('Open GitHub'),
-                          ),
-                        ],
-                      ),
-                    );
-                  }
-                },
+                onPressed: _submitting ? null : _submit,
+                child: _submitting
+                    ? const SizedBox(
+                        width: 18,
+                        height: 18,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : const Text("Submit"),
               ),
             )
           ],
         ));
   }
+
+  Future<void> _submit() async {
+    if (_submitting) return;
+    if (_content.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter your feedback first.')),
+      );
+      return;
+    }
+    final messenger = ScaffoldMessenger.of(context);
+    setState(() {
+      _submitting = true;
+    });
+    try {
+      final issueUrl = await submitFeedback(_name, _email, _content);
+      if (!mounted) return;
+      Navigator.pop(context);
+      if (issueUrl != null) {
+        messenger.showSnackBar(SnackBar(
+          content: const Text(
+            'Submitted. Open the issue on GitHub anytime to add comments (sign-in optional).',
+          ),
+          duration: const Duration(seconds: 8),
+          action: SnackBarAction(
+            label: 'Open',
+            onPressed: () => _openExternally(
+              Uri.parse(issueUrl),
+              messenger,
+            ),
+          ),
+        ));
+      } else {
+        messenger.showSnackBar(SnackBar(
+          content: const Text('Successfully submitted feedback'),
+          action: SnackBarAction(
+            onPressed: () {},
+            label: 'Ok',
+          ),
+        ));
+      }
+    } on FeedbackBadRequest {
+      if (!mounted) return;
+      messenger.showSnackBar(const SnackBar(
+        content: Text(
+            'Could not submit that request. Check your message and try again.'),
+      ));
+    } catch (error) {
+      sendError(error, "Feedback Submission");
+      if (!mounted) return;
+      final fallbackUri = prefilledGitHubNewIssueUri(
+        name: _name,
+        email: _email,
+        feedback: _content,
+      );
+      await showDialog<void>(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text('Could not reach the server'),
+          content: const Text(
+            'Open GitHub in your browser to file this report instead. '
+            'You may need to sign in there to submit the issue.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx),
+              child: const Text('Not now'),
+            ),
+            TextButton(
+              onPressed: () async {
+                await _openExternally(fallbackUri, messenger);
+                if (ctx.mounted) Navigator.pop(ctx);
+              },
+              child: const Text('Open GitHub'),
+            ),
+          ],
+        ),
+      );
+    } finally {
+      if (mounted) {
+        setState(() {
+          _submitting = false;
+        });
+      }
+    }
+  }
+}
+
+/// Opens [uri] in an external app, showing a snackbar if nothing can handle it.
+Future<void> _openExternally(Uri uri, ScaffoldMessengerState messenger) async {
+  bool launched;
+  try {
+    launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
+  } catch (_) {
+    launched = false;
+  }
+  if (!launched) {
+    messenger.showSnackBar(const SnackBar(
+      content: Text('Could not open the browser.'),
+    ));
+  }
 }
 
 /// Returns the GitHub issue URL when the server created an issue; otherwise null.
-Future<String?> submitFeedback(String name, String email, String feedback) async {
+Future<String?> submitFeedback(
+    String name, String email, String feedback) async {
   final response = await http
       .post(
-    Uri.parse('$kHomileticsApiBase/feedback'),
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
-    body: jsonEncode(
-        <String, String>{'name': name, 'email': email, 'feedback': feedback}),
-  )
+        Uri.parse('$kHomileticsApiBase/feedback'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'name': name,
+          'email': email,
+          'feedback': feedback
+        }),
+      )
       .timeout(const Duration(seconds: 25));
   if (response.statusCode == 400) {
     throw FeedbackBadRequest();
