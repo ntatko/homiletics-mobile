@@ -37,14 +37,14 @@ class Preferences {
       appLanguage ??
       Language.match(WidgetsBinding.instance.platformDispatcher.locale);
 
-  static String get preferredVersion =>
-      Hive.box(_boxKey).get(_preferredVersionKey) ?? Translation.web.code;
+  /// The code of the Bible translation in use (see [translation]).
+  static String get preferredVersion => translation.code;
 
-  static Translation get translation {
-    return Translation.all.firstWhere(
-        (translation) => translation.code == preferredVersion,
-        orElse: () => Translation.web);
-  }
+  /// The translation the user chose, or — if they never chose one (or the
+  /// stored code no longer exists) — the default for the app language.
+  static Translation get translation => Translation.resolve(
+      Hive.box(_boxKey).get(_preferredVersionKey) as String?,
+      effectiveLanguage);
 
   static set preferredVersion(String version) =>
       Hive.box(_boxKey).put(_preferredVersionKey, version);

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:homiletics/l10n/l10n.dart';
 import 'package:homiletics/theme/app_theme.dart';
 import 'package:homiletics/theme/widgets.dart';
 
@@ -23,7 +24,7 @@ class StudyKindTile extends StatelessWidget {
           size: size,
           background: c.accentTint,
           foreground: c.accent,
-          child: const Text('H'),
+          child: Text(context.l10n.homeKindTileHomiletic),
         );
       case StudyKind.lecture:
         return IconTile(
@@ -37,7 +38,7 @@ class StudyKindTile extends StatelessWidget {
           size: size,
           background: c.stepTint(StudyStep.divisions),
           foreground: c.step(StudyStep.divisions),
-          child: Text('W',
+          child: Text(context.l10n.homeKindTileWordStudy,
               style: TextStyle(
                   fontFamily: AppFonts.serif,
                   fontStyle: FontStyle.italic,
@@ -118,22 +119,17 @@ class StepProgressBar extends StatelessWidget {
 
   const StepProgressBar({Key? key, required this.done}) : super(key: key);
 
-  static const Map<StudyStep, String> _shortLabels = {
-    StudyStep.content: 'Content',
-    StudyStep.divisions: 'Divide',
-    StudyStep.summary: 'Summary',
-    StudyStep.fcf: 'FCF',
-    StudyStep.aim: 'Aim',
-    StudyStep.application: 'Apply',
-  };
-
   @override
   Widget build(BuildContext context) {
     final AppColors c = AppColors.of(context);
-    final String doneNames =
-        StudyStep.values.where(done.contains).map((s) => s.label).join(', ');
+    final AppLocalizations l = context.l10n;
+    final String doneNames = StudyStep.values
+        .where(done.contains)
+        .map((s) => s.localizedLabel(l))
+        .join(', ');
     return Semantics(
-      label: done.isEmpty ? 'No steps done yet' : 'Done: $doneNames',
+      label:
+          done.isEmpty ? l.homeProgressNoneDone : l.homeProgressDone(doneNames),
       excludeSemantics: true,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -165,7 +161,7 @@ class StepProgressBar extends StatelessWidget {
                   child: FittedBox(
                     fit: BoxFit.scaleDown,
                     child: Text(
-                      _shortLabels[s]!,
+                      s.localizedShortLabel(l),
                       textAlign: TextAlign.center,
                       maxLines: 1,
                       softWrap: false,
@@ -205,12 +201,13 @@ class PageDots extends StatelessWidget {
   Widget build(BuildContext context) {
     final AppColors c = AppColors.of(context);
     if (count <= 1) return const SizedBox.shrink();
-    final String label = 'Page ${index + 1} of $count';
+    final AppLocalizations l = context.l10n;
+    final String label = l.homePageOf(index + 1, count);
     if (count > maxDots) {
       return Semantics(
         label: label,
         excludeSemantics: true,
-        child: Text('${index + 1} / $count',
+        child: Text(l.homePageFraction(index + 1, count),
             textAlign: TextAlign.center,
             style: AppText.caption.copyWith(color: c.muted)),
       );

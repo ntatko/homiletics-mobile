@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:homiletics/classes/lecture_note.dart';
 import 'package:homiletics/classes/preferences.dart';
 import 'package:homiletics/common/report_error.dart';
+import 'package:homiletics/l10n/l10n.dart';
 import 'package:homiletics/services/transcript_formatter_service.dart';
 import 'package:homiletics/services/whisper_model_service.dart';
 import 'package:homiletics/theme/app_theme.dart';
@@ -167,16 +168,16 @@ class _RecordingSectionState extends State<RecordingSection>
     final bool? replace = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text("Replace existing recording?"),
-        content: const Text("The old audio and transcript will be deleted."),
+        title: Text(context.l10n.lectureReplaceTitle),
+        content: Text(context.l10n.lectureReplaceMessage),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text("Cancel"),
+            child: Text(context.l10n.commonCancel),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text("Replace"),
+            child: Text(context.l10n.lectureReplaceConfirm),
           ),
         ],
       ),
@@ -194,8 +195,8 @@ class _RecordingSectionState extends State<RecordingSection>
       if (!mounted) return;
       if (!await _recorder.hasPermission()) {
         if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text("Microphone permission is required to record."),
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(context.l10n.lectureMicPermissionRequired),
         ));
         return;
       }
@@ -209,19 +210,20 @@ class _RecordingSectionState extends State<RecordingSection>
       final Directory dir = await getApplicationDocumentsDirectory();
       // Once disposed nobody could stop a recording started now.
       if (!mounted) return;
+      final AppLocalizations l10n = context.l10n;
       final String fileName =
           'lecture_${widget.note.id}_${DateTime.now().millisecondsSinceEpoch}.m4a';
       try {
         await _recorder.start(
-          const RecordConfig(
+          RecordConfig(
             // Runs recording in an Android foreground service (with an
             // ongoing notification) so it keeps going with the screen off.
             // iOS gets the same via UIBackgroundModes=audio in Info.plist.
             androidConfig: AndroidRecordConfig(
               // ignore: deprecated_member_use
               service: AndroidService(
-                title: "Recording lecture",
-                content: "Homiletics is recording audio",
+                title: l10n.lectureNotificationTitle,
+                content: l10n.lectureNotificationContent(l10n.appTitle),
               ),
             ),
           ),
@@ -230,9 +232,8 @@ class _RecordingSectionState extends State<RecordingSection>
       } catch (error) {
         sendError(error, "RecordingSection start");
         if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text(
-              "Couldn't start recording. The microphone may be in use by another app."),
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(l10n.lectureStartFailed),
         ));
         return;
       }
@@ -314,17 +315,16 @@ class _RecordingSectionState extends State<RecordingSection>
     final bool? download = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text("Download offline transcription model?"),
-        content: const Text(
-            "A one-time ~140MB download lets your recordings be automatically transcribed and searched. You can skip this and download it later from Settings."),
+        title: Text(context.l10n.lectureTranscriptionModelTitle),
+        content: Text(context.l10n.lectureTranscriptionModelMessage),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text("Not now"),
+            child: Text(context.l10n.lectureNotNow),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text("Download"),
+            child: Text(context.l10n.lectureDownload),
           ),
         ],
       ),
@@ -350,9 +350,8 @@ class _RecordingSectionState extends State<RecordingSection>
       sendError(error, "RecordingSection model download");
       if (!mounted) return;
       setState(() => _isDownloadingModel = false);
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text(
-            "Something went wrong downloading the model. You can try again from Settings."),
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(context.l10n.lectureModelDownloadFailed),
       ));
     }
   }
@@ -368,8 +367,8 @@ class _RecordingSectionState extends State<RecordingSection>
         audioPath == null ||
         !await File(audioPath).exists()) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text("The recording file couldn't be found."),
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(context.l10n.lectureRecordingFileNotFound),
       ));
       return;
     }
@@ -398,8 +397,8 @@ class _RecordingSectionState extends State<RecordingSection>
     if (!stillCurrent) return;
 
     if (text == null || text.trim().isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text("Transcription didn't produce any text."),
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(context.l10n.lectureTranscriptionEmpty),
       ));
       return;
     }
@@ -424,17 +423,17 @@ class _RecordingSectionState extends State<RecordingSection>
     final bool? download = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text("Download transcript formatting model?"),
-        content: const Text(
-            "A one-time $localModelSizeLabel download lets transcripts be cleaned up into readable paragraphs, entirely on your device. Wi-Fi recommended. You can also do this later from Settings."),
+        title: Text(context.l10n.lectureFormattingModelTitle),
+        content: Text(
+            context.l10n.lectureFormattingModelMessage(localModelSizeLabel)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text("Not now"),
+            child: Text(context.l10n.lectureNotNow),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text("Download"),
+            child: Text(context.l10n.lectureDownload),
           ),
         ],
       ),
@@ -455,9 +454,8 @@ class _RecordingSectionState extends State<RecordingSection>
       sendError(error, "RecordingSection formatting model download");
       if (!mounted) return;
       setState(() => _isDownloadingModel = false);
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text(
-            "Something went wrong downloading the model. You can try again from Settings."),
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(context.l10n.lectureModelDownloadFailed),
       ));
       return;
     }
@@ -498,8 +496,8 @@ class _RecordingSectionState extends State<RecordingSection>
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(modelMissing
-            ? "The formatting model isn't downloaded."
-            : "Couldn't format the transcript."),
+            ? context.l10n.lectureFormattingModelMissing
+            : context.l10n.lectureFormattingFailed),
       ));
     }
   }
@@ -513,8 +511,8 @@ class _RecordingSectionState extends State<RecordingSection>
       final String? path = await widget.note.recordingFilePath();
       if (path == null || !await File(path).exists()) {
         if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text("The recording file couldn't be found."),
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(context.l10n.lectureRecordingFileNotFound),
         ));
         return;
       }
@@ -526,8 +524,8 @@ class _RecordingSectionState extends State<RecordingSection>
     } catch (error) {
       sendError(error, "RecordingSection playback");
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text("Couldn't play the recording."),
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(context.l10n.lecturePlaybackFailed),
       ));
     }
   }
@@ -558,22 +556,22 @@ class _RecordingSectionState extends State<RecordingSection>
   Widget? _progressLine() {
     if (_isDownloadingModel) {
       return RecordingBarProgress(
-        label:
-            "Downloading model ${(_downloadProgress * 100).toStringAsFixed(0)}%",
+        label: context.l10n.lectureDownloadingModel(
+            (_downloadProgress * 100).toStringAsFixed(0)),
         value: _downloadProgress > 0 ? _downloadProgress : null,
       );
     }
     if (_isTranscribing) {
       return RecordingBarProgress(
-        label: "Transcribing $_transcribeProgress%",
+        label: context.l10n.lectureTranscribingProgress(_transcribeProgress),
         value: _transcribeProgress > 0 ? _transcribeProgress / 100 : null,
       );
     }
     if (_isFormatting) {
       return RecordingBarProgress(
         label: _formatTotal > 0
-            ? "Formatting transcript $_formatDone/$_formatTotal"
-            : "Formatting transcript…",
+            ? context.l10n.lectureFormattingProgress(_formatDone, _formatTotal)
+            : context.l10n.lectureFormattingIndeterminate,
         value: _formatTotal > 0 ? _formatDone / _formatTotal : null,
       );
     }
@@ -582,6 +580,7 @@ class _RecordingSectionState extends State<RecordingSection>
 
   Widget _buildBar(BuildContext context, bool canRecord, bool canTranscribe) {
     final AppColors c = AppColors.of(context);
+    final AppLocalizations l10n = context.l10n;
     final bool hasRecording = widget.note.recordingPath != null;
 
     if (_isRecording) {
@@ -592,11 +591,11 @@ class _RecordingSectionState extends State<RecordingSection>
             const SizedBox(width: 14),
             Expanded(
               child: Semantics(
-                label: "Recording, ${formatClock(_elapsed)}",
+                label: l10n.lectureRecordingSemantics(formatClock(_elapsed)),
                 excludeSemantics: true,
                 child: RecordingBarTitle(
                   title: formatClock(_elapsed),
-                  subtitle: "Recording · keeps going with the screen off",
+                  subtitle: l10n.lectureRecordingSubtitle,
                   clock: true,
                 ),
               ),
@@ -605,7 +604,7 @@ class _RecordingSectionState extends State<RecordingSection>
             LevelMeter(levels: _levels),
             const SizedBox(width: 14),
             RecordingBarButton(
-              tooltip: "Stop recording",
+              tooltip: l10n.lectureStopRecording,
               size: 48,
               onPressed: _stopRecording,
               child: const StopGlyph(),
@@ -626,16 +625,16 @@ class _RecordingSectionState extends State<RecordingSection>
             Row(
               children: [
                 RecordingBarButton(
-                  tooltip: "Record lecture",
+                  tooltip: l10n.lectureRecordLecture,
                   size: 48,
                   onPressed: canRecord ? _startRecording : null,
                   child: const RecordGlyph(size: 16),
                 ),
                 const SizedBox(width: 14),
-                const Expanded(
+                Expanded(
                   child: RecordingBarTitle(
-                    title: "Record lecture",
-                    subtitle: "Keeps recording with the screen off",
+                    title: l10n.lectureRecordLecture,
+                    subtitle: l10n.lectureRecordIdleSubtitle,
                   ),
                 ),
               ],
@@ -656,7 +655,8 @@ class _RecordingSectionState extends State<RecordingSection>
           Row(
             children: [
               RecordingBarButton(
-                tooltip: _isPlaying ? "Pause" : "Play recording",
+                tooltip:
+                    _isPlaying ? l10n.lecturePause : l10n.lecturePlayRecording,
                 onPressed: _togglePlayback,
                 child: Icon(
                     _isPlaying ? Icons.pause_rounded : Icons.play_arrow_rounded,
@@ -672,7 +672,7 @@ class _RecordingSectionState extends State<RecordingSection>
               ),
               const SizedBox(width: 12),
               RecordingBarButton(
-                tooltip: "Record again",
+                tooltip: l10n.lectureRecordAgain,
                 filled: false,
                 onPressed: canRecord ? _startRecording : null,
                 child: const RecordGlyph(size: 12),
@@ -688,7 +688,7 @@ class _RecordingSectionState extends State<RecordingSection>
               child: Row(
                 children: [
                   Expanded(
-                    child: Text("Not transcribed yet",
+                    child: Text(l10n.lectureNotTranscribedYet,
                         style: AppText.caption
                             .copyWith(color: recordingBarMuted(c))),
                   ),
@@ -698,7 +698,7 @@ class _RecordingSectionState extends State<RecordingSection>
                       minimumSize: const Size(0, 44),
                     ),
                     icon: const Icon(Icons.subtitles_outlined, size: 18),
-                    label: const Text("Transcribe"),
+                    label: Text(l10n.lectureTranscribe),
                     onPressed: () => _maybeTranscribe(userRequested: true),
                   ),
                 ],
@@ -728,7 +728,7 @@ class _RecordingSectionState extends State<RecordingSection>
                         AppText.caption.copyWith(fontWeight: FontWeight.w500),
                   ),
                   onPressed: _insertTimeMark,
-                  child: const Text("+ Time mark"),
+                  child: Text(context.l10n.lectureTimeMark),
                 ),
             ],
           ),
@@ -741,29 +741,30 @@ class _RecordingSectionState extends State<RecordingSection>
 
   Widget _buildTranscriptTab(BuildContext context, bool canTranscribe) {
     final AppColors c = AppColors.of(context);
+    final AppLocalizations l10n = context.l10n;
     final String raw = widget.note.transcript ?? '';
     final String? formatted = widget.note.formattedTranscript;
 
     if (raw.isEmpty) {
       final String message;
       if (_isRecording) {
-        message =
-            "The lecture is transcribed on this phone after you stop recording.";
+        message = l10n.lectureTranscriptEmptyRecording;
       } else if (_isTranscribing || _isDownloadingModel) {
-        message = "The transcript will appear here when it's ready.";
+        message = l10n.lectureTranscriptEmptyPending;
       } else if (widget.note.recordingPath != null) {
-        message = "Transcribe the recording to read and search it here.";
+        message = l10n.lectureTranscriptEmptyNotTranscribed;
       } else {
-        message =
-            "Record the lecture and it's transcribed on this phone after you stop.";
+        message = l10n.lectureTranscriptEmptyNoRecording;
       }
       return TranscriptEmptyState(
-        title: _isTranscribing ? "Transcribing…" : "No transcript yet",
+        title: _isTranscribing
+            ? l10n.lectureTranscribing
+            : l10n.lectureNoTranscriptYet,
         message: message,
         action: canTranscribe
             ? FilledButton.icon(
                 icon: const Icon(Icons.subtitles_outlined, size: 18),
-                label: const Text("Transcribe"),
+                label: Text(l10n.lectureTranscribe),
                 onPressed: () => _maybeTranscribe(userRequested: true),
               )
             : null,
@@ -790,9 +791,10 @@ class _RecordingSectionState extends State<RecordingSection>
                       textStyle:
                           AppText.caption.copyWith(fontWeight: FontWeight.w600),
                     ),
-                    segments: const [
-                      ButtonSegment(value: true, label: Text("Formatted")),
-                      ButtonSegment(value: false, label: Text("Raw")),
+                    segments: [
+                      ButtonSegment(
+                          value: true, label: Text(l10n.lectureFormatted)),
+                      ButtonSegment(value: false, label: Text(l10n.lectureRaw)),
                     ],
                     selected: {showFormatted},
                     onSelectionChanged: (selection) =>
@@ -803,7 +805,7 @@ class _RecordingSectionState extends State<RecordingSection>
                         style: TextButton.styleFrom(
                             minimumSize: const Size(0, 44)),
                         icon: const Icon(Icons.auto_fix_high, size: 18),
-                        label: const Text("Format transcript"),
+                        label: Text(l10n.lectureFormatTranscript),
                         onPressed: () => _maybeFormat(raw, userRequested: true),
                       )
                     : const SizedBox(height: 44),
@@ -844,9 +846,9 @@ class _RecordingSectionState extends State<RecordingSection>
           padding: const EdgeInsets.symmetric(horizontal: 24),
           labelPadding: const EdgeInsets.only(right: 22),
           indicatorSize: TabBarIndicatorSize.label,
-          tabs: const [
-            Tab(height: 44, text: "My notes"),
-            Tab(height: 44, text: "Transcript"),
+          tabs: [
+            Tab(height: 44, text: context.l10n.lectureTabMyNotes),
+            Tab(height: 44, text: context.l10n.lectureTabTranscript),
           ],
         ),
         Expanded(

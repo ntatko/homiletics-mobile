@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:homiletics/l10n/l10n.dart';
 import 'package:homiletics/classes/application.dart';
 import 'package:homiletics/common/application_list_item.dart';
 import 'package:homiletics/common/study_data_builder.dart';
@@ -25,7 +26,7 @@ class ApplicationPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Living it out'),
+        title: Text(context.l10n.homeLivingItOut),
       ),
       body: Align(
         alignment: Alignment.topCenter,
@@ -37,7 +38,7 @@ class ApplicationPage extends StatelessWidget {
             builder: (context, snapshot) {
               final List<Application> current = snapshot.data ?? applications;
               return current.isEmpty
-                  ? const StudyListEmpty('No application questions yet.')
+                  ? StudyListEmpty(context.l10n.studiesNoApplications)
                   : ListView.separated(
                       padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
                       itemCount: current.length,

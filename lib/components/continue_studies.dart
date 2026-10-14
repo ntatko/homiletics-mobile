@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:homiletics/l10n/l10n.dart';
 import 'package:homiletics/classes/homiletic.dart';
 import 'package:homiletics/classes/lecture_note.dart';
 import 'package:homiletics/classes/word_study.dart';
@@ -76,8 +77,8 @@ class ContinueStudies extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               SectionHeader(
-                'Continue',
-                actionLabel: 'See all',
+                context.l10n.homeContinue,
+                actionLabel: context.l10n.homeSeeAll,
                 onAction: () {
                   Navigator.push(
                     context,

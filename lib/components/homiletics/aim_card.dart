@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:homiletics/classes/homiletic.dart';
+import 'package:homiletics/l10n/l10n.dart';
 import 'package:homiletics/theme/app_theme.dart';
 import 'package:homiletics/theme/homiletics_widgets.dart';
 
 /// The editor of the Aim step: a single multiline answer.
 class AimCard extends StatefulWidget {
-  static const String helpTitle = "Aim";
-  static const String helpText =
-      "The Aim is the key point, the one main takeaway truth you want yourself or an audience to walk away with. It may be derivable from the FCF, and will likely influence the Application Questions.";
+  static String helpTitle(AppLocalizations l) => l.stepAim;
+  static String helpText(AppLocalizations l) => l.homileticAimHelpText;
 
   final Homiletic homiletic;
 
@@ -45,7 +45,7 @@ class _AimCardState extends State<AimCard> {
     return StepTextField(
       step: StudyStep.aim,
       controller: _controller,
-      hint: 'Cause the audience to learn that…',
+      hint: context.l10n.homileticAimHint,
       keyboardType: TextInputType.multiline,
       onChanged: (String text) async {
         await widget.homiletic.updateAim(text);

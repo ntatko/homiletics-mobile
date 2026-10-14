@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:homiletics/l10n/l10n.dart';
 import 'package:homiletics/classes/homiletic.dart';
 import 'package:homiletics/common/homiletic_list_item.dart';
 import 'package:homiletics/common/study_data_builder.dart';
@@ -38,7 +39,7 @@ class DisplayLessons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (homiletics.isEmpty) {
-      return const StudyListEmpty('No homiletics yet.');
+      return StudyListEmpty(context.l10n.studiesNoHomiletics);
     }
     return ListView.builder(
       padding: studyListPadding,

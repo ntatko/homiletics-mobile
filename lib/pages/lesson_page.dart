@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:homiletics/l10n/l10n.dart';
 import 'package:homiletics/classes/homiletic.dart';
 import 'package:homiletics/components/past_lecture_notes.dart';
 import 'package:homiletics/components/past_lessons.dart';
@@ -26,12 +27,12 @@ class LessonPage extends StatelessWidget {
       initialIndex: initialTab,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("Your studies"),
-          bottom: const TabBar(
+          title: Text(context.l10n.studiesTitle),
+          bottom: TabBar(
             tabs: [
-              Tab(text: 'Homiletics'),
-              Tab(text: 'Lectures'),
-              Tab(text: 'Word studies'),
+              Tab(text: context.l10n.studiesTabHomiletics),
+              Tab(text: context.l10n.studiesTabLectures),
+              Tab(text: context.l10n.studiesTabWordStudies),
             ],
           ),
         ),

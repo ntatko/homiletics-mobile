@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:homiletics/classes/translation.dart';
 import 'package:homiletics/common/verse_container.dart';
+import 'package:homiletics/l10n/l10n.dart';
 import 'package:homiletics/theme/app_theme.dart';
 import 'package:homiletics/theme/widgets.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -41,7 +44,7 @@ String _hex(Color c) =>
 /// page's own scripts can keep filling in results and pages. Taps on a
 /// result title are caught with one delegated listener, so results added
 /// after load still post their reference.
-String _readerScript(AppColors c, Color accent) {
+String _readerScript(AppColors c, Color accent, String addLabel) {
   final String css = """
     @import url('https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,600&display=swap');
     html, body { background: ${_hex(c.surface)} !important; margin: 0 !important; }
@@ -82,7 +85,7 @@ String _readerScript(AppColors c, Color accent) {
       color: ${_hex(accent)} !important; text-decoration: none !important;
     }
     a.bible-item-title::after {
-      content: '+ Add'; margin-left: 10px; padding: 2px 9px;
+      content: ${jsonEncode(addLabel)}; margin-left: 10px; padding: 2px 9px;
       border: 1px solid ${_hex(accent)}; border-radius: 10px;
       font: 600 11px -apple-system, 'Roboto', sans-serif;
       vertical-align: 3px;
@@ -214,8 +217,10 @@ class _OtherUsageSearchSheetState extends State<_OtherUsageSearchSheet> {
     final AppColors c = AppColors.of(context);
     _controller.setBackgroundColor(c.surface);
     try {
-      await _controller
-          .runJavaScript(_readerScript(c, c.step(StudyStep.summary)));
+      await _controller.runJavaScript(_readerScript(
+          c,
+          c.step(StudyStep.summary),
+          context.l10n.wordStudyOtherUsageAddResult));
     } catch (_) {
       // Page navigated away mid-script; the next onPageFinished re-applies.
     }
@@ -243,10 +248,12 @@ class _OtherUsageSearchSheetState extends State<_OtherUsageSearchSheet> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Overline('Other usage', color: color),
+                          Overline(context.l10n.wordStudyOtherUsageTitle,
+                              color: color),
                           const SizedBox(height: 2),
                           Text(
-                            'Where else \u201c${widget.word}\u201d appears',
+                            context.l10n
+                                .wordStudyOtherUsageSheetTitle(widget.word),
                             style: AppText.title.copyWith(color: c.ink),
                           ),
                         ],
@@ -257,7 +264,7 @@ class _OtherUsageSearchSheetState extends State<_OtherUsageSearchSheet> {
                       onPressed: () => Navigator.of(context).pop(),
                       style: FilledButton.styleFrom(
                           minimumSize: const Size(64, 44)),
-                      child: const Text('Done'),
+                      child: Text(context.l10n.commonDone),
                     ),
                   ],
                 ),
@@ -270,7 +277,7 @@ class _OtherUsageSearchSheetState extends State<_OtherUsageSearchSheet> {
                     runSpacing: 6,
                     crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
-                      Text('Added',
+                      Text(context.l10n.wordStudyOtherUsageAdded,
                           style: AppText.caption.copyWith(color: c.muted)),
                       for (final String reference in _picked)
                         Container(
@@ -290,7 +297,7 @@ class _OtherUsageSearchSheetState extends State<_OtherUsageSearchSheet> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
                 child: Text(
-                  'Tap a result below to add its reference.',
+                  context.l10n.wordStudyOtherUsageInstructions,
                   style: AppText.caption.copyWith(color: c.muted),
                 ),
               ),

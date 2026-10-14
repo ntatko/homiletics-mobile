@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import 'package:homiletics/l10n/l10n.dart';
 
 import 'package:flutter/material.dart';
 import 'package:homiletics/common/home_header.dart';
@@ -150,8 +151,7 @@ class _SearchOverlay extends StatelessWidget {
           ? Padding(
               padding: const EdgeInsets.fromLTRB(24, 16, 24, 0),
               child: Text(
-                'Search your homiletics, divisions, applications, lecture '
-                'notes and word studies.',
+                context.l10n.homeSearchIntro,
                 style: AppText.body.copyWith(color: c.muted),
               ),
             )

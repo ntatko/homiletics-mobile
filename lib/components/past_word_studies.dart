@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:homiletics/l10n/l10n.dart';
 import 'package:homiletics/classes/word_study.dart';
 import 'package:homiletics/common/study_data_builder.dart';
 import 'package:homiletics/common/word_study_list_item.dart';
@@ -21,7 +22,7 @@ class PastWordStudies extends StatelessWidget {
 
         final List<WordStudy> studies = snapshot.data!.reversed.toList();
         if (studies.isEmpty) {
-          return const StudyListEmpty('No word studies yet.');
+          return StudyListEmpty(context.l10n.studiesNoWordStudies);
         }
         return ListView.builder(
           padding: studyListPadding,

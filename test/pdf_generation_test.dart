@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
+import 'dart:ui' show Locale;
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:homiletics/classes/Division.dart';
@@ -7,11 +8,78 @@ import 'package:homiletics/classes/application.dart';
 import 'package:homiletics/classes/content_summary.dart';
 import 'package:homiletics/classes/homiletic.dart';
 import 'package:homiletics/classes/word_study.dart';
+import 'package:homiletics/l10n/generated/app_localizations_en.dart';
+import 'package:homiletics/l10n/l10n.dart';
+import 'package:homiletics/services/pdf_font_service.dart';
 import 'package:homiletics/storage/pdf_generation.dart';
 import 'package:pdf/pdf.dart';
 
+/// Chinese strings for the handout, used while the app has no generated
+/// Chinese localization (the real one wins once it exists).
+class _ChinesePdfStrings extends AppLocalizationsEn {
+  _ChinesePdfStrings() : super('zh');
+  @override
+  String get pdfOverlineHomiletics => '讲道学';
+  @override
+  String get pdfUntitledPassage => '未命名经文';
+  @override
+  String pdfHomileticLabel(String passage) => '讲道学 · $passage';
+  @override
+  String pdfPageOf(int current, int total) => '第 $current 页，共 $total 页';
+  @override
+  String get pdfFcfCaption => '堕落光景焦点';
+  @override
+  String get pdfAimLeadIn => '使听众明白：';
+  @override
+  String get stepContent => '内容';
+  @override
+  String get stepDivisions => '分段';
+  @override
+  String get stepSummary => '摘要句';
+  @override
+  String get stepFcf => 'FCF';
+  @override
+  String get stepAim => '目标';
+  @override
+  String get stepApplication => '应用';
+}
+
+/// Spanish strings for the word study handout, likewise.
+class _SpanishPdfStrings extends AppLocalizationsEn {
+  _SpanishPdfStrings() : super('es');
+  @override
+  String get pdfOverlineWordStudy => 'ESTUDIO DE PALABRA';
+  @override
+  String pdfWordStudyLabelWithPassage(String word, String passage) =>
+      'Estudio de palabra · $word · $passage';
+  @override
+  String pdfPageOf(int current, int total) => 'página $current de $total';
+  @override
+  String get pdfWordStudyDefinition => 'Definición';
+  @override
+  String get pdfWordStudyOtherUsage => 'Otros usos';
+  @override
+  String get pdfWordStudyContextualMeaning => 'Significado en el contexto';
+  @override
+  String get pdfWordStudyDeeperMeaning => 'Significado más profundo';
+  @override
+  String get pdfWordStudyApplication => 'Aplicación';
+}
+
+/// The generated strings for [locale], or [fallback] if there are none yet.
+AppLocalizations _strings(Locale locale, AppLocalizations Function() fallback) {
+  try {
+    return lookupAppLocalizations(locale);
+  } catch (_) {
+    return fallback();
+  }
+}
+
 /// Builds sample handouts. Set PDF_PREVIEW_DIR to also write them to disk,
 /// e.g. `PDF_PREVIEW_DIR=/tmp/pdf flutter test test/pdf_generation_test.dart`.
+/// Set PDF_NOTO_DIR to a folder holding the downloaded Noto fonts (named as
+/// in [PdfScriptFont.fileName]) to render Chinese and Arabic glyphs; without
+/// it those cases check that the handout still builds, with boxes.
 void main() {
   late HomileticPdfFonts fonts;
 
@@ -39,9 +107,12 @@ void main() {
     List<Application> a, {
     PdfPageFormat format = PdfPageFormat.letter,
     String? previewName,
+    AppLocalizations? strings,
+    HomileticPdfFonts? withFonts,
   }) async {
     return preview(
-        await buildHomileticsDocument(h, s, d, a, fonts: fonts, format: format)
+        await buildHomileticsDocument(h, s, d, a,
+                fonts: withFonts ?? fonts, format: format, strings: strings)
             .save(),
         previewName);
   }
@@ -50,12 +121,22 @@ void main() {
     WordStudy study, {
     PdfPageFormat format = PdfPageFormat.letter,
     String? previewName,
+    AppLocalizations? strings,
+    HomileticPdfFonts? withFonts,
   }) async {
     return preview(
-        await buildWordStudyDocument(study, fonts: fonts, format: format)
+        await buildWordStudyDocument(study,
+                fonts: withFonts ?? fonts, format: format, strings: strings)
             .save(),
         previewName);
   }
+
+  /// Reads script fonts from PDF_NOTO_DIR, or null when that isn't set.
+  final String? notoDir = Platform.environment['PDF_NOTO_DIR'];
+  Future<Uint8List> notoFromDisk(PdfScriptFont font) =>
+      File('$notoDir/${font.fileName}').readAsBytes();
+  bool hasNoto(PdfScriptFont font) =>
+      notoDir != null && File('$notoDir/${font.fileName}').existsSync();
 
   int pageCount(Uint8List bytes) => RegExp(r'/Type\s*/Page[^s]')
       .allMatches(String.fromCharCodes(bytes))
@@ -244,5 +325,138 @@ void main() {
     final Uint8List bytes =
         await renderWordStudy(long, previewName: 'word_study_long.pdf');
     expect(pageCount(bytes), greaterThan(4));
+  });
+
+  test('English strings are unchanged', () {
+    final AppLocalizations l = lookupAppLocalizations(const Locale('en'));
+    expect(l.pdfPageOf(2, 3), 'page 2 of 3');
+    expect(l.pdfHomileticLabel('John 1'), 'Homiletics · John 1');
+    expect(l.pdfWordStudyLabelWithPassage('Logos', 'John 1:1'),
+        'Word study · Logos · John 1:1');
+  });
+
+  test('scriptFontsFor picks fonts by script', () {
+    expect(scriptFontsFor(['Revelation 2:1 · ξύλον · Иоанна']), isEmpty);
+    expect(scriptFontsFor(['太初有道']), {PdfScriptFont.chineseSimplified});
+    expect(scriptFontsFor(['太初有道'], preferTraditional: true),
+        {PdfScriptFont.chineseTraditional});
+    expect(scriptFontsFor(['في البدء كان الكلمة', '道']),
+        {PdfScriptFont.chineseSimplified, PdfScriptFont.arabic});
+  });
+
+  final Homiletic chineseHomiletic = Homiletic(
+    passage: '约翰福音 1:1–14',
+    updatedAt: DateTime(2026, 10, 13, 9, 30),
+    subjectSentence: '道成了肉身，住在我们中间，充充满满地有恩典有真理。',
+    fcf: '我们常常像那些不认识祂的人一样，宁爱黑暗，倒不爱光。',
+    aim: '永恒的道成为人，使凡接待祂的人有权柄作神的儿女。',
+  );
+  final List<ContentSummary> chineseSummaries = [
+    ContentSummary(
+        homileticId: 1, passage: '1:1–5', summary: '太初有道，道与神同在，道就是神。'),
+    ContentSummary(
+        homileticId: 1,
+        passage: '1:6–13',
+        summary: '有一个人，是从神那里差来的，名叫约翰。凡接待祂的，就是信祂名的人，'
+                '祂就赐他们权柄，作神的儿女。' *
+            6),
+    ContentSummary(
+        homileticId: 1,
+        passage: '1:14',
+        summary: '道成了肉身，住在我们中间。Mixed English 与 العربية text.'),
+  ];
+  final List<Division> chineseDivisions = [
+    Division(1, passage: '1:1–5', title: '永恒的道'),
+    Division(1, passage: '1:6–14', title: '道成肉身'),
+  ];
+  final List<Application> chineseApplications = [
+    Application(homileticsId: 1, text: '我今天怎样接待基督，而不是拒绝祂？'),
+  ];
+
+  test('Chinese homiletic builds even without a CJK font (boxes)', () async {
+    final AppLocalizations zh = _strings(
+        const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hans'),
+        _ChinesePdfStrings.new);
+    final HomileticPdfFonts offline = await withScriptFallbacks(
+        fonts,
+        homileticPdfTexts(chineseHomiletic, chineseSummaries, chineseDivisions,
+            chineseApplications, zh),
+        load: (PdfScriptFont font) async =>
+            throw const SocketException('offline'));
+    expect(offline.fallback.length, fonts.fallback.length);
+    final Uint8List bytes = await render(chineseHomiletic, chineseSummaries,
+        chineseDivisions, chineseApplications,
+        strings: zh, withFonts: offline);
+    expect(String.fromCharCodes(bytes.sublist(0, 5)), '%PDF-');
+  });
+
+  test('Chinese homiletic renders with Noto Sans SC', () async {
+    if (!hasNoto(PdfScriptFont.chineseSimplified)) {
+      markTestSkipped('Set PDF_NOTO_DIR to a folder with '
+          '${PdfScriptFont.chineseSimplified.fileName} to run this.');
+      return;
+    }
+    final AppLocalizations zh = _strings(
+        const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hans'),
+        _ChinesePdfStrings.new);
+    final HomileticPdfFonts withCjk = await withScriptFallbacks(
+        fonts,
+        homileticPdfTexts(chineseHomiletic, chineseSummaries, chineseDivisions,
+            chineseApplications, zh),
+        load: (PdfScriptFont font) async => hasNoto(font)
+            ? notoFromDisk(font)
+            : throw FileSystemException('missing', font.fileName));
+    expect(withCjk.fallback.length, greaterThan(fonts.fallback.length));
+    final Uint8List bytes = await render(chineseHomiletic, chineseSummaries,
+        chineseDivisions, chineseApplications,
+        strings: zh, withFonts: withCjk, previewName: 'homiletic_zh.pdf');
+    expect(String.fromCharCodes(bytes.sublist(0, 5)), '%PDF-');
+  });
+
+  test('Spanish word study renders', () async {
+    final AppLocalizations es =
+        _strings(const Locale('es'), _SpanishPdfStrings.new);
+    final WordStudy study = WordStudy(
+      word: 'Candelero',
+      passage: 'Apocalipsis 2:1–7',
+      updatedAt: DateTime(2026, 10, 13, 9, 30),
+      definition: 'Soporte que sostiene una lámpara de aceite para que su luz '
+          'alcance toda la habitación; en el tabernáculo, el candelero de oro '
+          'de siete brazos que iluminaba el Lugar Santo.',
+      otherUsage: 'Mateo 5:15\nHebreos 9:2\nApocalipsis 11:4',
+      contextualMeaning: 'Jesús mismo explica la imagen: «los siete '
+          'candeleros son las siete iglesias» (1:20). ¿Qué significa que se '
+          'quite el candelero? Dejar de ser iglesia, por ocupada que esté.',
+      deeperMeaning: 'El griego λυχνία es el soporte, no la lámpara: la '
+          'iglesia no produce la luz, la sostiene. (Chino: 灯台.)',
+      application: 'Esta semana volveré a las «primeras obras» de oración y '
+          'deleite en Él antes de emprender algo nuevo. Ñandú, pingüino.',
+    );
+    final HomileticPdfFonts withFonts = await withScriptFallbacks(
+        fonts, wordStudyPdfTexts(study, es),
+        load: (PdfScriptFont font) async => hasNoto(font)
+            ? notoFromDisk(font)
+            : throw FileSystemException('missing', font.fileName));
+    final Uint8List bytes = await renderWordStudy(study,
+        strings: es, withFonts: withFonts, previewName: 'word_study_es.pdf');
+    expect(pageCount(bytes), 1);
+  });
+
+  test('Arabic text renders with Noto Naskh Arabic', () async {
+    if (!hasNoto(PdfScriptFont.arabic)) {
+      markTestSkipped('Set PDF_NOTO_DIR to a folder with '
+          '${PdfScriptFont.arabic.fileName} to run this.');
+      return;
+    }
+    final WordStudy study = WordStudy(
+        word: 'الكلمة',
+        passage: 'يوحنا 1:1',
+        definition: 'في البدء كان الكلمة، والكلمة كان عند الله.');
+    final HomileticPdfFonts withArabic = await withScriptFallbacks(fonts,
+        wordStudyPdfTexts(study, lookupAppLocalizations(const Locale('en'))),
+        load: notoFromDisk);
+    expect(withArabic.fallback.length, fonts.fallback.length + 1);
+    await renderWordStudy(study,
+        withFonts: withArabic, previewName: 'word_study_ar.pdf');
   });
 }

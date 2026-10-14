@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:homiletics/l10n/l10n.dart';
 import 'package:homiletics/theme/app_theme.dart';
 
 /// A white card with a hairline border: the basic container of the design.
@@ -196,7 +197,10 @@ class SectionHeader extends StatelessWidget {
 /// a short note plus Print and Share buttons.
 class StudyCompleteCard extends StatelessWidget {
   final String title;
-  final String message;
+
+  /// Defaults to a localized "Print it for class, or share it with your
+  /// group."
+  final String? message;
   final VoidCallback onPrint;
   final VoidCallback onShare;
 
@@ -205,7 +209,7 @@ class StudyCompleteCard extends StatelessWidget {
     required this.title,
     required this.onPrint,
     required this.onShare,
-    this.message = 'Print it for class, or share it with your group.',
+    this.message,
   }) : super(key: key);
 
   @override
@@ -229,14 +233,15 @@ class StudyCompleteCard extends StatelessWidget {
               ),
             ]),
             const SizedBox(height: 4),
-            Text(message, style: AppText.body.copyWith(color: c.muted)),
+            Text(message ?? context.l10n.editorStudyCompleteMessage,
+                style: AppText.body.copyWith(color: c.muted)),
             const SizedBox(height: 14),
             Row(children: [
               Expanded(
                 child: FilledButton.icon(
                   onPressed: onPrint,
                   icon: const Icon(Icons.print_outlined, size: 18),
-                  label: const Text('Print'),
+                  label: Text(context.l10n.commonPrint),
                 ),
               ),
               const SizedBox(width: 10),
@@ -244,7 +249,7 @@ class StudyCompleteCard extends StatelessWidget {
                 child: OutlinedButton.icon(
                   onPressed: onShare,
                   icon: const Icon(Icons.ios_share_rounded, size: 18),
-                  label: const Text('Share'),
+                  label: Text(context.l10n.commonShare),
                   style: OutlinedButton.styleFrom(
                       backgroundColor: c.surface,
                       side: BorderSide(color: c.lineStrong)),

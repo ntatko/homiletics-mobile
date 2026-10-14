@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:homiletics/classes/content_summary.dart';
 import 'package:homiletics/classes/homiletic.dart';
+import 'package:homiletics/l10n/l10n.dart';
 import 'package:homiletics/components/homiletics/row_controllers.dart';
 import 'package:homiletics/theme/app_theme.dart';
 import 'package:homiletics/theme/homiletics_widgets.dart';
@@ -8,9 +9,8 @@ import 'package:homiletics/theme/homiletics_widgets.dart';
 /// The editor of the Content step: one row of verses + summary per section
 /// of the passage.
 class ContentSummariesCard extends StatefulWidget {
-  static const String helpTitle = "Content Summaries";
-  static const String helpText =
-      "A content summary is a summary of a section of the bible. It doesn't need to be a sentence, it can also be more than one sentence. It should be a summary, in your own words, of the content of the passage.\nYou should have at least 10, but more than 20 content summaries. Generally, depending on the length of the passage, you will divide your passage into chunks of an approximate size to hit the 10-20 mark. So, if you passage is 30 verses, I'd try for 3 verses per content summary on average.";
+  static String helpTitle(AppLocalizations l) => l.homileticContentHelpTitle;
+  static String helpText(AppLocalizations l) => l.homileticContentHelpText;
 
   final List<ContentSummary> contentSummaries;
   final Homiletic homiletic;
@@ -54,15 +54,16 @@ class ContentSummariesCardState extends State<ContentSummariesCard> {
     return _remover.remove(
       context,
       hasText: controllers.any((c) => c.text.trim().isNotEmpty),
-      rowName: 'content summary',
+      confirmTitle: context.l10n.homileticRemoveContentSummaryTitle,
       remove: () => widget.removeContentSummary(summary),
-      failureMessage: "Removing that Content Summary didn't work",
+      failureMessage: context.l10n.homileticRemoveContentSummaryFailed,
       errorIdentifier: "Content Summary removal",
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations l = context.l10n;
     _controllers.retainOnly(widget.contentSummaries);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -81,19 +82,21 @@ class ContentSummariesCardState extends State<ContentSummariesCard> {
                 await widget.homiletic.update();
               },
               textController: controllers[1],
-              textHint: 'Summary…',
+              textHint: l.homileticContentSummaryHint,
               onSubmitted: (_) => _add(),
               onTextChanged: (String value) async {
                 await element.updateText(value);
                 await widget.homiletic.update();
               },
-              removeTooltip: 'Remove content summary',
+              removeTooltip: l.homileticRemoveContentSummaryTooltip,
               onRemove: () => _remove(element),
             ),
           );
         }),
         DashedAddButton(
-            step: StudyStep.content, label: 'Add summary', onPressed: _add),
+            step: StudyStep.content,
+            label: l.homileticAddContentSummary,
+            onPressed: _add),
       ],
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:homiletics/l10n/l10n.dart';
 import 'package:homiletics/theme/app_theme.dart';
 
 /// Corner radius of the word-study section cards (the hero word card uses
@@ -23,7 +24,7 @@ Future<void> showWordStudyHelp(
       content: Text(helpText),
       actions: [
         TextButton(
-          child: const Text("Close"),
+          child: Text(context.l10n.commonClose),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ],
@@ -56,7 +57,7 @@ class WordStudyTitle extends StatelessWidget {
     );
     return Semantics(
       button: true,
-      label: '$title, about this section',
+      label: context.l10n.wordStudySectionHelpSemantics(title),
       excludeSemantics: true,
       child: InkWell(
         onTap: () => showWordStudyHelp(context, title, helpText),

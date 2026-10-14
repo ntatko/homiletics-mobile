@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:homiletics/l10n/l10n.dart';
 import 'package:homiletics/common/start_passage_item_flow.dart';
 import 'package:homiletics/theme/app_theme.dart';
 
@@ -28,6 +29,7 @@ class _StartActivityState extends State<StartActivity> {
   Widget build(BuildContext context) {
     final AppColors c = AppColors.of(context);
     final bool hasPassage = _passage.isNotEmpty;
+    final AppLocalizations l = context.l10n;
     OutlineInputBorder border(Color color, [double width = 1]) =>
         OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppRadius.tile),
@@ -49,7 +51,7 @@ class _StartActivityState extends State<StartActivity> {
                       Expanded(
                         child: FilledButton(
                           onPressed: () => _start(startHomileticForPassage),
-                          child: const Text('Homiletics',
+                          child: Text(l.startHomiletics,
                               maxLines: 1, overflow: TextOverflow.ellipsis),
                         ),
                       ),
@@ -57,7 +59,7 @@ class _StartActivityState extends State<StartActivity> {
                       Expanded(
                         child: OutlinedButton(
                           onPressed: () => _start(startLectureNoteForPassage),
-                          child: const Text('Lecture',
+                          child: Text(l.startLecture,
                               maxLines: 1, overflow: TextOverflow.ellipsis),
                         ),
                       ),
@@ -65,7 +67,7 @@ class _StartActivityState extends State<StartActivity> {
                       Expanded(
                         child: OutlinedButton(
                           onPressed: () => _start(startWordStudyForPassage),
-                          child: const Text('Word study',
+                          child: Text(l.startWordStudy,
                               maxLines: 1, overflow: TextOverflow.ellipsis),
                         ),
                       ),
@@ -83,11 +85,11 @@ class _StartActivityState extends State<StartActivity> {
           textInputAction: TextInputAction.go,
           style: AppText.body.copyWith(color: c.ink),
           decoration: InputDecoration(
-            hintText: 'Study another passage…',
+            hintText: l.startPassageHint,
             prefixIcon: Icon(Icons.add_rounded, size: 20, color: c.muted),
             suffixIcon: hasPassage
                 ? IconButton(
-                    tooltip: 'Clear',
+                    tooltip: l.startClear,
                     icon: Icon(Icons.close_rounded, size: 20, color: c.muted),
                     onPressed: () {
                       _controller.clear();

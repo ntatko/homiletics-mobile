@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import 'package:homiletics/l10n/l10n.dart';
 
 import 'package:homiletics/common/homiletic_progress.dart';
 import 'package:homiletics/common/start_passage_item_flow.dart';
@@ -126,16 +127,16 @@ class _CurrentLessonState extends State<CurrentLesson> {
       .replaceFirst(RegExp(r'^www\.', caseSensitive: false), '')
       .replaceFirst(RegExp(r'/$'), '');
 
-  String get _filterLabel =>
-      _selectedStudy == null ? 'All studies' : _studyLabel(_selectedStudy!);
+  String _filterLabel(AppLocalizations l) =>
+      _selectedStudy == null ? l.homeAllStudies : _studyLabel(_selectedStudy!);
 
-  String _overlineFor(int index) {
+  String _overlineFor(AppLocalizations l, int index) {
     final int current = _currentWeekIndex;
     final String when = index == current
-        ? 'This week'
-        : (current >= 0 && index < current ? 'Earlier' : 'Coming up');
+        ? l.homeThisWeek
+        : (current >= 0 && index < current ? l.homeEarlier : l.homeComingUp);
     final String lesson = _filteredSchedules[index].lesson.trim();
-    return lesson.isEmpty ? when : '$when · $lesson';
+    return lesson.isEmpty ? when : l.homeWeekOverline(when, lesson);
   }
 
   /// Widest the filter pill may get, given the card's inner width.
@@ -173,13 +174,14 @@ class _CurrentLessonState extends State<CurrentLesson> {
   Widget build(BuildContext context) {
     if (_filteredSchedules.isEmpty) return const SizedBox.shrink();
     final TextScaler scaler = MediaQuery.textScalerOf(context);
+    final AppLocalizations l = context.l10n;
 
     return LayoutBuilder(builder: (context, constraints) {
       final double inner =
           constraints.maxWidth - 2 * _pageGutter - 2 * _cardPaddingH;
       final double pillMaxWidth = _pillMaxWidth(inner);
       Widget pill(PassageSchedule schedule) => _StudyFilterPill(
-            label: _filterLabel,
+            label: _filterLabel(l),
             selected: _selectedStudy,
             studies: _uniqueStudies,
             studyLabel: _studyLabel,
@@ -206,7 +208,7 @@ class _CurrentLessonState extends State<CurrentLesson> {
                             const EdgeInsets.symmetric(horizontal: _pageGutter),
                         child: _WeekCard(
                           schedule: tallest,
-                          overline: 'This week',
+                          overline: l.homeThisWeek,
                           pillMaxWidth: pillMaxWidth,
                           filter: pill(tallest),
                           measuring: true,
@@ -229,7 +231,7 @@ class _CurrentLessonState extends State<CurrentLesson> {
                           const EdgeInsets.symmetric(horizontal: _pageGutter),
                       child: _WeekCard(
                         schedule: schedule,
-                        overline: _overlineFor(index),
+                        overline: _overlineFor(l, index),
                         pillMaxWidth: pillMaxWidth,
                         filter: pill(schedule),
                       ),
@@ -275,6 +277,7 @@ class _StudyFilterPill extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AppColors c = AppColors.of(context);
+    final AppLocalizations l = context.l10n;
     PopupMenuItem<String> item(String value, String text, bool checked) =>
         PopupMenuItem<String>(
           value: value,
@@ -290,11 +293,11 @@ class _StudyFilterPill extends StatelessWidget {
         );
 
     return PopupMenuButton<String>(
-      tooltip: 'Filter by study',
+      tooltip: l.homeFilterByStudy,
       onSelected: onSelected,
       position: PopupMenuPosition.under,
       itemBuilder: (context) => [
-        item(_allStudies, 'All studies', selected == null),
+        item(_allStudies, l.homeAllStudies, selected == null),
         for (final String study in studies)
           item(study, studyLabel(study), selected == study),
         if (canOpenSite) ...[
@@ -306,7 +309,7 @@ class _StudyFilterPill extends StatelessWidget {
                   width: 28,
                   child: Icon(Icons.open_in_new_rounded,
                       size: 18, color: c.muted)),
-              const Text('Open study website'),
+              Text(l.homeOpenStudySite),
             ]),
           ),
         ],
@@ -420,8 +423,8 @@ class _WeekCard extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: 8),
-                      const Flexible(
-                        child: Text('Lecture',
+                      Flexible(
+                        child: Text(context.l10n.startLecture,
                             maxLines: 1, overflow: TextOverflow.ellipsis),
                       ),
                     ],
@@ -434,7 +437,7 @@ class _WeekCard extends StatelessWidget {
                   style: _compactButton,
                   onPressed: () =>
                       startWordStudyForPassage(context, schedule.passage),
-                  child: const Text('Word study',
+                  child: Text(context.l10n.startWordStudy,
                       maxLines: 1, overflow: TextOverflow.ellipsis),
                 ),
               ),
@@ -465,7 +468,7 @@ class _HomileticProgressRow extends StatelessWidget {
         final bool loading =
             snapshot.connectionState != ConnectionState.done && done == null;
         return _ProgressRowContent(
-          status: loading ? '' : describeProgress(done),
+          status: loading ? '' : describeProgress(context.l10n, done),
           done: done ?? const {},
           started: done != null,
           onPressed: () => startHomileticForPassage(context, passage),
@@ -496,11 +499,12 @@ class _ProgressRowContent extends StatelessWidget {
   Widget build(BuildContext context) {
     final AppColors c = AppColors.of(context);
     final bool finished = done.length == StudyStep.values.length;
+    final AppLocalizations l = context.l10n;
     final String label = !started
-        ? 'Start homiletics'
+        ? l.homeStartHomiletics
         : finished
-            ? 'Open homiletics'
-            : 'Continue homiletics';
+            ? l.homeOpenHomiletics
+            : l.homeContinueHomiletics;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
@@ -547,7 +551,7 @@ class LoadingLesson extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Overline('This week', color: c.accent),
+            Overline(context.l10n.homeThisWeek, color: c.accent),
             const SizedBox(height: 10),
             Row(
               children: [
@@ -558,7 +562,7 @@ class LoadingLesson extends StatelessWidget {
                 ),
                 const SizedBox(width: 10),
                 Flexible(
-                  child: Text('Loading suggested passages…',
+                  child: Text(context.l10n.homeLoadingPassages,
                       style: AppText.body.copyWith(color: c.muted)),
                 ),
               ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:homiletics/l10n/l10n.dart';
 import 'package:homiletics/theme/app_theme.dart';
 
 /// Home's top bar: the serif "Homiletics" wordmark with search and settings
@@ -33,6 +34,7 @@ class HomeHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AppColors c = AppColors.of(context);
+    final AppLocalizations l = context.l10n;
     return Padding(
       padding: const EdgeInsets.fromLTRB(24, 12, 12, 8),
       child: SizedBox(
@@ -52,7 +54,7 @@ class HomeHeader extends StatelessWidget {
                         textInputAction: TextInputAction.search,
                         style: AppText.body.copyWith(color: c.ink),
                         decoration: InputDecoration(
-                          hintText: 'Search lessons, passages, notes…',
+                          hintText: l.homeSearchFieldHint,
                           isDense: true,
                           prefixIcon: Icon(Icons.search_rounded,
                               size: 20, color: c.muted),
@@ -67,7 +69,7 @@ class HomeHeader extends StatelessWidget {
                     ),
                     const SizedBox(width: 4),
                     IconButton(
-                      tooltip: 'Close search',
+                      tooltip: l.homeCloseSearch,
                       icon: Icon(Icons.close_rounded, color: c.ink),
                       onPressed: onCloseSearch,
                     ),
@@ -79,19 +81,19 @@ class HomeHeader extends StatelessWidget {
                     Expanded(
                       child: Semantics(
                         header: true,
-                        child: Text('Homiletics',
+                        child: Text(l.appTitle,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: _wordmark.copyWith(color: c.ink)),
                       ),
                     ),
                     IconButton(
-                      tooltip: 'Search',
+                      tooltip: l.homeSearchTooltip,
                       icon: Icon(Icons.search_rounded, size: 24, color: c.ink),
                       onPressed: onOpenSearch,
                     ),
                     IconButton(
-                      tooltip: 'Settings',
+                      tooltip: l.settingsTitle,
                       icon:
                           Icon(Icons.settings_outlined, size: 24, color: c.ink),
                       onPressed: onOpenSettings,

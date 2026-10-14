@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:homiletics/classes/homiletic.dart';
+import 'package:homiletics/l10n/l10n.dart';
 import 'package:homiletics/theme/app_theme.dart';
 import 'package:homiletics/theme/homiletics_widgets.dart';
 
 /// The editor of the FCF step: a single multiline answer.
 class FcfCard extends StatefulWidget {
-  static const String helpTitle = "FCF";
-  static const String helpText =
-      "The FCF (Fallen Condition Focus) is the part of humanity that is the most illustrated or referenced in the passage. It is the condition that the audience is in, the reason that the audience needs to be saved.";
+  static String helpTitle(AppLocalizations l) => l.stepFcf;
+  static String helpText(AppLocalizations l) => l.homileticFcfHelpText;
 
   final Homiletic homiletic;
 
@@ -45,7 +45,7 @@ class _FcfCardState extends State<FcfCard> {
     return StepTextField(
       step: StudyStep.fcf,
       controller: _controller,
-      hint: 'Fallen/Frail/Feeble/Fickle',
+      hint: context.l10n.homileticFcfHint,
       keyboardType: TextInputType.text,
       onChanged: (String text) async {
         await widget.homiletic.updateFcf(text);

@@ -3,6 +3,7 @@ import 'package:homiletics/classes/preferences.dart';
 import 'package:homiletics/common/report_error.dart';
 import 'package:homiletics/common/verse_container.dart';
 import 'package:homiletics/components/preferences_modal.dart';
+import 'package:homiletics/l10n/l10n.dart';
 import 'package:homiletics/theme/app_theme.dart';
 import 'package:homiletics/theme/widgets.dart';
 import 'package:split_view/split_view.dart';
@@ -13,10 +14,14 @@ class EditorMenuAction {
   final String title;
   final Future<void> Function() onSelected;
 
+  /// Drawn in the danger color (e.g. Delete).
+  final bool destructive;
+
   const EditorMenuAction({
     required this.icon,
     required this.title,
     required this.onSelected,
+    this.destructive = false,
   });
 }
 
@@ -56,7 +61,8 @@ class PassageSplitScaffold extends StatefulWidget {
   final List<EditorMenuAction> extraActions;
 
   /// Small label above the passage field (e.g. "Homiletics · Passage").
-  final String headerLabel;
+  /// Defaults to a localized "Passage".
+  final String? headerLabel;
 
   /// In portrait, whether the verse panel sits above the study pane (true)
   /// or below it. In landscape the verses are always on the left.
@@ -77,7 +83,7 @@ class PassageSplitScaffold extends StatefulWidget {
     required this.deleteErrorIdentifier,
     this.passageHint,
     this.extraActions = const [],
-    this.headerLabel = 'Passage',
+    this.headerLabel,
     this.versePanelFirst = true,
     this.verseWeight = 0.34,
   }) : super(key: key);
@@ -145,19 +151,19 @@ class _PassageSplitScaffoldState extends State<PassageSplitScaffold> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: const Text("Are you sure?"),
-            content: Text(
-                "Deleting this ${widget.itemName} is permanent and cannot be undone. Are you sure you wish to proceed?"),
+            title: Text(context.l10n.editorDeleteConfirmTitle),
+            content:
+                Text(context.l10n.editorDeleteConfirmMessage(widget.itemName)),
             actions: [
               TextButton(
                   onPressed: () => Navigator.pop(context, false),
-                  child: const Text('Cancel')),
+                  child: Text(context.l10n.commonCancel)),
               TextButton(
                 onPressed: () => Navigator.pop(context, true),
                 style: TextButton.styleFrom(
                   foregroundColor: Colors.red,
                 ),
-                child: const Text("Delete"),
+                child: Text(context.l10n.commonDelete),
               )
             ],
           );
@@ -166,6 +172,7 @@ class _PassageSplitScaffoldState extends State<PassageSplitScaffold> {
 
     final NavigatorState navigator = Navigator.of(context);
     final ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
+    final AppLocalizations l = context.l10n;
     _deleting = true;
     try {
       await widget.onDelete();
@@ -174,15 +181,15 @@ class _PassageSplitScaffoldState extends State<PassageSplitScaffold> {
         content: Text(widget.deletedMessage),
         action: SnackBarAction(
           onPressed: () {},
-          label: "Ok",
+          label: l.commonOk,
         ),
       ));
     } catch (error) {
       messenger.showSnackBar(SnackBar(
-        content: const Text("Something went wrong. Try again soon."),
+        content: Text(l.commonSomethingWentWrong),
         action: SnackBarAction(
           onPressed: () {},
-          label: "Ok",
+          label: l.commonOk,
         ),
       ));
       sendError(error, widget.deleteErrorIdentifier);
@@ -233,20 +240,22 @@ class _PassageSplitScaffoldState extends State<PassageSplitScaffold> {
   @override
   Widget build(BuildContext context) {
     final AppColors c = AppColors.of(context);
+    final AppLocalizations l = context.l10n;
     final List<EditorMenuAction> menu = [
       EditorMenuAction(
           icon: Icons.check_rounded,
-          title: "Save and close",
+          title: l.editorSaveAndClose,
           onSelected: () async => _close()),
       ...widget.extraActions,
       EditorMenuAction(
           icon: Icons.tune_rounded,
-          title: "Preferences",
+          title: l.commonPreferences,
           onSelected: _openPreferences),
       EditorMenuAction(
           icon: Icons.delete_outline_rounded,
-          title: "Delete",
-          onSelected: _confirmDelete),
+          title: l.commonDelete,
+          onSelected: _confirmDelete,
+          destructive: true),
     ];
 
     final Widget studyPane =
@@ -263,7 +272,7 @@ class _PassageSplitScaffoldState extends State<PassageSplitScaffold> {
               padding: const EdgeInsets.fromLTRB(4, 8, 4, 4),
               child: Row(children: [
                 IconButton(
-                  tooltip: 'Back',
+                  tooltip: l.editorBack,
                   icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 20),
                   color: c.ink,
                   onPressed: _close,
@@ -273,7 +282,7 @@ class _PassageSplitScaffoldState extends State<PassageSplitScaffold> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Overline(widget.headerLabel),
+                      Overline(widget.headerLabel ?? l.editorPassageLabel),
                       TextField(
                         keyboardType: TextInputType.text,
                         textCapitalization: TextCapitalization.sentences,
@@ -287,7 +296,8 @@ class _PassageSplitScaffoldState extends State<PassageSplitScaffold> {
                           border: InputBorder.none,
                           enabledBorder: InputBorder.none,
                           focusedBorder: InputBorder.none,
-                          hintText: widget.passageHint ?? 'Add a passage',
+                          hintText:
+                              widget.passageHint ?? l.editorAddPassageHint,
                           hintStyle:
                               AppText.passageField.copyWith(color: c.muted),
                         ),
@@ -298,7 +308,7 @@ class _PassageSplitScaffoldState extends State<PassageSplitScaffold> {
                   ),
                 ),
                 PopupMenuButton<EditorMenuAction>(
-                    tooltip: 'More options',
+                    tooltip: l.editorMoreOptions,
                     onSelected: (action) => action.onSelected(),
                     icon: Icon(Icons.more_vert_rounded, color: c.ink),
                     itemBuilder: (context) => menu
@@ -307,13 +317,12 @@ class _PassageSplitScaffoldState extends State<PassageSplitScaffold> {
                               child: Row(children: [
                                 Icon(action.icon,
                                     size: 20,
-                                    color: action.title == 'Delete'
-                                        ? c.danger
-                                        : c.ink),
+                                    color:
+                                        action.destructive ? c.danger : c.ink),
                                 const SizedBox(width: 12),
                                 Text(action.title,
                                     style: AppText.body.copyWith(
-                                        color: action.title == 'Delete'
+                                        color: action.destructive
                                             ? c.danger
                                             : c.ink)),
                               ]),

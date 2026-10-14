@@ -3,6 +3,7 @@ import 'package:homiletics/classes/preferences.dart';
 import 'package:homiletics/classes/translation.dart';
 import 'package:homiletics/components/word_study/other_usage_search_sheet.dart';
 import 'package:homiletics/components/word_study/word_study_section_card.dart';
+import 'package:homiletics/l10n/l10n.dart';
 import 'package:homiletics/theme/app_theme.dart';
 import 'package:homiletics/theme/word_study_widgets.dart';
 
@@ -35,8 +36,8 @@ class OtherUsageCard extends StatelessWidget {
     required Future<void> Function(String) onChanged,
   }) async {
     if (word.trim().isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text("Enter a word above first."),
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(context.l10n.wordStudyEnterWordFirst),
       ));
       return;
     }
@@ -59,19 +60,19 @@ class OtherUsageCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AppColors c = AppColors.of(context);
+    final AppLocalizations l = context.l10n;
     const StudyStep step = StudyStep.summary;
     return WordStudySectionCard(
-      title: 'Other usage',
-      helpText:
-          'Where else does this word or concept appear in Scripture? Tap "+" to search Bible Gateway and add references you find, or write your own.',
-      hint: 'Where else does it appear in Scripture?',
+      title: l.wordStudyOtherUsageTitle,
+      helpText: l.wordStudyOtherUsageHelp,
+      hint: l.wordStudyOtherUsageHint,
       controller: controller,
       onChanged: onChanged,
       step: step,
       minLines: 3,
       compact: true,
       action: WordStudyAddButton(
-        tooltip: 'Find other usages',
+        tooltip: l.wordStudyFindOtherUsages,
         color: c.step(step),
         tint: c.stepTint(step),
         onPressed: () => openUsageSearch(

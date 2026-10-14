@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:homiletics/l10n/l10n.dart';
 import 'package:homiletics/classes/homiletic.dart';
 import 'package:homiletics/common/homiletic_progress.dart';
+import 'package:homiletics/common/relative_time.dart';
 import 'package:homiletics/pages/homeletic_editor.dart';
 import 'package:homiletics/theme/app_theme.dart';
 import 'package:homiletics/theme/home_widgets.dart';
 import 'package:loggy/loggy.dart';
-import 'package:timeago/timeago.dart' as timeago;
 
 /// A saved homiletic in a list: passage, "Homiletics · 2 of 6 steps · 3
 /// days ago". Opens the editor.
@@ -51,16 +52,18 @@ class _HomileticListItemState extends State<HomileticListItem> {
   @override
   Widget build(BuildContext context) {
     final Homiletic homiletic = widget.homiletic;
-    final List<String> parts = [
-      'Homiletics',
-      if (_progress != null) describeProgress(_progress),
-      timeago.format(homiletic.updatedAt ?? DateTime.now()),
-    ];
+    final AppLocalizations l = context.l10n;
+    final String time =
+        relativeTime(context, homiletic.updatedAt ?? DateTime.now());
+    final String subtitle = _progress == null
+        ? l.studiesHomileticSubtitleNoProgress(time)
+        : l.studiesHomileticSubtitle(describeProgress(l, _progress), time);
     return StudyListRow(
       key: Key("${homiletic.id}"),
       leading: const StudyKindTile(StudyKind.homiletic),
-      title: homiletic.passage.isNotEmpty ? homiletic.passage : 'Untitled',
-      subtitle: parts.join(' · '),
+      title:
+          homiletic.passage.isNotEmpty ? homiletic.passage : l.commonUntitled,
+      subtitle: subtitle,
       divider: widget.divider,
       onTap: () {
         Navigator.push(

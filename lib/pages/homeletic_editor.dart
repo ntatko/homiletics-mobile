@@ -12,6 +12,7 @@ import 'package:homiletics/components/homiletics/content_summaries_card.dart';
 import 'package:homiletics/components/homiletics/divisions_card.dart';
 import 'package:homiletics/components/homiletics/fcf_card.dart';
 import 'package:homiletics/components/homiletics/summary_sentence_card.dart';
+import 'package:homiletics/l10n/l10n.dart';
 import 'package:homiletics/storage/application_storage.dart';
 import 'package:homiletics/storage/content_summary_storage.dart';
 import 'package:homiletics/storage/division_storage.dart';
@@ -105,10 +106,10 @@ class _HomileticState extends State<HomileticEditor> {
       sendError(error, "load homiletics");
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: const Text("Something went wrong loading this lesson."),
+        content: Text(context.l10n.homileticLoadError),
         action: SnackBarAction(
           onPressed: () {},
-          label: "Ok",
+          label: context.l10n.commonOk,
         ),
       ));
     }
@@ -156,33 +157,37 @@ class _HomileticState extends State<HomileticEditor> {
     }
   }
 
-  static String _count(int n, String one, String many) =>
-      '$n ${n == 1 ? one : many}';
-
   /// The short text on the right of a collapsed step.
   String _summaryOf(StudyStep step) {
+    final AppLocalizations l = context.l10n;
     switch (step) {
       case StudyStep.content:
         final int n = _summaries.where((s) => _filled(s.summary)).length;
-        return n > 0 ? _count(n, 'summary', 'summaries') : 'Verses + summary';
+        return n > 0
+            ? l.homileticSummaryCount(n)
+            : l.homileticContentEmptySummary;
       case StudyStep.divisions:
         final int n = _divisions.where((d) => _filled(d.title)).length;
-        return n > 0 ? _count(n, 'division', 'divisions') : '2–4 groupings';
+        return n > 0
+            ? l.homileticDivisionCount(n)
+            : l.homileticDivisionsEmptySummary;
       case StudyStep.summary:
         return _filled(_thisHomiletic.subjectSentence)
             ? _thisHomiletic.subjectSentence.trim()
-            : '≤ 10 words';
+            : l.homileticSummaryEmptySummary;
       case StudyStep.fcf:
         return _filled(_thisHomiletic.fcf)
             ? _thisHomiletic.fcf.trim()
-            : 'Fallen condition focus';
+            : l.homileticFcfEmptySummary;
       case StudyStep.aim:
         return _filled(_thisHomiletic.aim)
             ? _thisHomiletic.aim.trim()
-            : 'The main takeaway';
+            : l.homileticAimEmptySummary;
       case StudyStep.application:
         final int n = _applications.where((a) => _filled(a.text)).length;
-        return n > 0 ? _count(n, 'question', 'questions') : 'How can I…';
+        return n > 0
+            ? l.homileticQuestionCount(n)
+            : l.homileticApplicationEmptySummary;
     }
   }
 
@@ -253,33 +258,40 @@ class _HomileticState extends State<HomileticEditor> {
     }
   }
 
-  static (String, String) _helpFor(StudyStep step) {
+  static (String, String) _helpFor(StudyStep step, AppLocalizations l) {
     switch (step) {
       case StudyStep.content:
-        return (ContentSummariesCard.helpTitle, ContentSummariesCard.helpText);
+        return (
+          ContentSummariesCard.helpTitle(l),
+          ContentSummariesCard.helpText(l)
+        );
       case StudyStep.divisions:
-        return (DivisionsCard.helpTitle, DivisionsCard.helpText);
+        return (DivisionsCard.helpTitle(l), DivisionsCard.helpText(l));
       case StudyStep.summary:
-        return (SummarySentenceCard.helpTitle, SummarySentenceCard.helpText);
+        return (
+          SummarySentenceCard.helpTitle(l),
+          SummarySentenceCard.helpText(l)
+        );
       case StudyStep.fcf:
-        return (FcfCard.helpTitle, FcfCard.helpText);
+        return (FcfCard.helpTitle(l), FcfCard.helpText(l));
       case StudyStep.aim:
-        return (AimCard.helpTitle, AimCard.helpText);
+        return (AimCard.helpTitle(l), AimCard.helpText(l));
       case StudyStep.application:
         return (
-          ApplicationQuestionsCard.helpTitle,
-          ApplicationQuestionsCard.helpText
+          ApplicationQuestionsCard.helpTitle(l),
+          ApplicationQuestionsCard.helpText(l)
         );
     }
   }
 
   Widget _buildStep(StudyStep step, {bool compact = false}) {
+    final AppLocalizations l = context.l10n;
     if (_expanded.contains(step)) {
-      final (String helpTitle, String helpText) = _helpFor(step);
+      final (String helpTitle, String helpText) = _helpFor(step, l);
       return ExpandedStepCard(
         key: _stepKeys[step],
         step: step,
-        title: step.label,
+        title: step.localizedLabel(l),
         helpTitle: helpTitle,
         helpText: helpText,
         onCollapse: () => _toggle(step),
@@ -289,7 +301,9 @@ class _HomileticState extends State<HomileticEditor> {
     return CollapsedStepTile(
       key: _stepKeys[step],
       step: step,
-      title: compact && step == StudyStep.application ? 'Apply' : step.label,
+      title: compact && step == StudyStep.application
+          ? step.localizedShortLabel(l)
+          : step.localizedLabel(l),
       summary: _summaryOf(step),
       done: _isDone(step),
       compact: compact,
@@ -317,7 +331,8 @@ class _HomileticState extends State<HomileticEditor> {
       steps.add(Padding(
         padding: const EdgeInsets.only(top: 8),
         child: StudyCompleteCard(
-          title: 'All six steps done',
+          title: context.l10n.homileticCompleteTitle,
+          message: context.l10n.homileticCompleteMessage,
           onPrint: _print,
           onShare: _share,
         ),
@@ -334,13 +349,14 @@ class _HomileticState extends State<HomileticEditor> {
   Future<void> _runPdfAction(Future<void> Function() action, String success,
       String failure, String errorIdentifier) async {
     final ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
+    final String okLabel = context.l10n.commonOk;
     try {
       await action();
       messenger.showSnackBar(SnackBar(
         content: Text(success),
         action: SnackBarAction(
           onPressed: () {},
-          label: "Ok",
+          label: okLabel,
         ),
       ));
     } catch (error) {
@@ -349,7 +365,7 @@ class _HomileticState extends State<HomileticEditor> {
         content: Text(failure),
         action: SnackBarAction(
           onPressed: () {},
-          label: "Ok",
+          label: okLabel,
         ),
       ));
     }
@@ -358,32 +374,37 @@ class _HomileticState extends State<HomileticEditor> {
   Future<void> _share() => _runPdfAction(
       () =>
           shareHomiletic(_thisHomiletic, _summaries, _divisions, _applications),
-      "PDF shared successfully.",
-      "Something went wrong sharing your PDF. Try again soon.",
+      context.l10n.homileticPdfShared,
+      context.l10n.homileticPdfShareFailed,
       "Share PDF");
 
   Future<void> _print() => _runPdfAction(
       () =>
           printHomiletic(_thisHomiletic, _summaries, _divisions, _applications),
-      "PDF printed successfully.",
-      "Something went wrong creating your PDF. Try again soon.",
+      context.l10n.homileticPdfPrinted,
+      context.l10n.homileticPdfPrintFailed,
       "PDF print");
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations l = context.l10n;
     return PassageSplitScaffold(
       initialPassage: _thisHomiletic.passage,
-      headerLabel: 'Homiletics · Passage',
+      headerLabel: l.homileticHeaderLabel,
       onPassageChanged: _thisHomiletic.updatePassage,
-      itemName: "Homiletics lesson",
-      deletedMessage: "Homiletics Deleted",
+      itemName: l.homileticItemName,
+      deletedMessage: l.homileticDeletedMessage,
       deleteErrorIdentifier: "delete homiletics",
       onDelete: _thisHomiletic.delete,
       extraActions: [
         EditorMenuAction(
-            icon: Icons.ios_share_rounded, title: 'Share', onSelected: _share),
+            icon: Icons.ios_share_rounded,
+            title: l.commonShare,
+            onSelected: _share),
         EditorMenuAction(
-            icon: Icons.print_outlined, title: 'Print', onSelected: _print),
+            icon: Icons.print_outlined,
+            title: l.commonPrint,
+            onSelected: _print),
       ],
       child: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(12, 0, 12, 24),

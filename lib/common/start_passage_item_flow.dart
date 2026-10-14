@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:homiletics/classes/homiletic.dart';
 import 'package:homiletics/classes/lecture_note.dart';
 import 'package:homiletics/classes/word_study.dart';
+import 'package:homiletics/l10n/l10n.dart';
 import 'package:homiletics/pages/homeletic_editor.dart';
 import 'package:homiletics/pages/notes_editor.dart';
 import 'package:homiletics/pages/word_study_editor.dart';
@@ -27,26 +28,26 @@ Future<void> startHomileticForPassage(
       await showDialog<_DuplicatePassageChoice>(
     context: context,
     builder: (BuildContext ctx) {
-      final String extra = matches.length > 1
-          ? '\n\nYou have ${matches.length} homiletics for this passage; opening the most recent.'
-          : '';
+      final AppLocalizations l = ctx.l10n;
       return AlertDialog(
-        title: const Text('Already have a homiletic for this passage?'),
-        content: Text('$passage$extra'),
+        title: Text(l.startDuplicateHomileticTitle),
+        content: Text(matches.length > 1
+            ? l.startDuplicateHomileticMany(passage, matches.length)
+            : passage),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('Cancel'),
+            child: Text(l.commonCancel),
           ),
           TextButton(
             onPressed: () =>
                 Navigator.pop(ctx, _DuplicatePassageChoice.createNew),
-            child: const Text('Create new'),
+            child: Text(l.startCreateNew),
           ),
           FilledButton(
             onPressed: () =>
                 Navigator.pop(ctx, _DuplicatePassageChoice.editExisting),
-            child: const Text('Edit existing'),
+            child: Text(l.startEditExisting),
           ),
         ],
       );
@@ -82,26 +83,26 @@ Future<void> startLectureNoteForPassage(
       await showDialog<_DuplicatePassageChoice>(
     context: context,
     builder: (BuildContext ctx) {
-      final String extra = matches.length > 1
-          ? '\n\nYou have ${matches.length} lecture notes for this passage; opening the most recent.'
-          : '';
+      final AppLocalizations l = ctx.l10n;
       return AlertDialog(
-        title: const Text('Already have lecture notes for this passage?'),
-        content: Text('$passage$extra'),
+        title: Text(l.startDuplicateLectureTitle),
+        content: Text(matches.length > 1
+            ? l.startDuplicateLectureMany(passage, matches.length)
+            : passage),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('Cancel'),
+            child: Text(l.commonCancel),
           ),
           TextButton(
             onPressed: () =>
                 Navigator.pop(ctx, _DuplicatePassageChoice.createNew),
-            child: const Text('Create new'),
+            child: Text(l.startCreateNew),
           ),
           FilledButton(
             onPressed: () =>
                 Navigator.pop(ctx, _DuplicatePassageChoice.editExisting),
-            child: const Text('Edit existing'),
+            child: Text(l.startEditExisting),
           ),
         ],
       );
@@ -137,26 +138,26 @@ Future<void> startWordStudyForPassage(
       await showDialog<_DuplicatePassageChoice>(
     context: context,
     builder: (BuildContext ctx) {
-      final String extra = matches.length > 1
-          ? '\n\nYou have ${matches.length} word studies for this passage; opening the most recent.'
-          : '';
+      final AppLocalizations l = ctx.l10n;
       return AlertDialog(
-        title: const Text('Already have a word study for this passage?'),
-        content: Text('$passage$extra'),
+        title: Text(l.startDuplicateWordStudyTitle),
+        content: Text(matches.length > 1
+            ? l.startDuplicateWordStudyMany(passage, matches.length)
+            : passage),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('Cancel'),
+            child: Text(l.commonCancel),
           ),
           TextButton(
             onPressed: () =>
                 Navigator.pop(ctx, _DuplicatePassageChoice.createNew),
-            child: const Text('Create new'),
+            child: Text(l.startCreateNew),
           ),
           FilledButton(
             onPressed: () =>
                 Navigator.pop(ctx, _DuplicatePassageChoice.editExisting),
-            child: const Text('Edit existing'),
+            child: Text(l.startEditExisting),
           ),
         ],
       );

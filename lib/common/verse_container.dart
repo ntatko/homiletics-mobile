@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:homiletics/l10n/l10n.dart';
 import 'package:homiletics/theme/app_theme.dart';
 import 'package:homiletics/classes/preferences.dart';
 import 'package:homiletics/classes/translation.dart';
@@ -30,49 +31,12 @@ class VerseContainer extends StatefulWidget {
   VerseContainerState createState() => VerseContainerState();
 }
 
-/// Maps translation codes to Bible Gateway version codes
+/// The Bible Gateway version code for [translation], stored on the
+/// translation itself (e.g. 'oeb-us' -> 'OEB', 'nvi-pt' -> 'NVI-PT').
+/// Falls back to NIV for a translation without one.
 String getBibleGatewayVersion(Translation translation) {
-  switch (translation.code) {
-    // Popular modern translations
-    case 'niv':
-      return 'NIV';
-    case 'esv':
-      return 'ESV';
-    case 'nasb':
-      return 'NASB';
-    case 'nlt':
-      return 'NLT';
-    case 'nkjv':
-      return 'NKJV';
-    case 'csb':
-      return 'CSB';
-    case 'nrsv':
-      return 'NRSV';
-    case 'kjv':
-      return 'KJV';
-    case 'msg':
-      return 'MSG';
-    case 'amp':
-      return 'AMP';
-    case 'cev':
-      return 'CEV';
-    case 'ncv':
-      return 'NCV';
-    // Other translations
-    case 'web':
-      return 'WEB';
-    case 'bbe':
-      return 'BBE';
-    case 'oeb-cw':
-    case 'oeb-us':
-      return 'OEB';
-    case 'net':
-      return 'NET';
-    case 'asv':
-      return 'ASV';
-    default:
-      return 'NIV'; // Default fallback
-  }
+  final String code = translation.bibleGatewayCode;
+  return code.isEmpty ? 'NIV' : code;
 }
 
 /// Creates a Bible Gateway URL for the given passage and translation
@@ -276,6 +240,7 @@ class VerseContainerState extends State<VerseContainer> {
     final String showHeader = jsonEncode(widget.onTranslationTap != null);
     final String translationName = jsonEncode(translation.name);
     final String translationShort = jsonEncode(translation.short);
+    final String changeLabel = jsonEncode(context.l10n.editorChangeTranslation);
     final script = '''
       (function() {
         var style = document.getElementById('$_readingStyleId');
@@ -306,7 +271,7 @@ class VerseContainerState extends State<VerseContainer> {
             header = document.createElement('div');
             header.id = 'homiletics-reader-header';
             header.innerHTML = '<span class="label"></span>' +
-              '<button type="button" aria-label="Change translation">' +
+              '<button type="button">' +
               '<span class="short"></span>' +
               '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
               'stroke-width="2" stroke-linecap="round" aria-hidden="true">' +
@@ -317,6 +282,8 @@ class VerseContainerState extends State<VerseContainer> {
           }
           header.querySelector('.label').textContent = $translationName;
           header.querySelector('.short').textContent = $translationShort;
+          header.querySelector('button').setAttribute('aria-label',
+            $changeLabel);
         }
       })();
     ''';

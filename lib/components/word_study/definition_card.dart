@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:homiletics/classes/preferences.dart';
 import 'package:homiletics/components/word_study/definition_suggestions_sheet.dart';
 import 'package:homiletics/components/word_study/word_study_section_card.dart';
+import 'package:homiletics/l10n/l10n.dart';
 import 'package:homiletics/theme/app_theme.dart';
 import 'package:homiletics/theme/word_study_widgets.dart';
 
@@ -21,8 +23,8 @@ class DefinitionCard extends StatelessWidget {
   Future<void> _suggestDefinition(BuildContext context) async {
     final String word = wordController.text.trim();
     if (word.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text("Enter a word above first."),
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(context.l10n.wordStudyEnterWordFirst),
       ));
       return;
     }
@@ -36,21 +38,20 @@ class DefinitionCard extends StatelessWidget {
           await showDialog<_ExistingDefinitionChoice>(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text("Replace your definition?"),
-          content: const Text(
-              "You've already written a definition. Replace it with the suggestion, or add the suggestion below it?"),
+          title: Text(context.l10n.wordStudyReplaceDefinitionTitle),
+          content: Text(context.l10n.wordStudyReplaceDefinitionMessage),
           actions: [
             TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: const Text('Cancel')),
+                child: Text(context.l10n.commonCancel)),
             TextButton(
                 onPressed: () =>
                     Navigator.pop(context, _ExistingDefinitionChoice.append),
-                child: const Text('Add below')),
+                child: Text(context.l10n.wordStudyAddBelow)),
             TextButton(
                 onPressed: () =>
                     Navigator.pop(context, _ExistingDefinitionChoice.replace),
-                child: const Text('Replace')),
+                child: Text(context.l10n.wordStudyReplace)),
           ],
         ),
       );
@@ -69,23 +70,30 @@ class DefinitionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AppColors c = AppColors.of(context);
+    final AppLocalizations l = context.l10n;
     const StudyStep step = StudyStep.application;
+    // The suggestions come from an English-only dictionary, so only offer
+    // them when the study's Bible text is English.
+    final bool canSuggest = Preferences.translation.languageCode == 'en';
     return WordStudySectionCard(
-      title: 'Definition',
-      helpText:
-          'What does this word mean, in plain terms? Tap "+" for candidate definitions pulled from a dictionary, or write your own.',
-      hint: 'What does it mean, in plain terms?',
+      title: l.wordStudyDefinitionTitle,
+      helpText: canSuggest
+          ? l.wordStudyDefinitionHelp
+          : l.wordStudyDefinitionHelpNoSuggest,
+      hint: l.wordStudyDefinitionHint,
       controller: controller,
       onChanged: onChanged,
       step: step,
       minLines: 3,
       compact: true,
-      action: WordStudyAddButton(
-        tooltip: 'Suggest a definition',
-        color: c.step(step),
-        tint: c.stepTint(step),
-        onPressed: () => _suggestDefinition(context),
-      ),
+      action: canSuggest
+          ? WordStudyAddButton(
+              tooltip: l.wordStudySuggestDefinition,
+              color: c.step(step),
+              tint: c.stepTint(step),
+              onPressed: () => _suggestDefinition(context),
+            )
+          : null,
     );
   }
 }

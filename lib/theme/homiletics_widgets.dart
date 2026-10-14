@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:homiletics/l10n/l10n.dart';
 import 'package:homiletics/theme/app_theme.dart';
 import 'package:homiletics/theme/widgets.dart';
 
@@ -32,7 +33,7 @@ Future<void> showStepHelp(BuildContext context, String title, String text) {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text("Close"),
+          child: Text(context.l10n.commonClose),
         ),
       ],
     ),
@@ -81,6 +82,9 @@ class CollapsedStepTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AppColors c = AppColors.of(context);
+    final AppLocalizations l = context.l10n;
+    final String status =
+        done ? l.homileticStepStatusDone : l.homileticStepStatusToDo;
     final Text titleText = Text(title,
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
@@ -92,7 +96,9 @@ class CollapsedStepTile extends StatelessWidget {
     return Semantics(
       button: true,
       expanded: false,
-      label: '$title, ${done ? 'done' : 'to do'}${compact ? '' : ', $summary'}',
+      label: compact
+          ? l.homileticStepTileLabel(title, status)
+          : l.homileticStepTileLabelWithSummary(title, status, summary),
       excludeSemantics: true,
       child: AppCard(
         radius: _tileRadius,
@@ -103,7 +109,8 @@ class CollapsedStepTile extends StatelessWidget {
           child: LayoutBuilder(builder: (context, constraints) {
             return Row(children: [
               StepBadge(
-                  step: step, state: done ? StudyStepState.done : StudyStepState.pending),
+                  step: step,
+                  state: done ? StudyStepState.done : StudyStepState.pending),
               SizedBox(width: compact ? 10 : 12),
               Expanded(child: titleText),
               if (!compact) ...[
@@ -162,7 +169,7 @@ class ExpandedStepCard extends StatelessWidget {
               child: Semantics(
                 button: true,
                 expanded: true,
-                label: '$title, collapse',
+                label: context.l10n.homileticStepCollapseLabel(title),
                 excludeSemantics: true,
                 child: InkWell(
                   onTap: onCollapse,
@@ -214,11 +221,12 @@ class _StepHelpButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AppColors c = AppColors.of(context);
+    final String label = context.l10n.homileticStepHelpLabel(title);
     return Tooltip(
-      message: 'About $title',
+      message: label,
       child: Semantics(
         button: true,
-        label: 'About $title',
+        label: label,
         excludeSemantics: true,
         child: InkResponse(
           onTap: () => showStepHelp(context, title, text),
@@ -344,7 +352,7 @@ class StepListRow extends StatelessWidget {
             SizedBox(
               width: _verseColumnWidth,
               child: Semantics(
-                label: 'Verses',
+                label: context.l10n.homileticVersesLabel,
                 child: TextField(
                   autofocus: autofocus,
                   keyboardType: TextInputType.text,
@@ -352,7 +360,8 @@ class StepListRow extends StatelessWidget {
                   controller: versesController,
                   style: _verseStyle.copyWith(color: color, height: 1.5),
                   cursorColor: color,
-                  decoration: stepInputDecoration(context, 'v.',
+                  decoration: stepInputDecoration(
+                      context, context.l10n.homileticVersesHint,
                       hintStyle: _verseStyle.copyWith(
                           color: color.withValues(alpha: 0.55), height: 1.5)),
                   onChanged: onVersesChanged,
@@ -459,7 +468,7 @@ class DashedAddButton extends StatelessWidget {
             child: SizedBox(
               height: 44,
               child: Center(
-                child: Text('+ $label',
+                child: Text(context.l10n.homileticAddButtonLabel(label),
                     style: TextStyle(
                         fontFamily: AppFonts.sans,
                         fontSize: 14,

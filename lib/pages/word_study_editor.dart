@@ -9,6 +9,7 @@ import 'package:homiletics/components/word_study/definition_card.dart';
 import 'package:homiletics/components/word_study/other_usage_card.dart';
 import 'package:homiletics/components/word_study/word_hero_card.dart';
 import 'package:homiletics/components/word_study/word_study_section_card.dart';
+import 'package:homiletics/l10n/l10n.dart';
 import 'package:homiletics/storage/pdf_generation.dart';
 import 'package:homiletics/theme/app_theme.dart';
 import 'package:homiletics/theme/widgets.dart';
@@ -111,34 +112,38 @@ class _WordStudyEditorState extends State<WordStudyEditor> {
         _applicationController,
       ].every((c) => c.text.trim().isNotEmpty);
 
-  Future<void> _runPdfAction(Future<void> Function() action, String success,
-      String failure, String errorIdentifier) async {
+  Future<void> _runPdfAction(
+      Future<void> Function() action,
+      String Function(AppLocalizations) success,
+      String Function(AppLocalizations) failure,
+      String errorIdentifier) async {
     final ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
+    final AppLocalizations l = context.l10n;
     try {
       await action();
       messenger.showSnackBar(SnackBar(
-        content: Text(success),
-        action: SnackBarAction(onPressed: () {}, label: "Ok"),
+        content: Text(success(l)),
+        action: SnackBarAction(onPressed: () {}, label: l.commonOk),
       ));
     } catch (error) {
       sendError(error, errorIdentifier);
       messenger.showSnackBar(SnackBar(
-        content: Text(failure),
-        action: SnackBarAction(onPressed: () {}, label: "Ok"),
+        content: Text(failure(l)),
+        action: SnackBarAction(onPressed: () {}, label: l.commonOk),
       ));
     }
   }
 
   Future<void> _share() => _runPdfAction(
       () => shareWordStudy(_thisStudy),
-      "PDF shared successfully.",
-      "Something went wrong sharing your PDF. Try again soon.",
+      (l) => l.wordStudyPdfShared,
+      (l) => l.wordStudyPdfShareFailed,
       "Share word study PDF");
 
   Future<void> _print() => _runPdfAction(
       () => printWordStudy(_thisStudy),
-      "PDF printed successfully.",
-      "Something went wrong creating your PDF. Try again soon.",
+      (l) => l.wordStudyPdfPrinted,
+      (l) => l.wordStudyPdfPrintFailed,
       "Print word study PDF");
 
   @override
@@ -159,24 +164,29 @@ class _WordStudyEditorState extends State<WordStudyEditor> {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations l = context.l10n;
     return PassageSplitScaffold(
       initialPassage: _thisStudy.passage,
       onPassageChanged: (String passage) {
         _passage.value = passage;
         _thisStudy.updatePassage(passage);
       },
-      itemName: "Word Study",
-      deletedMessage: "Word Study Deleted",
+      itemName: l.wordStudyItemName,
+      deletedMessage: l.wordStudyDeleted,
       deleteErrorIdentifier: "word study deletion",
       onDelete: _thisStudy.delete,
-      headerLabel: 'Word study · Passage',
+      headerLabel: l.wordStudyHeaderLabel,
       versePanelFirst: true,
       verseWeight: 0.22,
       extraActions: [
         EditorMenuAction(
-            icon: Icons.ios_share_rounded, title: 'Share', onSelected: _share),
+            icon: Icons.ios_share_rounded,
+            title: l.commonShare,
+            onSelected: _share),
         EditorMenuAction(
-            icon: Icons.print_outlined, title: 'Print', onSelected: _print),
+            icon: Icons.print_outlined,
+            title: l.commonPrint,
+            onSelected: _print),
       ],
       child: ListView(
         padding: const EdgeInsets.fromLTRB(12, 4, 12, 16),
@@ -184,8 +194,7 @@ class _WordStudyEditorState extends State<WordStudyEditor> {
           ValueListenableBuilder<String>(
             valueListenable: _passage,
             builder: (context, passage, _) => WordHeroCard(
-              helpText:
-                  'The specific word or short phrase you\'re studying. Once you\'ve entered it, Definition and Other Usage can suggest content for you.',
+              helpText: l.wordStudyWordHelp,
               controller: _wordController,
               focusNode: _wordFocusNode,
               onChanged: _thisStudy.updateWord,
@@ -217,30 +226,27 @@ class _WordStudyEditorState extends State<WordStudyEditor> {
           ),
           const SizedBox(height: 10),
           WordStudySectionCard(
-            title: 'Contextual meaning',
-            helpText:
-                'What did the author intend this word to mean here, in this passage? Consider the surrounding verses, not just the word alone.',
-            hint: 'What does it mean here, in this passage?',
+            title: l.wordStudyContextualMeaningTitle,
+            helpText: l.wordStudyContextualMeaningHelp,
+            hint: l.wordStudyContextualMeaningHint,
             controller: _contextualMeaningController,
             onChanged: _thisStudy.updateContextualMeaning,
             step: StudyStep.fcf,
           ),
           const SizedBox(height: 10),
           WordStudySectionCard(
-            title: 'Deeper meaning',
-            helpText:
-                'Any insight from the original language, commentary, or outside study that adds depth beyond the basic definition? How does the rest of Scripture shape it? A Strong\'s concordance or Blue Letter Bible can help here.',
-            hint: 'How does the rest of Scripture shape it?',
+            title: l.wordStudyDeeperMeaningTitle,
+            helpText: l.wordStudyDeeperMeaningHelp,
+            hint: l.wordStudyDeeperMeaningHint,
             controller: _deeperMeaningController,
             onChanged: _thisStudy.updateDeeperMeaning,
             step: StudyStep.divisions,
           ),
           const SizedBox(height: 10),
           WordStudySectionCard(
-            title: 'Application',
-            helpText:
-                'How should this truth shape your life? Be specific, personal, and practical.',
-            hint: 'What will you do with it?',
+            title: l.wordStudyApplicationTitle,
+            helpText: l.wordStudyApplicationHelp,
+            hint: l.wordStudyApplicationHint,
             controller: _applicationController,
             onChanged: _thisStudy.updateApplication,
             step: StudyStep.aim,
@@ -248,7 +254,7 @@ class _WordStudyEditorState extends State<WordStudyEditor> {
           if (_isFinished) ...[
             const SizedBox(height: 10),
             StudyCompleteCard(
-              title: 'Word study done',
+              title: l.wordStudyDoneTitle,
               onPrint: _print,
               onShare: _share,
             ),

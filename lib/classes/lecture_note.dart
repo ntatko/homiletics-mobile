@@ -49,7 +49,8 @@ class LectureNote with SerializedSave {
         note: json['note'] as String? ?? '',
         passage: json['passage'] as String? ?? '',
         time: DateTime.tryParse(json['time'] as String? ?? ''),
-        recordingPath: _normalizeRecordingPath(json['recording_path'] as String?),
+        recordingPath:
+            _normalizeRecordingPath(json['recording_path'] as String?),
         transcript: json['transcript'] as String?,
         formattedTranscript: json['formatted_transcript'] as String?);
     // Remember the raw stored value so an old absolute path gets rewritten as

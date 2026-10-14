@@ -65,13 +65,11 @@ class SuggestedPassagesRepository {
     }
 
     try {
-      final response =
-          await http.get(Uri.parse(kSuggestedPassagesUrl)).timeout(
-                const Duration(seconds: 30),
-              );
+      final response = await http.get(Uri.parse(kSuggestedPassagesUrl)).timeout(
+            const Duration(seconds: 30),
+          );
       if (response.statusCode != 200) {
-        throw Exception(
-            'Suggested passages HTTP ${response.statusCode}');
+        throw Exception('Suggested passages HTTP ${response.statusCode}');
       }
       final parsed = _parseBody(response.body);
       if (parsed == null) {

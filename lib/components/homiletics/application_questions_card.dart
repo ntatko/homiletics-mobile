@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:homiletics/classes/application.dart';
 import 'package:homiletics/classes/homiletic.dart';
+import 'package:homiletics/l10n/l10n.dart';
 import 'package:homiletics/components/homiletics/row_controllers.dart';
 import 'package:homiletics/theme/app_theme.dart';
 import 'package:homiletics/theme/homiletics_widgets.dart';
 
 /// The editor of the Application step: one application question per row.
 class ApplicationQuestionsCard extends StatefulWidget {
-  static const String helpTitle = "Application Questions";
-  static const String helpText =
-      "These are questions that help the audience apply what they've just heard to their own lives. They should be specific, personal, open-ended, and thought-provoking.";
+  static String helpTitle(AppLocalizations l) =>
+      l.homileticApplicationHelpTitle;
+  static String helpText(AppLocalizations l) => l.homileticApplicationHelpText;
 
   final List<Application> applications;
   final Homiletic homiletic;
@@ -49,15 +50,16 @@ class _ApplicationQuestionsCardState extends State<ApplicationQuestionsCard> {
     return _remover.remove(
       context,
       hasText: _controllers.of(application)[0].text.trim().isNotEmpty,
-      rowName: 'application question',
+      confirmTitle: context.l10n.homileticRemoveApplicationTitle,
       remove: () => widget.removeApplication(application),
-      failureMessage: "Removing that Application didn't work",
+      failureMessage: context.l10n.homileticRemoveApplicationFailed,
       errorIdentifier: "Remove application",
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations l = context.l10n;
     _controllers.retainOnly(widget.applications);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -70,20 +72,20 @@ class _ApplicationQuestionsCardState extends State<ApplicationQuestionsCard> {
               step: StudyStep.application,
               autofocus: _controllers.shouldAutofocus(application),
               textController: _controllers.of(application)[0],
-              textHint: 'How can I…',
+              textHint: l.homileticApplicationHint,
               onSubmitted: (_) => _add(),
               onTextChanged: (value) async {
                 await application.updateText(value);
                 await widget.homiletic.update();
               },
-              removeTooltip: 'Remove application question',
+              removeTooltip: l.homileticRemoveApplicationTooltip,
               onRemove: () => _remove(application),
             ),
           );
         }),
         DashedAddButton(
             step: StudyStep.application,
-            label: 'Add question',
+            label: l.homileticAddApplication,
             onPressed: _add),
       ],
     );

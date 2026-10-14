@@ -1,4 +1,5 @@
 import 'package:homiletics/classes/homiletic.dart';
+import 'package:homiletics/l10n/l10n.dart';
 import 'package:homiletics/storage/application_storage.dart';
 import 'package:homiletics/storage/content_summary_storage.dart';
 import 'package:homiletics/storage/division_storage.dart';
@@ -42,8 +43,9 @@ Future<Set<StudyStep>?> loadPassageProgress(String passage) async {
 }
 
 /// "2 of 6 steps", "All 6 steps" or "Not started".
-String describeProgress(Set<StudyStep>? done) {
-  if (done == null) return 'Not started';
-  if (done.length == StudyStep.values.length) return 'All 6 steps';
-  return '${done.length} of ${StudyStep.values.length} steps';
+String describeProgress(AppLocalizations l, Set<StudyStep>? done) {
+  final int total = StudyStep.values.length;
+  if (done == null) return l.studiesProgressNotStarted;
+  if (done.length == total) return l.studiesProgressAll(total);
+  return l.studiesProgressSome(done.length, total);
 }

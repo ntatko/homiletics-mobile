@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:homiletics/l10n/l10n.dart';
 import 'package:homiletics/theme/app_theme.dart';
 import 'package:homiletics/theme/word_study_widgets.dart';
 
@@ -43,7 +44,7 @@ class WordHeroCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               WordStudyTitle(
-                title: 'Word',
+                title: context.l10n.wordStudyWordTitle,
                 helpText: helpText,
                 color: fg.withValues(alpha: 0.82),
                 style: AppText.overline,
@@ -58,7 +59,7 @@ class WordHeroCard extends StatelessWidget {
                 style: _wordStyle.copyWith(color: fg),
                 cursorColor: fg,
                 decoration: InputDecoration(
-                  hintText: 'Add a word',
+                  hintText: context.l10n.wordStudyWordHint,
                   hintStyle:
                       _wordStyle.copyWith(color: fg.withValues(alpha: 0.6)),
                   isCollapsed: true,

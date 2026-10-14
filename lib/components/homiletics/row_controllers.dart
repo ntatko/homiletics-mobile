@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:homiletics/common/report_error.dart';
+import 'package:homiletics/l10n/l10n.dart';
 import 'package:homiletics/theme/app_theme.dart';
 
 /// Owns the [TextEditingController]s for each row of a list card, keyed by
@@ -61,22 +62,23 @@ class RowControllers<T extends Object> {
   }
 }
 
-/// Asks before removing a row that has text in it. Returns true to remove.
-Future<bool> confirmRemoveRow(BuildContext context, String rowName) async {
+/// Asks before removing a row that has text in it, with the localized
+/// [title] (e.g. "Remove this division?"). Returns true to remove.
+Future<bool> confirmRemoveRow(BuildContext context, String title) async {
   final bool? confirmed = await showDialog<bool>(
     context: context,
     builder: (context) => AlertDialog(
-      title: Text("Remove this $rowName?"),
-      content: const Text("What you've written here will be deleted."),
+      title: Text(title),
+      content: Text(context.l10n.homileticRemoveRowMessage),
       actions: [
         TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel')),
+            child: Text(context.l10n.commonCancel)),
         TextButton(
           onPressed: () => Navigator.pop(context, true),
           style: TextButton.styleFrom(
               foregroundColor: AppColors.of(context).danger),
-          child: const Text('Remove'),
+          child: Text(context.l10n.homileticRemoveRowConfirm),
         ),
       ],
     ),
@@ -92,7 +94,7 @@ class RowRemover {
   Future<void> remove(
     BuildContext context, {
     required bool hasText,
-    required String rowName,
+    required String confirmTitle,
     required Future<void> Function() remove,
     required String failureMessage,
     required String errorIdentifier,
@@ -101,8 +103,9 @@ class RowRemover {
     _busy = true;
     try {
       final ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
+      final String okLabel = context.l10n.commonOk;
       if (hasText) {
-        final bool confirmed = await confirmRemoveRow(context, rowName);
+        final bool confirmed = await confirmRemoveRow(context, confirmTitle);
         if (!confirmed || !context.mounted) return;
       }
       try {
@@ -112,7 +115,7 @@ class RowRemover {
           content: Text(failureMessage),
           action: SnackBarAction(
             onPressed: () {},
-            label: "Ok",
+            label: okLabel,
           ),
         ));
         sendError(error, errorIdentifier);

@@ -7,6 +7,7 @@ import 'package:homiletics/classes/lecture_note.dart';
 import 'package:homiletics/common/study_data_builder.dart';
 import 'package:homiletics/components/editor/passage_split_scaffold.dart';
 import 'package:homiletics/components/recording_section.dart';
+import 'package:homiletics/l10n/l10n.dart';
 import 'package:homiletics/theme/app_theme.dart';
 import 'package:homiletics/theme/lecture_widgets.dart';
 
@@ -143,6 +144,7 @@ class _NotesState extends State<NotesEditor> {
   @override
   Widget build(BuildContext context) {
     final AppColors c = AppColors.of(context);
+    final AppLocalizations l10n = context.l10n;
     final TextStyle noteStyle =
         AppText.body.copyWith(height: 1.55, color: c.ink);
     const HorizontalSpacing noSpacing = HorizontalSpacing(0, 0);
@@ -150,21 +152,25 @@ class _NotesState extends State<NotesEditor> {
     final Widget toolbar = Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        _toolbarButton(
-            Attribute.bold, const Icon(Icons.format_bold_rounded), "Bold"),
+        _toolbarButton(Attribute.bold, const Icon(Icons.format_bold_rounded),
+            l10n.lectureToolbarBold),
         _toolbarButton(Attribute.italic,
-            const Icon(Icons.format_italic_rounded), "Italic"),
-        _toolbarButton(Attribute.ul,
-            const Icon(Icons.format_list_bulleted_rounded), "Bulleted list"),
-        _toolbarButton(Attribute.ol,
-            const Icon(Icons.format_list_numbered_rounded), "Numbered list"),
+            const Icon(Icons.format_italic_rounded), l10n.lectureToolbarItalic),
+        _toolbarButton(
+            Attribute.ul,
+            const Icon(Icons.format_list_bulleted_rounded),
+            l10n.lectureToolbarBulletedList),
+        _toolbarButton(
+            Attribute.ol,
+            const Icon(Icons.format_list_numbered_rounded),
+            l10n.lectureToolbarNumberedList),
       ],
     );
 
     final Widget editor = QuillEditor.basic(
       controller: _noteController,
       config: QuillEditorConfig(
-        placeholder: 'Notes',
+        placeholder: l10n.lectureNotesPlaceholder,
         padding: const EdgeInsets.fromLTRB(24, 10, 24, 24),
         customStyles: DefaultStyles(
           paragraph: DefaultTextBlockStyle(noteStyle, noSpacing,
@@ -184,13 +190,13 @@ class _NotesState extends State<NotesEditor> {
 
     return PassageSplitScaffold(
       initialPassage: _thisNote.passage,
-      passageHint: 'Passage',
+      passageHint: l10n.lecturePassageHint,
       onPassageChanged: _onPassageChanged,
-      itemName: "Lecture Note",
-      deletedMessage: "Lecture Note Deleted",
+      itemName: l10n.lectureItemName,
+      deletedMessage: l10n.lectureDeleted,
       deleteErrorIdentifier: "notes deletion",
       onDelete: _thisNote.delete,
-      headerLabel: 'Lecture · Passage',
+      headerLabel: l10n.lectureHeaderLabel,
       versePanelFirst: false,
       verseWeight: 0.26,
       child: RecordingSection(

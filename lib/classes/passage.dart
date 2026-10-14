@@ -28,7 +28,10 @@ class Passage {
 Future<PassageResponse> fetchPassage(
     String reference, Translation? version) async {
   final Uri uri = Uri.parse('$kHomileticsApiBase/passages').replace(
-      queryParameters: {'passage': reference, 'version': version?.code ?? 'web'});
+      queryParameters: {
+        'passage': reference,
+        'version': version?.code ?? 'web'
+      });
   final http.Response response = await http.get(uri);
 
   if (response.statusCode != 200) {

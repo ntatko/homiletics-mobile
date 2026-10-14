@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:homiletics/l10n/l10n.dart';
 
 class SearchBar extends StatelessWidget {
   final void Function()? onTap;
@@ -27,7 +28,7 @@ class SearchBar extends StatelessWidget {
         autofocus: autofocus,
         onChanged: onChanged,
         decoration: InputDecoration(
-            hintText: 'Search',
+            hintText: context.l10n.searchHint,
             prefixIcon: onIconPressed == null
                 ? icon
                 : IconButton(

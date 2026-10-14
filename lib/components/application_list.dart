@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:homiletics/l10n/l10n.dart';
 import 'package:homiletics/classes/application.dart';
 import 'package:homiletics/common/application_list_item.dart';
 import 'package:homiletics/common/study_data_builder.dart';
@@ -45,8 +46,8 @@ class ApplicationList extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               SectionHeader(
-                "Living it out",
-                actionLabel: "See all",
+                context.l10n.homeLivingItOut,
+                actionLabel: context.l10n.homeSeeAll,
                 onAction: () {
                   Navigator.push(
                     context,

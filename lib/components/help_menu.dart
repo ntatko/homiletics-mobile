@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:homiletics/l10n/l10n.dart';
 import 'package:homiletics/components/feedback_form.dart';
 import 'package:homiletics/theme/app_theme.dart';
 
@@ -23,18 +24,19 @@ class HelpMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     final TextStyle footnote =
         AppText.caption.copyWith(color: AppColors.of(context).muted);
+    final AppLocalizations l = context.l10n;
     return Container(
         padding: const EdgeInsets.only(top: 28, bottom: 10),
         child: Column(children: [
           Center(
-              child: Text("Copyright (C) ${DateTime.now().year} 13one.org",
+              child: Text(l.helpCopyright('${DateTime.now().year}'),
                   style: footnote)),
-          Center(child: Text("All rights reserved", style: footnote)),
+          Center(child: Text(l.helpAllRightsReserved, style: footnote)),
           const SizedBox(height: 4),
           TextButton(
               onPressed: () => showFeedbackSheet(context),
               style: TextButton.styleFrom(minimumSize: const Size(0, 44)),
-              child: const Text("Request help / leave feedback"))
+              child: Text(l.helpRequestFeedback))
         ]));
   }
 }

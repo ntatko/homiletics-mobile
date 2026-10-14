@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:homiletics/l10n/l10n.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' show Document;
@@ -43,54 +44,55 @@ class SearchResults extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations l = context.l10n;
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         SearchSection<ContentSummary>(
-          title: "Content Summaries",
+          title: l.searchSectionContentSummaries,
           searchString: searchString,
           search: getSummaryByText,
           label: (summary) => summary.summary,
           open: (summary) => _homileticById(summary.homileticId),
         ),
         SearchSection<Division>(
-          title: "Divisions",
+          title: l.searchSectionDivisions,
           searchString: searchString,
           search: getDivisionByText,
           label: (division) => division.title,
           open: (division) => _homileticById(division.homileticId),
         ),
         SearchSection<Application>(
-          title: "Applications",
+          title: l.searchSectionApplications,
           searchString: searchString,
           search: getApplicationsByText,
           label: (application) => application.text,
           open: (application) => _homileticById(application.homileticsId),
         ),
         SearchSection<Homiletic>(
-          title: "Aims",
+          title: l.searchSectionAims,
           searchString: searchString,
           search: getHomileticsByAimText,
           label: (homiletic) => homiletic.aim,
           open: (homiletic) async => HomileticEditor(homiletic: homiletic),
         ),
         SearchSection<Homiletic>(
-          title: "Summary Sentences",
+          title: l.searchSectionSummarySentences,
           searchString: searchString,
           search: getHomileticsBySummarySentenceText,
           label: (homiletic) => homiletic.subjectSentence,
           open: (homiletic) async => HomileticEditor(homiletic: homiletic),
         ),
         SearchSection<Homiletic>(
-          title: "Homiletics Passages",
+          title: l.searchSectionPassages,
           searchString: searchString,
           search: getHomileticsByPassageText,
           label: (homiletic) => homiletic.passage,
           open: (homiletic) async => HomileticEditor(homiletic: homiletic),
         ),
         SearchSection<LectureNote>(
-          title: "Lecture Notes",
+          title: l.searchSectionLectureNotes,
           searchString: searchString,
           search: getLectureNotesByText,
           label: (note) =>
@@ -98,7 +100,7 @@ class SearchResults extends StatelessWidget {
           open: (note) async => NotesEditor(note: note),
         ),
         SearchSection<WordStudy>(
-          title: "Word Studies",
+          title: l.searchSectionWordStudies,
           searchString: searchString,
           search: getWordStudiesByText,
           label: (study) => study.word.isNotEmpty ? study.word : study.passage,
@@ -160,15 +162,14 @@ class _SearchSectionState<T> extends State<SearchSection<T>> {
     _opening = true;
     final NavigatorState navigator = Navigator.of(context);
     final ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
+    final String failed = context.l10n.searchOpenFailed;
     try {
       final Widget page = await widget.open(item);
       if (!mounted) return;
       navigator.push(MaterialPageRoute(builder: (context) => page));
     } catch (error) {
       logError('Opening search result failed: $error');
-      messenger.showSnackBar(const SnackBar(
-        content: Text("Couldn't open that result. It may have been deleted."),
-      ));
+      messenger.showSnackBar(SnackBar(content: Text(failed)));
     } finally {
       _opening = false;
     }

@@ -1,26 +1,60 @@
 import 'package:flutter/material.dart';
+import 'package:homiletics/classes/language.dart';
+import 'package:homiletics/classes/preferences.dart';
 import 'package:homiletics/common/report_error.dart';
+import 'package:homiletics/l10n/l10n.dart';
 import 'package:homiletics/services/transcript_formatter_service.dart';
 import 'package:homiletics/services/whisper_model_service.dart';
 import 'package:homiletics/theme/app_theme.dart';
 import 'package:homiletics/theme/widgets.dart';
+import 'package:whisper_ggml/whisper_ggml.dart';
 
-/// Settings card for the on-device transcription (Whisper) model.
+/// Settings cards for the on-device transcription (Whisper) models: the
+/// English-only model and the multilingual one. The model the current app
+/// language needs comes first; the other can still be downloaded or deleted.
 class WhisperModelSettings extends StatelessWidget {
   const WhisperModelSettings({Key? key}) : super(key: key);
 
-  static bool _isWhisperDownloading() => WhisperModelService.isDownloading;
+  static const String _sizeLabel = '~140MB';
+
+  String _detail(
+      AppLocalizations l, WhisperModel model, bool needed, String language) {
+    if (model == kEnglishTranscriptionModel) {
+      return needed
+          ? l.modelTranscriptionEnglishNeeded(language)
+          : l.modelTranscriptionEnglishNotNeeded(language);
+    }
+    return needed
+        ? l.modelTranscriptionMultilingualNeeded(language)
+        : l.modelTranscriptionMultilingualNotNeeded(language);
+  }
 
   @override
   Widget build(BuildContext context) {
-    return const ModelDownloadSettings(
-      title: 'Offline transcription model',
-      sizeLabel: '~140MB',
-      isDownloaded: WhisperModelService.isModelDownloaded,
-      sizeBytes: WhisperModelService.modelSizeBytes,
-      download: WhisperModelService.downloadModel,
-      delete: WhisperModelService.deleteModel,
-      isDownloading: _isWhisperDownloading,
+    final AppLocalizations l = context.l10n;
+    final Language language = Preferences.effectiveLanguage;
+    final WhisperModel required = whisperModelFor(language);
+    final List<WhisperModel> models = [
+      required,
+      ...kTranscriptionModels.where((m) => m != required),
+    ];
+    return Column(
+      children: [
+        for (final WhisperModel model in models)
+          ModelDownloadSettings(
+            key: ValueKey(model),
+            title: l.modelTranscriptionTitle,
+            detail: _detail(l, model, model == required, language.name),
+            sizeLabel: _sizeLabel,
+            isDownloaded: () =>
+                WhisperModelService.isModelDownloaded(model: model),
+            sizeBytes: () => WhisperModelService.modelSizeBytes(model: model),
+            download: ({onProgress}) => WhisperModelService.downloadModel(
+                onProgress: onProgress, model: model),
+            delete: () => WhisperModelService.deleteModel(model: model),
+            isDownloading: () => WhisperModelService.isDownloadingModel(model),
+          ),
+      ],
     );
   }
 }
@@ -30,23 +64,22 @@ class WhisperModelSettings extends StatelessWidget {
 class FormattingModelSettings extends StatelessWidget {
   const FormattingModelSettings({Key? key}) : super(key: key);
 
-  static Future<String?> _appleIntelligenceStatus() async =>
-      await TranscriptFormatterService.isAppleIntelligenceAvailable()
-          ? 'Using Apple Intelligence (no download needed)'
-          : null;
-
   @override
   Widget build(BuildContext context) {
     if (!TranscriptFormatterService.isLocalModelSupported) {
       return const SizedBox.shrink();
     }
-    return const ModelDownloadSettings(
-      title: 'Transcript formatting model',
+    final AppLocalizations l = context.l10n;
+    return ModelDownloadSettings(
+      title: l.modelFormattingTitle,
       sizeLabel: localModelSizeLabel,
       isDownloaded: TranscriptFormatterService.isLocalModelDownloaded,
       download: TranscriptFormatterService.downloadLocalModel,
       delete: TranscriptFormatterService.deleteLocalModel,
-      builtInStatus: _appleIntelligenceStatus,
+      builtInStatus: () async =>
+          await TranscriptFormatterService.isAppleIntelligenceAvailable()
+              ? l.modelAppleIntelligenceStatus
+              : null,
     );
   }
 }
@@ -55,6 +88,9 @@ class FormattingModelSettings extends StatelessWidget {
 /// [PreferencesPanel]'s card style.
 class ModelDownloadSettings extends StatefulWidget {
   final String title;
+
+  /// Optional line under the title, e.g. which languages the model serves.
+  final String? detail;
 
   /// Shown while not downloaded, e.g. "~140MB".
   final String sizeLabel;
@@ -77,6 +113,7 @@ class ModelDownloadSettings extends StatefulWidget {
   const ModelDownloadSettings({
     Key? key,
     required this.title,
+    this.detail,
     required this.sizeLabel,
     required this.isDownloaded,
     this.sizeBytes,
@@ -149,9 +186,8 @@ class _ModelDownloadSettingsState extends State<ModelDownloadSettings> {
       sendError(error, "ModelDownloadSettings download (${widget.title})");
       if (!mounted) return;
       setState(() => _state = _ModelState.notDownloaded);
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content:
-            Text("Something went wrong downloading the model. Try again soon."),
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(context.l10n.modelDownloadFailed),
       ));
     }
   }
@@ -163,30 +199,31 @@ class _ModelDownloadSettingsState extends State<ModelDownloadSettings> {
     } catch (error) {
       sendError(error, "ModelDownloadSettings delete (${widget.title})");
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text("Something went wrong deleting the model."),
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(context.l10n.modelDeleteFailed),
       ));
     }
   }
 
-  String get _statusText {
+  String _statusText(AppLocalizations l) {
     switch (_state) {
       case _ModelState.checking:
-        return "Checking…";
+        return l.modelStatusChecking;
       case _ModelState.builtIn:
         return _builtInMessage!;
       case _ModelState.notDownloaded:
-        return "Not downloaded (${widget.sizeLabel})";
+        return l.modelStatusNotDownloaded(widget.sizeLabel);
       case _ModelState.downloading:
-        return "Downloading… ${(_downloadProgress * 100).toStringAsFixed(0)}%";
+        return l.modelStatusDownloading(
+            (_downloadProgress * 100).toStringAsFixed(0));
       case _ModelState.downloaded:
-        if (_sizeBytes == null) return "Downloaded";
+        if (_sizeBytes == null) return l.modelStatusDownloaded;
         final double mb = _sizeBytes! / (1024 * 1024);
-        return "Downloaded (${mb.toStringAsFixed(0)}MB)";
+        return l.modelStatusDownloadedSize(mb.toStringAsFixed(0));
     }
   }
 
-  Widget? get _trailing {
+  Widget? _trailing(AppLocalizations l) {
     switch (_state) {
       case _ModelState.checking:
         return const SizedBox(
@@ -196,7 +233,7 @@ class _ModelDownloadSettingsState extends State<ModelDownloadSettings> {
       case _ModelState.builtIn:
         return null;
       case _ModelState.notDownloaded:
-        return TextButton(onPressed: _download, child: const Text("Download"));
+        return TextButton(onPressed: _download, child: Text(l.modelDownload));
       case _ModelState.downloading:
         return SizedBox(
           width: 20,
@@ -211,7 +248,7 @@ class _ModelDownloadSettingsState extends State<ModelDownloadSettings> {
           onPressed: _delete,
           style: TextButton.styleFrom(
               foregroundColor: AppColors.of(context).danger),
-          child: const Text("Delete"),
+          child: Text(l.modelDelete),
         );
     }
   }
@@ -219,6 +256,7 @@ class _ModelDownloadSettingsState extends State<ModelDownloadSettings> {
   @override
   Widget build(BuildContext context) {
     final AppColors c = AppColors.of(context);
+    final AppLocalizations l = context.l10n;
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: AppCard(
@@ -228,9 +266,12 @@ class _ModelDownloadSettingsState extends State<ModelDownloadSettings> {
           contentPadding: EdgeInsets.zero,
           title: Text(widget.title,
               style: AppText.bodyStrong.copyWith(fontSize: 15, color: c.ink)),
-          subtitle: Text(_statusText,
+          subtitle: Text(
+              widget.detail == null
+                  ? _statusText(l)
+                  : '${widget.detail}\n${_statusText(l)}',
               style: AppText.caption.copyWith(color: c.muted)),
-          trailing: _trailing,
+          trailing: _trailing(l),
         ),
       ),
     );

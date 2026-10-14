@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:homiletics/classes/Division.dart';
 import 'package:homiletics/classes/homiletic.dart';
+import 'package:homiletics/l10n/l10n.dart';
 import 'package:homiletics/components/homiletics/row_controllers.dart';
 import 'package:homiletics/theme/app_theme.dart';
 import 'package:homiletics/theme/homiletics_widgets.dart';
@@ -8,9 +9,8 @@ import 'package:homiletics/theme/homiletics_widgets.dart';
 /// The editor of the Divisions step: one row of verses + division sentence
 /// per grouping of the passage.
 class DivisionsCard extends StatefulWidget {
-  static const String helpTitle = "Divisions";
-  static const String helpText =
-      "Divisions are groupings of verses that are related. There should be at least two and no more than four.";
+  static String helpTitle(AppLocalizations l) => l.stepDivisions;
+  static String helpText(AppLocalizations l) => l.homileticDivisionsHelpText;
 
   final List<Division> divisions;
   final Homiletic homiletic;
@@ -54,15 +54,16 @@ class _DivisionsCardState extends State<DivisionsCard> {
     return _remover.remove(
       context,
       hasText: controllers.any((c) => c.text.trim().isNotEmpty),
-      rowName: 'division',
+      confirmTitle: context.l10n.homileticRemoveDivisionTitle,
       remove: () => widget.removeDivision(division),
-      failureMessage: "Removing that Division didn't work",
+      failureMessage: context.l10n.homileticRemoveDivisionFailed,
       errorIdentifier: "Remove Divisions",
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations l = context.l10n;
     _controllers.retainOnly(widget.divisions);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -81,19 +82,21 @@ class _DivisionsCardState extends State<DivisionsCard> {
                 await widget.homiletic.update();
               },
               textController: controllers[1],
-              textHint: 'Division sentence…',
+              textHint: l.homileticDivisionHint,
               onSubmitted: (_) => _add(),
               onTextChanged: (String value) async {
                 await division.updateText(value);
                 await widget.homiletic.update();
               },
-              removeTooltip: 'Remove division',
+              removeTooltip: l.homileticRemoveDivisionTooltip,
               onRemove: () => _remove(division),
             ),
           );
         }),
         DashedAddButton(
-            step: StudyStep.divisions, label: 'Add division', onPressed: _add),
+            step: StudyStep.divisions,
+            label: l.homileticAddDivision,
+            onPressed: _add),
       ],
     );
   }

@@ -1,13 +1,23 @@
+import 'dart:ui' show Locale;
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:homiletics/classes/Division.dart';
 import 'package:homiletics/classes/application.dart';
 import 'package:homiletics/classes/content_summary.dart';
 import 'package:homiletics/classes/homiletic.dart';
+import 'package:homiletics/classes/preferences.dart';
 import 'package:homiletics/classes/word_study.dart';
+import 'package:homiletics/l10n/l10n.dart';
+import 'package:homiletics/services/pdf_font_service.dart';
 import 'package:homiletics/theme/app_theme.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
+
+export 'package:homiletics/services/pdf_font_service.dart' show PdfScriptFont;
 
 /// The fonts a homiletic handout is set in: Newsreader for the passage,
 /// headings and statements; Public Sans for labels and body text; and a
@@ -38,6 +48,23 @@ class HomileticPdfFonts {
     required this.sansBold,
     this.fallback = const [],
   });
+
+  /// These fonts with [extra] appended to [fallback].
+  HomileticPdfFonts withFallback(List<pw.Font> extra) {
+    if (extra.isEmpty) return this;
+    return HomileticPdfFonts(
+      serif: serif,
+      serifItalic: serifItalic,
+      serifMedium: serifMedium,
+      serifSemiBold: serifSemiBold,
+      sans: sans,
+      sansItalic: sansItalic,
+      sansMedium: sansMedium,
+      sansSemiBold: sansSemiBold,
+      sansBold: sansBold,
+      fallback: [...fallback, ...extra],
+    );
+  }
 
   /// Loads the bundled fonts through [loadAsset], which receives an asset
   /// path such as `assets/fonts/Newsreader-Regular.ttf` (pass
@@ -76,6 +103,10 @@ class HomileticPdfFonts {
 
 /// Returns [data] with a few zero bytes appended.
 ///
+/// Also applied to the downloaded Noto fonts: they don't need it today, but
+/// it costs one copy and guards against a future build of them laying out
+/// their glyphs the same way.
+///
 /// The pdf package always embeds the glyph for U+0000 and reads a glyph
 /// header (12 bytes) even when the glyph is empty. Public Sans and Ubuntu
 /// map U+0000 to an empty glyph stored at the very end of the file, so that
@@ -100,6 +131,72 @@ Future<HomileticPdfFonts> _loadBundledFonts() {
   });
 }
 
+/// Loads the bytes of a script font; [PdfFontService.load] in the app.
+typedef ScriptFontLoader = Future<Uint8List> Function(PdfScriptFont font);
+
+final Map<PdfScriptFont, Future<pw.Font?>> _scriptFonts = {};
+
+Future<pw.Font?> _parseScriptFont(
+    PdfScriptFont script, ScriptFontLoader load) async {
+  try {
+    final Uint8List bytes = await load(script);
+    return pw.Font.ttf(_padded(ByteData.sublistView(bytes)));
+  } catch (error) {
+    debugPrint('PDF font ${script.family} unavailable: $error');
+    return null;
+  }
+}
+
+/// [fonts] plus fallbacks for any CJK or Arabic characters in [texts] (the
+/// handout's content and its localized labels). Missing fonts are loaded
+/// through [load] (by default downloaded once by [PdfFontService]); a font
+/// that can't be had is skipped, so those characters print as boxes rather
+/// than the export failing. Parsed fonts are kept for later exports when
+/// [load] is the default.
+Future<HomileticPdfFonts> withScriptFallbacks(
+  HomileticPdfFonts fonts,
+  Iterable<String> texts, {
+  Locale? locale,
+  ScriptFontLoader? load,
+}) async {
+  final Set<PdfScriptFont> needed = scriptFontsFor(texts,
+      preferTraditional: locale?.languageCode == 'zh' &&
+          (locale?.scriptCode == 'Hant' ||
+              const {'TW', 'HK', 'MO'}.contains(locale?.countryCode)));
+  if (needed.isEmpty) return fonts;
+
+  Future<pw.Font?> get(PdfScriptFont script) {
+    if (load != null) return _parseScriptFont(script, load);
+    return _scriptFonts[script] ??=
+        _parseScriptFont(script, PdfFontService.load).then((pw.Font? font) {
+      if (font == null) {
+        // Try again next time (the device may be back online), and drop a
+        // stored file that didn't parse.
+        _scriptFonts.remove(script);
+        PdfFontService.delete(script).catchError((_) {});
+      }
+      return font;
+    });
+  }
+
+  final List<pw.Font?> loaded = await Future.wait(needed.map(get));
+  return fonts.withFallback(loaded.whereType<pw.Font>().toList());
+}
+
+/// English strings, for callers that don't pass any.
+AppLocalizations get _english => lookupAppLocalizations(const Locale('en'));
+
+/// The app's current interface language, falling back to English for a
+/// language that has no generated strings yet.
+(AppLocalizations, Locale) _appStrings() {
+  final Locale locale = Preferences.effectiveLanguage.locale;
+  try {
+    return (lookupAppLocalizations(locale), locale);
+  } catch (_) {
+    return (_english, const Locale('en'));
+  }
+}
+
 PdfColor _pdf(Color color) => PdfColor.fromInt(color.toARGB32());
 
 /// Print-safe colors, taken from the light "Scripture Desk" palette.
@@ -115,15 +212,33 @@ class _Palette {
   static PdfColor tint(StudyStep s) => _pdf(_c.stepTints[s.index]);
 }
 
-const List<String> _months = [
-  'January', 'February', 'March', 'April', 'May', 'June', 'July', //
-  'August', 'September', 'October', 'November', 'December',
-];
+bool _dateSymbolsLoaded = false;
 
-String _formatDate(DateTime date) {
-  final DateTime local = date.toLocal();
-  return '${_months[local.month - 1]} ${local.day}, ${local.year}';
+/// The intl locale to format dates for [l]'s language: Traditional Chinese
+/// uses Taiwan's conventions, and an unknown locale falls back to its
+/// language, then English.
+String _dateLocale(AppLocalizations l) {
+  if (!_dateSymbolsLoaded) {
+    // Fills intl's tables synchronously; the Future is already done.
+    initializeDateFormatting();
+    _dateSymbolsLoaded = true;
+  }
+  final String name = l.localeName;
+  final String language = name.split(RegExp('[_-]')).first;
+  final List<String> candidates = [
+    if (language == 'zh' && name.contains('Hant')) 'zh_TW',
+    name,
+    language,
+  ];
+  for (final String candidate in candidates) {
+    if (DateFormat.localeExists(candidate)) return candidate;
+  }
+  return 'en';
 }
+
+/// [date] as a long date ("October 13, 2026" in English).
+String _formatDate(DateTime date, AppLocalizations l) =>
+    DateFormat.yMMMMd(_dateLocale(l)).format(date.toLocal());
 
 final RegExp _token = RegExp(r'\S+\s*|\s+');
 final RegExp _sentenceEnd = RegExp(r'[.!?;:”"]\s*$');
@@ -177,19 +292,23 @@ pw.Document buildHomileticsDocument(
   List<Application> applications, {
   required HomileticPdfFonts fonts,
   PdfPageFormat format = PdfPageFormat.letter,
+  AppLocalizations? strings,
 }) {
+  final AppLocalizations l = strings ?? _english;
   final String passage = homiletic.passage.trim();
-  final String title = passage.isEmpty ? 'Untitled passage' : passage;
-  final _Styles styles = _Styles(fonts);
+  final String title = passage.isEmpty ? l.pdfUntitledPassage : passage;
+  final _Styles styles = _Styles(fonts, l);
+  final String label = l.pdfHomileticLabel(title);
 
   final pw.Document doc = pw.Document(
-    title: 'Homiletics · $title',
+    title: label,
     creator: 'Homiletics',
     producer: 'Homiletics',
   );
 
   final List<pw.Widget> body = [
-    _header('HOMILETICS', title, styles, updatedAt: homiletic.updatedAt)
+    _header(l.pdfOverlineHomiletics, title, styles,
+        updatedAt: homiletic.updatedAt)
   ];
   final int before = body.length;
 
@@ -218,12 +337,12 @@ pw.Document buildHomileticsDocument(
   if (homiletic.fcf.trim().isNotEmpty) {
     body.addAll(_statementSection(
         StudyStep.fcf, 4, homiletic.fcf.trim(), styles,
-        caption: 'Fallen Condition Focus'));
+        caption: l.pdfFcfCaption));
   }
   if (homiletic.aim.trim().isNotEmpty) {
     body.addAll(_statementSection(
         StudyStep.aim, 5, homiletic.aim.trim(), styles,
-        leadIn: 'Cause the audience to learn that '));
+        leadIn: l.pdfAimLeadIn));
   }
 
   final List<String> questions = [
@@ -241,11 +360,10 @@ pw.Document buildHomileticsDocument(
   }
 
   if (body.length == before) {
-    body.add(
-        _emptyNote('Nothing has been written for this passage yet.', styles));
+    body.add(_emptyNote(l.pdfEmptyHomiletic, styles));
   }
 
-  doc.addPage(_handoutPage(body, fonts, styles, format, 'Homiletics · $title'));
+  doc.addPage(_handoutPage(body, fonts, styles, format, label));
   return doc;
 }
 
@@ -259,13 +377,16 @@ pw.Document buildWordStudyDocument(
   WordStudy study, {
   required HomileticPdfFonts fonts,
   PdfPageFormat format = PdfPageFormat.letter,
+  AppLocalizations? strings,
 }) {
+  final AppLocalizations l = strings ?? _english;
   final String word = study.word.trim();
   final String passage = study.passage.trim();
-  final String title = word.isEmpty ? 'Untitled word' : word;
-  final _Styles styles = _Styles(fonts);
-  final String label =
-      ['Word study', title, if (passage.isNotEmpty) passage].join(' · ');
+  final String title = word.isEmpty ? l.pdfUntitledWord : word;
+  final _Styles styles = _Styles(fonts, l);
+  final String label = passage.isEmpty
+      ? l.pdfWordStudyLabel(title)
+      : l.pdfWordStudyLabelWithPassage(title, passage);
 
   final pw.Document doc = pw.Document(
     title: label,
@@ -274,7 +395,7 @@ pw.Document buildWordStudyDocument(
   );
 
   final List<pw.Widget> body = [
-    _header('WORD STUDY', title, styles,
+    _header(l.pdfOverlineWordStudy, title, styles,
         subtitle: passage.isEmpty ? null : passage, updatedAt: study.updatedAt)
   ];
   final int before = body.length;
@@ -303,22 +424,22 @@ pw.Document buildWordStudyDocument(
   if (sideBySide) {
     body.add(_definitionAndUsage(definition, usages, styles));
   } else {
-    prose('Definition', StudyStep.application, definition);
+    prose(l.pdfWordStudyDefinition, StudyStep.application, definition);
     if (usages.isNotEmpty) {
       body.addAll(_withHeading(
-          _sectionHeading(StudyStep.summary, 'Other usage', styles,
+          _sectionHeading(StudyStep.summary, l.pdfWordStudyOtherUsage, styles,
               top: _wordStudyGap),
           _usageList(StudyStep.summary, usages, styles)));
     }
   }
 
-  prose('Contextual meaning', StudyStep.fcf, study.contextualMeaning);
-  prose('Deeper meaning', StudyStep.divisions, study.deeperMeaning);
-  prose('Application', StudyStep.aim, study.application);
+  prose(
+      l.pdfWordStudyContextualMeaning, StudyStep.fcf, study.contextualMeaning);
+  prose(l.pdfWordStudyDeeperMeaning, StudyStep.divisions, study.deeperMeaning);
+  prose(l.pdfWordStudyApplication, StudyStep.aim, study.application);
 
   if (body.length == before) {
-    body.add(_emptyNote(
-        'Nothing has been written for this word study yet.', styles));
+    body.add(_emptyNote(l.pdfEmptyWordStudy, styles));
   }
 
   doc.addPage(_handoutPage(body, fonts, styles, format, label));
@@ -355,7 +476,7 @@ pw.Widget _emptyNote(String text, _Styles styles) {
 }
 
 class _Styles {
-  _Styles(HomileticPdfFonts f)
+  _Styles(HomileticPdfFonts f, this.strings)
       : overline = pw.TextStyle(
             font: f.sansSemiBold,
             fontSize: 8,
@@ -390,6 +511,9 @@ class _Styles {
             lineSpacing: 4.5,
             color: _Palette.muted),
         footer = pw.TextStyle(font: f.sans, fontSize: 8, color: _Palette.muted);
+
+  /// The handout's language.
+  final AppLocalizations strings;
 
   final pw.TextStyle overline;
   final pw.TextStyle passage;
@@ -431,7 +555,8 @@ pw.Widget _header(String overline, String title, _Styles styles,
             ),
             if (updatedAt != null) ...[
               pw.SizedBox(width: 12),
-              pw.Text(_formatDate(updatedAt), style: styles.date),
+              pw.Text(_formatDate(updatedAt, styles.strings),
+                  style: styles.date),
             ],
           ],
         ),
@@ -465,7 +590,8 @@ pw.Widget _squareMarker(StudyStep step) {
 }
 
 /// A section heading: [step]'s marker (a numbered circle when [number] is
-/// given, otherwise a small square) and [title] (default: the step label).
+/// given, otherwise a small square) and [title] (default: the step's
+/// localized name).
 pw.Widget _sectionHeading(StudyStep step, String? title, _Styles styles,
     {int? number, String? caption, double top = 22}) {
   return pw.Padding(
@@ -478,7 +604,8 @@ pw.Widget _sectionHeading(StudyStep step, String? title, _Styles styles,
         else
           _squareMarker(step),
         pw.SizedBox(width: number != null ? 9 : 8),
-        pw.Text(title ?? step.label, style: styles.sectionTitle),
+        pw.Text(title ?? step.localizedLabel(styles.strings),
+            style: styles.sectionTitle),
         if (caption != null) ...[
           pw.SizedBox(width: 8),
           pw.Text(caption, style: styles.caption),
@@ -711,9 +838,11 @@ pw.Widget _definitionAndUsage(
     },
     children: [
       pw.TableRow(children: [
-        _sectionHeading(defStep, 'Definition', styles, top: _wordStudyGap),
+        _sectionHeading(defStep, styles.strings.pdfWordStudyDefinition, styles,
+            top: _wordStudyGap),
         pw.SizedBox(),
-        _sectionHeading(useStep, 'Other usage', styles, top: _wordStudyGap),
+        _sectionHeading(useStep, styles.strings.pdfWordStudyOtherUsage, styles,
+            top: _wordStudyGap),
       ]),
       // "full" stretches both cards to the taller one's height.
       pw.TableRow(
@@ -758,22 +887,95 @@ pw.Widget _footer(pw.Context context, String label, _Styles styles) {
               overflow: pw.TextOverflow.clip),
         ),
         pw.SizedBox(width: 12),
-        pw.Text('page ${context.pageNumber} of ${context.pagesCount}',
+        pw.Text(
+            styles.strings.pdfPageOf(context.pageNumber, context.pagesCount),
             style: styles.footer),
       ],
     ),
   );
 }
 
-/// Builds the handout with the app's bundled fonts.
+/// The fixed text a handout in [l]'s language prints (headings, notes,
+/// footer, date), for choosing script fonts.
+List<String> _labelTexts(AppLocalizations l, DateTime? updatedAt) => [
+      l.pdfOverlineHomiletics,
+      l.pdfOverlineWordStudy,
+      l.pdfUntitledPassage,
+      l.pdfUntitledWord,
+      l.pdfHomileticLabel(''),
+      l.pdfWordStudyLabelWithPassage('', ''),
+      l.pdfPageOf(1, 1),
+      l.pdfFcfCaption,
+      l.pdfAimLeadIn,
+      l.pdfEmptyHomiletic,
+      l.pdfEmptyWordStudy,
+      l.pdfWordStudyDefinition,
+      l.pdfWordStudyOtherUsage,
+      l.pdfWordStudyContextualMeaning,
+      l.pdfWordStudyDeeperMeaning,
+      l.pdfWordStudyApplication,
+      for (final StudyStep step in StudyStep.values) step.localizedLabel(l),
+      if (updatedAt != null) _formatDate(updatedAt, l),
+    ];
+
+/// Everything a homiletic handout in [l]'s language prints.
+List<String> homileticPdfTexts(
+        Homiletic homiletic,
+        List<ContentSummary> summaries,
+        List<Division> divisions,
+        List<Application> applications,
+        AppLocalizations l) =>
+    [
+      homiletic.passage,
+      homiletic.subjectSentence,
+      homiletic.fcf,
+      homiletic.aim,
+      for (final ContentSummary s in summaries) ...[s.passage, s.summary],
+      for (final Division d in divisions) ...[d.passage, d.title],
+      for (final Application a in applications) a.text,
+      ..._labelTexts(l, homiletic.updatedAt),
+    ];
+
+/// Everything a word study handout in [l]'s language prints.
+List<String> wordStudyPdfTexts(WordStudy study, AppLocalizations l) => [
+      study.word,
+      study.passage,
+      study.definition,
+      study.otherUsage,
+      study.contextualMeaning,
+      study.deeperMeaning,
+      study.application,
+      ..._labelTexts(l, study.updatedAt),
+    ];
+
+/// The bundled fonts plus whatever script fonts [texts] need.
+Future<HomileticPdfFonts> _fontsFor(List<String> texts, Locale locale) async =>
+    withScriptFallbacks(await _loadBundledFonts(), texts, locale: locale);
+
+/// Builds the handout in the app's language with the app's fonts,
+/// downloading a CJK or Arabic font first if the handout needs one.
 Future<pw.Document> createHomileticsPdf(
     Homiletic homiletic,
     List<ContentSummary> summaries,
     List<Division> divisions,
     List<Application> applications,
     {PdfPageFormat format = PdfPageFormat.letter}) async {
+  final (AppLocalizations l, Locale locale) = _appStrings();
+  final HomileticPdfFonts fonts = await _fontsFor(
+      homileticPdfTexts(homiletic, summaries, divisions, applications, l),
+      locale);
   return buildHomileticsDocument(homiletic, summaries, divisions, applications,
-      fonts: await _loadBundledFonts(), format: format);
+      fonts: fonts, format: format, strings: l);
+}
+
+/// Builds the word study handout like [createHomileticsPdf].
+Future<pw.Document> createWordStudyPdf(WordStudy study,
+    {PdfPageFormat format = PdfPageFormat.letter}) async {
+  final (AppLocalizations l, Locale locale) = _appStrings();
+  final HomileticPdfFonts fonts =
+      await _fontsFor(wordStudyPdfTexts(study, l), locale);
+  return buildWordStudyDocument(study,
+      fonts: fonts, format: format, strings: l);
 }
 
 /// [text] made safe for a file name: path and reserved characters become
@@ -797,13 +999,16 @@ String _wordStudyFileName(WordStudy study) {
 
 Future<void> printHomiletic(Homiletic homiletic, List<ContentSummary> summaries,
     List<Division> divisions, List<Application> applications) async {
-  final HomileticPdfFonts fonts = await _loadBundledFonts();
+  final (AppLocalizations l, Locale locale) = _appStrings();
+  final HomileticPdfFonts fonts = await _fontsFor(
+      homileticPdfTexts(homiletic, summaries, divisions, applications, l),
+      locale);
   await Printing.layoutPdf(
     name: _fileName(homiletic),
     // Lay out for the paper the user picks (Letter, A4, ...).
     onLayout: (PdfPageFormat format) => buildHomileticsDocument(
             homiletic, summaries, divisions, applications,
-            fonts: fonts, format: format)
+            fonts: fonts, format: format, strings: l)
         .save(),
   );
 }
@@ -817,18 +1022,20 @@ Future<void> shareHomiletic(Homiletic homiletic, List<ContentSummary> summaries,
 }
 
 Future<void> printWordStudy(WordStudy study) async {
-  final HomileticPdfFonts fonts = await _loadBundledFonts();
+  final (AppLocalizations l, Locale locale) = _appStrings();
+  final HomileticPdfFonts fonts =
+      await _fontsFor(wordStudyPdfTexts(study, l), locale);
   await Printing.layoutPdf(
     name: _wordStudyFileName(study),
     // Lay out for the paper the user picks (Letter, A4, ...).
     onLayout: (PdfPageFormat format) =>
-        buildWordStudyDocument(study, fonts: fonts, format: format).save(),
+        buildWordStudyDocument(study, fonts: fonts, format: format, strings: l)
+            .save(),
   );
 }
 
 Future<void> shareWordStudy(WordStudy study) async {
-  final pw.Document pdf =
-      buildWordStudyDocument(study, fonts: await _loadBundledFonts());
+  final pw.Document pdf = await createWordStudyPdf(study);
   await Printing.sharePdf(
       bytes: await pdf.save(), filename: _wordStudyFileName(study));
 }

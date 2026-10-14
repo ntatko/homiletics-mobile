@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:homiletics/l10n/l10n.dart';
 import 'package:homiletics/classes/lecture_note.dart';
 import 'package:homiletics/common/notes_list_item.dart';
 import 'package:homiletics/common/study_data_builder.dart';
@@ -21,7 +22,7 @@ class PastLectureNotes extends StatelessWidget {
 
         final List<LectureNote> notes = snapshot.data!.reversed.toList();
         if (notes.isEmpty) {
-          return const StudyListEmpty('No lecture notes yet.');
+          return StudyListEmpty(context.l10n.studiesNoLectureNotes);
         }
         return ListView.builder(
           padding: studyListPadding,
