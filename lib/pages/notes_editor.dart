@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:homiletics/classes/lecture_note.dart';
 import 'package:homiletics/classes/preferences.dart';
-import 'package:homiletics/classes/translation.dart';
 import 'package:homiletics/common/report_error.dart';
 import 'package:homiletics/common/verse_container.dart';
+import 'package:homiletics/components/preferences_modal.dart';
 import 'package:homiletics/components/recording_section.dart';
 import 'package:homiletics/pages/home.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:split_view/split_view.dart';
 
 class NotesEditor extends StatefulWidget {
   const NotesEditor({Key? key, this.note}) : super(key: key);
@@ -23,9 +23,8 @@ class NotesEditor extends StatefulWidget {
 class _NotesState extends State<NotesEditor> {
   late LectureNote _thisNote;
   late QuillController _noteController;
-  bool _isTrayOpen = false;
+  final TextEditingController _passageController = TextEditingController();
   String _translationVersion = 'web';
-  final PanelController _controller = PanelController();
   final GlobalKey<VerseContainerState> _verseContainerKey =
       GlobalKey<VerseContainerState>();
 
@@ -83,6 +82,7 @@ class _NotesState extends State<NotesEditor> {
       _thisNote = widget.note ?? LectureNote();
       _translationVersion = Preferences.preferredVersion;
       _noteController = _buildNoteController(_thisNote.note);
+      _passageController.text = _thisNote.passage;
     });
     await _thisNote.update();
   }
@@ -91,14 +91,61 @@ class _NotesState extends State<NotesEditor> {
   void dispose() {
     _noteController.removeListener(_onNoteChanged);
     _noteController.dispose();
+    _passageController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> splitChildren = [
+      Column(children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: RecordingSection(note: _thisNote),
+        ),
+        QuillSimpleToolbar(
+          controller: _noteController,
+          config: const QuillSimpleToolbarConfig(
+            multiRowsDisplay: false,
+            showFontFamily: false,
+            showFontSize: false,
+            showSearchButton: false,
+          ),
+        ),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: QuillEditor.basic(
+              controller: _noteController,
+              config: const QuillEditorConfig(
+                placeholder: 'Notes',
+                padding: EdgeInsets.symmetric(vertical: 8),
+              ),
+            ),
+          ),
+        ),
+      ]),
+      VerseContainer(
+          key: _verseContainerKey,
+          passage: _thisNote.passage,
+          translation: Preferences.translation)
+    ];
+
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Homiletics'),
+          title: TextField(
+            keyboardType: TextInputType.text,
+            textCapitalization: TextCapitalization.sentences,
+            controller: _passageController,
+            decoration: const InputDecoration(
+                hintText: 'Passage', suffixIcon: Icon(Icons.edit)),
+            onChanged: (String value) async {
+              _thisNote.passage = value;
+              if (_thisNote.id != -1) await _thisNote.update();
+            },
+            onEditingComplete: () => setState(() {}),
+            onSubmitted: (_) => setState(() {}),
+          ),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
@@ -173,6 +220,20 @@ class _NotesState extends State<NotesEditor> {
                             );
                           });
                       return;
+                    case 3:
+                      showDialog(
+                          context: context,
+                          builder: ((context) => PreferencesModal(
+                                onTranslationChanged: () {
+                                  // Reload the verse container when translation changes
+                                  WidgetsBinding.instance
+                                      .addPostFrameCallback((_) {
+                                    _verseContainerKey.currentState
+                                        ?.reloadPassage();
+                                  });
+                                },
+                              )));
+                      return;
                     // case 2:
                     //   try {
                     //     await createHomileticsPdf(_thisHomiletic!, _summaries,
@@ -212,143 +273,36 @@ class _NotesState extends State<NotesEditor> {
                           leading: Icon(Icons.delete),
                         ),
                       ),
+                      const PopupMenuItem(
+                        value: 3,
+                        child: ListTile(
+                          title: Text('Preferences'),
+                          leading: Icon(Icons.settings),
+                        ),
+                      ),
                     ]),
           ],
         ),
-        body: SlidingUpPanel(
-            backdropColor:
-                MediaQuery.of(context).platformBrightness == Brightness.dark
-                    ? Colors.white
-                    : Colors.white,
-            controller: _controller,
-            minHeight: 75,
-            // panelSnapping: false,
-            backdropEnabled: true,
-            parallaxEnabled: false,
-            isDraggable: true,
-            color: MediaQuery.of(context).platformBrightness == Brightness.dark
-                ? Colors.black
-                : Colors.white,
-            borderRadius: BorderRadius.circular(15),
-            onPanelClosed: () {
-              setState(() {
-                _isTrayOpen = false;
-              });
-            },
-            onPanelSlide: (height) {
-              if (height > 0 && !_isTrayOpen) {
-                setState(() {
-                  _isTrayOpen = true;
-                });
-              }
-            },
-            onPanelOpened: () {
-              FocusManager.instance.primaryFocus?.unfocus();
-              setState(() {
-                _isTrayOpen = true;
-              });
-            },
-            collapsed: Column(children: [
-              Container(
-                  padding: const EdgeInsets.only(top: 7),
-                  child: Center(
-                    child: Container(
-                      height: 5,
-                      width: 40,
-                      decoration: BoxDecoration(
-                          color: Colors.grey,
-                          borderRadius: BorderRadius.circular(300)),
-                    ),
-                  )),
-              SizedBox(
-                  height: 60,
-                  child: Row(children: [
-                    Container(
-                        width: MediaQuery.of(context).size.width - 100,
-                        margin: const EdgeInsets.all(8),
-                        child: TextField(
-                          keyboardType: TextInputType.text,
-                          textCapitalization: TextCapitalization.sentences,
-                          controller:
-                              TextEditingController(text: _thisNote.passage),
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                          ),
-                          onChanged: (String value) async {
-                            _thisNote.passage = value;
-                            if (_thisNote.id != -1) await _thisNote.update();
-                          },
-                        )),
-                    SizedBox(
-                      width: 75,
-                      child: DropdownButton(
-                        items: [
-                          ...Translation.all
-                              .map((e) => DropdownMenuItem(
-                                    value: e.code,
-                                    child: Text(
-                                      e.short,
-                                      style: const TextStyle(fontSize: 12),
-                                    ),
-                                  ))
-                              .toList()
-                        ],
-                        onChanged: (version) {
-                          setState(() {
-                            _translationVersion = version.toString();
-                          });
-                        },
-                        value: _translationVersion,
-                      ),
-                    )
-                  ])),
-            ]),
-            panel: Column(children: [
-              Container(
-                  padding: const EdgeInsets.only(top: 7, bottom: 12),
-                  child: Center(
-                    child: Container(
-                      height: 5,
-                      width: 40,
-                      decoration: BoxDecoration(
-                          color: Colors.grey,
-                          borderRadius: BorderRadius.circular(300)),
-                    ),
-                  )),
-              Container(
-                  padding: const EdgeInsets.only(top: 40),
-                  height: MediaQuery.of(context).size.height * 0.56,
-                  child: VerseContainer(
-                      key: _verseContainerKey,
-                      passage: _thisNote.passage,
-                      translation: Preferences.translation))
-            ]),
-            body: Column(children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: RecordingSection(note: _thisNote),
-              ),
-              QuillSimpleToolbar(
-                controller: _noteController,
-                config: const QuillSimpleToolbarConfig(
-                  multiRowsDisplay: false,
-                  showFontFamily: false,
-                  showFontSize: false,
-                  showSearchButton: false,
-                ),
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: QuillEditor.basic(
-                    controller: _noteController,
-                    config: const QuillEditorConfig(
-                      placeholder: 'Notes',
-                      padding: EdgeInsets.symmetric(vertical: 8),
-                    ),
-                  ),
-                ),
-              ),
-            ])));
+        body: LayoutBuilder(builder: (context, constraints) {
+          // Use screen size to determine orientation, not available space
+          // This prevents keyboard opening from triggering layout changes
+          final screenSize = MediaQuery.sizeOf(context);
+          final isLandscape = screenSize.width > screenSize.height;
+
+          return SafeArea(
+            bottom: false,
+            child: SplitView(
+                indicator: SplitIndicator(
+                    viewMode: isLandscape
+                        ? SplitViewMode.Horizontal
+                        : SplitViewMode.Vertical),
+                viewMode: isLandscape
+                    ? SplitViewMode.Horizontal
+                    : SplitViewMode.Vertical,
+                children: isLandscape
+                    ? splitChildren.reversed.toList()
+                    : splitChildren),
+          );
+        }));
   }
 }
