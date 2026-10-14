@@ -11,10 +11,14 @@ class PreferencesPanel extends StatefulWidget {
   final VoidCallback? onTranslationChanged;
   final bool showHeader;
 
+  /// Settings has its own App language row, so it hides this one.
+  final bool showAppLanguage;
+
   const PreferencesPanel({
     Key? key,
     this.onTranslationChanged,
     this.showHeader = true,
+    this.showAppLanguage = true,
   }) : super(key: key);
 
   @override
@@ -75,12 +79,14 @@ class _PreferencesPanelState extends State<PreferencesPanel> {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
           child: Column(
             children: [
-              _PrefRow(
-                title: l.prefsAppLanguage,
-                value: appLanguage?.name ?? l.languageSystemDefault,
-                onTap: _pickAppLanguage,
-              ),
-              const Divider(height: 1),
+              if (widget.showAppLanguage) ...[
+                _PrefRow(
+                  title: l.prefsAppLanguage,
+                  value: appLanguage?.name ?? l.languageSystemDefault,
+                  onTap: _pickAppLanguage,
+                ),
+                const Divider(height: 1),
+              ],
               _PrefRow(
                 title: l.prefsBibleVersion,
                 value: translation.name,

@@ -471,7 +471,8 @@ class _HomileticProgressRow extends StatelessWidget {
           status: loading ? '' : describeProgress(context.l10n, done),
           done: done ?? const {},
           started: done != null,
-          onPressed: () => startHomileticForPassage(context, passage),
+          onPressed: () =>
+              startHomileticForPassage(context, passage, askIfExisting: false),
         );
       },
     );
@@ -522,10 +523,12 @@ class _ProgressRowContent extends StatelessWidget {
                 child:
                     Text(label, maxLines: 1, overflow: TextOverflow.ellipsis),
               ),
-              if (started)
+              if (started) ...[
+                const SizedBox(width: 8),
                 Text(status,
                     style: _progressText.copyWith(
                         color: c.onAccent.withValues(alpha: 0.85))),
+              ],
               const SizedBox(width: 2),
               const Icon(Icons.chevron_right_rounded, size: 20),
             ],

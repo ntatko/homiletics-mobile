@@ -42,6 +42,7 @@ class SettingsPage extends StatelessWidget {
                 PreferencesPanel(
                   onTranslationChanged: onTranslationChanged,
                   showHeader: false,
+                  showAppLanguage: false,
                 ),
                 heading(l.settingsSectionModels),
                 const WhisperModelSettings(),

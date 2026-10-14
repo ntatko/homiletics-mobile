@@ -12,8 +12,12 @@ import 'package:homiletics/storage/word_study_storage.dart';
 
 enum _DuplicatePassageChoice { editExisting, createNew }
 
-Future<void> startHomileticForPassage(
-    BuildContext context, String passage) async {
+/// Opens a homiletic for [passage]: a new one if none exists. When one
+/// does, asks whether to edit it or start another — unless
+/// [askIfExisting] is false (a "Continue" button), which opens the latest
+/// directly.
+Future<void> startHomileticForPassage(BuildContext context, String passage,
+    {bool askIfExisting = true}) async {
   final List<Homiletic> matches =
       await getHomileticsMatchingPassageReference(passage);
   if (matches.isEmpty) {
@@ -24,6 +28,14 @@ Future<void> startHomileticForPassage(
   if (!context.mounted) return;
 
   final Homiletic latest = matches.first;
+  if (!askIfExisting) {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (BuildContext c) => HomileticEditor(homiletic: latest),
+      ),
+    );
+    return;
+  }
   final _DuplicatePassageChoice? choice =
       await showDialog<_DuplicatePassageChoice>(
     context: context,
