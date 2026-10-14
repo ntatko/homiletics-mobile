@@ -7,6 +7,8 @@ import 'package:homiletics/services/whisper_model_service.dart';
 class WhisperModelSettings extends StatelessWidget {
   const WhisperModelSettings({Key? key}) : super(key: key);
 
+  static bool _isWhisperDownloading() => WhisperModelService.isDownloading;
+
   @override
   Widget build(BuildContext context) {
     return const ModelDownloadSettings(
@@ -16,6 +18,7 @@ class WhisperModelSettings extends StatelessWidget {
       sizeBytes: WhisperModelService.modelSizeBytes,
       download: WhisperModelService.downloadModel,
       delete: WhisperModelService.deleteModel,
+      isDownloading: _isWhisperDownloading,
     );
   }
 }
@@ -65,6 +68,10 @@ class ModelDownloadSettings extends StatefulWidget {
   /// the message is shown and the download controls are hidden.
   final Future<String?> Function()? builtInStatus;
 
+  /// Whether a download started elsewhere (e.g. the editor prompt) is still
+  /// running; the card then joins it instead of offering another one.
+  final bool Function()? isDownloading;
+
   const ModelDownloadSettings({
     Key? key,
     required this.title,
@@ -74,6 +81,7 @@ class ModelDownloadSettings extends StatefulWidget {
     required this.download,
     required this.delete,
     this.builtInStatus,
+    this.isDownloading,
   }) : super(key: key);
 
   @override
@@ -105,9 +113,15 @@ class _ModelDownloadSettingsState extends State<ModelDownloadSettings> {
       return;
     }
 
+    if (widget.isDownloading?.call() == true) {
+      if (mounted && _state != _ModelState.downloading) _download();
+      return;
+    }
+
     final bool downloaded = await widget.isDownloaded();
     final int? size = await widget.sizeBytes?.call();
-    if (!mounted) return;
+    // A download started while this was checking owns the status now.
+    if (!mounted || _state == _ModelState.downloading) return;
     setState(() {
       _state = downloaded ? _ModelState.downloaded : _ModelState.notDownloaded;
       _sizeBytes = size;
@@ -126,14 +140,16 @@ class _ModelDownloadSettingsState extends State<ModelDownloadSettings> {
           setState(() => _downloadProgress = progress);
         },
       );
+      if (!mounted) return;
+      setState(() => _state = _ModelState.checking);
       await _refreshStatus();
     } catch (error) {
       sendError(error, "ModelDownloadSettings download (${widget.title})");
       if (!mounted) return;
       setState(() => _state = _ModelState.notDownloaded);
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text(
-            "Something went wrong downloading the model. Try again soon."),
+        content:
+            Text("Something went wrong downloading the model. Try again soon."),
       ));
     }
   }

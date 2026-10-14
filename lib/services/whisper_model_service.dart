@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:homiletics/common/report_error.dart';
@@ -24,6 +25,14 @@ const Duration _paragraphPause = Duration(milliseconds: 1200);
 const int _minParagraphWords = 40;
 const int _maxParagraphWords = 160;
 
+/// Whisper sometimes emits long stretches with no sentence punctuation at
+/// all; break those anyway so one paragraph can't swallow the lecture.
+const int _hardMaxParagraphWords = 320;
+
+/// No bytes for this long means the connection is dead.
+const Duration _downloadStallTimeout = Duration(seconds: 60);
+const Duration _downloadOverallTimeout = Duration(hours: 1);
+
 /// Joins Whisper segments into paragraphs, breaking on long pauses and on
 /// sentence ends once a paragraph gets long. Gives a readable transcript
 /// even without the formatting model, and gives the formatter natural
@@ -46,12 +55,13 @@ String paragraphsFromSegments(
     final String text = segment.text.trim();
     if (text.isEmpty || text.startsWith('[')) continue; // [BLANK_AUDIO] etc.
 
-    final bool longPause = previousEnd != null &&
-        segment.from - previousEnd >= _paragraphPause;
+    final bool longPause =
+        previousEnd != null && segment.from - previousEnd >= _paragraphPause;
     final bool endsSentence =
         RegExp(r'[.?!]["”’]?$').hasMatch(current.toString().trim());
     if ((longPause && wordCount >= _minParagraphWords && endsSentence) ||
-        (wordCount >= _maxParagraphWords && endsSentence)) {
+        (wordCount >= _maxParagraphWords && endsSentence) ||
+        wordCount >= _hardMaxParagraphWords) {
       flush();
     }
 
@@ -84,32 +94,80 @@ class WhisperModelService {
     return file.lengthSync();
   }
 
+  static Future<void>? _inFlightDownload;
+  static final Set<void Function(double progress)> _progressListeners = {};
+
+  /// Whether a download is currently running (from any caller).
+  static bool get isDownloading => _inFlightDownload != null;
+
   /// Downloads the model from Hugging Face if it isn't already present.
   /// Reports progress as 0.0-1.0 via [onProgress] when the response
-  /// includes a content-length header.
+  /// includes a content-length header. Concurrent callers (Settings and the
+  /// editor prompt) share one download.
   static Future<void> downloadModel(
       {void Function(double progress)? onProgress}) async {
+    if (onProgress != null) _progressListeners.add(onProgress);
+    _inFlightDownload ??= _download().whenComplete(() {
+      _inFlightDownload = null;
+      _progressListeners.clear();
+    });
+    try {
+      await _inFlightDownload;
+    } finally {
+      if (onProgress != null) _progressListeners.remove(onProgress);
+    }
+  }
+
+  /// Streams into `<model>.part` and only renames it into place once it's
+  /// complete, so an interrupted download never looks like a downloaded
+  /// model.
+  static Future<void> _download() async {
     final File file = File(await _modelFilePath());
     if (file.existsSync()) return;
     await file.parent.create(recursive: true);
+    final File partFile = File('${file.path}.part');
+    if (partFile.existsSync()) await partFile.delete();
 
-    final http.StreamedResponse response =
-        await http.Client().send(http.Request('GET', kTranscriptionModel.modelUri));
-    if (response.statusCode != 200) {
-      throw Exception('Failed to download model: ${response.statusCode}');
-    }
-
-    final int total = response.contentLength ?? 0;
-    int received = 0;
-    final IOSink sink = file.openWrite();
+    final http.Client client = http.Client();
+    IOSink? sink;
     try {
-      await for (final List<int> chunk in response.stream) {
+      final http.StreamedResponse response = await client
+          .send(http.Request('GET', kTranscriptionModel.modelUri))
+          .timeout(_downloadStallTimeout);
+      if (response.statusCode != 200) {
+        throw Exception('Failed to download model: ${response.statusCode}');
+      }
+
+      final int total = response.contentLength ?? 0;
+      int received = 0;
+      final Stopwatch stopwatch = Stopwatch()..start();
+      sink = partFile.openWrite();
+      await for (final List<int> chunk
+          in response.stream.timeout(_downloadStallTimeout)) {
+        if (stopwatch.elapsed > _downloadOverallTimeout) {
+          throw TimeoutException('Model download took too long');
+        }
         received += chunk.length;
         sink.add(chunk);
-        if (total > 0) onProgress?.call(received / total);
+        if (total > 0) {
+          for (final listener in _progressListeners.toList()) {
+            listener(received / total);
+          }
+        }
       }
-    } finally {
       await sink.close();
+      sink = null;
+
+      if (total > 0 && received != total) {
+        throw Exception('Model download incomplete: $received of $total bytes');
+      }
+      await partFile.rename(file.path);
+    } catch (_) {
+      await sink?.close().catchError((_) {});
+      if (partFile.existsSync()) await partFile.delete();
+      rethrow;
+    } finally {
+      client.close();
     }
   }
 

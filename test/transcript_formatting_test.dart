@@ -39,6 +39,17 @@ void main() {
       expect(result.split('\n\n'), hasLength(1));
     });
 
+    test('breaks a long run with no sentence punctuation', () {
+      final result = paragraphsFromSegments(
+          List.generate(20, (i) => seg(words(30), i * 1000, i * 1000 + 900)));
+      final paragraphs = result.split('\n\n');
+      expect(paragraphs.length, greaterThan(1));
+      for (final paragraph in paragraphs) {
+        expect(paragraph.split(' ').length, lessThanOrEqualTo(350));
+      }
+      expect(result.split(RegExp(r'\s+')), hasLength(600));
+    });
+
     test('drops non-speech markers', () {
       final result = paragraphsFromSegments([
         seg('[BLANK_AUDIO]', 0, 1000),
@@ -64,6 +75,29 @@ void main() {
       for (final chunk in chunks) {
         expect(chunk.trim(), endsWith('end.'));
       }
+    });
+
+    test('re-joins sentences of one paragraph with a space', () {
+      final paragraph =
+          List.generate(10, (_) => '${words(59)} end.').join(' ');
+      for (final chunk in chunkTranscript(paragraph)) {
+        expect(chunk, isNot(contains('\n')));
+      }
+    });
+
+    test('keeps paragraph breaks between different paragraphs', () {
+      final chunks = chunkTranscript(
+          '${words(500, 'a')}.\n\n${words(10, 'b')}.');
+      expect(chunks.last, contains('\n\nb'));
+    });
+
+    test('hard-splits an oversized run with no punctuation', () {
+      final chunks = chunkTranscript(words(1000));
+      expect(chunks, hasLength(3));
+      for (final chunk in chunks) {
+        expect(chunk.split(' ').length, lessThanOrEqualTo(350));
+      }
+      expect(chunks.join(' ').split(' '), hasLength(1000));
     });
 
     test('loses no words', () {
