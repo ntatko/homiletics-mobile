@@ -2338,6 +2338,198 @@ abstract class AppLocalizations {
   /// **'Start a summary at verse {verse}'**
   String bibleVerseTapLabel(String verse);
 
+  /// Title of the bottom sheet listing the ways to share a study (link, QR code, PDF, print).
+  ///
+  /// In en, this message translates to:
+  /// **'Share this study'**
+  String get shareSheetTitle;
+
+  /// Share-sheet option: send a link to the study through the system share sheet (Messages, AirDrop, email...).
+  ///
+  /// In en, this message translates to:
+  /// **'Share link'**
+  String get shareLink;
+
+  /// Small line under "Share link": the recipient can open the link in Homiletics or on the website.
+  ///
+  /// In en, this message translates to:
+  /// **'Opens in the app, or in any browser'**
+  String get shareLinkSubtitle;
+
+  /// Share-sheet option: copy the study link to the clipboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy link'**
+  String get shareCopyLink;
+
+  /// Snack bar after the study link was copied to the clipboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Link copied'**
+  String get shareLinkCopied;
+
+  /// Share-sheet option: show a QR code of the study link for another phone to scan.
+  ///
+  /// In en, this message translates to:
+  /// **'Show QR code'**
+  String get shareShowQr;
+
+  /// Share-sheet option: share the study as a PDF document.
+  ///
+  /// In en, this message translates to:
+  /// **'Share PDF'**
+  String get shareSharePdf;
+
+  /// Snack bar when sharing or copying the study link failed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t share the link.'**
+  String get shareLinkFailed;
+
+  /// Title of the warning shown before sharing a study whose link is over ~8000 characters.
+  ///
+  /// In en, this message translates to:
+  /// **'This link is very long'**
+  String get shareLinkTooLongTitle;
+
+  /// Warning before sharing a very long study link. {count} is the number of characters in the link.
+  ///
+  /// In en, this message translates to:
+  /// **'This study makes a link of {count} characters. Some apps may cut it off, so it might not open. If that happens, share the PDF instead.'**
+  String shareLinkTooLongMessage(int count);
+
+  /// Button in the long-link warning that goes ahead with sharing.
+  ///
+  /// In en, this message translates to:
+  /// **'Share anyway'**
+  String get shareAnyway;
+
+  /// Heading of the QR code sheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan to open'**
+  String get shareQrTitle;
+
+  /// Explanation under the QR code.
+  ///
+  /// In en, this message translates to:
+  /// **'Point another phone\'s camera at the code to open this study.'**
+  String get shareQrHint;
+
+  /// Shown in the QR sheet when the link has too much data to fit in a QR code.
+  ///
+  /// In en, this message translates to:
+  /// **'This study is too long for a QR code. Use Share link or Copy link instead.'**
+  String get shareQrTooLong;
+
+  /// Screen-reader label of the QR code image.
+  ///
+  /// In en, this message translates to:
+  /// **'QR code linking to this study'**
+  String get shareQrSemantics;
+
+  /// Home header button and sheet title: open a study someone shared as a link.
+  ///
+  /// In en, this message translates to:
+  /// **'Import from link'**
+  String get importFromLink;
+
+  /// Explanation in the "Import from link" sheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste a Homiletics link someone shared with you. You can look it over before saving a copy.'**
+  String get importSheetMessage;
+
+  /// Hint in the link field of the import sheet (an example link; usually left as is).
+  ///
+  /// In en, this message translates to:
+  /// **'https://homiletics.app/view#…'**
+  String get importFieldHint;
+
+  /// Button that pastes the clipboard into the import field.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste'**
+  String get importPaste;
+
+  /// Button that opens the pasted link in the import preview.
+  ///
+  /// In en, this message translates to:
+  /// **'Open'**
+  String get importOpen;
+
+  /// Shown when Paste was tapped but the clipboard has no text.
+  ///
+  /// In en, this message translates to:
+  /// **'There is no text to paste.'**
+  String get importClipboardEmpty;
+
+  /// Error for a link that cannot be read (not ours, cut off, or corrupted).
+  ///
+  /// In en, this message translates to:
+  /// **'This isn\'t a Homiletics link, or part of it is missing. Ask for the link again.'**
+  String get importInvalidLink;
+
+  /// Error for a link made by a newer app version.
+  ///
+  /// In en, this message translates to:
+  /// **'This study was shared from a newer version of Homiletics. Update Homiletics to open this.'**
+  String get importNewerVersion;
+
+  /// Title of the dialog shown when an incoming link cannot be opened.
+  ///
+  /// In en, this message translates to:
+  /// **'Can\'t open this link'**
+  String get importCouldNotOpenTitle;
+
+  /// Small label above the passage on the preview of a shared homiletic.
+  ///
+  /// In en, this message translates to:
+  /// **'Shared homiletics'**
+  String get importPreviewHomiletic;
+
+  /// Small label above the passage on the preview of a shared word study.
+  ///
+  /// In en, this message translates to:
+  /// **'Shared word study'**
+  String get importPreviewWordStudy;
+
+  /// Note at the top of the shared-study preview.
+  ///
+  /// In en, this message translates to:
+  /// **'Someone shared this with you. Saving adds a copy to your studies; nothing you already have is changed.'**
+  String get importPreviewNote;
+
+  /// Line on the shared-study preview naming the Bible translation the sharer used, e.g. "Written with NIV".
+  ///
+  /// In en, this message translates to:
+  /// **'Written with {translation}'**
+  String importPreviewTranslation(String translation);
+
+  /// Button on the shared-study preview that saves it as a new study of the user.
+  ///
+  /// In en, this message translates to:
+  /// **'Save a copy'**
+  String get importSaveCopy;
+
+  /// Snack bar after a shared study was saved as a copy.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved to your studies'**
+  String get importSaved;
+
+  /// Snack bar when saving a shared study failed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t save the study. Try again.'**
+  String get importSaveFailed;
+
+  /// Button above the "Study another passage" field when a share link was pasted into it.
+  ///
+  /// In en, this message translates to:
+  /// **'Open shared study'**
+  String get startOpenSharedStudy;
+
   /// Windows only: verse panel title when the chosen translation is only available from Bible Gateway, which can't be shown inside the app on Windows.
   ///
   /// In en, this message translates to:

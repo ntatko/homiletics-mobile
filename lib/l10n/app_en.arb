@@ -1823,6 +1823,146 @@
       }
     }
   },
+  "shareSheetTitle": "Share this study",
+  "@shareSheetTitle": {
+    "description": "Title of the bottom sheet listing the ways to share a study (link, QR code, PDF, print)."
+  },
+  "shareLink": "Share link",
+  "@shareLink": {
+    "description": "Share-sheet option: send a link to the study through the system share sheet (Messages, AirDrop, email...)."
+  },
+  "shareLinkSubtitle": "Opens in the app, or in any browser",
+  "@shareLinkSubtitle": {
+    "description": "Small line under \"Share link\": the recipient can open the link in Homiletics or on the website."
+  },
+  "shareCopyLink": "Copy link",
+  "@shareCopyLink": {
+    "description": "Share-sheet option: copy the study link to the clipboard."
+  },
+  "shareLinkCopied": "Link copied",
+  "@shareLinkCopied": {
+    "description": "Snack bar after the study link was copied to the clipboard."
+  },
+  "shareShowQr": "Show QR code",
+  "@shareShowQr": {
+    "description": "Share-sheet option: show a QR code of the study link for another phone to scan."
+  },
+  "shareSharePdf": "Share PDF",
+  "@shareSharePdf": {
+    "description": "Share-sheet option: share the study as a PDF document."
+  },
+  "shareLinkFailed": "Couldn't share the link.",
+  "@shareLinkFailed": {
+    "description": "Snack bar when sharing or copying the study link failed."
+  },
+  "shareLinkTooLongTitle": "This link is very long",
+  "@shareLinkTooLongTitle": {
+    "description": "Title of the warning shown before sharing a study whose link is over ~8000 characters."
+  },
+  "shareLinkTooLongMessage": "This study makes a link of {count} characters. Some apps may cut it off, so it might not open. If that happens, share the PDF instead.",
+  "@shareLinkTooLongMessage": {
+    "description": "Warning before sharing a very long study link. {count} is the number of characters in the link.",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "9120"
+      }
+    }
+  },
+  "shareAnyway": "Share anyway",
+  "@shareAnyway": {
+    "description": "Button in the long-link warning that goes ahead with sharing."
+  },
+  "shareQrTitle": "Scan to open",
+  "@shareQrTitle": {
+    "description": "Heading of the QR code sheet."
+  },
+  "shareQrHint": "Point another phone's camera at the code to open this study.",
+  "@shareQrHint": {
+    "description": "Explanation under the QR code."
+  },
+  "shareQrTooLong": "This study is too long for a QR code. Use Share link or Copy link instead.",
+  "@shareQrTooLong": {
+    "description": "Shown in the QR sheet when the link has too much data to fit in a QR code."
+  },
+  "shareQrSemantics": "QR code linking to this study",
+  "@shareQrSemantics": {
+    "description": "Screen-reader label of the QR code image."
+  },
+  "importFromLink": "Import from link",
+  "@importFromLink": {
+    "description": "Home header button and sheet title: open a study someone shared as a link."
+  },
+  "importSheetMessage": "Paste a Homiletics link someone shared with you. You can look it over before saving a copy.",
+  "@importSheetMessage": {
+    "description": "Explanation in the \"Import from link\" sheet."
+  },
+  "importFieldHint": "https://homiletics.app/view#…",
+  "@importFieldHint": {
+    "description": "Hint in the link field of the import sheet (an example link; usually left as is)."
+  },
+  "importPaste": "Paste",
+  "@importPaste": {
+    "description": "Button that pastes the clipboard into the import field."
+  },
+  "importOpen": "Open",
+  "@importOpen": {
+    "description": "Button that opens the pasted link in the import preview."
+  },
+  "importClipboardEmpty": "There is no text to paste.",
+  "@importClipboardEmpty": {
+    "description": "Shown when Paste was tapped but the clipboard has no text."
+  },
+  "importInvalidLink": "This isn't a Homiletics link, or part of it is missing. Ask for the link again.",
+  "@importInvalidLink": {
+    "description": "Error for a link that cannot be read (not ours, cut off, or corrupted)."
+  },
+  "importNewerVersion": "This study was shared from a newer version of Homiletics. Update Homiletics to open this.",
+  "@importNewerVersion": {
+    "description": "Error for a link made by a newer app version."
+  },
+  "importCouldNotOpenTitle": "Can't open this link",
+  "@importCouldNotOpenTitle": {
+    "description": "Title of the dialog shown when an incoming link cannot be opened."
+  },
+  "importPreviewHomiletic": "Shared homiletics",
+  "@importPreviewHomiletic": {
+    "description": "Small label above the passage on the preview of a shared homiletic."
+  },
+  "importPreviewWordStudy": "Shared word study",
+  "@importPreviewWordStudy": {
+    "description": "Small label above the passage on the preview of a shared word study."
+  },
+  "importPreviewNote": "Someone shared this with you. Saving adds a copy to your studies; nothing you already have is changed.",
+  "@importPreviewNote": {
+    "description": "Note at the top of the shared-study preview."
+  },
+  "importPreviewTranslation": "Written with {translation}",
+  "@importPreviewTranslation": {
+    "description": "Line on the shared-study preview naming the Bible translation the sharer used, e.g. \"Written with NIV\".",
+    "placeholders": {
+      "translation": {
+        "type": "String",
+        "example": "NIV"
+      }
+    }
+  },
+  "importSaveCopy": "Save a copy",
+  "@importSaveCopy": {
+    "description": "Button on the shared-study preview that saves it as a new study of the user."
+  },
+  "importSaved": "Saved to your studies",
+  "@importSaved": {
+    "description": "Snack bar after a shared study was saved as a copy."
+  },
+  "importSaveFailed": "Couldn't save the study. Try again.",
+  "@importSaveFailed": {
+    "description": "Snack bar when saving a shared study failed."
+  },
+  "startOpenSharedStudy": "Open shared study",
+  "@startOpenSharedStudy": {
+    "description": "Button above the \"Study another passage\" field when a share link was pasted into it."
+  },
   "bibleWebUnavailableTitle": "Read {translation} in your browser",
   "@bibleWebUnavailableTitle": {
     "description": "Windows only: verse panel title when the chosen translation is only available from Bible Gateway, which can't be shown inside the app on Windows.",

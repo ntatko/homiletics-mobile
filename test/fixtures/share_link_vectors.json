@@ -1,0 +1,109 @@
+[
+  {
+    "name": "homiletic",
+    "envelope": {
+      "v": 1,
+      "t": "h",
+      "d": {
+        "p": "Romans 3:1-20",
+        "c": [
+          [
+            "1-2",
+            "God entrusted the Jews with His very words."
+          ],
+          [
+            "3-4",
+            "Human unfaithfulness can't cancel God's faithfulness."
+          ],
+          [
+            "9",
+            "Jews and Gentiles alike are under sin."
+          ],
+          [
+            "10-12",
+            "No one is righteous; no one seeks God."
+          ]
+        ],
+        "dv": [
+          [
+            "1-8",
+            "God stays faithful even when His people fail."
+          ],
+          [
+            "9-20",
+            "Scripture's verdict: all are under sin."
+          ]
+        ],
+        "s": "God is faithful; every person is guilty before Him.",
+        "f": "We excuse our own sin.",
+        "a": "the whole world is accountable to God.",
+        "ap": [
+          "Where am I comparing myself to others?",
+          "How can I thank God for His faithfulness?"
+        ],
+        "tr": "niv",
+        "u": "2026-10-14T12:00:00Z"
+      }
+    },
+    "link": "https://homiletics.app/view#h=ZVHBauMwEP2VQZdckmKnpXTdQ49N97CH3YVCQw-qPI5FZMloJHtD6b_3KQ60sCCERjPz3pt572pSTb1WSTWqV2vVquZdjQh-h0F7oeum3mwrJIxq9nuFAO_H0BL7FLMkbin1TD95Fppt6mlnhSaOJ5pDbOVKva736npzg65dBiJl32nUddl5FiGj_SqV27Aj4K6EvueX_h_oPjNo39IjmK1jBM4emXRkYLYcSaxfyutqUxeZvwIFzwRB0R76xCHLPfnlU5iPUgjR8oqxp8t4d5fxJOnTlxTiiT3NPa4y38hhdFyy7iJw2dEfE-2YcuTVeQetNamBTPefSDAKdlyI7BfLfaHB5kaOEnzJHLJ16URv3AUg7OxwBZYOnc9M_M9kYQo5Upj9ArxWGsliyNwHKIQH7kyhjQnZJ_2GzxSWuVEMo_fquWeA64GeyIRh1NH6Aw0nYdeV2gC4KA_FwDAXp1CXeu2PBYUg7LyS76Y9YCcqRSjxdkJfxmtbbW83xZibv_W2qSqcF_Xx8Qk"
+  },
+  {
+    "name": "word_study",
+    "envelope": {
+      "v": 1,
+      "t": "w",
+      "d": {
+        "p": "Romans 3:10",
+        "wd": "Righteous",
+        "df": "Right with God.",
+        "ou": "Genesis 15:6\nRomans 1:17",
+        "cm": "No one meets God's standard on their own.",
+        "dm": "Greek δίκαιος (dikaios).",
+        "ap": "Rest in Christ's righteousness.",
+        "tr": "web"
+      }
+    },
+    "link": "https://homiletics.app/view#w=NY-xbgIxDIZfxfJCKyFEhFqkrAy3MTCzpI3pRadLUGzIgFj6QhVSl3bpG6SvhFP1Rn_-_Ov3Bc9ozRwFLRaco0d7waMOuzS6yLCyZqm4-IbCWy-UTty8wwSgBOmhS36hOJ0UdxSJA4N5ss_7-B9krFmr8DqqsE2QIsFIJNwuZwwsLnqXvS5AegoZUokt0beDLhMNUD_rR_2ut_pVf37f4cGHwYXEj01zf52JBUKETZ8Di6bmqbEW4qZJbn_SC16vdw"
+  },
+  {
+    "name": "chinese",
+    "envelope": {
+      "v": 1,
+      "t": "h",
+      "d": {
+        "p": "罗马书 3:1-20",
+        "c": [
+          [
+            "1-2",
+            "神把祂的圣言交托给犹太人。"
+          ]
+        ],
+        "s": "神是信实的；人人都有罪。"
+      }
+    },
+    "link": "https://homiletics.app/view#h=q1YqU7Iy1FEqUbJSylDSUUpRsqpWKgBynu-d_nLlmic7lykYWxnqGhkA5ZKVrKKjlYAcIPv50nnPurqeL216Pqvl6ZzFL1Y0PNm15FnnjOe7Zz7v2vl0yaonu3Y9bmhSio3VUSoGGQdUP2P9k_0Ln66bB9Tyfs9soAIgetm899mczud7V4EU19YCAA"
+  },
+  {
+    "name": "minimal",
+    "envelope": {
+      "v": 1,
+      "t": "h",
+      "d": {
+        "p": "John 1"
+      }
+    },
+    "link": "https://homiletics.app/view#h=q1YqU7Iy1FEqUbJSylDSUUpRsqpWKgByvPIz8hQMlWprAQ"
+  },
+  {
+    "name": "future_version",
+    "envelope": null,
+    "link": "https://homiletics.app/view#h=q1YqU7KytNRRKlGyUspQ0lFKUbKqVioAciqUamsB",
+    "expect": "unsupported_version"
+  },
+  {
+    "name": "garbage",
+    "envelope": null,
+    "link": "https://homiletics.app/view#h=not-valid!!",
+    "expect": "invalid"
+  }
+]

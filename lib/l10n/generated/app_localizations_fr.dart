@@ -1342,6 +1342,114 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
+  String get shareSheetTitle => 'Partager cette étude';
+
+  @override
+  String get shareLink => 'Partager le lien';
+
+  @override
+  String get shareLinkSubtitle =>
+      'S\'ouvre dans l\'app ou dans n\'importe quel navigateur';
+
+  @override
+  String get shareCopyLink => 'Copier le lien';
+
+  @override
+  String get shareLinkCopied => 'Lien copié';
+
+  @override
+  String get shareShowQr => 'Afficher le code QR';
+
+  @override
+  String get shareSharePdf => 'Partager le PDF';
+
+  @override
+  String get shareLinkFailed => 'Impossible de partager le lien.';
+
+  @override
+  String get shareLinkTooLongTitle => 'Ce lien est très long';
+
+  @override
+  String shareLinkTooLongMessage(int count) {
+    return 'Cette étude produit un lien de $count caractères. Certaines apps peuvent le couper, et il risque de ne pas s\'ouvrir. Dans ce cas, partagez plutôt le PDF.';
+  }
+
+  @override
+  String get shareAnyway => 'Partager quand même';
+
+  @override
+  String get shareQrTitle => 'Scanner pour ouvrir';
+
+  @override
+  String get shareQrHint =>
+      'Visez le code avec l\'appareil photo d\'un autre téléphone pour ouvrir cette étude.';
+
+  @override
+  String get shareQrTooLong =>
+      'Cette étude est trop longue pour un code QR. Utilisez plutôt Partager le lien ou Copier le lien.';
+
+  @override
+  String get shareQrSemantics => 'Code QR menant à cette étude';
+
+  @override
+  String get importFromLink => 'Importer depuis un lien';
+
+  @override
+  String get importSheetMessage =>
+      'Collez un lien Homiletics qu\'on vous a partagé. Vous pourrez le consulter avant d\'en enregistrer une copie.';
+
+  @override
+  String get importFieldHint => 'https://homiletics.app/view#…';
+
+  @override
+  String get importPaste => 'Coller';
+
+  @override
+  String get importOpen => 'Ouvrir';
+
+  @override
+  String get importClipboardEmpty => 'Il n\'y a pas de texte à coller.';
+
+  @override
+  String get importInvalidLink =>
+      'Ce n\'est pas un lien Homiletics, ou il en manque une partie. Redemandez le lien.';
+
+  @override
+  String get importNewerVersion =>
+      'Cette étude a été partagée depuis une version plus récente de Homiletics. Mettez Homiletics à jour pour l\'ouvrir.';
+
+  @override
+  String get importCouldNotOpenTitle => 'Impossible d\'ouvrir ce lien';
+
+  @override
+  String get importPreviewHomiletic => 'Homilétique partagée';
+
+  @override
+  String get importPreviewWordStudy => 'Étude de mot partagée';
+
+  @override
+  String get importPreviewNote =>
+      'Quelqu\'un vous a partagé ceci. L\'enregistrer ajoute une copie à vos études ; rien de ce que vous avez déjà n\'est modifié.';
+
+  @override
+  String importPreviewTranslation(String translation) {
+    return 'Rédigé avec $translation';
+  }
+
+  @override
+  String get importSaveCopy => 'Enregistrer une copie';
+
+  @override
+  String get importSaved => 'Enregistré dans vos études';
+
+  @override
+  String get importSaveFailed =>
+      'Impossible d\'enregistrer l\'étude. Réessayez.';
+
+  @override
+  String get startOpenSharedStudy => 'Ouvrir l\'étude partagée';
+
+  @override
   String bibleWebUnavailableTitle(String translation) {
     return 'Lire $translation dans votre navigateur';
   }

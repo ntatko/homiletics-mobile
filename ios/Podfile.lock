@@ -1,4 +1,6 @@
 PODS:
+  - app_links (7.0.0):
+    - Flutter
   - audioplayers_darwin (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -34,6 +36,8 @@ PODS:
     - Flutter
   - record_ios (1.2.1):
     - Flutter
+  - share_plus (0.0.1):
+    - Flutter
   - shared_preferences_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -49,6 +53,7 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
+  - app_links (from `.symlinks/plugins/app_links/ios`)
   - audioplayers_darwin (from `.symlinks/plugins/audioplayers_darwin/darwin`)
   - background_downloader (from `.symlinks/plugins/background_downloader/ios`)
   - ffmpeg_kit_flutter_new_min (from `.symlinks/plugins/ffmpeg_kit_flutter_new_min/ios`)
@@ -62,6 +67,7 @@ DEPENDENCIES:
   - printing (from `.symlinks/plugins/printing/ios`)
   - quill_native_bridge_ios (from `.symlinks/plugins/quill_native_bridge_ios/ios`)
   - record_ios (from `.symlinks/plugins/record_ios/ios`)
+  - share_plus (from `.symlinks/plugins/share_plus/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
   - sqflite_darwin (from `.symlinks/plugins/sqflite_darwin/darwin`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
@@ -74,6 +80,8 @@ SPEC REPOS:
     - MediaPipeTasksGenAIC
 
 EXTERNAL SOURCES:
+  app_links:
+    :path: ".symlinks/plugins/app_links/ios"
   audioplayers_darwin:
     :path: ".symlinks/plugins/audioplayers_darwin/darwin"
   background_downloader:
@@ -100,6 +108,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/quill_native_bridge_ios/ios"
   record_ios:
     :path: ".symlinks/plugins/record_ios/ios"
+  share_plus:
+    :path: ".symlinks/plugins/share_plus/ios"
   shared_preferences_foundation:
     :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
   sqflite_darwin:
@@ -112,6 +122,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/whisper_ggml/ios"
 
 SPEC CHECKSUMS:
+  app_links: 6d01271b3907b0ee7325c5297c75d697c4226c4d
   audioplayers_darwin: f15e209a3e856d1a7edcf98dc029f484fead2242
   background_downloader: a05c77d32a0d70615b9c04577aa203535fc924ff
   ffmpeg_kit_flutter_new_min: f28813df6012a3b3c0e66e4e9f3583a9b30be4d6
@@ -127,6 +138,7 @@ SPEC CHECKSUMS:
   printing: 233e1b73bd1f4a05615548e9b5a324c98588640b
   quill_native_bridge_ios: 2b01d585fcc73d0f5eed78c0bd244ee564b06f5a
   record_ios: 3b171007ae5de51221a3a76d2b379a7105ca98b5
+  share_plus: 8b6f8b3447e494cca5317c8c3073de39b3600d1f
   shared_preferences_foundation: 5086985c1d43c5ba4d5e69a4e8083a389e2909e6
   sqflite_darwin: 5a7236e3b501866c1c9befc6771dfd73ffb8702d
   url_launcher_ios: bb13df5870e8c4234ca12609d04010a21be43dfa

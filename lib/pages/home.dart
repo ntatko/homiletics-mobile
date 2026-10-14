@@ -7,6 +7,7 @@ import 'package:homiletics/components/application_list.dart';
 import 'package:homiletics/components/continue_studies.dart';
 import 'package:homiletics/components/current_lesson.dart';
 import 'package:homiletics/components/help_menu.dart';
+import 'package:homiletics/components/share/import_link_sheet.dart';
 import 'package:homiletics/components/start_activity.dart';
 import 'package:homiletics/pages/onboarding/onboarding_launcher.dart';
 import 'package:homiletics/pages/search_page.dart';
@@ -99,6 +100,7 @@ class _HomeState extends State<Home> {
                     onSearchChanged: (value) =>
                         setState(() => _searchString = value),
                     onOpenSettings: _openSettings,
+                    onImportLink: () => showImportLinkSheet(context),
                   ),
                   Expanded(
                     child: Stack(

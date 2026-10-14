@@ -3,6 +3,7 @@ import 'package:homiletics/classes/application.dart';
 import 'package:homiletics/classes/content_summary.dart';
 import 'package:homiletics/classes/Division.dart';
 import 'package:homiletics/classes/homiletic.dart';
+import 'package:homiletics/classes/preferences.dart';
 import 'package:homiletics/common/report_error.dart';
 import 'package:homiletics/common/study_data_builder.dart';
 import 'package:homiletics/components/editor/passage_split_scaffold.dart';
@@ -12,8 +13,10 @@ import 'package:homiletics/components/homiletics/content_summaries_card.dart';
 import 'package:homiletics/components/homiletics/divisions_card.dart';
 import 'package:homiletics/components/homiletics/fcf_card.dart';
 import 'package:homiletics/components/homiletics/summary_sentence_card.dart';
+import 'package:homiletics/components/share/study_share_sheet.dart';
 import 'package:homiletics/l10n/l10n.dart';
 import 'package:homiletics/services/bible_text_service.dart';
+import 'package:homiletics/services/share_link.dart';
 import 'package:homiletics/storage/application_storage.dart';
 import 'package:homiletics/storage/content_summary_storage.dart';
 import 'package:homiletics/storage/division_storage.dart';
@@ -23,7 +26,11 @@ import 'package:homiletics/theme/widgets.dart';
 import 'package:homiletics/theme/homiletics_widgets.dart';
 
 class HomileticEditor extends StatefulWidget {
-  const HomileticEditor({Key? key, this.homiletic}) : super(key: key);
+  const HomileticEditor({Key? key, this.homiletic, this.initialExpanded})
+      : super(key: key);
+
+  /// Steps to open on load instead of the first unfinished one.
+  final Set<StudyStep>? initialExpanded;
 
   final Homiletic? homiletic;
 
@@ -101,7 +108,11 @@ class _HomileticState extends State<HomileticEditor> {
         _applications = savedApplications.isNotEmpty
             ? savedApplications
             : [Application.blank(_thisHomiletic.id)];
-        if (!_userChoseStep) {
+        if (!_userChoseStep && widget.initialExpanded != null) {
+          _expanded
+            ..clear()
+            ..addAll(widget.initialExpanded!);
+        } else if (!_userChoseStep) {
           final StudyStep? firstOpen =
               StudyStep.values.where((step) => !_isDone(step)).firstOrNull;
           _expanded
@@ -343,7 +354,7 @@ class _HomileticState extends State<HomileticEditor> {
           title: context.l10n.homileticCompleteTitle,
           message: context.l10n.homileticCompleteMessage,
           onPrint: _print,
-          onShare: _share,
+          onShare: _openShareSheet,
         ),
       ));
     }
@@ -408,7 +419,7 @@ class _HomileticState extends State<HomileticEditor> {
     }
   }
 
-  Future<void> _share() => _runPdfAction(
+  Future<void> _sharePdf() => _runPdfAction(
       () =>
           shareHomiletic(_thisHomiletic, _summaries, _divisions, _applications),
       context.l10n.homileticPdfShared,
@@ -421,6 +432,27 @@ class _HomileticState extends State<HomileticEditor> {
       context.l10n.homileticPdfPrinted,
       context.l10n.homileticPdfPrintFailed,
       "PDF print");
+
+  String _buildLink() => ShareLink.encodeHomiletic(
+        _thisHomiletic,
+        summaries: _summaries,
+        divisions: _divisions,
+        applications: _applications,
+        translation: Preferences.preferredVersion,
+      );
+
+  Future<void> _openShareSheet() {
+    final String passage = _thisHomiletic.passage.trim();
+    return showStudyShareSheet(
+      context,
+      buildLink: _buildLink,
+      title: passage.isEmpty
+          ? context.l10n.pdfUntitledPassage
+          : context.l10n.pdfHomileticLabel(passage),
+      onSharePdf: _sharePdf,
+      onPrint: _print,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -438,11 +470,7 @@ class _HomileticState extends State<HomileticEditor> {
         EditorMenuAction(
             icon: Icons.ios_share_rounded,
             title: l.commonShare,
-            onSelected: _share),
-        EditorMenuAction(
-            icon: Icons.print_outlined,
-            title: l.commonPrint,
-            onSelected: _print),
+            onSelected: _openShareSheet),
       ],
       child: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(12, 0, 12, 24),

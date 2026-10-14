@@ -118,7 +118,8 @@ void main() {
     });
   });
 
-  test('LectureNote.fromJson reduces an old absolute recording path to its file name',
+  test(
+      'LectureNote.fromJson reduces an old absolute recording path to its file name',
       () {
     final LectureNote n = LectureNote.fromJson({
       'id': 1,
@@ -135,7 +136,8 @@ void main() {
     expect(m.recordingPath, 'lecture_2_9.m4a');
   });
 
-  test('LectureNote.updateNote and updateTranscript allow clearing with empty string',
+  test(
+      'LectureNote.updateNote and updateTranscript allow clearing with empty string',
       () async {
     // A deleted note doesn't touch the database, so this exercises only the
     // field handling.
