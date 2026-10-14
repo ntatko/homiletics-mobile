@@ -172,10 +172,9 @@ class _PickerSheet extends StatelessWidget {
       builder: (context, controller) => Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const SizedBox(height: 10),
-          const DragHandle(),
+          // The bottom sheet theme already draws the drag handle.
           Padding(
-            padding: const EdgeInsets.fromLTRB(20, 14, 20, 8),
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 8),
             child: Text(title, style: AppText.title.copyWith(color: c.ink)),
           ),
           Expanded(
