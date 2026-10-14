@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:homiletics/classes/application.dart';
 import 'package:homiletics/common/application_list_item.dart';
 import 'package:homiletics/common/home_header.dart';
+import 'package:homiletics/common/study_data_builder.dart';
 import 'package:homiletics/pages/application_page.dart';
 import 'package:homiletics/storage/application_storage.dart';
 import 'package:loggy/loggy.dart';
@@ -20,8 +21,8 @@ class ApplicationList extends StatelessWidget {
             color: Theme.of(context).brightness == Brightness.dark
                 ? Colors.green[900]
                 : Colors.green[100],
-            child: FutureBuilder<List<Application>>(
-              future: getAllApplicationsWithPassages(),
+            child: StudyDataBuilder<List<Application>>(
+              load: getAllApplicationsWithPassages,
               builder: (context, snapshot) {
                 if (snapshot.hasError) logError("${snapshot.error}");
 

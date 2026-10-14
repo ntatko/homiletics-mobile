@@ -72,6 +72,7 @@ class _OtherUsageSearchSheetState extends State<_OtherUsageSearchSheet> {
       ..addJavaScriptChannel(
         'OtherUsageChannel',
         onMessageReceived: (JavaScriptMessage message) {
+          if (!mounted) return;
           final reference = message.message.trim();
           if (reference.isEmpty) return;
           widget.onReferenceSelected(reference);
@@ -80,8 +81,12 @@ class _OtherUsageSearchSheetState extends State<_OtherUsageSearchSheet> {
       )
       ..setNavigationDelegate(
         NavigationDelegate(
-          onPageStarted: (String url) => setState(() => _isLoading = true),
+          onPageStarted: (String url) {
+            if (!mounted) return;
+            setState(() => _isLoading = true);
+          },
           onPageFinished: (String url) {
+            if (!mounted) return;
             setState(() => _isLoading = false);
             _controller.runJavaScript(_bridgeScript);
           },

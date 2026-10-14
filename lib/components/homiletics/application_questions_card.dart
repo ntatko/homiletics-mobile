@@ -1,17 +1,15 @@
-// ignore_for_file: must_be_immutable
-
 import 'package:flutter/material.dart';
 import 'package:homiletics/classes/application.dart';
 import 'package:homiletics/classes/homiletic.dart';
-import 'package:homiletics/common/report_error.dart';
+import 'package:homiletics/components/homiletics/row_controllers.dart';
 
-class ApplicationQuestionsCard extends StatelessWidget {
-  List<Application> applications;
+class ApplicationQuestionsCard extends StatefulWidget {
+  final List<Application> applications;
   final Homiletic homiletic;
-  void Function() addApplication;
-  Future<void> Function() removeApplication;
+  final VoidCallback addApplication;
+  final Future<void> Function(Application application) removeApplication;
 
-  ApplicationQuestionsCard(
+  const ApplicationQuestionsCard(
       {Key? key,
       required this.applications,
       required this.homiletic,
@@ -20,9 +18,42 @@ class ApplicationQuestionsCard extends StatelessWidget {
       : super(key: key);
 
   @override
+  State<ApplicationQuestionsCard> createState() =>
+      _ApplicationQuestionsCardState();
+}
+
+class _ApplicationQuestionsCardState extends State<ApplicationQuestionsCard> {
+  final RowControllers<Application> _controllers = RowControllers<Application>(
+      (application) => [TextEditingController(text: application.text)]);
+  final RowRemover _remover = RowRemover();
+
+  @override
+  void dispose() {
+    _controllers.dispose();
+    super.dispose();
+  }
+
+  void _add() {
+    _controllers.focusNextNewRow();
+    widget.addApplication();
+  }
+
+  Future<void> _remove(Application application) {
+    return _remover.remove(
+      context,
+      hasText: _controllers.of(application)[0].text.trim().isNotEmpty,
+      rowName: 'application question',
+      remove: () => widget.removeApplication(application),
+      failureMessage: "Removing that Application didn't work",
+      errorIdentifier: "Remove application",
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
+    _controllers.retainOnly(widget.applications);
     return Card(
-        color: MediaQuery.of(context).platformBrightness == Brightness.light
+        color: Theme.of(context).brightness == Brightness.light
             ? Colors.grey[200]
             : Colors.blueGrey[900],
         child: Padding(
@@ -61,79 +92,52 @@ class ApplicationQuestionsCard extends StatelessWidget {
                           }),
                     ]),
               ),
-              ...applications.map((application) {
-                // int index = _applications.indexOf(application);
+              ...widget.applications.map((application) {
                 return Container(
-                    width: MediaQuery.of(context).size.width,
+                    key: ObjectKey(application),
                     margin: const EdgeInsets.all(8),
-                    child: TextField(
-                        autofocus: true,
-                        maxLines: null,
-                        keyboardType: TextInputType.text,
-                        textCapitalization: TextCapitalization.sentences,
-                        controller:
-                            TextEditingController(text: application.text),
-                        decoration: const InputDecoration(
-                          hintText: 'How can I...',
-                          border: OutlineInputBorder(),
-                        ),
-                        onSubmitted: (_) {
-                          addApplication();
-                          // setState(() {
-                          //   _applications
-                          //       .add(Application.blank(_thisHomiletic.id));
-                          // });
-                        },
-                        onChanged: (value) async {
-                          await application.updateText(value);
-                          await homiletic.update();
-                        }));
-              }).toList(),
+                    child: Row(children: [
+                      Expanded(
+                          child: TextField(
+                              autofocus:
+                                  _controllers.shouldAutofocus(application),
+                              maxLines: null,
+                              keyboardType: TextInputType.text,
+                              textCapitalization: TextCapitalization.sentences,
+                              controller: _controllers.of(application)[0],
+                              decoration: const InputDecoration(
+                                hintText: 'How can I...',
+                                border: OutlineInputBorder(),
+                              ),
+                              onSubmitted: (_) => _add(),
+                              onChanged: (value) async {
+                                await application.updateText(value);
+                                await widget.homiletic.update();
+                              })),
+                      IconButton(
+                        tooltip: 'Remove application question',
+                        icon: const Icon(Icons.delete_outline),
+                        onPressed: () => _remove(application),
+                      ),
+                    ]));
+              }),
               Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   child:
                       Row(mainAxisAlignment: MainAxisAlignment.end, children: [
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.all(8),
-                        minimumSize: const Size(40, 40),
-                      ),
-                      onPressed: applications.isNotEmpty
-                          ? () async {
-                              try {
-                                removeApplication();
-                              } catch (error) {
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(SnackBar(
-                                  content: const Text(
-                                      "Removing that Application didn't work"),
-                                  action: SnackBarAction(
-                                    onPressed: () {},
-                                    label: "Ok",
-                                  ),
-                                ));
-                                sendError(error, "Remove application");
-                              }
-                            }
-                          : null,
-                      child: const Icon(Icons.delete),
-                    ),
-                    const SizedBox(width: 5),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 8, vertical: 0),
                         minimumSize: const Size(0, 40),
                       ),
-                      onPressed: () {
-                        addApplication();
-                      },
+                      onPressed: _add,
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           const Icon(Icons.add, size: 20),
                           const SizedBox(width: 4),
-                          Text('(${applications.length})'),
+                          Text('(${widget.applications.length})'),
                         ],
                       ),
                     ),

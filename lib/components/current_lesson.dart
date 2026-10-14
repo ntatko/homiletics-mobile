@@ -37,16 +37,23 @@ class _CurrentLessonState extends State<CurrentLesson> {
     if (!_sameScheduleList(oldWidget.schedules, widget.schedules)) {
       _selectedStudy = null;
       _filteredSchedules = widget.schedules;
-      _pageController.dispose();
-      _pageController = PageController(
-        viewportFraction: 0.85,
-        initialPage: _getInitialPage(),
-      );
+      _replacePageController();
     }
   }
 
-  bool _sameScheduleList(
-      List<PassageSchedule> a, List<PassageSchedule> b) {
+  /// Swaps in a controller starting at the right page for
+  /// [_filteredSchedules]. The old one is still attached to the PageView
+  /// until this build finishes, so it's disposed after the frame.
+  void _replacePageController() {
+    final PageController old = _pageController;
+    _pageController = PageController(
+      viewportFraction: 0.85,
+      initialPage: _getInitialPage(),
+    );
+    WidgetsBinding.instance.addPostFrameCallback((_) => old.dispose());
+  }
+
+  bool _sameScheduleList(List<PassageSchedule> a, List<PassageSchedule> b) {
     if (a.length != b.length) return false;
     for (var i = 0; i < a.length; i++) {
       if (a[i].passage != b[i].passage ||
@@ -62,8 +69,10 @@ class _CurrentLessonState extends State<CurrentLesson> {
   int _getInitialPage() {
     if (_filteredSchedules.isEmpty) return 0;
     final now = DateTime.now();
-    return _filteredSchedules
+    final int index = _filteredSchedules
         .lastIndexWhere((schedule) => schedule.rollout.isBefore(now));
+    // Nothing has rolled out yet: start at the first lesson.
+    return index < 0 ? 0 : index;
   }
 
   List<String> get _uniqueStudies {
@@ -76,10 +85,7 @@ class _CurrentLessonState extends State<CurrentLesson> {
       _filteredSchedules = study == null
           ? widget.schedules
           : widget.schedules.where((s) => s.study == study).toList();
-      _pageController = PageController(
-        viewportFraction: 0.85,
-        initialPage: _getInitialPage(),
-      );
+      _replacePageController();
     });
   }
 
@@ -126,7 +132,8 @@ class _CurrentLessonState extends State<CurrentLesson> {
           ),
         ),
         SizedBox(
-          height: 200, // room for the button row to wrap to two lines with 3 buttons
+          height:
+              200, // room for the button row to wrap to two lines with 3 buttons
           child: PageView.builder(
             controller: _pageController,
             itemCount: _filteredSchedules.length,
@@ -172,9 +179,9 @@ class _CurrentLessonState extends State<CurrentLesson> {
               children: [
                 ElevatedButton(
                   onPressed: () => startHomileticForPassage(
-                        context,
-                        schedule.passage,
-                      ),
+                    context,
+                    schedule.passage,
+                  ),
                   child: const Text("Homiletics"),
                 ),
                 OtherStudyMenuButton(passage: schedule.passage),

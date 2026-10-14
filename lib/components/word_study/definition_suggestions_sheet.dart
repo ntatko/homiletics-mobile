@@ -67,8 +67,9 @@ class _DefinitionSuggestionsSheetState
                               TextButton(
                                 onPressed: () {
                                   setState(() {
-                                    _definitions = DictionaryApiService
-                                        .fetchDefinitions(widget.word);
+                                    _definitions =
+                                        DictionaryApiService.fetchDefinitions(
+                                            widget.word);
                                   });
                                 },
                                 child: const Text("Retry"),
@@ -90,7 +91,8 @@ class _DefinitionSuggestionsSheetState
                           return Card(
                             child: ListTile(
                               title: Text(definition),
-                              onTap: () => Navigator.of(context).pop(definition),
+                              onTap: () =>
+                                  Navigator.of(context).pop(definition),
                             ),
                           );
                         },

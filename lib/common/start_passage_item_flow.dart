@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:homiletics/classes/homiletic.dart';
 import 'package:homiletics/classes/lecture_note.dart';
@@ -12,13 +11,10 @@ import 'package:homiletics/storage/word_study_storage.dart';
 
 enum _DuplicatePassageChoice { editExisting, createNew }
 
-Future<void> startHomileticForPassage(BuildContext context, String passage) async {
-  if (kIsWeb) {
-    await _openNewHomiletic(context, passage);
-    return;
-  }
-
-  final List<Homiletic> matches = await getHomileticsMatchingPassageReference(passage);
+Future<void> startHomileticForPassage(
+    BuildContext context, String passage) async {
+  final List<Homiletic> matches =
+      await getHomileticsMatchingPassageReference(passage);
   if (matches.isEmpty) {
     await _openNewHomiletic(context, passage);
     return;
@@ -27,7 +23,8 @@ Future<void> startHomileticForPassage(BuildContext context, String passage) asyn
   if (!context.mounted) return;
 
   final Homiletic latest = matches.first;
-  final _DuplicatePassageChoice? choice = await showDialog<_DuplicatePassageChoice>(
+  final _DuplicatePassageChoice? choice =
+      await showDialog<_DuplicatePassageChoice>(
     context: context,
     builder: (BuildContext ctx) {
       final String extra = matches.length > 1
@@ -42,11 +39,13 @@ Future<void> startHomileticForPassage(BuildContext context, String passage) asyn
             child: const Text('Cancel'),
           ),
           TextButton(
-            onPressed: () => Navigator.pop(ctx, _DuplicatePassageChoice.createNew),
+            onPressed: () =>
+                Navigator.pop(ctx, _DuplicatePassageChoice.createNew),
             child: const Text('Create new'),
           ),
           ElevatedButton(
-            onPressed: () => Navigator.pop(ctx, _DuplicatePassageChoice.editExisting),
+            onPressed: () =>
+                Navigator.pop(ctx, _DuplicatePassageChoice.editExisting),
             child: const Text('Edit existing'),
           ),
         ],
@@ -67,13 +66,10 @@ Future<void> startHomileticForPassage(BuildContext context, String passage) asyn
   }
 }
 
-Future<void> startLectureNoteForPassage(BuildContext context, String passage) async {
-  if (kIsWeb) {
-    await _openNewLectureNote(context, passage);
-    return;
-  }
-
-  final List<LectureNote> matches = await getLectureNotesMatchingPassageReference(passage);
+Future<void> startLectureNoteForPassage(
+    BuildContext context, String passage) async {
+  final List<LectureNote> matches =
+      await getLectureNotesMatchingPassageReference(passage);
   if (matches.isEmpty) {
     await _openNewLectureNote(context, passage);
     return;
@@ -82,7 +78,8 @@ Future<void> startLectureNoteForPassage(BuildContext context, String passage) as
   if (!context.mounted) return;
 
   final LectureNote latest = matches.first;
-  final _DuplicatePassageChoice? choice = await showDialog<_DuplicatePassageChoice>(
+  final _DuplicatePassageChoice? choice =
+      await showDialog<_DuplicatePassageChoice>(
     context: context,
     builder: (BuildContext ctx) {
       final String extra = matches.length > 1
@@ -97,11 +94,13 @@ Future<void> startLectureNoteForPassage(BuildContext context, String passage) as
             child: const Text('Cancel'),
           ),
           TextButton(
-            onPressed: () => Navigator.pop(ctx, _DuplicatePassageChoice.createNew),
+            onPressed: () =>
+                Navigator.pop(ctx, _DuplicatePassageChoice.createNew),
             child: const Text('Create new'),
           ),
           ElevatedButton(
-            onPressed: () => Navigator.pop(ctx, _DuplicatePassageChoice.editExisting),
+            onPressed: () =>
+                Navigator.pop(ctx, _DuplicatePassageChoice.editExisting),
             child: const Text('Edit existing'),
           ),
         ],
@@ -122,13 +121,10 @@ Future<void> startLectureNoteForPassage(BuildContext context, String passage) as
   }
 }
 
-Future<void> startWordStudyForPassage(BuildContext context, String passage) async {
-  if (kIsWeb) {
-    await _openNewWordStudy(context, passage);
-    return;
-  }
-
-  final List<WordStudy> matches = await getWordStudiesMatchingPassageReference(passage);
+Future<void> startWordStudyForPassage(
+    BuildContext context, String passage) async {
+  final List<WordStudy> matches =
+      await getWordStudiesMatchingPassageReference(passage);
   if (matches.isEmpty) {
     await _openNewWordStudy(context, passage);
     return;
@@ -137,7 +133,8 @@ Future<void> startWordStudyForPassage(BuildContext context, String passage) asyn
   if (!context.mounted) return;
 
   final WordStudy latest = matches.first;
-  final _DuplicatePassageChoice? choice = await showDialog<_DuplicatePassageChoice>(
+  final _DuplicatePassageChoice? choice =
+      await showDialog<_DuplicatePassageChoice>(
     context: context,
     builder: (BuildContext ctx) {
       final String extra = matches.length > 1
@@ -152,11 +149,13 @@ Future<void> startWordStudyForPassage(BuildContext context, String passage) asyn
             child: const Text('Cancel'),
           ),
           TextButton(
-            onPressed: () => Navigator.pop(ctx, _DuplicatePassageChoice.createNew),
+            onPressed: () =>
+                Navigator.pop(ctx, _DuplicatePassageChoice.createNew),
             child: const Text('Create new'),
           ),
           ElevatedButton(
-            onPressed: () => Navigator.pop(ctx, _DuplicatePassageChoice.editExisting),
+            onPressed: () =>
+                Navigator.pop(ctx, _DuplicatePassageChoice.editExisting),
             child: const Text('Edit existing'),
           ),
         ],

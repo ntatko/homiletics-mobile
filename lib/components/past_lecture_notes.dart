@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:homiletics/classes/lecture_note.dart';
 import 'package:homiletics/common/home_header.dart';
+import 'package:homiletics/common/study_data_builder.dart';
 import 'package:homiletics/common/notes_list_item.dart';
 import 'package:homiletics/storage/lecture_note_storage.dart';
 import 'package:loggy/loggy.dart';
@@ -10,8 +11,8 @@ class PastLectureNotes extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<LectureNote>>(
-      future: getLectureNotes(),
+    return StudyDataBuilder<List<LectureNote>>(
+      load: getLectureNotes,
       builder: (context, snapshot) {
         if (snapshot.hasError) logError("${snapshot.error}");
 

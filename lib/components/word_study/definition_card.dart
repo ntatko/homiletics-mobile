@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:homiletics/components/word_study/definition_suggestions_sheet.dart';
 import 'package:homiletics/components/word_study/word_study_section_card.dart';
 
+enum _ExistingDefinitionChoice { replace, append }
+
 class DefinitionCard extends StatelessWidget {
   final TextEditingController wordController;
   final TextEditingController controller;
@@ -25,9 +27,43 @@ class DefinitionCard extends StatelessWidget {
       return;
     }
     final String? chosen = await showDefinitionSuggestionsSheet(context, word);
-    if (chosen == null) return;
-    controller.text = chosen;
-    await onChanged(chosen);
+    if (chosen == null || !context.mounted) return;
+
+    String updated = chosen;
+    final String existing = controller.text.trim();
+    if (existing.isNotEmpty && existing != chosen) {
+      final _ExistingDefinitionChoice? choice =
+          await showDialog<_ExistingDefinitionChoice>(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text("Replace your definition?"),
+          content: const Text(
+              "You've already written a definition. Replace it with the suggestion, or add the suggestion below it?"),
+          actions: [
+            TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Cancel')),
+            TextButton(
+                onPressed: () =>
+                    Navigator.pop(context, _ExistingDefinitionChoice.append),
+                child: const Text('Add below')),
+            TextButton(
+                onPressed: () =>
+                    Navigator.pop(context, _ExistingDefinitionChoice.replace),
+                child: const Text('Replace')),
+          ],
+        ),
+      );
+      if (choice == null || !context.mounted) return;
+      if (choice == _ExistingDefinitionChoice.append) {
+        updated = '$existing\n$chosen';
+      }
+    } else if (existing == chosen) {
+      return;
+    }
+
+    controller.text = updated;
+    await onChanged(updated);
   }
 
   @override

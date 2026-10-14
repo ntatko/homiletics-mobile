@@ -27,7 +27,7 @@ class WordStudySectionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-        color: MediaQuery.of(context).platformBrightness == Brightness.light
+        color: Theme.of(context).brightness == Brightness.light
             ? lightColor
             : Colors.blueGrey[900],
         child: Padding(

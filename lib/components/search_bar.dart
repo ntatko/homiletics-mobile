@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-// ignore: must_be_immutable
 class SearchBar extends StatelessWidget {
   final void Function()? onTap;
   final void Function(String)? onChanged;

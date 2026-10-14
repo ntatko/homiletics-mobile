@@ -1,16 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:homiletics/classes/homiletic.dart';
 
-class SummarySentenceCard extends StatelessWidget {
+class SummarySentenceCard extends StatefulWidget {
   final Homiletic homiletic;
 
   const SummarySentenceCard({Key? key, required this.homiletic})
       : super(key: key);
 
   @override
+  State<SummarySentenceCard> createState() => _SummarySentenceCardState();
+}
+
+class _SummarySentenceCardState extends State<SummarySentenceCard> {
+  late final TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController(text: widget.homiletic.subjectSentence);
+  }
+
+  @override
+  void didUpdateWidget(covariant SummarySentenceCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (!identical(oldWidget.homiletic, widget.homiletic)) {
+      _controller.text = widget.homiletic.subjectSentence;
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Card(
-        color: MediaQuery.of(context).platformBrightness == Brightness.light
+        color: Theme.of(context).brightness == Brightness.light
             ? Colors.yellow[100]
             : Colors.blueGrey[900],
         child: Padding(
@@ -53,14 +80,13 @@ class SummarySentenceCard extends StatelessWidget {
                       maxLines: null,
                       keyboardType: TextInputType.text,
                       textCapitalization: TextCapitalization.sentences,
-                      controller: TextEditingController(
-                          text: homiletic.subjectSentence),
+                      controller: _controller,
                       decoration: const InputDecoration(
                         hintText: 'Summarize: 10 words or fewer',
                         border: OutlineInputBorder(),
                       ),
                       onChanged: (String ss) async {
-                        await homiletic.updateSubjectSentence(ss);
+                        await widget.homiletic.updateSubjectSentence(ss);
                       })),
             ])));
   }

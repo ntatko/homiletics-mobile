@@ -52,7 +52,7 @@ class Homiletic with SerializedSave {
       passage: json['passage'] as String? ?? '',
       subjectSentence: json['subject_sentence'] as String? ?? '',
       aim: json['aim'] as String? ?? '',
-      id: json['id'] as int? ?? -1,
+      id: int.tryParse(json['id']?.toString() ?? '') ?? -1,
       updatedAt: DateTime.tryParse(json['updated_at'] as String? ?? ''),
       fcf: json['fcf'] as String? ?? '',
     );

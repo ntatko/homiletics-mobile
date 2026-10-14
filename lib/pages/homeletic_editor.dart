@@ -1,25 +1,21 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:homiletics/classes/application.dart';
 import 'package:homiletics/classes/content_summary.dart';
 import 'package:homiletics/classes/Division.dart';
 import 'package:homiletics/classes/homiletic.dart';
-import 'package:homiletics/classes/preferences.dart';
 import 'package:homiletics/common/report_error.dart';
-import 'package:homiletics/common/verse_container.dart';
+import 'package:homiletics/common/study_data_builder.dart';
+import 'package:homiletics/components/editor/passage_split_scaffold.dart';
 import 'package:homiletics/components/homiletics/aim_card.dart';
 import 'package:homiletics/components/homiletics/application_questions_card.dart';
 import 'package:homiletics/components/homiletics/content_summaries_card.dart';
 import 'package:homiletics/components/homiletics/divisions_card.dart';
 import 'package:homiletics/components/homiletics/fcf_card.dart';
 import 'package:homiletics/components/homiletics/summary_sentence_card.dart';
-import 'package:homiletics/components/preferences_modal.dart';
-import 'package:homiletics/pages/home.dart';
 import 'package:homiletics/storage/application_storage.dart';
 import 'package:homiletics/storage/content_summary_storage.dart';
 import 'package:homiletics/storage/division_storage.dart';
 import 'package:homiletics/storage/pdf_generation.dart';
-import 'package:split_view/split_view.dart';
 
 class HomileticEditor extends StatefulWidget {
   const HomileticEditor({Key? key, this.homiletic}) : super(key: key);
@@ -31,88 +27,152 @@ class HomileticEditor extends StatefulWidget {
 }
 
 class _HomileticState extends State<HomileticEditor> {
-  late Homiletic _thisHomiletic;
+  late final Homiletic _thisHomiletic;
   List<ContentSummary> _summaries = [];
   List<Division> _divisions = [];
   List<Application> _applications = [];
-  late TextEditingController _fcfController;
-  String _translationVersion = 'web';
-  final GlobalKey<VerseContainerState> _verseContainerKey =
-      GlobalKey<VerseContainerState>();
 
   @override
   void initState() {
     super.initState();
-    setState(() {
-      _thisHomiletic = widget.homiletic ?? Homiletic();
-      _translationVersion = Preferences.preferredVersion;
-    });
-    _fcfController = TextEditingController(text: _thisHomiletic.fcf);
+    _thisHomiletic = widget.homiletic ?? Homiletic();
     prepTheTable();
   }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // Check if translation preference has changed and reload if needed
-    final currentTranslation = Preferences.preferredVersion;
-    if (currentTranslation != _translationVersion) {
+  void dispose() {
+    notifyStudyDataChanged();
+    super.dispose();
+  }
+
+  Future<void> prepTheTable() async {
+    try {
+      // Only a brand-new homiletic needs saving up front (to get an id for
+      // its rows); re-saving an existing one would bump its updated time
+      // just for being opened.
+      if (_thisHomiletic.id == -1) await _thisHomiletic.update();
+      final List<ContentSummary> savedSummaries =
+          await getSummariesByHomileticId(_thisHomiletic.id);
+      final List<Division> savedDivisions =
+          await getDivisionsByHomileticId(_thisHomiletic.id);
+      final List<Application> savedApplications =
+          await getApplicationsByHomileticId(_thisHomiletic.id);
+      if (!mounted) return;
+
       setState(() {
-        _translationVersion = currentTranslation;
+        _summaries = savedSummaries.isNotEmpty
+            ? savedSummaries
+            : [ContentSummary.blank(_thisHomiletic.id)];
+        _divisions = savedDivisions.isNotEmpty
+            ? savedDivisions
+            : [Division.blank(_thisHomiletic.id)];
+        _applications = savedApplications.isNotEmpty
+            ? savedApplications
+            : [Application.blank(_thisHomiletic.id)];
       });
-      // Reload the verse container with new translation
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _verseContainerKey.currentState?.reloadPassage();
-      });
+    } catch (error) {
+      sendError(error, "load homiletics");
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: const Text("Something went wrong loading this lesson."),
+        action: SnackBarAction(
+          onPressed: () {},
+          label: "Ok",
+        ),
+      ));
+    }
+  }
+
+  /// Takes [item] out of [list] right away (so the row disappears and a
+  /// second tap can't hit it), then deletes it, putting it back if the
+  /// delete fails.
+  Future<void> _removeRow<T>(
+      List<T> list, T item, Future<void> Function() delete) async {
+    final int index = list.indexOf(item);
+    if (index == -1) return;
+    setState(() {
+      list.removeAt(index);
+    });
+    try {
+      await delete();
+    } catch (_) {
+      if (mounted) {
+        setState(() {
+          list.insert(index.clamp(0, list.length), item);
+        });
+      }
+      rethrow;
+    }
+  }
+
+  Future<void> _runPdfAction(Future<void> Function() action, String success,
+      String failure, String errorIdentifier) async {
+    final ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
+    try {
+      await action();
+      messenger.showSnackBar(SnackBar(
+        content: Text(success),
+        action: SnackBarAction(
+          onPressed: () {},
+          label: "Ok",
+        ),
+      ));
+    } catch (error) {
+      sendError(error, errorIdentifier);
+      messenger.showSnackBar(SnackBar(
+        content: Text(failure),
+        action: SnackBarAction(
+          onPressed: () {},
+          label: "Ok",
+        ),
+      ));
     }
   }
 
   @override
-  void dispose() {
-    _fcfController.dispose();
-    super.dispose();
-  }
-
-  prepTheTable() async {
-    await _thisHomiletic.update();
-    List<ContentSummary> savedSummaries =
-        await getSummariesByHomileticId(_thisHomiletic.id);
-    List<Division> savedDivisions =
-        await getDivisionsByHomileticId(_thisHomiletic.id);
-    List<Application> savedApplications =
-        await getApplicationsByHomileticId(_thisHomiletic.id);
-
-    setState(() {
-      _summaries = savedSummaries.isNotEmpty
-          ? savedSummaries
-          : [ContentSummary.blank(_thisHomiletic.id)];
-      _divisions = savedDivisions.isNotEmpty
-          ? savedDivisions
-          : [Division.blank(_thisHomiletic.id)];
-      _applications = savedApplications.isNotEmpty
-          ? savedApplications
-          : [Application.blank(_thisHomiletic.id)];
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    List<Widget> splitChildren = [
-      ListView(
+    return PassageSplitScaffold(
+      initialPassage: _thisHomiletic.passage,
+      onPassageChanged: _thisHomiletic.updatePassage,
+      itemName: "Homiletics lesson",
+      deletedMessage: "Homiletics Deleted",
+      deleteErrorIdentifier: "delete homiletics",
+      onDelete: _thisHomiletic.delete,
+      extraActions: [
+        EditorMenuAction(
+          icon: Icons.share,
+          title: 'Share',
+          onSelected: () => _runPdfAction(
+              () => shareHomiletic(
+                  _thisHomiletic, _summaries, _divisions, _applications),
+              "PDF shared successfully.",
+              "Something went wrong sharing your PDF. Try again soon.",
+              "Share PDF"),
+        ),
+        EditorMenuAction(
+          icon: Icons.print,
+          title: 'Print',
+          onSelected: () => _runPdfAction(
+              () => printHomiletic(
+                  _thisHomiletic, _summaries, _divisions, _applications),
+              "PDF printed successfully.",
+              "Something went wrong creating your PDF. Try again soon.",
+              "PDF print"),
+        ),
+      ],
+      child: ListView(
         padding: const EdgeInsets.all(5),
         children: [
           ContentSummariesCard(
               contentSummaries: _summaries,
               homiletic: _thisHomiletic,
               addContentSummary: () {
-                _summaries.add(ContentSummary.blank(_thisHomiletic.id));
-              },
-              removeContentSummary: () async {
-                await _summaries[_summaries.length - 1].delete();
                 setState(() {
-                  _summaries.removeLast();
+                  _summaries.add(ContentSummary.blank(_thisHomiletic.id));
                 });
-              }),
+              },
+              removeContentSummary: (summary) =>
+                  _removeRow(_summaries, summary, summary.delete)),
           const SizedBox(height: 20),
           DivisionsCard(
               divisions: _divisions,
@@ -122,12 +182,8 @@ class _HomileticState extends State<HomileticEditor> {
                   _divisions.add(Division.blank(_thisHomiletic.id));
                 });
               },
-              removeDivision: () async {
-                await _divisions[_divisions.length - 1].delete();
-                setState(() {
-                  _divisions.removeLast();
-                });
-              }),
+              removeDivision: (division) =>
+                  _removeRow(_divisions, division, division.delete)),
           const SizedBox(height: 20),
           SummarySentenceCard(homiletic: _thisHomiletic),
           const SizedBox(height: 20),
@@ -143,257 +199,10 @@ class _HomileticState extends State<HomileticEditor> {
                   _applications.add(Application.blank(_thisHomiletic.id));
                 });
               },
-              removeApplication: () async {
-                await _applications[_applications.length - 1].delete();
-                setState(() {
-                  _applications.removeLast();
-                });
-              }),
+              removeApplication: (application) =>
+                  _removeRow(_applications, application, application.delete)),
         ],
       ),
-      VerseContainer(
-          key: _verseContainerKey,
-          passage: _thisHomiletic.passage,
-          translation: Preferences.translation)
-    ];
-
-    return Scaffold(
-        // resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-          title: TextField(
-            keyboardType: TextInputType.text,
-            textCapitalization: TextCapitalization.sentences,
-            controller: TextEditingController()..text = _thisHomiletic.passage,
-            decoration: const InputDecoration(suffixIcon: Icon(Icons.edit)),
-            onChanged: (String value) {
-              _thisHomiletic.updatePassage(value);
-            },
-            onEditingComplete: () => setState(() => {}),
-            onSubmitted: (_) => setState(() {}),
-          ),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              if (kIsWeb) {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) => AlertDialog(
-                    title: const Text('Are you sure?'),
-                    content: const Text('You will lose all your work.'),
-                    actions: [
-                      ElevatedButton(
-                        child: const Text('Cancel'),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                      ElevatedButton(
-                        child: const Text('OK'),
-                        onPressed: () {
-                          Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const Home()),
-                              (r) => false);
-                        },
-                      ),
-                    ],
-                  ),
-                );
-              } else {
-                Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => const Home()),
-                    (r) => false);
-              }
-            },
-          ),
-          actions: [
-            PopupMenuButton(
-                onSelected: (value) async {
-                  switch (value) {
-                    case 0:
-                      Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(builder: (context) => const Home()),
-                          (r) => false);
-                      return;
-                    case 1:
-                      showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: const Text("Are you sure?"),
-                              content: const Text(
-                                  "Deleting this Homiletics lesson is permanent and cannot be undone. Are you sure you wish to proceed?"),
-                              actions: [
-                                TextButton(
-                                    onPressed: () => Navigator.pop(context),
-                                    child: const Text('Cancel')),
-                                TextButton(
-                                  onPressed: () async {
-                                    try {
-                                      await _thisHomiletic.delete();
-                                      Navigator.pushAndRemoveUntil(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const Home()),
-                                          (r) => false);
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(SnackBar(
-                                        content:
-                                            const Text("Homiletics Deleted"),
-                                        action: SnackBarAction(
-                                          onPressed: () {},
-                                          label: "Ok",
-                                        ),
-                                      ));
-                                    } catch (error) {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(SnackBar(
-                                        content: const Text(
-                                            "Something went wrong. Try again soon."),
-                                        action: SnackBarAction(
-                                          onPressed: () {},
-                                          label: "Ok",
-                                        ),
-                                      ));
-                                      sendError(error, "delete homiletics");
-                                    }
-                                  },
-                                  style: TextButton.styleFrom(
-                                    foregroundColor: Colors.red,
-                                  ),
-                                  child: const Text("Delete"),
-                                )
-                              ],
-                            );
-                          });
-                      return;
-                    case 2:
-                      try {
-                        await shareHomiletic(_thisHomiletic, _summaries,
-                            _divisions, _applications);
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: const Text("PDF shared successfully."),
-                          action: SnackBarAction(
-                            onPressed: () {},
-                            label: "Ok",
-                          ),
-                        ));
-                      } catch (error) {
-                        sendError(error, "Share PDF");
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: const Text(
-                              "Something went wrong sharing your PDF. Try again soon."),
-                          action: SnackBarAction(
-                            onPressed: () {},
-                            label: "Ok",
-                          ),
-                        ));
-                      }
-                      return;
-                    case 3:
-                      try {
-                        await printHomiletic(_thisHomiletic, _summaries,
-                            _divisions, _applications);
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: const Text("PDF printed successfully."),
-                          action: SnackBarAction(
-                            onPressed: () {},
-                            label: "Ok",
-                          ),
-                        ));
-                      } catch (error) {
-                        sendError(error, "PDF print");
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: const Text(
-                              "Something went wrong creating your PDF. Try again soon."),
-                          action: SnackBarAction(
-                            onPressed: () {},
-                            label: "Ok",
-                          ),
-                        ));
-                      }
-                      return;
-                    case 4:
-                      showDialog(
-                          context: context,
-                          builder: ((context) => PreferencesModal(
-                                onTranslationChanged: () {
-                                  // Reload the verse container when translation changes
-                                  WidgetsBinding.instance
-                                      .addPostFrameCallback((_) {
-                                    _verseContainerKey.currentState
-                                        ?.reloadPassage();
-                                  });
-                                },
-                              )));
-                  }
-                },
-                icon: const Icon(Icons.menu),
-                itemBuilder: (context) => [
-                      if (!kIsWeb)
-                        const PopupMenuItem(
-                          value: 0,
-                          child: ListTile(
-                              leading: Icon(Icons.save), title: Text("Save")),
-                        ),
-                      if (!kIsWeb)
-                        const PopupMenuItem(
-                          value: 1,
-                          child: ListTile(
-                            title: Text('Delete'),
-                            leading: Icon(Icons.delete),
-                          ),
-                        ),
-                      const PopupMenuItem(
-                        value: 2,
-                        child: ListTile(
-                          leading: Icon(Icons.share),
-                          title: Text(kIsWeb ? 'Save to PDF' : 'Share'),
-                        ),
-                      ),
-                      const PopupMenuItem(
-                        value: 3,
-                        child: ListTile(
-                          leading: Icon(Icons.print),
-                          title: Text('Print'),
-                        ),
-                      ),
-                      if (!kIsWeb)
-                        const PopupMenuItem(
-                          value: 4,
-                          child: ListTile(
-                            title: Text('Preferences'),
-                            leading: Icon(Icons.settings),
-                          ),
-                        ),
-                    ]),
-          ],
-        ),
-        body: LayoutBuilder(
-            builder: (context, constraints) {
-              // Use screen size to determine orientation, not available space
-              // This prevents keyboard opening from triggering layout changes
-              final screenSize = MediaQuery.sizeOf(context);
-              final isLandscape = screenSize.width > screenSize.height;
-              
-              return SafeArea(
-                bottom: false,
-                child: SplitView(
-                    indicator: SplitIndicator(
-                        viewMode: isLandscape
-                            ? SplitViewMode.Horizontal
-                            : SplitViewMode.Vertical),
-                    viewMode: isLandscape
-                        ? SplitViewMode.Horizontal
-                        : SplitViewMode.Vertical,
-                    children: isLandscape
-                        ? splitChildren.reversed.toList()
-                        : splitChildren),
-              );
-            }));
+    );
   }
 }

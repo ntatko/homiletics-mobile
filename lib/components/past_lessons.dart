@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:homiletics/classes/homiletic.dart';
 import 'package:homiletics/common/home_header.dart';
+import 'package:homiletics/common/study_data_builder.dart';
 import 'package:homiletics/common/homiletic_list_item.dart';
 import 'package:homiletics/pages/lesson_page.dart';
 import 'package:homiletics/storage/homiletic_storage.dart';
@@ -11,8 +12,8 @@ class PastLessons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<Homiletic>>(
-        future: getAllHomiletics(),
+    return StudyDataBuilder<List<Homiletic>>(
+        load: getAllHomiletics,
         builder: (context, snapshot) {
           if (snapshot.hasError) logError('${snapshot.error}');
 

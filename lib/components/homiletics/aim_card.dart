@@ -1,15 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:homiletics/classes/homiletic.dart';
 
-class AimCard extends StatelessWidget {
+class AimCard extends StatefulWidget {
   final Homiletic homiletic;
 
   const AimCard({Key? key, required this.homiletic}) : super(key: key);
 
   @override
+  State<AimCard> createState() => _AimCardState();
+}
+
+class _AimCardState extends State<AimCard> {
+  late final TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController(text: widget.homiletic.aim);
+  }
+
+  @override
+  void didUpdateWidget(covariant AimCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (!identical(oldWidget.homiletic, widget.homiletic)) {
+      _controller.text = widget.homiletic.aim;
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Card(
-        color: MediaQuery.of(context).platformBrightness == Brightness.light
+        color: Theme.of(context).brightness == Brightness.light
             ? Colors.red[100]
             : Colors.blueGrey[900],
         child: Padding(
@@ -53,13 +80,13 @@ class AimCard extends StatelessWidget {
                       maxLines: null,
                       keyboardType: TextInputType.multiline,
                       textCapitalization: TextCapitalization.sentences,
-                      controller: TextEditingController(text: homiletic.aim),
+                      controller: _controller,
                       decoration: const InputDecoration(
                         labelText: 'Cause the audience to learn that...',
                         border: OutlineInputBorder(),
                       ),
                       onChanged: (String aim) async {
-                        await homiletic.updateAim(aim);
+                        await widget.homiletic.updateAim(aim);
                       })),
             ])));
   }

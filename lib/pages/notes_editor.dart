@@ -1,15 +1,12 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:homiletics/classes/lecture_note.dart';
-import 'package:homiletics/classes/preferences.dart';
-import 'package:homiletics/common/report_error.dart';
-import 'package:homiletics/common/verse_container.dart';
-import 'package:homiletics/components/preferences_modal.dart';
+import 'package:homiletics/common/study_data_builder.dart';
+import 'package:homiletics/components/editor/passage_split_scaffold.dart';
 import 'package:homiletics/components/recording_section.dart';
-import 'package:homiletics/pages/home.dart';
-import 'package:split_view/split_view.dart';
 
 class NotesEditor extends StatefulWidget {
   const NotesEditor({Key? key, this.note}) : super(key: key);
@@ -21,17 +18,25 @@ class NotesEditor extends StatefulWidget {
 }
 
 class _NotesState extends State<NotesEditor> {
-  late LectureNote _thisNote;
-  late QuillController _noteController;
-  final TextEditingController _passageController = TextEditingController();
-  String _translationVersion = 'web';
-  final GlobalKey<VerseContainerState> _verseContainerKey =
-      GlobalKey<VerseContainerState>();
+  static const Duration _saveDelay = Duration(milliseconds: 500);
+
+  late final LectureNote _thisNote;
+  late final QuillController _noteController;
+
+  /// The Delta JSON last copied into [_thisNote.note], so selection-only
+  /// changes (which also notify the controller) don't trigger saves.
+  late String _lastNoteJson;
+  Timer? _saveTimer;
 
   @override
   void initState() {
     super.initState();
-    prepTheTable();
+    _thisNote = widget.note ?? LectureNote();
+    _noteController = _buildNoteController(_thisNote.note);
+    _lastNoteJson = _currentNoteJson();
+    // Only a brand-new note needs saving up front; re-saving an existing one
+    // would bump its time just for being opened.
+    if (_thisNote.id == -1) _thisNote.update();
   }
 
   /// The note's rich text is stored as Quill Delta JSON in the same `note`
@@ -55,50 +60,60 @@ class _NotesState extends State<NotesEditor> {
     return controller;
   }
 
+  String _currentNoteJson() =>
+      jsonEncode(_noteController.document.toDelta().toJson());
+
   void _onNoteChanged() {
-    final String json = jsonEncode(_noteController.document.toDelta().toJson());
+    final String json = _currentNoteJson();
+    if (json == _lastNoteJson) return;
+    _lastNoteJson = json;
     _thisNote.note = json;
-    if (_thisNote.id != -1) _thisNote.update();
+    _scheduleSave();
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // Check if translation preference has changed and reload if needed
-    final currentTranslation = Preferences.preferredVersion;
-    if (currentTranslation != _translationVersion) {
-      setState(() {
-        _translationVersion = currentTranslation;
-      });
-      // Reload the verse container with new translation
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _verseContainerKey.currentState?.reloadPassage();
-      });
-    }
+  void _onPassageChanged(String value) {
+    _thisNote.passage = value;
+    _scheduleSave();
   }
 
-  prepTheTable() async {
-    setState(() {
-      _thisNote = widget.note ?? LectureNote();
-      _translationVersion = Preferences.preferredVersion;
-      _noteController = _buildNoteController(_thisNote.note);
-      _passageController.text = _thisNote.passage;
-    });
+  /// Debounces saves while the user types; [_flushSave] writes immediately.
+  void _scheduleSave() {
+    _saveTimer?.cancel();
+    _saveTimer = Timer(_saveDelay, _flushSave);
+  }
+
+  Future<void> _flushSave() async {
+    _saveTimer?.cancel();
+    _saveTimer = null;
+    // update() runs saves in order, so this can't race the initial insert.
     await _thisNote.update();
   }
 
   @override
   void dispose() {
+    final bool hadPendingSave = _saveTimer?.isActive ?? false;
     _noteController.removeListener(_onNoteChanged);
     _noteController.dispose();
-    _passageController.dispose();
+    if (hadPendingSave) {
+      _flushSave().whenComplete(notifyStudyDataChanged);
+    } else {
+      _saveTimer?.cancel();
+      notifyStudyDataChanged();
+    }
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> splitChildren = [
-      Column(children: [
+    return PassageSplitScaffold(
+      initialPassage: _thisNote.passage,
+      passageHint: 'Passage',
+      onPassageChanged: _onPassageChanged,
+      itemName: "Lecture Note",
+      deletedMessage: "Lecture Note Deleted",
+      deleteErrorIdentifier: "notes deletion",
+      onDelete: _thisNote.delete,
+      child: Column(children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8),
           child: RecordingSection(note: _thisNote),
@@ -125,184 +140,6 @@ class _NotesState extends State<NotesEditor> {
           ),
         ),
       ]),
-      VerseContainer(
-          key: _verseContainerKey,
-          passage: _thisNote.passage,
-          translation: Preferences.translation)
-    ];
-
-    return Scaffold(
-        appBar: AppBar(
-          title: TextField(
-            keyboardType: TextInputType.text,
-            textCapitalization: TextCapitalization.sentences,
-            controller: _passageController,
-            decoration: const InputDecoration(
-                hintText: 'Passage', suffixIcon: Icon(Icons.edit)),
-            onChanged: (String value) async {
-              _thisNote.passage = value;
-              if (_thisNote.id != -1) await _thisNote.update();
-            },
-            onEditingComplete: () => setState(() {}),
-            onSubmitted: (_) => setState(() {}),
-          ),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => const Home()),
-                  (r) => false);
-            },
-          ),
-          actions: [
-            PopupMenuButton(
-                onSelected: (value) async {
-                  switch (value) {
-                    case 0:
-                      Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(builder: (context) => const Home()),
-                          (r) => false);
-                      return;
-                    case 1:
-                      showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: const Text("Are you sure?"),
-                              content: const Text(
-                                  "Deleting this Lecture Note is permanent and cannot be undone. Are you sure you wish to proceed?"),
-                              actions: [
-                                TextButton(
-                                    onPressed: () => Navigator.pop(context),
-                                    child: const Text('Cancel')),
-                                TextButton(
-                                  onPressed: () async {
-                                    try {
-                                      await _thisNote.delete();
-                                      if (!mounted) return;
-                                      final navigatorContext = context;
-                                      Navigator.pushAndRemoveUntil(
-                                          navigatorContext,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const Home()),
-                                          (r) => false);
-                                      ScaffoldMessenger.of(navigatorContext)
-                                          .showSnackBar(SnackBar(
-                                        content:
-                                            const Text("Lecture Note Deleted"),
-                                        action: SnackBarAction(
-                                          onPressed: () {},
-                                          label: "Ok",
-                                        ),
-                                      ));
-                                    } catch (error) {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(SnackBar(
-                                        content: const Text(
-                                            "Something went wrong. Try again soon."),
-                                        action: SnackBarAction(
-                                          onPressed: () {},
-                                          label: "Ok",
-                                        ),
-                                      ));
-                                      sendError(error, "notes deletion");
-                                    }
-                                  },
-                                  style: TextButton.styleFrom(
-                                    foregroundColor: Colors.red,
-                                  ),
-                                  child: const Text("Delete"),
-                                )
-                              ],
-                            );
-                          });
-                      return;
-                    case 3:
-                      showDialog(
-                          context: context,
-                          builder: ((context) => PreferencesModal(
-                                onTranslationChanged: () {
-                                  // Reload the verse container when translation changes
-                                  WidgetsBinding.instance
-                                      .addPostFrameCallback((_) {
-                                    _verseContainerKey.currentState
-                                        ?.reloadPassage();
-                                  });
-                                },
-                              )));
-                      return;
-                    // case 2:
-                    //   try {
-                    //     await createHomileticsPdf(_thisHomiletic!, _summaries,
-                    //         _divisions, _applications);
-                    //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    //       content: const Text(
-                    //           "PDF created successfully. Look in your files app to find it."),
-                    //       action: SnackBarAction(
-                    //         onPressed: () {},
-                    //         label: "Ok",
-                    //       ),
-                    //     ));
-                    //   } catch (error) {
-                    //     print("error: ${error.toString()}");
-                    //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    //       content: const Text(
-                    //           "Something went wrong creating your PDF. Try again soon."),
-                    //       action: SnackBarAction(
-                    //         onPressed: () {},
-                    //         label: "Ok",
-                    //       ),
-                    //     ));
-                    //   }
-                  }
-                },
-                icon: const Icon(Icons.menu),
-                itemBuilder: (context) => [
-                      const PopupMenuItem(
-                        value: 0,
-                        child: ListTile(
-                            leading: Icon(Icons.save), title: Text("Save")),
-                      ),
-                      const PopupMenuItem(
-                        value: 1,
-                        child: ListTile(
-                          title: Text('Delete'),
-                          leading: Icon(Icons.delete),
-                        ),
-                      ),
-                      const PopupMenuItem(
-                        value: 3,
-                        child: ListTile(
-                          title: Text('Preferences'),
-                          leading: Icon(Icons.settings),
-                        ),
-                      ),
-                    ]),
-          ],
-        ),
-        body: LayoutBuilder(builder: (context, constraints) {
-          // Use screen size to determine orientation, not available space
-          // This prevents keyboard opening from triggering layout changes
-          final screenSize = MediaQuery.sizeOf(context);
-          final isLandscape = screenSize.width > screenSize.height;
-
-          return SafeArea(
-            bottom: false,
-            child: SplitView(
-                indicator: SplitIndicator(
-                    viewMode: isLandscape
-                        ? SplitViewMode.Horizontal
-                        : SplitViewMode.Vertical),
-                viewMode: isLandscape
-                    ? SplitViewMode.Horizontal
-                    : SplitViewMode.Vertical,
-                children: isLandscape
-                    ? splitChildren.reversed.toList()
-                    : splitChildren),
-          );
-        }));
+    );
   }
 }

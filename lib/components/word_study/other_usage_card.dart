@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:homiletics/classes/preferences.dart';
 import 'package:homiletics/classes/translation.dart';
 import 'package:homiletics/components/word_study/other_usage_search_sheet.dart';
 import 'package:homiletics/components/word_study/word_study_section_card.dart';
 
 class OtherUsageCard extends StatelessWidget {
   final TextEditingController wordController;
-  final Translation translation;
+
+  /// The translation to search; defaults to the current preference, read at
+  /// the time of the search.
+  final Translation? translation;
   final TextEditingController controller;
   final Future<void> Function(String) onChanged;
   final Color lightColor;
@@ -13,7 +17,7 @@ class OtherUsageCard extends StatelessWidget {
   const OtherUsageCard({
     Key? key,
     required this.wordController,
-    required this.translation,
+    this.translation,
     required this.controller,
     required this.onChanged,
     required this.lightColor,
@@ -41,8 +45,12 @@ class OtherUsageCard extends StatelessWidget {
       word: word.trim(),
       translation: translation,
       onReferenceSelected: (reference) async {
+        // The sheet can outlive the page that opened it; don't write into a
+        // disposed controller.
+        if (!context.mounted) return;
         final existing = controller.text.trim();
-        controller.text = existing.isEmpty ? reference : '$existing\n$reference';
+        controller.text =
+            existing.isEmpty ? reference : '$existing\n$reference';
         await onChanged(controller.text);
       },
     );
@@ -63,7 +71,7 @@ class OtherUsageCard extends StatelessWidget {
           onPressed: () => openUsageSearch(
             context,
             word: wordController.text,
-            translation: translation,
+            translation: translation ?? Preferences.translation,
             controller: controller,
             onChanged: onChanged,
           ),

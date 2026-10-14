@@ -1,16 +1,12 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:homiletics/classes/word_study.dart';
 import 'package:homiletics/classes/preferences.dart';
-import 'package:homiletics/common/report_error.dart';
-import 'package:homiletics/common/verse_container.dart';
+import 'package:homiletics/common/study_data_builder.dart';
+import 'package:homiletics/components/editor/passage_split_scaffold.dart';
 import 'package:homiletics/components/help_menu.dart';
-import 'package:homiletics/components/preferences_modal.dart';
 import 'package:homiletics/components/word_study/definition_card.dart';
 import 'package:homiletics/components/word_study/other_usage_card.dart';
 import 'package:homiletics/components/word_study/word_study_section_card.dart';
-import 'package:homiletics/pages/home.dart';
-import 'package:split_view/split_view.dart';
 
 class WordStudyEditor extends StatefulWidget {
   const WordStudyEditor({Key? key, this.study}) : super(key: key);
@@ -22,10 +18,7 @@ class WordStudyEditor extends StatefulWidget {
 }
 
 class _WordStudyEditorState extends State<WordStudyEditor> {
-  late WordStudy _thisStudy;
-  String _translationVersion = 'web';
-  final GlobalKey<VerseContainerState> _verseContainerKey =
-      GlobalKey<VerseContainerState>();
+  late final WordStudy _thisStudy;
 
   late final TextEditingController _wordController;
   late final TextEditingController _definitionController;
@@ -39,10 +32,7 @@ class _WordStudyEditorState extends State<WordStudyEditor> {
   @override
   void initState() {
     super.initState();
-    setState(() {
-      _thisStudy = widget.study ?? WordStudy();
-      _translationVersion = Preferences.preferredVersion;
-    });
+    _thisStudy = widget.study ?? WordStudy();
     _wordController = TextEditingController(text: _thisStudy.word);
     _definitionController = TextEditingController(text: _thisStudy.definition);
     _otherUsageController = TextEditingController(text: _thisStudy.otherUsage);
@@ -50,44 +40,50 @@ class _WordStudyEditorState extends State<WordStudyEditor> {
         TextEditingController(text: _thisStudy.contextualMeaning);
     _deeperMeaningController =
         TextEditingController(text: _thisStudy.deeperMeaning);
-    _applicationController = TextEditingController(text: _thisStudy.application);
+    _applicationController =
+        TextEditingController(text: _thisStudy.application);
     _wordFocusNode.addListener(_onWordFocusChange);
-    prepTheTable();
+    // Only a brand-new study needs saving up front; re-saving an existing
+    // one would bump its updated time just for being opened.
+    if (_thisStudy.id == -1) _thisStudy.update();
   }
 
+  /// Offers the Other Usage search once, the first time the user finishes
+  /// typing a word and moves on to another field on this page. Focus also
+  /// leaves the word field when a menu, dialog or another route opens, or
+  /// when the page closes; none of those should pop the sheet up.
   void _onWordFocusChange() {
     if (_wordFocusNode.hasFocus) return;
-    if (_autoUsageShown) return;
-    if (_wordController.text.trim().isEmpty) return;
-    if (_otherUsageController.text.trim().isNotEmpty) return;
-    _autoUsageShown = true;
-    OtherUsageCard.openUsageSearch(
-      context,
-      word: _wordController.text,
-      translation: Preferences.translation,
-      controller: _otherUsageController,
-      onChanged: _thisStudy.updateOtherUsage,
-    );
+    // Focus changes are applied in a batch; look at where focus ended up
+    // once that settles.
+    Future.microtask(() {
+      if (!mounted || _autoUsageShown) return;
+      if (_wordController.text.trim().isEmpty) return;
+      if (_otherUsageController.text.trim().isNotEmpty) return;
+      final ModalRoute<dynamic>? route = ModalRoute.of(context);
+      if (route == null || !route.isCurrent) return;
+      if (!_focusMovedToFieldOnThisPage(FocusScope.of(context))) return;
+
+      _autoUsageShown = true;
+      OtherUsageCard.openUsageSearch(
+        context,
+        word: _wordController.text,
+        translation: Preferences.translation,
+        controller: _otherUsageController,
+        onChanged: _thisStudy.updateOtherUsage,
+      );
+    });
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // Check if translation preference has changed and reload if needed
-    final currentTranslation = Preferences.preferredVersion;
-    if (currentTranslation != _translationVersion) {
-      setState(() {
-        _translationVersion = currentTranslation;
-      });
-      // Reload the verse container with new translation
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _verseContainerKey.currentState?.reloadPassage();
-      });
+  /// Whether the focused node is a text field inside [pageScope] (the
+  /// route's focus scope; dialogs and sheets have their own).
+  bool _focusMovedToFieldOnThisPage(FocusScopeNode pageScope) {
+    final FocusNode? focused = FocusManager.instance.primaryFocus;
+    if (focused == null || !focused.ancestors.contains(pageScope)) {
+      return false;
     }
-  }
-
-  prepTheTable() async {
-    await _thisStudy.update();
+    return focused.context?.findAncestorStateOfType<EditableTextState>() !=
+        null;
   }
 
   @override
@@ -100,13 +96,20 @@ class _WordStudyEditorState extends State<WordStudyEditor> {
     _contextualMeaningController.dispose();
     _deeperMeaningController.dispose();
     _applicationController.dispose();
+    notifyStudyDataChanged();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> splitChildren = [
-      ListView(
+    return PassageSplitScaffold(
+      initialPassage: _thisStudy.passage,
+      onPassageChanged: _thisStudy.updatePassage,
+      itemName: "Word Study",
+      deletedMessage: "Word Study Deleted",
+      deleteErrorIdentifier: "word study deletion",
+      onDelete: _thisStudy.delete,
+      child: ListView(
         padding: const EdgeInsets.all(15),
         children: [
           WordStudySectionCard(
@@ -130,7 +133,6 @@ class _WordStudyEditorState extends State<WordStudyEditor> {
           const SizedBox(height: 12),
           OtherUsageCard(
             wordController: _wordController,
-            translation: Preferences.translation,
             controller: _otherUsageController,
             onChanged: _thisStudy.updateOtherUsage,
             lightColor: const Color.fromARGB(255, 209, 227, 255),
@@ -140,7 +142,8 @@ class _WordStudyEditorState extends State<WordStudyEditor> {
             title: 'Contextual Meaning',
             helpText:
                 'What did the author intend this word to mean here, in this passage? Consider the surrounding verses, not just the word alone.',
-            hint: 'What did the author intend this word to mean here, in this passage?',
+            hint:
+                'What did the author intend this word to mean here, in this passage?',
             controller: _contextualMeaningController,
             onChanged: _thisStudy.updateContextualMeaning,
             lightColor: const Color.fromARGB(255, 230, 220, 255),
@@ -150,7 +153,8 @@ class _WordStudyEditorState extends State<WordStudyEditor> {
             title: 'Deeper Meaning',
             helpText:
                 'Any insight from the original language, commentary, or outside study that adds depth beyond the basic definition? A Strong\'s concordance or Blue Letter Bible can help here.',
-            hint: 'Any insight from the original language, commentary, or outside study that adds depth?',
+            hint:
+                'Any insight from the original language, commentary, or outside study that adds depth?',
             controller: _deeperMeaningController,
             onChanged: _thisStudy.updateDeeperMeaning,
             lightColor: const Color.fromARGB(255, 255, 236, 179),
@@ -169,190 +173,6 @@ class _WordStudyEditorState extends State<WordStudyEditor> {
           const HelpMenu(),
         ],
       ),
-      VerseContainer(
-          key: _verseContainerKey,
-          passage: _thisStudy.passage,
-          translation: Preferences.translation)
-    ];
-
-    return Scaffold(
-        appBar: AppBar(
-          title: TextField(
-            keyboardType: TextInputType.text,
-            textCapitalization: TextCapitalization.sentences,
-            controller: TextEditingController()..text = _thisStudy.passage,
-            decoration: const InputDecoration(suffixIcon: Icon(Icons.edit)),
-            onChanged: (String value) {
-              _thisStudy.updatePassage(value);
-            },
-            onEditingComplete: () => setState(() => {}),
-            onSubmitted: (_) => setState(() {}),
-          ),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              if (kIsWeb) {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) => AlertDialog(
-                    title: const Text('Are you sure?'),
-                    content: const Text('You will lose all your work.'),
-                    actions: [
-                      ElevatedButton(
-                        child: const Text('Cancel'),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                      ElevatedButton(
-                        child: const Text('OK'),
-                        onPressed: () {
-                          Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const Home()),
-                              (r) => false);
-                        },
-                      ),
-                    ],
-                  ),
-                );
-              } else {
-                Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => const Home()),
-                    (r) => false);
-              }
-            },
-          ),
-          actions: [
-            PopupMenuButton(
-                onSelected: (value) async {
-                  switch (value) {
-                    case 0:
-                      Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(builder: (context) => const Home()),
-                          (r) => false);
-                      return;
-                    case 1:
-                      showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: const Text("Are you sure?"),
-                              content: const Text(
-                                  "Deleting this Word Study is permanent and cannot be undone. Are you sure you wish to proceed?"),
-                              actions: [
-                                TextButton(
-                                    onPressed: () => Navigator.pop(context),
-                                    child: const Text('Cancel')),
-                                TextButton(
-                                  onPressed: () async {
-                                    try {
-                                      await _thisStudy.delete();
-                                      if (!mounted) return;
-                                      final navigatorContext = context;
-                                      Navigator.pushAndRemoveUntil(
-                                          navigatorContext,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const Home()),
-                                          (r) => false);
-                                      ScaffoldMessenger.of(navigatorContext)
-                                          .showSnackBar(SnackBar(
-                                        content:
-                                            const Text("Word Study Deleted"),
-                                        action: SnackBarAction(
-                                          onPressed: () {},
-                                          label: "Ok",
-                                        ),
-                                      ));
-                                    } catch (error) {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(SnackBar(
-                                        content: const Text(
-                                            "Something went wrong. Try again soon."),
-                                        action: SnackBarAction(
-                                          onPressed: () {},
-                                          label: "Ok",
-                                        ),
-                                      ));
-                                      sendError(error, "word study deletion");
-                                    }
-                                  },
-                                  style: TextButton.styleFrom(
-                                    foregroundColor: Colors.red,
-                                  ),
-                                  child: const Text("Delete"),
-                                )
-                              ],
-                            );
-                          });
-                      return;
-                    case 2:
-                      showDialog(
-                          context: context,
-                          builder: ((context) => PreferencesModal(
-                                onTranslationChanged: () {
-                                  // Reload the verse container when translation changes
-                                  WidgetsBinding.instance
-                                      .addPostFrameCallback((_) {
-                                    _verseContainerKey.currentState
-                                        ?.reloadPassage();
-                                  });
-                                },
-                              )));
-                      return;
-                  }
-                },
-                icon: const Icon(Icons.menu),
-                itemBuilder: (context) => [
-                      if (!kIsWeb)
-                        const PopupMenuItem(
-                          value: 0,
-                          child: ListTile(
-                              leading: Icon(Icons.save), title: Text("Save")),
-                        ),
-                      if (!kIsWeb)
-                        const PopupMenuItem(
-                          value: 1,
-                          child: ListTile(
-                            title: Text('Delete'),
-                            leading: Icon(Icons.delete),
-                          ),
-                        ),
-                      if (!kIsWeb)
-                        const PopupMenuItem(
-                          value: 2,
-                          child: ListTile(
-                            title: Text('Preferences'),
-                            leading: Icon(Icons.settings),
-                          ),
-                        ),
-                    ]),
-          ],
-        ),
-        body: LayoutBuilder(builder: (context, constraints) {
-          // Use screen size to determine orientation, not available space
-          // This prevents keyboard opening from triggering layout changes
-          final screenSize = MediaQuery.sizeOf(context);
-          final isLandscape = screenSize.width > screenSize.height;
-
-          return SafeArea(
-            bottom: false,
-            child: SplitView(
-                indicator: SplitIndicator(
-                    viewMode: isLandscape
-                        ? SplitViewMode.Horizontal
-                        : SplitViewMode.Vertical),
-                viewMode: isLandscape
-                    ? SplitViewMode.Horizontal
-                    : SplitViewMode.Vertical,
-                children: isLandscape
-                    ? splitChildren.reversed.toList()
-                    : splitChildren),
-          );
-        }));
+    );
   }
 }

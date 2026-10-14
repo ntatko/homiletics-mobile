@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:homiletics/common/passage_badge.dart';
 import 'package:homiletics/classes/homiletic.dart';
 import 'package:homiletics/pages/homeletic_editor.dart';
-import 'package:string_to_hex/string_to_hex.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class HomileticListItem extends StatelessWidget {
@@ -27,28 +27,7 @@ class HomileticListItem extends StatelessWidget {
               surfaceTintColor: Colors.blue,
               clipBehavior: Clip.antiAliasWithSaveLayer,
               child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                Container(
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: Color(StringToHex.toColor(homiletic.passage
-                          .padLeft(3)
-                          .toLowerCase()
-                          .replaceAll(RegExp(r'[^\w\s]+'), '')
-                          .substring(0, 3))),
-                    ),
-                    child: Center(
-                      child: Text(
-                        homiletic.passage
-                            .replaceAll(RegExp(r'\s'), '')
-                            .padRight(3)
-                            .substring(0, 3),
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
-                        ),
-                      ),
-                    )),
+                PassageBadge(passage: homiletic.passage),
                 Padding(
                     padding: const EdgeInsets.only(left: 15),
                     child: Column(

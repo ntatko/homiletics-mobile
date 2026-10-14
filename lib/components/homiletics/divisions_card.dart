@@ -1,17 +1,15 @@
-// ignore_for_file: must_be_immutable
-
 import 'package:flutter/material.dart';
 import 'package:homiletics/classes/Division.dart';
 import 'package:homiletics/classes/homiletic.dart';
-import 'package:homiletics/common/report_error.dart';
+import 'package:homiletics/components/homiletics/row_controllers.dart';
 
-class DivisionsCard extends StatelessWidget {
-  List<Division> divisions;
+class DivisionsCard extends StatefulWidget {
+  final List<Division> divisions;
   final Homiletic homiletic;
-  void Function() addDivision;
-  Future<void> Function() removeDivision;
+  final VoidCallback addDivision;
+  final Future<void> Function(Division division) removeDivision;
 
-  DivisionsCard(
+  const DivisionsCard(
       {Key? key,
       required this.divisions,
       required this.homiletic,
@@ -20,9 +18,46 @@ class DivisionsCard extends StatelessWidget {
       : super(key: key);
 
   @override
+  State<DivisionsCard> createState() => _DivisionsCardState();
+}
+
+class _DivisionsCardState extends State<DivisionsCard> {
+  /// Per row: [verses, title].
+  final RowControllers<Division> _controllers =
+      RowControllers<Division>((division) => [
+            TextEditingController(text: division.passage),
+            TextEditingController(text: division.title),
+          ]);
+  final RowRemover _remover = RowRemover();
+
+  @override
+  void dispose() {
+    _controllers.dispose();
+    super.dispose();
+  }
+
+  void _add() {
+    _controllers.focusNextNewRow();
+    widget.addDivision();
+  }
+
+  Future<void> _remove(Division division) {
+    final controllers = _controllers.of(division);
+    return _remover.remove(
+      context,
+      hasText: controllers.any((c) => c.text.trim().isNotEmpty),
+      rowName: 'division',
+      remove: () => widget.removeDivision(division),
+      failureMessage: "Removing that Division didn't work",
+      errorIdentifier: "Remove Divisions",
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
+    _controllers.retainOnly(widget.divisions);
     return Card(
-        color: MediaQuery.of(context).platformBrightness == Brightness.light
+        color: Theme.of(context).brightness == Brightness.light
             ? Colors.green[100]
             : Colors.blueGrey[900],
         child: Padding(
@@ -64,8 +99,10 @@ class DivisionsCard extends StatelessWidget {
                   ],
                 ),
               ),
-              ...divisions.map((division) {
+              ...widget.divisions.map((division) {
+                final controllers = _controllers.of(division);
                 return Container(
+                    key: ObjectKey(division),
                     margin: const EdgeInsets.all(8),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -73,31 +110,27 @@ class DivisionsCard extends StatelessWidget {
                         SizedBox(
                             width: 75,
                             child: TextField(
-                                autofocus: true,
+                                autofocus:
+                                    _controllers.shouldAutofocus(division),
                                 keyboardType: TextInputType.text,
                                 textCapitalization:
                                     TextCapitalization.sentences,
-                                controller: TextEditingController(
-                                    text: division.passage),
+                                controller: controllers[0],
                                 decoration: const InputDecoration(
                                   labelText: 'Verses',
                                   border: OutlineInputBorder(),
                                 ),
                                 onChanged: (String value) async {
-                                  await divisions[divisions.indexOf(division)]
-                                      .updatePassage(value);
-                                  await homiletic.update();
+                                  await division.updatePassage(value);
+                                  await widget.homiletic.update();
                                 })),
                         Expanded(
                             child: TextField(
                                 keyboardType: TextInputType.text,
                                 textCapitalization:
                                     TextCapitalization.sentences,
-                                controller:
-                                    TextEditingController(text: division.title),
-                                onSubmitted: (_) {
-                                  addDivision();
-                                },
+                                controller: controllers[1],
+                                onSubmitted: (_) => _add(),
                                 decoration: const InputDecoration(
                                   labelText: 'Division Sentence',
                                   border: OutlineInputBorder(),
@@ -106,8 +139,13 @@ class DivisionsCard extends StatelessWidget {
                                 minLines: 1,
                                 onChanged: (String value) async {
                                   await division.updateText(value);
-                                  await homiletic.update();
-                                }))
+                                  await widget.homiletic.update();
+                                })),
+                        IconButton(
+                          tooltip: 'Remove division',
+                          icon: const Icon(Icons.delete_outline),
+                          onPressed: () => _remove(division),
+                        ),
                       ],
                     ));
               }),
@@ -118,45 +156,17 @@ class DivisionsCard extends StatelessWidget {
                   children: [
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.all(8),
-                        minimumSize: const Size(40, 40),
-                      ),
-                      onPressed: divisions.isNotEmpty
-                          ? () async {
-                              try {
-                                await removeDivision();
-                              } catch (error) {
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(SnackBar(
-                                  content: const Text(
-                                      "Removing that Division didn't work"),
-                                  action: SnackBarAction(
-                                    onPressed: () {},
-                                    label: "Ok",
-                                  ),
-                                ));
-                                sendError(error, "Remove Divisions");
-                              }
-                            }
-                          : null,
-                      child: const Icon(Icons.delete),
-                    ),
-                    const SizedBox(width: 5),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 8, vertical: 0),
                         minimumSize: const Size(0, 40),
                       ),
-                      onPressed: () {
-                        addDivision();
-                      },
+                      onPressed: _add,
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           const Icon(Icons.add, size: 20),
                           const SizedBox(width: 4),
-                          Text('(${divisions.length})'),
+                          Text('(${widget.divisions.length})'),
                         ],
                       ),
                     ),

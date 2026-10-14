@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:homiletics/classes/content_summary.dart';
 import 'package:homiletics/classes/homiletic.dart';
-import 'package:homiletics/common/report_error.dart';
+import 'package:homiletics/components/homiletics/row_controllers.dart';
 
 class ContentSummariesCard extends StatefulWidget {
   final List<ContentSummary> contentSummaries;
   final Homiletic homiletic;
-  final void Function() addContentSummary;
-  final void Function() removeContentSummary;
+  final VoidCallback addContentSummary;
+  final Future<void> Function(ContentSummary summary) removeContentSummary;
 
   const ContentSummariesCard({
     Key? key,
@@ -22,10 +22,42 @@ class ContentSummariesCard extends StatefulWidget {
 }
 
 class ContentSummariesCardState extends State<ContentSummariesCard> {
+  /// Per row: [verses, summary].
+  final RowControllers<ContentSummary> _controllers =
+      RowControllers<ContentSummary>((summary) => [
+            TextEditingController(text: summary.passage),
+            TextEditingController(text: summary.summary),
+          ]);
+  final RowRemover _remover = RowRemover();
+
+  @override
+  void dispose() {
+    _controllers.dispose();
+    super.dispose();
+  }
+
+  void _add() {
+    _controllers.focusNextNewRow();
+    widget.addContentSummary();
+  }
+
+  Future<void> _remove(ContentSummary summary) {
+    final controllers = _controllers.of(summary);
+    return _remover.remove(
+      context,
+      hasText: controllers.any((c) => c.text.trim().isNotEmpty),
+      rowName: 'content summary',
+      remove: () => widget.removeContentSummary(summary),
+      failureMessage: "Removing that Content Summary didn't work",
+      errorIdentifier: "Content Summary removal",
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    _controllers.retainOnly(widget.contentSummaries);
     return Card(
-      color: MediaQuery.of(context).platformBrightness == Brightness.light
+      color: Theme.of(context).brightness == Brightness.light
           ? Colors.blue[100]
           : Colors.blueGrey[900],
       child: Padding(
@@ -68,7 +100,9 @@ class ContentSummariesCardState extends State<ContentSummariesCard> {
               ),
             ),
             ...widget.contentSummaries.map((element) {
+              final controllers = _controllers.of(element);
               return Container(
+                key: ObjectKey(element),
                 margin: const EdgeInsets.all(8),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -77,11 +111,10 @@ class ContentSummariesCardState extends State<ContentSummariesCard> {
                       width: 90,
                       padding: const EdgeInsets.only(left: 5, right: 5),
                       child: TextField(
-                        autofocus: true,
+                        autofocus: _controllers.shouldAutofocus(element),
                         keyboardType: TextInputType.text,
                         textCapitalization: TextCapitalization.sentences,
-                        controller:
-                            TextEditingController(text: element.passage),
+                        controller: controllers[0],
                         decoration: const InputDecoration(
                           labelText: 'Verses',
                           border: OutlineInputBorder(),
@@ -96,17 +129,12 @@ class ContentSummariesCardState extends State<ContentSummariesCard> {
                       child: TextField(
                         keyboardType: TextInputType.text,
                         textCapitalization: TextCapitalization.sentences,
-                        controller:
-                            TextEditingController(text: element.summary),
+                        controller: controllers[1],
                         decoration: const InputDecoration(
                           labelText: 'Summary',
                           border: OutlineInputBorder(),
                         ),
-                        onSubmitted: (_) {
-                          setState(() {
-                            widget.addContentSummary();
-                          });
-                        },
+                        onSubmitted: (_) => _add(),
                         maxLines: 4,
                         minLines: 1,
                         onChanged: (String value) async {
@@ -115,10 +143,15 @@ class ContentSummariesCardState extends State<ContentSummariesCard> {
                         },
                       ),
                     ),
+                    IconButton(
+                      tooltip: 'Remove content summary',
+                      icon: const Icon(Icons.delete_outline),
+                      onPressed: () => _remove(element),
+                    ),
                   ],
                 ),
               );
-            }).toList(),
+            }),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
               child: Row(
@@ -126,41 +159,11 @@ class ContentSummariesCardState extends State<ContentSummariesCard> {
                 children: [
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.all(8),
-                      minimumSize: const Size(40, 40),
-                    ),
-                    onPressed: widget.contentSummaries.isNotEmpty
-                        ? () async {
-                            try {
-                              widget.removeContentSummary();
-                            } catch (error) {
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(SnackBar(
-                                content: const Text(
-                                    "Removing that Content Summary didn't work"),
-                                action: SnackBarAction(
-                                  onPressed: () {},
-                                  label: "Ok",
-                                ),
-                              ));
-                              sendError(error, "Content Summary removal");
-                            }
-                          }
-                        : null,
-                    child: const Icon(Icons.delete),
-                  ),
-                  const SizedBox(width: 5),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 8, vertical: 0),
                       minimumSize: const Size(0, 40),
                     ),
-                    onPressed: () {
-                      setState(() {
-                        widget.addContentSummary();
-                      });
-                    },
+                    onPressed: _add,
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [

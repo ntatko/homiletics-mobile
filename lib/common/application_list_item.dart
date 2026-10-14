@@ -33,8 +33,7 @@ class ApplicationListItem extends StatelessWidget {
   }
 
   Color _cardColor(BuildContext context) {
-    final isLight =
-        MediaQuery.of(context).platformBrightness == Brightness.light;
+    final isLight = Theme.of(context).brightness == Brightness.light;
     return isLight ? Colors.green.shade300 : Colors.green.shade800;
   }
 
@@ -77,9 +76,8 @@ class _CarouselApplicationCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final passage = application.homileticPassage;
-    final onCard = theme.brightness == Brightness.dark
-        ? Colors.white
-        : Colors.black87;
+    final onCard =
+        theme.brightness == Brightness.dark ? Colors.white : Colors.black87;
     final passageColor = theme.brightness == Brightness.dark
         ? Colors.white.withValues(alpha: 0.72)
         : Colors.black.withValues(alpha: 0.55);
@@ -112,9 +110,8 @@ class _CarouselApplicationCard extends StatelessWidget {
                         Expanded(
                           child: Text(
                             application.text,
-                            maxLines: passage != null && passage.isNotEmpty
-                                ? 3
-                                : 4,
+                            maxLines:
+                                passage != null && passage.isNotEmpty ? 3 : 4,
                             overflow: TextOverflow.ellipsis,
                             style: theme.textTheme.titleSmall?.copyWith(
                                   height: 1.25,

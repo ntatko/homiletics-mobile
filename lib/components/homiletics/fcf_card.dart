@@ -1,15 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:homiletics/classes/homiletic.dart';
 
-class FcfCard extends StatelessWidget {
+class FcfCard extends StatefulWidget {
   final Homiletic homiletic;
 
   const FcfCard({Key? key, required this.homiletic}) : super(key: key);
 
   @override
+  State<FcfCard> createState() => _FcfCardState();
+}
+
+class _FcfCardState extends State<FcfCard> {
+  late final TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController(text: widget.homiletic.fcf);
+  }
+
+  @override
+  void didUpdateWidget(covariant FcfCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (!identical(oldWidget.homiletic, widget.homiletic)) {
+      _controller.text = widget.homiletic.fcf;
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Card(
-        color: MediaQuery.of(context).platformBrightness == Brightness.light
+        color: Theme.of(context).brightness == Brightness.light
             ? const Color.fromARGB(255, 196, 255, 241)
             : Colors.blueGrey[900],
         child: Padding(
@@ -52,13 +79,13 @@ class FcfCard extends StatelessWidget {
                       maxLines: null,
                       keyboardType: TextInputType.text,
                       textCapitalization: TextCapitalization.sentences,
-                      controller: TextEditingController(text: homiletic.fcf),
+                      controller: _controller,
                       decoration: const InputDecoration(
                         hintText: 'Fallen/Frail/Feeble/Fickle',
                         border: OutlineInputBorder(),
                       ),
                       onChanged: (String ss) async {
-                        await homiletic.updateFcf(ss);
+                        await widget.homiletic.updateFcf(ss);
                       })),
             ])));
   }

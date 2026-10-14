@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:homiletics/classes/word_study.dart';
 import 'package:homiletics/common/home_header.dart';
+import 'package:homiletics/common/study_data_builder.dart';
 import 'package:homiletics/common/word_study_list_item.dart';
 import 'package:homiletics/storage/word_study_storage.dart';
 import 'package:loggy/loggy.dart';
@@ -10,8 +11,8 @@ class PastWordStudies extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<WordStudy>>(
-      future: getAllWordStudies(),
+    return StudyDataBuilder<List<WordStudy>>(
+      load: getAllWordStudies,
       builder: (context, snapshot) {
         if (snapshot.hasError) logError("${snapshot.error}");
 

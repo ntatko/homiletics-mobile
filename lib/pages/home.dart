@@ -10,13 +10,9 @@ import 'package:homiletics/components/past_word_studies.dart';
 import 'package:homiletics/components/start_activity.dart';
 import 'package:homiletics/pages/search_page.dart';
 import 'package:homiletics/pages/settings_page.dart';
-// import 'package:homiletics/storage/application_storage.dart';
-// import 'package:homiletics/storage/content_summary_storage.dart';
-// import 'package:homiletics/storage/division_storage.dart';
-// import 'package:homiletics/storage/homiletic_storage.dart';
-// import 'package:homiletics/storage/lecture_note_storage.dart';
 
-// ignore: must_be_immutable
+/// Home's study lists refresh themselves when an editor closes (see
+/// StudyDataBuilder), so they can stay const here.
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
 
@@ -47,13 +43,11 @@ class _HomeState extends State<Home> {
     final colorScheme = theme.colorScheme;
     final size = MediaQuery.sizeOf(context);
     final isWide = size.width >= _wideBreakpoint;
-    final maxW = isWide
-        ? math.min(_homeMaxWidth, size.width - 48)
-        : double.infinity;
+    final maxW =
+        isWide ? math.min(_homeMaxWidth, size.width - 48) : double.infinity;
 
-    final searchBarFill = isWide
-        ? colorScheme.surfaceContainerHigh
-        : theme.cardColor;
+    final searchBarFill =
+        isWide ? colorScheme.surfaceContainerHigh : theme.cardColor;
 
     return Scaffold(
         backgroundColor:
@@ -117,8 +111,7 @@ class _HomeState extends State<Home> {
                               },
                               onTap: () {
                                 setState(() {
-                                  _showSearchResults =
-                                      _searchString.isNotEmpty;
+                                  _showSearchResults = _searchString.isNotEmpty;
                                 });
                               },
                               decoration: InputDecoration(
@@ -141,8 +134,7 @@ class _HomeState extends State<Home> {
                                           tooltip: 'Clear',
                                           icon: Icon(
                                             Icons.clear_rounded,
-                                            color:
-                                                colorScheme.onSurfaceVariant,
+                                            color: colorScheme.onSurfaceVariant,
                                           ),
                                           onPressed: () {
                                             _searchController.clear();
@@ -157,8 +149,7 @@ class _HomeState extends State<Home> {
                                         tooltip: 'Settings',
                                         icon: Icon(
                                           Icons.settings_rounded,
-                                          color:
-                                              colorScheme.onSurfaceVariant,
+                                          color: colorScheme.onSurfaceVariant,
                                         ),
                                         onPressed: _openSettings,
                                       ),
@@ -204,18 +195,7 @@ class _HomeState extends State<Home> {
                                 shrinkWrap: true,
                                 children: [
                                   const SizedBox(height: 16),
-                                  ContentSearches(searchString: _searchString),
-                                  DivisionSearches(searchString: _searchString),
-                                  ApplicationSearches(
-                                      searchString: _searchString),
-                                  AimSearches(searchString: _searchString),
-                                  SummarySentenceSearches(
-                                      searchString: _searchString),
-                                  PassageSearches(searchString: _searchString),
-                                  LectureNoteSearches(
-                                      searchString: _searchString),
-                                  WordStudySearches(
-                                      searchString: _searchString),
+                                  SearchResults(searchString: _searchString),
                                   const SizedBox(height: 16),
                                 ],
                               ),
