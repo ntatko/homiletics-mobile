@@ -12,6 +12,9 @@ name: Windows release
 on:
   push:
     tags: [ "v*" ]
+    # TEMPORARY: lets the branch be built before this workflow exists on
+    # main (workflow_dispatch only works from the default branch).
+    branches: [ "windows-support" ]
   workflow_dispatch:
 
 permissions:
