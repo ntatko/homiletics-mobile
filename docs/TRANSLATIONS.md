@@ -104,3 +104,15 @@ abbreviation with a local gloss.
 2. Add the translation to every other `app_*.arb` (keep `app_zh.arb` and
    `app_zh_Hans.arb` identical). The completeness test lists what's missing.
 3. `flutter gen-l10n`.
+
+## Weekly passages feed
+`data/suggested-passages.json` (served from GitHub `main`) carries
+translated display fields alongside the English ones: a top-level
+`studies` map of study names, and per-week `lesson_i18n` and
+`passage_i18n`. Write new weeks in English only, then run
+`python3 tool/localize_suggested_passages.py` to fill these in — it
+refuses to guess unknown book names or studies, so add a row to its
+`BOOKS` / `STUDIES` tables when it asks. The English `passage` is what's
+sent to Bible Gateway and matched against saved studies, so it always
+stays an English reference. `test/suggested_passages_test.dart` fails if
+a week is missing a translation. Older app versions ignore the new fields.

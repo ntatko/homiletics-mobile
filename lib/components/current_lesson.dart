@@ -10,6 +10,8 @@ import 'package:homiletics/theme/home_widgets.dart';
 import 'package:homiletics/theme/widgets.dart';
 import 'package:homiletics/utils/study_launch_uri.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+import 'package:homiletics/classes/language.dart';
 import 'package:homiletics/classes/passage_schedule.dart';
 import 'package:loggy/loggy.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -86,7 +88,10 @@ class _CurrentLessonState extends State<CurrentLesson> {
       if (a[i].passage != b[i].passage ||
           a[i].rollout != b[i].rollout ||
           a[i].lesson != b[i].lesson ||
-          a[i].study != b[i].study) {
+          a[i].study != b[i].study ||
+          !mapEquals(a[i].lessonI18n, b[i].lessonI18n) ||
+          !mapEquals(a[i].passageI18n, b[i].passageI18n) ||
+          !mapEquals(a[i].studyNames, b[i].studyNames)) {
         return false;
       }
     }
@@ -120,8 +125,23 @@ class _CurrentLessonState extends State<CurrentLesson> {
     });
   }
 
-  /// "bsfinternational.org/john" rather than a full URL.
-  static String _studyLabel(String study) => study
+  /// The interface language, for the feed's translated titles.
+  Language get _language => Language.match(Localizations.localeOf(context));
+
+  /// The study's name from the feed in the current language, else its
+  /// address without the scheme ("bsfinternational.org/john").
+  String _studyLabel(String study) {
+    for (final PassageSchedule s in widget.schedules) {
+      if (s.study == study) {
+        final String? name = s.studyName(_language);
+        if (name != null && name.trim().isNotEmpty) return name;
+        break;
+      }
+    }
+    return _studyAddress(study);
+  }
+
+  static String _studyAddress(String study) => study
       .trim()
       .replaceFirst(RegExp(r'^https?://', caseSensitive: false), '')
       .replaceFirst(RegExp(r'^www\.', caseSensitive: false), '')
@@ -135,7 +155,8 @@ class _CurrentLessonState extends State<CurrentLesson> {
     final String when = index == current
         ? l.homeThisWeek
         : (current >= 0 && index < current ? l.homeEarlier : l.homeComingUp);
-    final String lesson = _filteredSchedules[index].lesson.trim();
+    final String lesson =
+        _filteredSchedules[index].displayLesson(_language).trim();
     return lesson.isEmpty ? when : l.homeWeekOverline(when, lesson);
   }
 
@@ -149,7 +170,8 @@ class _CurrentLessonState extends State<CurrentLesson> {
     double widest = -1;
     for (final PassageSchedule s in _filteredSchedules) {
       final TextPainter painter = TextPainter(
-        text: TextSpan(text: s.passage, style: AppText.display),
+        text:
+            TextSpan(text: s.displayPassage(_language), style: AppText.display),
         textDirection: TextDirection.ltr,
         textScaler: scaler,
       )..layout();
@@ -393,7 +415,8 @@ class _WeekCard extends StatelessWidget {
             ],
           ),
           Text(
-            schedule.passage,
+            schedule.displayPassage(
+                Language.match(Localizations.localeOf(context))),
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: AppText.display.copyWith(color: c.ink),
