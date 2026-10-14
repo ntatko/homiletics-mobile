@@ -1163,4 +1163,181 @@ class AppLocalizationsFr extends AppLocalizations {
   String wordStudySectionHelpSemantics(String title) {
     return '$title, à propos de cette section';
   }
+
+  @override
+  String get lectureTimeMarkNoRecording =>
+      'Cette note n’a pas d’enregistrement à lire.';
+
+  @override
+  String get lectureTimeMarkStopRecordingFirst =>
+      'Arrêtez l’enregistrement pour lire à partir d’un repère.';
+
+  @override
+  String get lectureTimeMarkPastEnd =>
+      'Ce repère se situe après la fin de l’enregistrement.';
+
+  @override
+  String get onboardingSkip => 'Passer';
+
+  @override
+  String get onboardingBack => 'Retour';
+
+  @override
+  String get onboardingNext => 'Suivant';
+
+  @override
+  String get onboardingWelcomeOverline => 'Bienvenue';
+
+  @override
+  String get onboardingWelcomeTitle => 'Étudiez la Bible, un passage à la fois';
+
+  @override
+  String get onboardingWelcomeBody =>
+      'Homiletics vous aide à rédiger votre homilétique, à prendre des notes pendant l\'exposé et à faire des études de mot — toujours avec le passage ouvert à côté, dans votre langue et votre traduction de la Bible.';
+
+  @override
+  String get onboardingMethodOverline => 'La méthode';
+
+  @override
+  String get onboardingMethodTitle => 'Qu\'est-ce qu\'une homilétique ?';
+
+  @override
+  String get onboardingMethodBody =>
+      'Une homilétique est une façon brève d\'étudier un passage : vous en dégagez le message principal, puis vous réfléchissez à la manière de le vivre. Elle compte six étapes — et n\'a pas besoin d\'être parfaite. Cela devient plus facile chaque semaine.';
+
+  @override
+  String get onboardingStepsOverline => 'Étape par étape';
+
+  @override
+  String get onboardingStepsTitle => 'Les six étapes';
+
+  @override
+  String get onboardingStepContent =>
+      'Résumez le passage en 10 à 20 courts morceaux, avec vos propres mots.';
+
+  @override
+  String get onboardingStepDivisions =>
+      'Regroupez ces morceaux en 2 à 4 parties.';
+
+  @override
+  String get onboardingStepSummary => 'Tout le passage en 10 mots ou moins.';
+
+  @override
+  String get onboardingStepFcf =>
+      'Focus sur la condition déchue : le besoin ou la brisure humaine dont parle le passage.';
+
+  @override
+  String get onboardingStepAim =>
+      'La vérité principale que vous voulez que vos auditeurs retiennent.';
+
+  @override
+  String get onboardingStepApplication =>
+      'Des questions qui font passer le passage dans la vie de tous les jours.';
+
+  @override
+  String get onboardingLecturesOverline => 'Exposés et études de mot';
+
+  @override
+  String get onboardingLecturesTitle =>
+      'Écoutez attentivement, creusez plus loin';
+
+  @override
+  String get onboardingLecturesBody =>
+      'Enregistrez l\'exposé — l\'enregistrement continue écran éteint et la transcription se fait sur votre téléphone. Prenez des notes en écoutant et ajoutez des repères de temps pour retrouver un moment.';
+
+  @override
+  String get onboardingWordStudyBody =>
+      'Un mot vous interpelle ? Commencez une étude de mot et creusez ce qu\'il signifie dans le passage.';
+
+  @override
+  String get onboardingStartOverline => 'Pour commencer';
+
+  @override
+  String get onboardingStartTitle => 'Tout est prêt pour commencer';
+
+  @override
+  String get onboardingStartBody =>
+      'Commencez par le passage de cette semaine, ou faites d\'abord un tour. Chaque étape que vous écrivez est enregistrée au fur et à mesure.';
+
+  @override
+  String get onboardingReopenHint =>
+      'Vous pouvez rouvrir ce guide à tout moment depuis les Paramètres.';
+
+  @override
+  String get onboardingStartThisWeek =>
+      'Commencer l\'homilétique de la semaine';
+
+  @override
+  String get onboardingExplore => 'Explorer par moi-même';
+
+  @override
+  String onboardingThisWeekPassage(String passage) {
+    return 'Cette semaine : $passage';
+  }
+
+  @override
+  String get onboardingSettingsRow => 'Comment fonctionne l\'homilétique';
+
+  @override
+  String bibleOfflineSize(String size) {
+    return 'Hors ligne · $size';
+  }
+
+  @override
+  String bibleDownloadedSize(String size) {
+    return 'Téléchargée · $size';
+  }
+
+  @override
+  String get bibleDownloadAction => 'Télécharger pour lire hors ligne';
+
+  @override
+  String get bibleDownloading => 'Téléchargement…';
+
+  @override
+  String get bibleRemoveDownload => 'Supprimer le téléchargement';
+
+  @override
+  String bibleDownloadFailed(String translation) {
+    return 'Impossible de télécharger $translation. Vérifiez votre connexion et réessayez.';
+  }
+
+  @override
+  String get bibleOfflineTitle => 'Pas de connexion';
+
+  @override
+  String bibleOfflineMessage(String translation) {
+    return 'Ce passage vient de Bible Gateway, qui demande une connexion Internet. Téléchargez $translation pour le lire partout.';
+  }
+
+  @override
+  String get bibleOfflineNoDownloadMessage =>
+      'Ce passage vient de Bible Gateway, qui demande une connexion Internet. Connectez-vous et réessayez.';
+
+  @override
+  String get bibleTryAgain => 'Réessayer';
+
+  @override
+  String bibleNeedsDownloadTitle(String translation) {
+    return 'Télécharger $translation';
+  }
+
+  @override
+  String bibleNeedsDownloadMessage(String size) {
+    return 'Cette Bible se lit depuis votre appareil. Téléchargez-la une fois (environ $size) pour voir le passage.';
+  }
+
+  @override
+  String bibleNotInTranslation(String translation) {
+    return 'Ce passage est introuvable dans $translation.';
+  }
+
+  @override
+  String get bibleVerseTapTip =>
+      'Astuce : touchez un numéro de verset pour commencer un résumé à cet endroit.';
+
+  @override
+  String bibleVerseTapLabel(String verse) {
+    return 'Commencer un résumé au verset $verse';
+  }
 }

@@ -6,6 +6,7 @@ import 'package:homiletics/classes/preferences.dart';
 import 'package:homiletics/common/report_error.dart';
 import 'package:homiletics/services/transcript_formatter_service.dart';
 import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
 import 'package:whisper_ggml/whisper_ggml.dart';
 
 /// Whisper models this app offers. `base` trades a larger download
@@ -275,6 +276,34 @@ class WhisperModelService {
     } catch (error) {
       sendError(error, "WhisperModelService.transcribe");
       return null;
+    } finally {
+      // whisper_ggml converts the recording to "<audioPath>.wav" (about
+      // twice the recording's size) and leaves it behind.
+      await _deleteQuietly(File('$audioPath.wav'));
+    }
+  }
+
+  /// Removes conversion files left next to recordings by transcriptions
+  /// from before [transcribe] cleaned up after itself. Cheap; safe to run
+  /// on every launch.
+  static Future<void> cleanUpConversionFiles() async {
+    try {
+      final Directory dir = await getApplicationDocumentsDirectory();
+      await for (final FileSystemEntity entity in dir.list()) {
+        if (entity is File && entity.path.endsWith('.m4a.wav')) {
+          await _deleteQuietly(entity);
+        }
+      }
+    } catch (error) {
+      sendError(error, "WhisperModelService.cleanUpConversionFiles");
+    }
+  }
+
+  static Future<void> _deleteQuietly(File file) async {
+    try {
+      if (await file.exists()) await file.delete();
+    } catch (_) {
+      // Best effort: a leftover file only costs space.
     }
   }
 }

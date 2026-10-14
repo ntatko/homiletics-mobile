@@ -1104,6 +1104,169 @@ class AppLocalizationsZh extends AppLocalizations {
   String wordStudySectionHelpSemantics(String title) {
     return '$title，关于此部分';
   }
+
+  @override
+  String get lectureTimeMarkNoRecording => '此笔记没有可播放的录音。';
+
+  @override
+  String get lectureTimeMarkStopRecordingFirst => '请先停止录音，再从时间标记处播放。';
+
+  @override
+  String get lectureTimeMarkPastEnd => '该时间标记超出了录音的长度。';
+
+  @override
+  String get onboardingSkip => '跳过';
+
+  @override
+  String get onboardingBack => '上一步';
+
+  @override
+  String get onboardingNext => '下一步';
+
+  @override
+  String get onboardingWelcomeOverline => '欢迎';
+
+  @override
+  String get onboardingWelcomeTitle => '一次一段经文，好好查考圣经';
+
+  @override
+  String get onboardingWelcomeBody =>
+      '这个应用帮助你写讲道大纲、做讲课笔记和字词研究——经文始终就在旁边，用你的语言和你选择的圣经译本。';
+
+  @override
+  String get onboardingMethodOverline => '方法';
+
+  @override
+  String get onboardingMethodTitle => '什么是讲道大纲？';
+
+  @override
+  String get onboardingMethodBody =>
+      '讲道大纲是一种简短的查经方法：找出经文的中心信息，再思考如何活出来。共有六个步骤——不需要做得完美，每周都会越来越顺手。';
+
+  @override
+  String get onboardingStepsOverline => '逐步进行';
+
+  @override
+  String get onboardingStepsTitle => '六个步骤';
+
+  @override
+  String get onboardingStepContent => '用自己的话，把经文概括成10到20个简短的小段。';
+
+  @override
+  String get onboardingStepDivisions => '把这些小段归纳成2到4个部分。';
+
+  @override
+  String get onboardingStepSummary => '用不超过20个字概括整段经文。';
+
+  @override
+  String get onboardingStepFcf => '堕落景况焦点：经文所针对的人的需要或破碎。';
+
+  @override
+  String get onboardingStepAim => '你希望听众学到的那个核心真理。';
+
+  @override
+  String get onboardingStepApplication => '帮助人把经文活在日常生活中的问题。';
+
+  @override
+  String get onboardingLecturesOverline => '讲课与字词研究';
+
+  @override
+  String get onboardingLecturesTitle => '用心聆听，深入挖掘';
+
+  @override
+  String get onboardingLecturesBody =>
+      '录下讲课——关闭屏幕也会继续录音，并直接在手机上转成文字。一边听一边做笔记，加上时间标记，方便以后找到那一刻。';
+
+  @override
+  String get onboardingWordStudyBody => '对某个词感到好奇？开始一个字词研究，深入了解它在经文中的意思。';
+
+  @override
+  String get onboardingStartOverline => '开始';
+
+  @override
+  String get onboardingStartTitle => '你已准备好开始了';
+
+  @override
+  String get onboardingStartBody => '从本周的经文开始，或者先四处看看。你写下的每一步都会自动保存。';
+
+  @override
+  String get onboardingReopenHint => '你随时可以在设置中再次打开本指南。';
+
+  @override
+  String get onboardingStartThisWeek => '开始本周的讲道大纲';
+
+  @override
+  String get onboardingExplore => '自己先看看';
+
+  @override
+  String onboardingThisWeekPassage(String passage) {
+    return '本周：$passage';
+  }
+
+  @override
+  String get onboardingSettingsRow => '讲道大纲怎么做';
+
+  @override
+  String bibleOfflineSize(String size) {
+    return '可离线 · $size';
+  }
+
+  @override
+  String bibleDownloadedSize(String size) {
+    return '已下载 · $size';
+  }
+
+  @override
+  String get bibleDownloadAction => '下载以离线使用';
+
+  @override
+  String get bibleDownloading => '正在下载…';
+
+  @override
+  String get bibleRemoveDownload => '删除下载';
+
+  @override
+  String bibleDownloadFailed(String translation) {
+    return '无法下载 $translation。请检查网络后重试。';
+  }
+
+  @override
+  String get bibleOfflineTitle => '没有网络连接';
+
+  @override
+  String bibleOfflineMessage(String translation) {
+    return '这段经文来自 Bible Gateway，需要连接网络。下载 $translation 后可随时阅读。';
+  }
+
+  @override
+  String get bibleOfflineNoDownloadMessage =>
+      '这段经文来自 Bible Gateway，需要连接网络。请连接网络后重试。';
+
+  @override
+  String get bibleTryAgain => '重试';
+
+  @override
+  String bibleNeedsDownloadTitle(String translation) {
+    return '下载 $translation';
+  }
+
+  @override
+  String bibleNeedsDownloadMessage(String size) {
+    return '这本圣经从你的设备读取。下载一次（约 $size）即可查看经文。';
+  }
+
+  @override
+  String bibleNotInTranslation(String translation) {
+    return '在 $translation 中找不到这段经文。';
+  }
+
+  @override
+  String get bibleVerseTapTip => '提示：点按经节编号，即可从该节开始写摘要。';
+
+  @override
+  String bibleVerseTapLabel(String verse) {
+    return '从第 $verse 节开始写摘要';
+  }
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hans`).
@@ -2205,6 +2368,169 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   @override
   String wordStudySectionHelpSemantics(String title) {
     return '$title，关于此部分';
+  }
+
+  @override
+  String get lectureTimeMarkNoRecording => '此笔记没有可播放的录音。';
+
+  @override
+  String get lectureTimeMarkStopRecordingFirst => '请先停止录音，再从时间标记处播放。';
+
+  @override
+  String get lectureTimeMarkPastEnd => '该时间标记超出了录音的长度。';
+
+  @override
+  String get onboardingSkip => '跳过';
+
+  @override
+  String get onboardingBack => '上一步';
+
+  @override
+  String get onboardingNext => '下一步';
+
+  @override
+  String get onboardingWelcomeOverline => '欢迎';
+
+  @override
+  String get onboardingWelcomeTitle => '一次一段经文，好好查考圣经';
+
+  @override
+  String get onboardingWelcomeBody =>
+      '这个应用帮助你写讲道大纲、做讲课笔记和字词研究——经文始终就在旁边，用你的语言和你选择的圣经译本。';
+
+  @override
+  String get onboardingMethodOverline => '方法';
+
+  @override
+  String get onboardingMethodTitle => '什么是讲道大纲？';
+
+  @override
+  String get onboardingMethodBody =>
+      '讲道大纲是一种简短的查经方法：找出经文的中心信息，再思考如何活出来。共有六个步骤——不需要做得完美，每周都会越来越顺手。';
+
+  @override
+  String get onboardingStepsOverline => '逐步进行';
+
+  @override
+  String get onboardingStepsTitle => '六个步骤';
+
+  @override
+  String get onboardingStepContent => '用自己的话，把经文概括成10到20个简短的小段。';
+
+  @override
+  String get onboardingStepDivisions => '把这些小段归纳成2到4个部分。';
+
+  @override
+  String get onboardingStepSummary => '用不超过20个字概括整段经文。';
+
+  @override
+  String get onboardingStepFcf => '堕落景况焦点：经文所针对的人的需要或破碎。';
+
+  @override
+  String get onboardingStepAim => '你希望听众学到的那个核心真理。';
+
+  @override
+  String get onboardingStepApplication => '帮助人把经文活在日常生活中的问题。';
+
+  @override
+  String get onboardingLecturesOverline => '讲课与字词研究';
+
+  @override
+  String get onboardingLecturesTitle => '用心聆听，深入挖掘';
+
+  @override
+  String get onboardingLecturesBody =>
+      '录下讲课——关闭屏幕也会继续录音，并直接在手机上转成文字。一边听一边做笔记，加上时间标记，方便以后找到那一刻。';
+
+  @override
+  String get onboardingWordStudyBody => '对某个词感到好奇？开始一个字词研究，深入了解它在经文中的意思。';
+
+  @override
+  String get onboardingStartOverline => '开始';
+
+  @override
+  String get onboardingStartTitle => '你已准备好开始了';
+
+  @override
+  String get onboardingStartBody => '从本周的经文开始，或者先四处看看。你写下的每一步都会自动保存。';
+
+  @override
+  String get onboardingReopenHint => '你随时可以在设置中再次打开本指南。';
+
+  @override
+  String get onboardingStartThisWeek => '开始本周的讲道大纲';
+
+  @override
+  String get onboardingExplore => '自己先看看';
+
+  @override
+  String onboardingThisWeekPassage(String passage) {
+    return '本周：$passage';
+  }
+
+  @override
+  String get onboardingSettingsRow => '讲道大纲怎么做';
+
+  @override
+  String bibleOfflineSize(String size) {
+    return '可离线 · $size';
+  }
+
+  @override
+  String bibleDownloadedSize(String size) {
+    return '已下载 · $size';
+  }
+
+  @override
+  String get bibleDownloadAction => '下载以离线使用';
+
+  @override
+  String get bibleDownloading => '正在下载…';
+
+  @override
+  String get bibleRemoveDownload => '删除下载';
+
+  @override
+  String bibleDownloadFailed(String translation) {
+    return '无法下载 $translation。请检查网络后重试。';
+  }
+
+  @override
+  String get bibleOfflineTitle => '没有网络连接';
+
+  @override
+  String bibleOfflineMessage(String translation) {
+    return '这段经文来自 Bible Gateway，需要连接网络。下载 $translation 后可随时阅读。';
+  }
+
+  @override
+  String get bibleOfflineNoDownloadMessage =>
+      '这段经文来自 Bible Gateway，需要连接网络。请连接网络后重试。';
+
+  @override
+  String get bibleTryAgain => '重试';
+
+  @override
+  String bibleNeedsDownloadTitle(String translation) {
+    return '下载 $translation';
+  }
+
+  @override
+  String bibleNeedsDownloadMessage(String size) {
+    return '这本圣经从你的设备读取。下载一次（约 $size）即可查看经文。';
+  }
+
+  @override
+  String bibleNotInTranslation(String translation) {
+    return '在 $translation 中找不到这段经文。';
+  }
+
+  @override
+  String get bibleVerseTapTip => '提示：点按经节编号，即可从该节开始写摘要。';
+
+  @override
+  String bibleVerseTapLabel(String verse) {
+    return '从第 $verse 节开始写摘要';
   }
 }
 
@@ -3308,5 +3634,168 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   @override
   String wordStudySectionHelpSemantics(String title) {
     return '$title，關於這個部分';
+  }
+
+  @override
+  String get lectureTimeMarkNoRecording => '此筆記沒有可播放的錄音。';
+
+  @override
+  String get lectureTimeMarkStopRecordingFirst => '請先停止錄音，再從時間標記處播放。';
+
+  @override
+  String get lectureTimeMarkPastEnd => '該時間標記超出了錄音的長度。';
+
+  @override
+  String get onboardingSkip => '跳過';
+
+  @override
+  String get onboardingBack => '上一步';
+
+  @override
+  String get onboardingNext => '下一步';
+
+  @override
+  String get onboardingWelcomeOverline => '歡迎';
+
+  @override
+  String get onboardingWelcomeTitle => '一次一段經文，好好查考聖經';
+
+  @override
+  String get onboardingWelcomeBody =>
+      '這個應用程式幫助你寫講道大綱、做講課筆記和字詞研究——經文始終就在旁邊，用你的語言和你選擇的聖經譯本。';
+
+  @override
+  String get onboardingMethodOverline => '方法';
+
+  @override
+  String get onboardingMethodTitle => '什麼是講道大綱？';
+
+  @override
+  String get onboardingMethodBody =>
+      '講道大綱是一種簡短的查經方法：找出經文的中心信息，再思考如何活出來。共有六個步驟——不需要做得完美，每週都會越來越順手。';
+
+  @override
+  String get onboardingStepsOverline => '逐步進行';
+
+  @override
+  String get onboardingStepsTitle => '六個步驟';
+
+  @override
+  String get onboardingStepContent => '用自己的話，把經文概括成10到20個簡短的小段。';
+
+  @override
+  String get onboardingStepDivisions => '把這些小段歸納成2到4個部分。';
+
+  @override
+  String get onboardingStepSummary => '用不超過20個字概括整段經文。';
+
+  @override
+  String get onboardingStepFcf => '墮落景況焦點：經文所針對的人的需要或破碎。';
+
+  @override
+  String get onboardingStepAim => '你希望聽眾學到的那個核心真理。';
+
+  @override
+  String get onboardingStepApplication => '幫助人把經文活在日常生活中的問題。';
+
+  @override
+  String get onboardingLecturesOverline => '講課與字詞研究';
+
+  @override
+  String get onboardingLecturesTitle => '用心聆聽，深入挖掘';
+
+  @override
+  String get onboardingLecturesBody =>
+      '錄下講課——關閉螢幕也會繼續錄音，並直接在手機上轉成文字。一邊聽一邊做筆記，加上時間標記，方便以後找到那一刻。';
+
+  @override
+  String get onboardingWordStudyBody => '對某個詞感到好奇？開始一個字詞研究，深入了解它在經文中的意思。';
+
+  @override
+  String get onboardingStartOverline => '開始';
+
+  @override
+  String get onboardingStartTitle => '你已準備好開始了';
+
+  @override
+  String get onboardingStartBody => '從本週的經文開始，或者先四處看看。你寫下的每一步都會自動儲存。';
+
+  @override
+  String get onboardingReopenHint => '你隨時可以在設定中再次開啟本指南。';
+
+  @override
+  String get onboardingStartThisWeek => '開始本週的講道大綱';
+
+  @override
+  String get onboardingExplore => '自己先看看';
+
+  @override
+  String onboardingThisWeekPassage(String passage) {
+    return '本週：$passage';
+  }
+
+  @override
+  String get onboardingSettingsRow => '講道大綱怎麼做';
+
+  @override
+  String bibleOfflineSize(String size) {
+    return '可離線 · $size';
+  }
+
+  @override
+  String bibleDownloadedSize(String size) {
+    return '已下載 · $size';
+  }
+
+  @override
+  String get bibleDownloadAction => '下載以離線使用';
+
+  @override
+  String get bibleDownloading => '正在下載…';
+
+  @override
+  String get bibleRemoveDownload => '刪除下載';
+
+  @override
+  String bibleDownloadFailed(String translation) {
+    return '無法下載 $translation。請檢查網路後再試一次。';
+  }
+
+  @override
+  String get bibleOfflineTitle => '沒有網路連線';
+
+  @override
+  String bibleOfflineMessage(String translation) {
+    return '這段經文來自 Bible Gateway，需要連上網路。下載 $translation 後可隨時閱讀。';
+  }
+
+  @override
+  String get bibleOfflineNoDownloadMessage =>
+      '這段經文來自 Bible Gateway，需要連上網路。請連線後再試一次。';
+
+  @override
+  String get bibleTryAgain => '再試一次';
+
+  @override
+  String bibleNeedsDownloadTitle(String translation) {
+    return '下載 $translation';
+  }
+
+  @override
+  String bibleNeedsDownloadMessage(String size) {
+    return '這本聖經從你的裝置讀取。下載一次（約 $size）即可查看經文。';
+  }
+
+  @override
+  String bibleNotInTranslation(String translation) {
+    return '在 $translation 中找不到這段經文。';
+  }
+
+  @override
+  String get bibleVerseTapTip => '提示：點按經節編號，即可從該節開始寫摘要。';
+
+  @override
+  String bibleVerseTapLabel(String verse) {
+    return '從第 $verse 節開始寫摘要';
   }
 }

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:homiletics/theme/app_theme.dart';
 import 'package:homiletics/classes/language.dart';
@@ -13,7 +14,9 @@ import 'package:homiletics/classes/preferences.dart';
 import 'package:homiletics/common/report_error.dart';
 import 'package:homiletics/pages/home.dart';
 import 'package:homiletics/services/transcript_formatter_service.dart';
+import 'package:homiletics/services/whisper_model_service.dart';
 import 'package:homiletics/services/suggested_passages_repository.dart';
+import 'package:homiletics/storage/app_storage.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 
@@ -44,6 +47,21 @@ void main() async {
     return;
   }
 
+  // Opens the single database and, on the first launch after the upgrade,
+  // copies the old per-table files into it. Must finish before any screen
+  // reads data. A failed copy doesn't throw (the app keeps using the old
+  // files and retries next launch); this only throws if the new database
+  // exists but can't be read, when no safe fallback exists.
+  if (!kIsWeb) {
+    try {
+      await AppStorage.init();
+    } catch (error) {
+      sendError(error, "main: AppStorage.init");
+      runApp(const StartupErrorApp());
+      return;
+    }
+  }
+
   // Non-fatal: the repository reopens its box lazily if this fails.
   try {
     await SuggestedPassagesRepository.init();
@@ -55,6 +73,7 @@ void main() async {
 
   // Not needed for the first frame (only the recording / model settings UI
   // uses it), so don't delay startup. Reports its own errors.
+  unawaited(WhisperModelService.cleanUpConversionFiles());
   unawaited(TranscriptFormatterService.initialize());
 }
 

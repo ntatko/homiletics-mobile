@@ -2055,6 +2055,288 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{title}, about this section'**
   String wordStudySectionHelpSemantics(String title);
+
+  /// Snackbar when the user taps a time mark like [14:02] in lecture notes but the note has no recording.
+  ///
+  /// In en, this message translates to:
+  /// **'This note has no recording to play.'**
+  String get lectureTimeMarkNoRecording;
+
+  /// Snackbar when the user taps a time mark in lecture notes while a recording is still in progress.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop recording to play from a time mark.'**
+  String get lectureTimeMarkStopRecordingFirst;
+
+  /// Snackbar when a tapped time mark in lecture notes is later than the length of the note's recording (e.g. the lecture was recorded again).
+  ///
+  /// In en, this message translates to:
+  /// **'That time mark is past the end of the recording.'**
+  String get lectureTimeMarkPastEnd;
+
+  /// First-run guide: button that closes the guide early.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get onboardingSkip;
+
+  /// First-run guide: button to go to the previous page.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get onboardingBack;
+
+  /// First-run guide: button to go to the next page.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get onboardingNext;
+
+  /// First-run guide, page 1: small uppercase label above the title.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome'**
+  String get onboardingWelcomeOverline;
+
+  /// First-run guide, page 1: serif title.
+  ///
+  /// In en, this message translates to:
+  /// **'Study the Bible, one passage at a time'**
+  String get onboardingWelcomeTitle;
+
+  /// First-run guide, page 1: what the app helps with. 'Homiletics' here is the BSF study method.
+  ///
+  /// In en, this message translates to:
+  /// **'Homiletics helps you write your homiletics, take lecture notes and do word studies — all with the passage open beside you, in your language and your Bible translation.'**
+  String get onboardingWelcomeBody;
+
+  /// First-run guide, page 2: small uppercase label above the title.
+  ///
+  /// In en, this message translates to:
+  /// **'The method'**
+  String get onboardingMethodOverline;
+
+  /// First-run guide, page 2: serif title. 'A homiletic' is one study written with the BSF homiletics method.
+  ///
+  /// In en, this message translates to:
+  /// **'What is a homiletic?'**
+  String get onboardingMethodTitle;
+
+  /// First-run guide, page 2: short explanation of the homiletics method.
+  ///
+  /// In en, this message translates to:
+  /// **'A homiletic is a short way of studying a passage: you find its main message, then think about how to live it out. It takes six steps — and it doesn\'t have to be perfect. It gets easier every week.'**
+  String get onboardingMethodBody;
+
+  /// First-run guide, page 3: small uppercase label above the title.
+  ///
+  /// In en, this message translates to:
+  /// **'Step by step'**
+  String get onboardingStepsOverline;
+
+  /// First-run guide, page 3: serif title over the list of the six homiletic steps.
+  ///
+  /// In en, this message translates to:
+  /// **'The six steps'**
+  String get onboardingStepsTitle;
+
+  /// First-run guide, page 3: one-line description of the Content step (shown after its name).
+  ///
+  /// In en, this message translates to:
+  /// **'Summarize the passage in 10–20 short chunks, in your own words.'**
+  String get onboardingStepContent;
+
+  /// First-run guide, page 3: one-line description of the Divisions step.
+  ///
+  /// In en, this message translates to:
+  /// **'Group those chunks into 2–4 sections.'**
+  String get onboardingStepDivisions;
+
+  /// First-run guide, page 3: one-line description of the Summary sentence step. Chinese uses 20 characters instead of 10 words, like the step's help text.
+  ///
+  /// In en, this message translates to:
+  /// **'The whole passage in 10 words or fewer.'**
+  String get onboardingStepSummary;
+
+  /// First-run guide, page 3: one-line description of the FCF step; spells out the abbreviation (use the FCF gloss from docs/TRANSLATIONS.md).
+  ///
+  /// In en, this message translates to:
+  /// **'Fallen Condition Focus: the human need or brokenness the passage speaks to.'**
+  String get onboardingStepFcf;
+
+  /// First-run guide, page 3: one-line description of the Aim step.
+  ///
+  /// In en, this message translates to:
+  /// **'The one main truth you want your hearers to learn.'**
+  String get onboardingStepAim;
+
+  /// First-run guide, page 3: one-line description of the Application step.
+  ///
+  /// In en, this message translates to:
+  /// **'Questions that turn the passage into everyday life.'**
+  String get onboardingStepApplication;
+
+  /// First-run guide, page 4: small uppercase label above the title.
+  ///
+  /// In en, this message translates to:
+  /// **'Lectures & word studies'**
+  String get onboardingLecturesOverline;
+
+  /// First-run guide, page 4: serif title.
+  ///
+  /// In en, this message translates to:
+  /// **'Listen closely, dig deeper'**
+  String get onboardingLecturesTitle;
+
+  /// First-run guide, page 4: what lecture notes do. Transcription happens on the device, not online.
+  ///
+  /// In en, this message translates to:
+  /// **'Record the lecture — it keeps going with the screen off and is transcribed right on your phone. Take notes as you listen and add time marks to find a moment again.'**
+  String get onboardingLecturesBody;
+
+  /// First-run guide, page 4: what a word study is.
+  ///
+  /// In en, this message translates to:
+  /// **'Curious about one word? Start a word study and dig into what it means in the passage.'**
+  String get onboardingWordStudyBody;
+
+  /// First-run guide, last page: small uppercase label above the title.
+  ///
+  /// In en, this message translates to:
+  /// **'Get started'**
+  String get onboardingStartOverline;
+
+  /// First-run guide, last page: serif title.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re ready to begin'**
+  String get onboardingStartTitle;
+
+  /// First-run guide, last page: encouragement before the start buttons.
+  ///
+  /// In en, this message translates to:
+  /// **'Begin with this week\'s passage, or take a look around first. Every step you write is saved as you go.'**
+  String get onboardingStartBody;
+
+  /// First-run guide, last page: small note on where to find the guide again (Settings > Help > How homiletics works).
+  ///
+  /// In en, this message translates to:
+  /// **'You can open this guide again anytime from Settings.'**
+  String get onboardingReopenHint;
+
+  /// First-run guide, last page: main button that opens a homiletic on this week's passage.
+  ///
+  /// In en, this message translates to:
+  /// **'Start this week\'s homiletic'**
+  String get onboardingStartThisWeek;
+
+  /// First-run guide, last page: button that closes the guide and shows the home screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Explore on my own'**
+  String get onboardingExplore;
+
+  /// First-run guide, last page: line above the start button naming this week's passage, e.g. 'This week: John 3:1–21'.
+  ///
+  /// In en, this message translates to:
+  /// **'This week: {passage}'**
+  String onboardingThisWeekPassage(String passage);
+
+  /// Settings > Help: row that reopens the first-run guide explaining the homiletics method.
+  ///
+  /// In en, this message translates to:
+  /// **'How homiletics works'**
+  String get onboardingSettingsRow;
+
+  /// Picker subtitle for a Bible translation that can be downloaded to read without internet.
+  ///
+  /// In en, this message translates to:
+  /// **'Offline · {size}'**
+  String bibleOfflineSize(String size);
+
+  /// Picker subtitle for a Bible translation already downloaded to the device.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloaded · {size}'**
+  String bibleDownloadedSize(String size);
+
+  /// Button / tooltip: download this Bible translation so passages show without internet.
+  ///
+  /// In en, this message translates to:
+  /// **'Download for offline'**
+  String get bibleDownloadAction;
+
+  /// Shown while a Bible translation is downloading.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloading…'**
+  String get bibleDownloading;
+
+  /// Tooltip: delete the downloaded copy of a Bible translation (it can be downloaded again).
+  ///
+  /// In en, this message translates to:
+  /// **'Remove download'**
+  String get bibleRemoveDownload;
+
+  /// Snack bar when downloading a Bible translation fails.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t download {translation}. Check your connection and try again.'**
+  String bibleDownloadFailed(String translation);
+
+  /// Title in the verse panel when the passage cannot load because the phone is offline.
+  ///
+  /// In en, this message translates to:
+  /// **'No connection'**
+  String get bibleOfflineTitle;
+
+  /// Verse panel message when offline and the current Bible translation can be downloaded.
+  ///
+  /// In en, this message translates to:
+  /// **'This passage comes from Bible Gateway, which needs the internet. Download {translation} to read it anywhere.'**
+  String bibleOfflineMessage(String translation);
+
+  /// Verse panel message when offline and the current Bible translation cannot be downloaded.
+  ///
+  /// In en, this message translates to:
+  /// **'This passage comes from Bible Gateway, which needs the internet. Connect and try again.'**
+  String get bibleOfflineNoDownloadMessage;
+
+  /// Button in the verse panel to reload the passage.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get bibleTryAgain;
+
+  /// Title in the verse panel for a Bible translation that is only available as a download.
+  ///
+  /// In en, this message translates to:
+  /// **'Download {translation}'**
+  String bibleNeedsDownloadTitle(String translation);
+
+  /// Verse panel message for a Bible translation that must be downloaded before it can be shown.
+  ///
+  /// In en, this message translates to:
+  /// **'This Bible is read from your device. Download it once (about {size}) to see the passage.'**
+  String bibleNeedsDownloadMessage(String size);
+
+  /// Verse panel message when the passage reference is not in the downloaded Bible text and there is no web fallback.
+  ///
+  /// In en, this message translates to:
+  /// **'This passage couldn\'t be found in {translation}.'**
+  String bibleNotInTranslation(String translation);
+
+  /// Small hint under the Content step of a homiletics study: tapping a verse number in the passage adds a content summary starting at that verse.
+  ///
+  /// In en, this message translates to:
+  /// **'Tip: tap a verse number to start a summary there.'**
+  String get bibleVerseTapTip;
+
+  /// Screen-reader label for a tappable verse number in the passage.
+  ///
+  /// In en, this message translates to:
+  /// **'Start a summary at verse {verse}'**
+  String bibleVerseTapLabel(String verse);
 }
 
 class _AppLocalizationsDelegate

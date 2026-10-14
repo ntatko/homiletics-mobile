@@ -3,6 +3,7 @@ import 'package:homiletics/classes/language.dart';
 import 'package:homiletics/classes/preferences.dart';
 import 'package:homiletics/classes/translation.dart';
 import 'package:homiletics/l10n/l10n.dart';
+import 'package:homiletics/services/bible_text_service.dart';
 import 'package:homiletics/theme/app_theme.dart';
 import 'package:homiletics/theme/widgets.dart';
 
@@ -198,12 +199,16 @@ class _PickerRow extends StatelessWidget {
   final bool selected;
   final VoidCallback onTap;
 
+  /// A button after the trailing text (e.g. download / remove).
+  final Widget? action;
+
   const _PickerRow({
     required this.title,
     required this.selected,
     required this.onTap,
     this.subtitle,
     this.trailing,
+    this.action,
   });
 
   @override
@@ -246,6 +251,7 @@ class _PickerRow extends StatelessWidget {
                             color: selected ? c.accent : c.muted,
                             fontWeight: FontWeight.w600)),
                   ],
+                  if (action != null) action!,
                   const SizedBox(width: 8),
                   SizedBox(
                     width: 22,
@@ -291,12 +297,103 @@ class _AppLanguageSheet extends StatelessWidget {
 }
 
 /// Bible translations grouped by language (the app language's first).
-class _TranslationSheet extends StatelessWidget {
+/// Translations with an offline text show their download state and a
+/// download / remove button.
+class _TranslationSheet extends StatefulWidget {
   const _TranslationSheet();
+
+  @override
+  State<_TranslationSheet> createState() => _TranslationSheetState();
+}
+
+class _TranslationSheetState extends State<_TranslationSheet> {
+  final BibleTextService _service = BibleTextService.instance;
+  final Map<String, int> _sizes = {};
+
+  @override
+  void initState() {
+    super.initState();
+    _service.changes.addListener(_refresh);
+    _refresh();
+  }
+
+  @override
+  void dispose() {
+    _service.changes.removeListener(_refresh);
+    super.dispose();
+  }
+
+  Future<void> _refresh() async {
+    final Map<String, int> sizes = {};
+    for (final Translation t in Translation.all) {
+      if (!t.offlineAvailable) continue;
+      final int? size = await _service.downloadedSize(t);
+      if (size != null) sizes[t.code] = size;
+    }
+    if (!mounted) return;
+    setState(() {
+      _sizes
+        ..clear()
+        ..addAll(sizes);
+    });
+  }
+
+  Future<void> _download(Translation t) async {
+    final ScaffoldMessengerState? messenger =
+        ScaffoldMessenger.maybeOf(context);
+    final String failed = context.l10n.bibleDownloadFailed(t.short);
+    final bool ok = await _service.download(t);
+    if (!ok) messenger?.showSnackBar(SnackBar(content: Text(failed)));
+  }
+
+  String? _subtitle(Translation t, AppLocalizations l) {
+    final List<String> lines = [
+      if (t.newTestamentOnly) l.bibleNewTestamentOnly,
+      if (t.offlineAvailable)
+        _service.isDownloading(t)
+            ? l.bibleDownloading
+            : _sizes.containsKey(t.code)
+                ? l.bibleDownloadedSize(formatBibleSize(_sizes[t.code]!))
+                : l.bibleOfflineSize(formatBibleSize(t.offlineBytes!)),
+      if (t.attribution != null) t.attribution!,
+    ];
+    return lines.isEmpty ? null : lines.join('\n');
+  }
+
+  Widget? _action(Translation t, AppColors c, AppLocalizations l) {
+    if (!t.offlineAvailable) return null;
+    if (_service.isDownloading(t)) {
+      return SizedBox(
+        width: 44,
+        height: 44,
+        child: Center(
+          child: SizedBox(
+            width: 18,
+            height: 18,
+            child: CircularProgressIndicator(
+                strokeWidth: 2, value: _service.progress(t), color: c.accent),
+          ),
+        ),
+      );
+    }
+    final bool downloaded = _sizes.containsKey(t.code);
+    return IconButton(
+      tooltip: downloaded ? l.bibleRemoveDownload : l.bibleDownloadAction,
+      constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
+      icon: Icon(
+          downloaded
+              ? Icons.delete_outline_rounded
+              : Icons.download_for_offline_outlined,
+          size: 22,
+          color: downloaded ? c.muted : c.accent),
+      onPressed: () => downloaded ? _service.delete(t) : _download(t),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     final AppLocalizations l = context.l10n;
+    final AppColors c = AppColors.of(context);
     final String current = Preferences.translation.code;
     final groups = Translation.groupedFor(Preferences.effectiveLanguage);
     return _PickerSheet(
@@ -310,9 +407,10 @@ class _TranslationSheet extends StatelessWidget {
           for (final Translation t in group.value)
             _PickerRow(
               title: t.name,
-              subtitle: t.newTestamentOnly ? l.bibleNewTestamentOnly : null,
+              subtitle: _subtitle(t, l),
               trailing: t.short,
               selected: t.code == current,
+              action: _action(t, c, l),
               onTap: () => Navigator.pop(context, t),
             ),
         ],

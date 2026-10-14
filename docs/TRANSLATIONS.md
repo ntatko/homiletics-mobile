@@ -56,6 +56,11 @@ abbreviation with a local gloss.
   fr "cette {itemName}" with all-feminine names, sw avoids "this"). If an
   item name is ever reused elsewhere, revisit.
 
+### Walkthrough (first run)
+- pt "Pular" for Skip (Brazilian; "Saltar" in Portugal/Africa).
+- zh Settings row "讲道大纲怎么做" / zh_Hant equivalent.
+- es avoids gendered "Bienvenido/a" with "Te damos la bienvenida".
+
 ### Español
 - "Conferencia" for lecture — confirm against BSF Spanish materials.
 - Word-study tile letter "P" (Palabra) rather than "E".

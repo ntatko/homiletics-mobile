@@ -1153,4 +1153,181 @@ class AppLocalizationsSw extends AppLocalizations {
   String wordStudySectionHelpSemantics(String title) {
     return '$title, kuhusu sehemu hii';
   }
+
+  @override
+  String get lectureTimeMarkNoRecording =>
+      'Maelezo haya hayana rekodi ya kucheza.';
+
+  @override
+  String get lectureTimeMarkStopRecordingFirst =>
+      'Simamisha kurekodi ili kucheza kuanzia alama ya muda.';
+
+  @override
+  String get lectureTimeMarkPastEnd =>
+      'Alama hiyo ya muda iko baada ya mwisho wa rekodi.';
+
+  @override
+  String get onboardingSkip => 'Ruka';
+
+  @override
+  String get onboardingBack => 'Rudi';
+
+  @override
+  String get onboardingNext => 'Endelea';
+
+  @override
+  String get onboardingWelcomeOverline => 'Karibu';
+
+  @override
+  String get onboardingWelcomeTitle =>
+      'Jifunze Biblia, kifungu kimoja kwa wakati';
+
+  @override
+  String get onboardingWelcomeBody =>
+      'Homiletics inakusaidia kuandika homiletiki yako, kuandika maelezo ya hotuba na kufanya uchunguzi wa neno — kifungu kikiwa wazi kando yako, kwa lugha yako na tafsiri yako ya Biblia.';
+
+  @override
+  String get onboardingMethodOverline => 'Mbinu';
+
+  @override
+  String get onboardingMethodTitle => 'Homiletiki ni nini?';
+
+  @override
+  String get onboardingMethodBody =>
+      'Homiletiki ni njia fupi ya kujifunza kifungu: unatafuta ujumbe wake mkuu, kisha unafikiri jinsi ya kuuishi. Ina hatua sita — na haihitaji kuwa kamili. Inakuwa rahisi kila wiki.';
+
+  @override
+  String get onboardingStepsOverline => 'Hatua kwa hatua';
+
+  @override
+  String get onboardingStepsTitle => 'Hatua sita';
+
+  @override
+  String get onboardingStepContent =>
+      'Fupisha kifungu kwa vipande vifupi 10–20, kwa maneno yako mwenyewe.';
+
+  @override
+  String get onboardingStepDivisions =>
+      'Panga vipande hivyo katika sehemu 2–4.';
+
+  @override
+  String get onboardingStepSummary =>
+      'Kifungu kizima kwa maneno 10 au machache.';
+
+  @override
+  String get onboardingStepFcf =>
+      'Kiini cha Hali ya Kuanguka: hitaji au uvunjifu wa mwanadamu ambao kifungu kinazungumzia.';
+
+  @override
+  String get onboardingStepAim =>
+      'Kweli moja kuu unayotaka wasikilizaji wako wajifunze.';
+
+  @override
+  String get onboardingStepApplication =>
+      'Maswali yanayogeuza kifungu kuwa maisha ya kila siku.';
+
+  @override
+  String get onboardingLecturesOverline => 'Hotuba na uchunguzi wa neno';
+
+  @override
+  String get onboardingLecturesTitle => 'Sikiliza kwa makini, chimba zaidi';
+
+  @override
+  String get onboardingLecturesBody =>
+      'Rekodi hotuba — inaendelea hata skrini ikiwa imezimwa na inanakiliwa kwenye simu yako yenyewe. Andika maelezo unaposikiliza na uweke alama za muda ili kupata tena sehemu fulani.';
+
+  @override
+  String get onboardingWordStudyBody =>
+      'Una hamu ya kujua neno moja? Anza uchunguzi wa neno na uchimbe maana yake katika kifungu.';
+
+  @override
+  String get onboardingStartOverline => 'Anza';
+
+  @override
+  String get onboardingStartTitle => 'Uko tayari kuanza';
+
+  @override
+  String get onboardingStartBody =>
+      'Anza na kifungu cha wiki hii, au angalia kwanza. Kila hatua unayoandika inahifadhiwa papo hapo.';
+
+  @override
+  String get onboardingReopenHint =>
+      'Unaweza kufungua mwongozo huu tena wakati wowote kutoka Mipangilio.';
+
+  @override
+  String get onboardingStartThisWeek => 'Anza homiletiki ya wiki hii';
+
+  @override
+  String get onboardingExplore => 'Gundua mwenyewe';
+
+  @override
+  String onboardingThisWeekPassage(String passage) {
+    return 'Wiki hii: $passage';
+  }
+
+  @override
+  String get onboardingSettingsRow => 'Jinsi homiletiki inavyofanya kazi';
+
+  @override
+  String bibleOfflineSize(String size) {
+    return 'Bila mtandao · $size';
+  }
+
+  @override
+  String bibleDownloadedSize(String size) {
+    return 'Imepakuliwa · $size';
+  }
+
+  @override
+  String get bibleDownloadAction => 'Pakua kwa matumizi bila mtandao';
+
+  @override
+  String get bibleDownloading => 'Inapakua…';
+
+  @override
+  String get bibleRemoveDownload => 'Ondoa upakuaji';
+
+  @override
+  String bibleDownloadFailed(String translation) {
+    return 'Imeshindwa kupakua $translation. Angalia muunganisho wako kisha ujaribu tena.';
+  }
+
+  @override
+  String get bibleOfflineTitle => 'Hakuna muunganisho';
+
+  @override
+  String bibleOfflineMessage(String translation) {
+    return 'Kifungu hiki kinatoka Bible Gateway, kinachohitaji intaneti. Pakua $translation ili ukisome popote.';
+  }
+
+  @override
+  String get bibleOfflineNoDownloadMessage =>
+      'Kifungu hiki kinatoka Bible Gateway, kinachohitaji intaneti. Unganisha kisha ujaribu tena.';
+
+  @override
+  String get bibleTryAgain => 'Jaribu tena';
+
+  @override
+  String bibleNeedsDownloadTitle(String translation) {
+    return 'Pakua $translation';
+  }
+
+  @override
+  String bibleNeedsDownloadMessage(String size) {
+    return 'Biblia hii inasomwa kutoka kwenye kifaa chako. Ipakue mara moja (karibu $size) ili kuona kifungu.';
+  }
+
+  @override
+  String bibleNotInTranslation(String translation) {
+    return 'Kifungu hiki hakikupatikana katika $translation.';
+  }
+
+  @override
+  String get bibleVerseTapTip =>
+      'Kidokezo: gusa namba ya mstari ili kuanza muhtasari hapo.';
+
+  @override
+  String bibleVerseTapLabel(String verse) {
+    return 'Anza muhtasari kwenye mstari $verse';
+  }
 }

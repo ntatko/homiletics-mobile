@@ -5,6 +5,7 @@ import 'package:homiletics/components/help_menu.dart';
 import 'package:homiletics/components/preferences_modal.dart';
 import 'package:homiletics/components/model_settings.dart';
 import 'package:homiletics/l10n/l10n.dart';
+import 'package:homiletics/pages/onboarding/onboarding_launcher.dart';
 import 'package:homiletics/theme/app_theme.dart';
 import 'package:homiletics/theme/widgets.dart';
 
@@ -49,6 +50,13 @@ class SettingsPage extends StatelessWidget {
                 const FormattingModelSettings(),
                 heading(l.settingsSectionHelp),
                 _SettingsRow(
+                  key: const ValueKey('settingsOnboarding'),
+                  icon: Icons.school_outlined,
+                  label: l.onboardingSettingsRow,
+                  onTap: () => showOnboarding(context),
+                ),
+                const SizedBox(height: 10),
+                _SettingsRow(
                   icon: Icons.chat_bubble_outline_rounded,
                   label: l.helpRequestFeedback,
                   onTap: () => showFeedbackSheet(context),
@@ -78,6 +86,7 @@ class _SettingsRow extends StatelessWidget {
   final VoidCallback onTap;
 
   const _SettingsRow({
+    super.key,
     required this.icon,
     required this.label,
     required this.onTap,

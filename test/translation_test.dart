@@ -21,11 +21,49 @@ void main() {
   test('every translation maps to a Bible Gateway code and a named language',
       () {
     for (final t in Translation.all) {
+      if (t.offlineOnly) continue;
       expect(t.bibleGatewayCode, isNotEmpty, reason: t.code);
       expect(getBibleGatewayVersion(t), t.bibleGatewayCode, reason: t.code);
       expect(Translation.languageNames.containsKey(t.languageCode), isTrue,
           reason: t.code);
     }
+  });
+
+  test('offline-only translations have offline data and an attribution', () {
+    final offlineOnly = Translation.all.where((t) => t.offlineOnly).toList();
+    expect(offlineOnly, isNotEmpty);
+    for (final t in offlineOnly) {
+      expect(t.offlineAvailable, isTrue, reason: t.code);
+      expect(t.webAvailable, isFalse, reason: t.code);
+      expect(t.attribution, isNotNull, reason: t.code);
+      expect(t.attribution, isNotEmpty, reason: t.code);
+      // Other Bible Gateway features (e.g. Other usage search) get the
+      // language's default there, never an empty code.
+      final String fallback = getBibleGatewayVersion(t);
+      expect(fallback, isNotEmpty, reason: t.code);
+      expect(
+          Translation.all.any((o) =>
+              o.bibleGatewayCode == fallback &&
+              o.languageCode == t.languageCode),
+          isTrue,
+          reason: t.code);
+    }
+    expect(getBibleGatewayVersion(Translation.blivre), 'NVI-PT');
+  });
+
+  test('offline translations keep their codes and note any licence', () {
+    for (final code in [
+      'web', 'kjv', 'bbe', 'rv1909', 'lsg', 'cuvmps', 'cuvmpt', 'ccb', //
+      'ccbt', 'blivre', 'snt',
+    ]) {
+      final t = Translation.all.firstWhere((t) => t.code == code);
+      expect(t.offlineAvailable, isTrue, reason: code);
+    }
+    for (final code in ['ccb', 'ccbt', 'blivre', 'snt']) {
+      final t = Translation.all.firstWhere((t) => t.code == code);
+      expect(t.attribution, contains('CC BY'), reason: code);
+    }
+    expect(getBibleGatewayVersion(Translation.rv1909), 'RVA');
   });
 
   test('Chinese translations declare a script', () {

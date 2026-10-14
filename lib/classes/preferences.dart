@@ -12,6 +12,7 @@ class Preferences {
       'hasSeenTranscriptionPrompt';
   static const String _hasSeenFormattingPromptKey = 'hasSeenFormattingPrompt';
   static const String _appLanguageKey = 'appLanguage';
+  static const String _hasSeenOnboardingKey = 'hasSeenOnboarding';
 
   /// The interface language the user picked, or null to follow the phone.
   /// MaterialApp listens to this so a change applies immediately.
@@ -60,4 +61,12 @@ class Preferences {
 
   static set hasSeenFormattingPrompt(bool seen) =>
       Hive.box(_boxKey).put(_hasSeenFormattingPromptKey, seen);
+
+  /// Whether the first-run guide ("How homiletics works") has been shown
+  /// or skipped, so Home doesn't open it again.
+  static bool get hasSeenOnboarding =>
+      Hive.box(_boxKey).get(_hasSeenOnboardingKey) ?? false;
+
+  static set hasSeenOnboarding(bool seen) =>
+      Hive.box(_boxKey).put(_hasSeenOnboardingKey, seen);
 }

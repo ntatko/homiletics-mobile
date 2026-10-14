@@ -1573,5 +1573,254 @@
         "description": "The section's title."
       }
     }
+  },
+  "lectureTimeMarkNoRecording": "This note has no recording to play.",
+  "@lectureTimeMarkNoRecording": {
+    "description": "Snackbar when the user taps a time mark like [14:02] in lecture notes but the note has no recording."
+  },
+  "lectureTimeMarkStopRecordingFirst": "Stop recording to play from a time mark.",
+  "@lectureTimeMarkStopRecordingFirst": {
+    "description": "Snackbar when the user taps a time mark in lecture notes while a recording is still in progress."
+  },
+  "lectureTimeMarkPastEnd": "That time mark is past the end of the recording.",
+  "@lectureTimeMarkPastEnd": {
+    "description": "Snackbar when a tapped time mark in lecture notes is later than the length of the note's recording (e.g. the lecture was recorded again)."
+  },
+  "onboardingSkip": "Skip",
+  "@onboardingSkip": {
+    "description": "First-run guide: button that closes the guide early."
+  },
+  "onboardingBack": "Back",
+  "@onboardingBack": {
+    "description": "First-run guide: button to go to the previous page."
+  },
+  "onboardingNext": "Next",
+  "@onboardingNext": {
+    "description": "First-run guide: button to go to the next page."
+  },
+  "onboardingWelcomeOverline": "Welcome",
+  "@onboardingWelcomeOverline": {
+    "description": "First-run guide, page 1: small uppercase label above the title."
+  },
+  "onboardingWelcomeTitle": "Study the Bible, one passage at a time",
+  "@onboardingWelcomeTitle": {
+    "description": "First-run guide, page 1: serif title."
+  },
+  "onboardingWelcomeBody": "Homiletics helps you write your homiletics, take lecture notes and do word studies — all with the passage open beside you, in your language and your Bible translation.",
+  "@onboardingWelcomeBody": {
+    "description": "First-run guide, page 1: what the app helps with. 'Homiletics' here is the BSF study method."
+  },
+  "onboardingMethodOverline": "The method",
+  "@onboardingMethodOverline": {
+    "description": "First-run guide, page 2: small uppercase label above the title."
+  },
+  "onboardingMethodTitle": "What is a homiletic?",
+  "@onboardingMethodTitle": {
+    "description": "First-run guide, page 2: serif title. 'A homiletic' is one study written with the BSF homiletics method."
+  },
+  "onboardingMethodBody": "A homiletic is a short way of studying a passage: you find its main message, then think about how to live it out. It takes six steps — and it doesn't have to be perfect. It gets easier every week.",
+  "@onboardingMethodBody": {
+    "description": "First-run guide, page 2: short explanation of the homiletics method."
+  },
+  "onboardingStepsOverline": "Step by step",
+  "@onboardingStepsOverline": {
+    "description": "First-run guide, page 3: small uppercase label above the title."
+  },
+  "onboardingStepsTitle": "The six steps",
+  "@onboardingStepsTitle": {
+    "description": "First-run guide, page 3: serif title over the list of the six homiletic steps."
+  },
+  "onboardingStepContent": "Summarize the passage in 10–20 short chunks, in your own words.",
+  "@onboardingStepContent": {
+    "description": "First-run guide, page 3: one-line description of the Content step (shown after its name)."
+  },
+  "onboardingStepDivisions": "Group those chunks into 2–4 sections.",
+  "@onboardingStepDivisions": {
+    "description": "First-run guide, page 3: one-line description of the Divisions step."
+  },
+  "onboardingStepSummary": "The whole passage in 10 words or fewer.",
+  "@onboardingStepSummary": {
+    "description": "First-run guide, page 3: one-line description of the Summary sentence step. Chinese uses 20 characters instead of 10 words, like the step's help text."
+  },
+  "onboardingStepFcf": "Fallen Condition Focus: the human need or brokenness the passage speaks to.",
+  "@onboardingStepFcf": {
+    "description": "First-run guide, page 3: one-line description of the FCF step; spells out the abbreviation (use the FCF gloss from docs/TRANSLATIONS.md)."
+  },
+  "onboardingStepAim": "The one main truth you want your hearers to learn.",
+  "@onboardingStepAim": {
+    "description": "First-run guide, page 3: one-line description of the Aim step."
+  },
+  "onboardingStepApplication": "Questions that turn the passage into everyday life.",
+  "@onboardingStepApplication": {
+    "description": "First-run guide, page 3: one-line description of the Application step."
+  },
+  "onboardingLecturesOverline": "Lectures & word studies",
+  "@onboardingLecturesOverline": {
+    "description": "First-run guide, page 4: small uppercase label above the title."
+  },
+  "onboardingLecturesTitle": "Listen closely, dig deeper",
+  "@onboardingLecturesTitle": {
+    "description": "First-run guide, page 4: serif title."
+  },
+  "onboardingLecturesBody": "Record the lecture — it keeps going with the screen off and is transcribed right on your phone. Take notes as you listen and add time marks to find a moment again.",
+  "@onboardingLecturesBody": {
+    "description": "First-run guide, page 4: what lecture notes do. Transcription happens on the device, not online."
+  },
+  "onboardingWordStudyBody": "Curious about one word? Start a word study and dig into what it means in the passage.",
+  "@onboardingWordStudyBody": {
+    "description": "First-run guide, page 4: what a word study is."
+  },
+  "onboardingStartOverline": "Get started",
+  "@onboardingStartOverline": {
+    "description": "First-run guide, last page: small uppercase label above the title."
+  },
+  "onboardingStartTitle": "You're ready to begin",
+  "@onboardingStartTitle": {
+    "description": "First-run guide, last page: serif title."
+  },
+  "onboardingStartBody": "Begin with this week's passage, or take a look around first. Every step you write is saved as you go.",
+  "@onboardingStartBody": {
+    "description": "First-run guide, last page: encouragement before the start buttons."
+  },
+  "onboardingReopenHint": "You can open this guide again anytime from Settings.",
+  "@onboardingReopenHint": {
+    "description": "First-run guide, last page: small note on where to find the guide again (Settings > Help > How homiletics works)."
+  },
+  "onboardingStartThisWeek": "Start this week's homiletic",
+  "@onboardingStartThisWeek": {
+    "description": "First-run guide, last page: main button that opens a homiletic on this week's passage."
+  },
+  "onboardingExplore": "Explore on my own",
+  "@onboardingExplore": {
+    "description": "First-run guide, last page: button that closes the guide and shows the home screen."
+  },
+  "onboardingThisWeekPassage": "This week: {passage}",
+  "@onboardingThisWeekPassage": {
+    "description": "First-run guide, last page: line above the start button naming this week's passage, e.g. 'This week: John 3:1–21'.",
+    "placeholders": {
+      "passage": {
+        "type": "String"
+      }
+    }
+  },
+  "onboardingSettingsRow": "How homiletics works",
+  "@onboardingSettingsRow": {
+    "description": "Settings > Help: row that reopens the first-run guide explaining the homiletics method."
+  },
+  "bibleOfflineSize": "Offline · {size}",
+  "@bibleOfflineSize": {
+    "description": "Picker subtitle for a Bible translation that can be downloaded to read without internet.",
+    "placeholders": {
+      "size": {
+        "type": "String",
+        "example": "1.3 MB",
+        "description": "Download size, already formatted, e.g. \"1.3 MB\"."
+      }
+    }
+  },
+  "bibleDownloadedSize": "Downloaded · {size}",
+  "@bibleDownloadedSize": {
+    "description": "Picker subtitle for a Bible translation already downloaded to the device.",
+    "placeholders": {
+      "size": {
+        "type": "String",
+        "example": "1.3 MB",
+        "description": "Download size, already formatted, e.g. \"1.3 MB\"."
+      }
+    }
+  },
+  "bibleDownloadAction": "Download for offline",
+  "@bibleDownloadAction": {
+    "description": "Button / tooltip: download this Bible translation so passages show without internet."
+  },
+  "bibleDownloading": "Downloading…",
+  "@bibleDownloading": {
+    "description": "Shown while a Bible translation is downloading."
+  },
+  "bibleRemoveDownload": "Remove download",
+  "@bibleRemoveDownload": {
+    "description": "Tooltip: delete the downloaded copy of a Bible translation (it can be downloaded again)."
+  },
+  "bibleDownloadFailed": "Couldn't download {translation}. Check your connection and try again.",
+  "@bibleDownloadFailed": {
+    "description": "Snack bar when downloading a Bible translation fails.",
+    "placeholders": {
+      "translation": {
+        "type": "String",
+        "example": "NIV",
+        "description": "Short code or name of the Bible translation, e.g. \"WEB\" (not localized)."
+      }
+    }
+  },
+  "bibleOfflineTitle": "No connection",
+  "@bibleOfflineTitle": {
+    "description": "Title in the verse panel when the passage cannot load because the phone is offline."
+  },
+  "bibleOfflineMessage": "This passage comes from Bible Gateway, which needs the internet. Download {translation} to read it anywhere.",
+  "@bibleOfflineMessage": {
+    "description": "Verse panel message when offline and the current Bible translation can be downloaded.",
+    "placeholders": {
+      "translation": {
+        "type": "String",
+        "example": "NIV",
+        "description": "Short code or name of the Bible translation, e.g. \"WEB\" (not localized)."
+      }
+    }
+  },
+  "bibleOfflineNoDownloadMessage": "This passage comes from Bible Gateway, which needs the internet. Connect and try again.",
+  "@bibleOfflineNoDownloadMessage": {
+    "description": "Verse panel message when offline and the current Bible translation cannot be downloaded."
+  },
+  "bibleTryAgain": "Try again",
+  "@bibleTryAgain": {
+    "description": "Button in the verse panel to reload the passage."
+  },
+  "bibleNeedsDownloadTitle": "Download {translation}",
+  "@bibleNeedsDownloadTitle": {
+    "description": "Title in the verse panel for a Bible translation that is only available as a download.",
+    "placeholders": {
+      "translation": {
+        "type": "String",
+        "example": "NIV",
+        "description": "Short code or name of the Bible translation, e.g. \"WEB\" (not localized)."
+      }
+    }
+  },
+  "bibleNeedsDownloadMessage": "This Bible is read from your device. Download it once (about {size}) to see the passage.",
+  "@bibleNeedsDownloadMessage": {
+    "description": "Verse panel message for a Bible translation that must be downloaded before it can be shown.",
+    "placeholders": {
+      "size": {
+        "type": "String",
+        "example": "1.3 MB",
+        "description": "Download size, already formatted, e.g. \"1.3 MB\"."
+      }
+    }
+  },
+  "bibleNotInTranslation": "This passage couldn't be found in {translation}.",
+  "@bibleNotInTranslation": {
+    "description": "Verse panel message when the passage reference is not in the downloaded Bible text and there is no web fallback.",
+    "placeholders": {
+      "translation": {
+        "type": "String",
+        "example": "NIV",
+        "description": "Short code or name of the Bible translation, e.g. \"WEB\" (not localized)."
+      }
+    }
+  },
+  "bibleVerseTapTip": "Tip: tap a verse number to start a summary there.",
+  "@bibleVerseTapTip": {
+    "description": "Small hint under the Content step of a homiletics study: tapping a verse number in the passage adds a content summary starting at that verse."
+  },
+  "bibleVerseTapLabel": "Start a summary at verse {verse}",
+  "@bibleVerseTapLabel": {
+    "description": "Screen-reader label for a tappable verse number in the passage.",
+    "placeholders": {
+      "verse": {
+        "type": "String",
+        "example": "4",
+        "description": "Verse number, e.g. \"4\" or \"3:4\"."
+      }
+    }
   }
 }

@@ -11,6 +11,16 @@ String formatClock(Duration d) {
 /// Tabular figures, so a running clock doesn't jitter.
 const List<FontFeature> _tabular = [FontFeature.tabularFigures()];
 
+/// How a tappable time mark ("[14:02]") reads inside the notes: accent
+/// text on the accent tint, with tabular figures. (Quill draws marks as
+/// plain text runs, so the tint is a flat highlight rather than a pill.)
+TextStyle timeMarkTextStyle(AppColors c) => TextStyle(
+      color: c.accent,
+      backgroundColor: c.accentTint,
+      fontWeight: FontWeight.w600,
+      fontFeatures: _tabular,
+    );
+
 /// Secondary text on the dark recording bar.
 Color recordingBarMuted(AppColors c) =>
     c.onRecordingBar.withValues(alpha: 0.72);

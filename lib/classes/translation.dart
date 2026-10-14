@@ -1,6 +1,8 @@
 import 'package:homiletics/classes/language.dart';
 
-/// A Bible translation the passage view can show (via Bible Gateway).
+/// A Bible translation the passage view can show: from Bible Gateway in a
+/// web view, or natively from a downloaded offline text (see
+/// [offlineBytes] and data/bibles/SOURCES.md).
 ///
 /// [code] is what gets persisted in Preferences, so existing codes must
 /// never be renamed.
@@ -22,6 +24,19 @@ class Translation {
   /// True when only the New Testament is available.
   final bool newTestamentOnly;
 
+  /// Approximate download size of the offline text
+  /// (data/bibles/<code>.json.gz), or null when there is none. Printed by
+  /// tool/build_bibles.py.
+  final int? offlineBytes;
+
+  /// True when the text exists only offline (Bible Gateway doesn't host
+  /// it); [bibleGatewayCode] is empty and the web view is never used.
+  final bool offlineOnly;
+
+  /// Copyright / licence line that must be shown with the text (CC BY and
+  /// CC BY-SA texts); null when none is needed.
+  final String? attribution;
+
   Translation(
     this.name,
     this.short,
@@ -31,7 +46,16 @@ class Translation {
     this.scriptCode,
     String? bibleGatewayCode,
     this.newTestamentOnly = false,
-  }) : bibleGatewayCode = bibleGatewayCode ?? short;
+    this.offlineBytes,
+    this.offlineOnly = false,
+    this.attribution,
+  }) : bibleGatewayCode = offlineOnly ? '' : (bibleGatewayCode ?? short);
+
+  /// Whether a text can be downloaded for offline, native reading.
+  bool get offlineAvailable => offlineBytes != null;
+
+  /// Whether Bible Gateway hosts this translation.
+  bool get webAvailable => bibleGatewayCode.isNotEmpty;
 
   /// A Bible Gateway translation; the app code is the lowercased BG code.
   Translation._bg(
@@ -40,6 +64,8 @@ class Translation {
     String languageCode, {
     String? scriptCode,
     bool newTestamentOnly = false,
+    int? offlineBytes,
+    String? attribution,
   }) : this(
           name,
           bgCode,
@@ -49,15 +75,20 @@ class Translation {
           scriptCode: scriptCode,
           bibleGatewayCode: bgCode,
           newTestamentOnly: newTestamentOnly,
+          offlineBytes: offlineBytes,
+          attribution: attribution,
         );
 
   // ---- English ----
-  static Translation bbe =
-      Translation('Bible in Basic English', 'BBE', 'bbe', 'bibleapi');
-  static Translation kjv =
-      Translation('King James Version', 'KJV', 'kjv', 'bibleapi');
-  static Translation web =
-      Translation('World English Bible', 'WEB', 'web', 'bibleapi');
+  static Translation bbe = Translation(
+      'Bible in Basic English', 'BBE', 'bbe', 'bibleapi',
+      offlineBytes: 1242399);
+  static Translation kjv = Translation(
+      'King James Version', 'KJV', 'kjv', 'bibleapi',
+      offlineBytes: 1293980);
+  static Translation web = Translation(
+      'World English Bible', 'WEB', 'web', 'bibleapi',
+      offlineBytes: 1291688);
   static Translation oebCw = Translation(
       'Open English Bible, Commonwealth Edition',
       'OEB-CW',
@@ -114,33 +145,44 @@ class Translation {
       Translation._bg('Palabra de Dios para Todos', 'PDT', 'es');
   static Translation tla =
       Translation._bg('Traducción en lenguaje actual', 'TLA', 'es');
+  // Bible Gateway calls the 1909 text "Reina-Valera Antigua" (RVA).
+  static Translation rv1909 = Translation(
+      'Reina-Valera 1909', 'RV1909', 'rv1909', 'ebible',
+      languageCode: 'es', bibleGatewayCode: 'RVA', offlineBytes: 1303438);
 
   // ---- 中文 (简体) ----
   static Translation cuvs =
       Translation._bg('和合本（简体）', 'CUVS', 'zh', scriptCode: 'Hans');
-  static Translation cuvmps =
-      Translation._bg('新标点和合本（简体）', 'CUVMPS', 'zh', scriptCode: 'Hans');
+  static Translation cuvmps = Translation._bg('新标点和合本（简体）', 'CUVMPS', 'zh',
+      scriptCode: 'Hans', offlineBytes: 1253426);
   static Translation cnvs =
       Translation._bg('新译本（简体）', 'CNVS', 'zh', scriptCode: 'Hans');
-  static Translation ccb =
-      Translation._bg('当代译本（简体）', 'CCB', 'zh', scriptCode: 'Hans');
+  static Translation ccb = Translation._bg('当代译本（简体）', 'CCB', 'zh',
+      scriptCode: 'Hans',
+      offlineBytes: 1259030,
+      attribution: 'Biblica® 圣经当代译本™开放资源 © 1979–2022 Biblica, Inc. · '
+          'CC BY-SA 4.0');
   static Translation rcu17ss =
       Translation._bg('和合本修订版（简体，神版）', 'RCU17SS', 'zh', scriptCode: 'Hans');
 
   // ---- 中文 (繁體) ----
   static Translation cuv =
       Translation._bg('和合本（繁體）', 'CUV', 'zh', scriptCode: 'Hant');
-  static Translation cuvmpt =
-      Translation._bg('新標點和合本（繁體）', 'CUVMPT', 'zh', scriptCode: 'Hant');
+  static Translation cuvmpt = Translation._bg('新標點和合本（繁體）', 'CUVMPT', 'zh',
+      scriptCode: 'Hant', offlineBytes: 1256221);
   static Translation cnvt =
       Translation._bg('新譯本（繁體）', 'CNVT', 'zh', scriptCode: 'Hant');
-  static Translation ccbt =
-      Translation._bg('當代譯本（繁體）', 'CCBT', 'zh', scriptCode: 'Hant');
+  static Translation ccbt = Translation._bg('當代譯本（繁體）', 'CCBT', 'zh',
+      scriptCode: 'Hant',
+      offlineBytes: 1262131,
+      attribution: 'Biblica® 聖經，當代譯本™開放資源 © 1979–2023 Biblica, Inc. · '
+          'CC BY-SA 4.0');
   static Translation rcu17ts =
       Translation._bg('和合本修訂版（繁體，神版）', 'RCU17TS', 'zh', scriptCode: 'Hant');
 
   // ---- Français ----
-  static Translation lsg = Translation._bg('Louis Segond', 'LSG', 'fr');
+  static Translation lsg =
+      Translation._bg('Louis Segond', 'LSG', 'fr', offlineBytes: 1409428);
   static Translation sg21 = Translation._bg('Segond 21', 'SG21', 'fr');
   static Translation bds = Translation._bg('La Bible du Semeur', 'BDS', 'fr');
   static Translation neg1979 =
@@ -156,10 +198,21 @@ class Translation {
   static Translation ntlh =
       Translation._bg('Nova Tradução na Linguagem de Hoje 2000', 'NTLH', 'pt');
   static Translation ol = Translation._bg('O Livro', 'OL', 'pt');
+  // Almeida-based and freely licensed; not on Bible Gateway.
+  static Translation blivre =
+      Translation('Bíblia Livre', 'BLIVRE', 'blivre', 'ebible',
+          languageCode: 'pt',
+          offlineOnly: true,
+          offlineBytes: 1296131,
+          attribution: 'Bíblia Livre © 2018 Diego Santos, Mario Sérgio e '
+              'Marco Teles · CC BY 4.0 BR');
 
   // ---- Kiswahili ----
   static Translation snt =
-      Translation._bg('Neno: Bibilia Takatifu', 'SNT', 'sw');
+      Translation._bg('Neno: Bibilia Takatifu', 'SNT', 'sw',
+          offlineBytes: 1365550,
+          attribution: 'Biblica® Toleo Wazi Neno: Bibilia Takatifu™ '
+              '© 1984–2015 Biblica, Inc. · CC BY-SA 4.0');
   static Translation tku = Translation._bg(
       'Agano Jipya: Tafsiri ya Kusoma-Kwa-Urahisi', 'TKU', 'sw',
       newTestamentOnly: true);
@@ -202,14 +255,14 @@ class Translation {
         // net,
         // asv,
         // Spanish
-        rvr1960, nvi, ntv, lbla, nbla, dhh, rvc, pdt, tla,
+        rvr1960, nvi, ntv, lbla, nbla, dhh, rvc, pdt, tla, rv1909,
         // Chinese
         cuvs, cuvmps, cnvs, ccb, rcu17ss,
         cuv, cuvmpt, cnvt, ccbt, rcu17ts,
         // French
         lsg, sg21, bds, neg1979,
         // Portuguese
-        nviPt, arc, nvt, ntlh, ol,
+        nviPt, arc, nvt, ntlh, ol, blivre,
         // Swahili
         snt, tku,
         // Yoruba, Chichewa, Luganda, Somali, Twi, Arabic
@@ -247,6 +300,25 @@ class Translation {
         return snt;
       default:
         return web;
+    }
+  }
+
+  /// The Bible Gateway translation to use for a [languageCode] (and
+  /// [scriptCode]) when a translation has no Bible Gateway code of its own.
+  static Translation webFallbackFor(String languageCode, {String? scriptCode}) {
+    switch (languageCode) {
+      case 'es':
+        return rvr1960;
+      case 'zh':
+        return scriptCode == 'Hant' ? cuv : cuvs;
+      case 'fr':
+        return lsg;
+      case 'pt':
+        return nviPt;
+      case 'sw':
+        return snt;
+      default:
+        return niv;
     }
   }
 

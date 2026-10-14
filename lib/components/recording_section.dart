@@ -15,6 +15,21 @@ import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:record/record.dart';
 
+/// Lets the notes editor play a [RecordingSection]'s recording from a time
+/// mark. Pass it to one RecordingSection at a time.
+class RecordingSectionController {
+  _RecordingSectionState? _state;
+
+  /// While recording, taps on time marks should just place the cursor.
+  bool get isRecording => _state?._isRecording ?? false;
+
+  /// Plays the note's recording from [position] (seeking if it's already
+  /// playing or paused), or shows a snackbar saying why it can't.
+  Future<void> playFrom(Duration position) async {
+    await _state?._playFrom(position);
+  }
+}
+
 /// Record/playback/transcribe a lecture: the dark recording bar, then a
 /// "My notes" | "Transcript" tab row. The notes tab shows [notesToolbar]
 /// over [notesEditor]; the transcript tab shows the note's transcript.
@@ -30,12 +45,16 @@ class RecordingSection extends StatefulWidget {
   /// button only shows while recording, and only when this is set.
   final ValueChanged<String>? onTimeMark;
 
+  /// Lets the notes play the recording from a tapped time mark.
+  final RecordingSectionController? controller;
+
   const RecordingSection({
     Key? key,
     required this.note,
     required this.notesToolbar,
     required this.notesEditor,
     this.onTimeMark,
+    this.controller,
   }) : super(key: key);
 
   @override
@@ -93,6 +112,7 @@ class _RecordingSectionState extends State<RecordingSection>
   @override
   void initState() {
     super.initState();
+    widget.controller?._state = this;
     _playerStateSub = _player.onPlayerStateChanged.listen((state) {
       if (!mounted) return;
       setState(() {
@@ -130,7 +150,19 @@ class _RecordingSectionState extends State<RecordingSection>
   }
 
   @override
+  void didUpdateWidget(covariant RecordingSection oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.controller != widget.controller) {
+      if (oldWidget.controller?._state == this) {
+        oldWidget.controller!._state = null;
+      }
+      widget.controller?._state = this;
+    }
+  }
+
+  @override
   void dispose() {
+    if (widget.controller?._state == this) widget.controller!._state = null;
     _timer?.cancel();
     _playerStateSub?.cancel();
     _positionSub?.cancel();
@@ -541,6 +573,55 @@ class _RecordingSectionState extends State<RecordingSection>
       await _player.seek(position);
     } catch (error) {
       sendError(error, "RecordingSection seek");
+    }
+  }
+
+  /// Plays from a tapped time mark: seeks if the recording is already
+  /// playing or paused (resuming if paused), otherwise starts it there.
+  Future<void> _playFrom(Duration position) async {
+    if (!mounted) return;
+    final AppLocalizations l10n = context.l10n;
+    final ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
+    void tell(String message) {
+      messenger
+        ..hideCurrentSnackBar()
+        ..showSnackBar(SnackBar(content: Text(message)));
+    }
+
+    if (_isRecording || _busy) {
+      tell(l10n.lectureTimeMarkStopRecordingFirst);
+      return;
+    }
+    if (widget.note.recordingPath == null) {
+      tell(l10n.lectureTimeMarkNoRecording);
+      return;
+    }
+    final Duration? total = _recordingDuration ?? _playerDuration;
+    if (total != null && total > Duration.zero && position >= total) {
+      tell(l10n.lectureTimeMarkPastEnd);
+      return;
+    }
+    try {
+      if (_canSeek) {
+        await _player.seek(position);
+        if (_player.state == PlayerState.paused) await _player.resume();
+        return;
+      }
+      final String? path = await widget.note.recordingFilePath();
+      if (path == null || !await File(path).exists()) {
+        if (!mounted) return;
+        tell(l10n.lectureRecordingFileNotFound);
+        return;
+      }
+      if (!mounted) return;
+      // Show the new spot right away instead of 0:00 until the first
+      // position update arrives.
+      setState(() => _position = position);
+      await _player.play(DeviceFileSource(path), position: position);
+    } catch (error) {
+      sendError(error, "RecordingSection play from time mark");
+      if (!mounted) return;
+      tell(l10n.lecturePlaybackFailed);
     }
   }
 

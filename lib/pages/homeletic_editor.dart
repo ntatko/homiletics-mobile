@@ -13,6 +13,7 @@ import 'package:homiletics/components/homiletics/divisions_card.dart';
 import 'package:homiletics/components/homiletics/fcf_card.dart';
 import 'package:homiletics/components/homiletics/summary_sentence_card.dart';
 import 'package:homiletics/l10n/l10n.dart';
+import 'package:homiletics/services/bible_text_service.dart';
 import 'package:homiletics/storage/application_storage.dart';
 import 'package:homiletics/storage/content_summary_storage.dart';
 import 'package:homiletics/storage/division_storage.dart';
@@ -43,6 +44,12 @@ class _HomileticState extends State<HomileticEditor> {
   /// Set once the user opens or closes a step, so finishing the load
   /// doesn't override their choice.
   bool _userChoseStep = false;
+
+  final GlobalKey<ContentSummariesCardState> _contentCardKey =
+      GlobalKey<ContentSummariesCardState>();
+
+  /// Whether to show the "tap a verse number" tip (until it's first used).
+  bool _showVerseTapTip = !VerseTapTip.hasUsed;
 
   final Map<StudyStep, GlobalKey> _stepKeys = {
     for (final StudyStep step in StudyStep.values) step: GlobalKey(),
@@ -218,6 +225,8 @@ class _HomileticState extends State<HomileticEditor> {
     switch (step) {
       case StudyStep.content:
         return ContentSummariesCard(
+            key: _contentCardKey,
+            showVerseTapTip: _showVerseTapTip,
             contentSummaries: _summaries,
             homiletic: _thisHomiletic,
             addContentSummary: () {
@@ -346,6 +355,34 @@ class _HomileticState extends State<HomileticEditor> {
     ];
   }
 
+  /// A verse number in the passage was tapped: start a Content summary
+  /// there. Fills the last row when it's completely empty, otherwise adds
+  /// one, opens the Content step and puts the cursor in the summary.
+  Future<void> _startSummaryAt(String verses) async {
+    final ContentSummary? last = _summaries.lastOrNull;
+    final ContentSummary row =
+        last != null && !_filled(last.summary) && !_filled(last.passage)
+            ? last
+            : ContentSummary.blank(_thisHomiletic.id);
+    VerseTapTip.markUsed();
+    setState(() {
+      if (!identical(row, last)) _summaries.add(row);
+      row.passage = verses;
+      _expanded.add(StudyStep.content);
+      _userChoseStep = true;
+      _showVerseTapTip = false;
+    });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _contentCardKey.currentState?.focusSummary(row);
+    });
+    try {
+      await row.updatePassage(verses);
+      await _thisHomiletic.update();
+    } catch (error) {
+      sendError(error, "start content summary from verse");
+    }
+  }
+
   Future<void> _runPdfAction(Future<void> Function() action, String success,
       String failure, String errorIdentifier) async {
     final ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
@@ -396,6 +433,7 @@ class _HomileticState extends State<HomileticEditor> {
       deletedMessage: l.homileticDeletedMessage,
       deleteErrorIdentifier: "delete homiletics",
       onDelete: _thisHomiletic.delete,
+      onVerseTap: _startSummaryAt,
       extraActions: [
         EditorMenuAction(
             icon: Icons.ios_share_rounded,

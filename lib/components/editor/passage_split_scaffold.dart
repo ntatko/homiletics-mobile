@@ -72,6 +72,11 @@ class PassageSplitScaffold extends StatefulWidget {
   /// starts with.
   final double verseWeight;
 
+  /// Called when a verse number in the verse panel is tapped, with "4" —
+  /// or "3:4" when the passage spans chapters. Verse numbers are only
+  /// tappable when this is set.
+  final ValueChanged<String>? onVerseTap;
+
   const PassageSplitScaffold({
     Key? key,
     required this.initialPassage,
@@ -86,6 +91,7 @@ class PassageSplitScaffold extends StatefulWidget {
     this.headerLabel,
     this.versePanelFirst = true,
     this.verseWeight = 0.34,
+    this.onVerseTap,
   }) : super(key: key);
 
   @override
@@ -229,7 +235,8 @@ class _PassageSplitScaffoldState extends State<PassageSplitScaffold> {
                   key: _versePaneKey,
                   passage: _versePassage,
                   translation: translation,
-                  onTranslationTap: _openPreferences),
+                  onTranslationTap: _openPreferences,
+                  onVerseTap: widget.onVerseTap),
             ),
           ],
         ),

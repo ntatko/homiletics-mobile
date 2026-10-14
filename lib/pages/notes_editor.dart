@@ -6,6 +6,7 @@ import 'package:flutter_quill/flutter_quill.dart';
 import 'package:homiletics/classes/lecture_note.dart';
 import 'package:homiletics/common/study_data_builder.dart';
 import 'package:homiletics/components/editor/passage_split_scaffold.dart';
+import 'package:homiletics/components/lecture/time_marks.dart';
 import 'package:homiletics/components/recording_section.dart';
 import 'package:homiletics/l10n/l10n.dart';
 import 'package:homiletics/theme/app_theme.dart';
@@ -25,6 +26,7 @@ class _NotesState extends State<NotesEditor> {
 
   late final LectureNote _thisNote;
   late final QuillController _noteController;
+  final RecordingSectionController _recording = RecordingSectionController();
 
   /// The Delta JSON last copied into [_thisNote.note], so selection-only
   /// changes (which also notify the controller) don't trigger saves.
@@ -118,6 +120,19 @@ class _NotesState extends State<NotesEditor> {
         TextSelection.collapsed(offset: from + mark.length));
   }
 
+  /// Plays the recording from a tapped time mark. Returns whether the tap
+  /// was used, so a tap anywhere else (or any tap while recording, when
+  /// there's nothing to play yet) still places the cursor.
+  bool _onEditorTapUp(
+      TapUpDetails details, TextPosition Function(Offset) positionAt) {
+    if (_recording.isRecording) return false;
+    final TimeMark? mark = timeMarkInDocumentAt(
+        _noteController.document, positionAt(details.globalPosition).offset);
+    if (mark == null) return false;
+    _recording.playFrom(mark.position);
+    return true;
+  }
+
   Widget _toolbarButton(Attribute attribute, Widget icon, String tooltip) {
     // Driven straight from the controller: flutter_quill's
     // QuillToolbarToggleStyleButton childBuilder hook throws a type error
@@ -171,6 +186,10 @@ class _NotesState extends State<NotesEditor> {
       controller: _noteController,
       config: QuillEditorConfig(
         placeholder: l10n.lectureNotesPlaceholder,
+        // Time marks ("[14:02]") stay plain text in the Delta; they're
+        // styled when drawn and found again when tapped.
+        textSpanBuilder: timeMarkSpanBuilder(timeMarkTextStyle(c)),
+        onTapUp: _onEditorTapUp,
         padding: const EdgeInsets.fromLTRB(24, 10, 24, 24),
         customStyles: DefaultStyles(
           paragraph: DefaultTextBlockStyle(noteStyle, noSpacing,
@@ -204,6 +223,7 @@ class _NotesState extends State<NotesEditor> {
         notesToolbar: toolbar,
         notesEditor: editor,
         onTimeMark: _insertTimeMark,
+        controller: _recording,
       ),
     );
   }

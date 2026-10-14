@@ -8,6 +8,7 @@ import 'package:homiletics/components/continue_studies.dart';
 import 'package:homiletics/components/current_lesson.dart';
 import 'package:homiletics/components/help_menu.dart';
 import 'package:homiletics/components/start_activity.dart';
+import 'package:homiletics/pages/onboarding/onboarding_launcher.dart';
 import 'package:homiletics/pages/search_page.dart';
 import 'package:homiletics/pages/settings_page.dart';
 import 'package:homiletics/theme/app_theme.dart';
@@ -32,6 +33,19 @@ class _HomeState extends State<Home> {
   final TextEditingController _searchController = TextEditingController();
   final FocusNode _searchFocusNode = FocusNode();
   bool _searching = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _maybeShowOnboarding());
+  }
+
+  /// Opens the first-run guide on a fresh install (see
+  /// [shouldShowOnboarding]); everyone else finds it in Settings.
+  Future<void> _maybeShowOnboarding() async {
+    if (!await shouldShowOnboarding() || !mounted) return;
+    await showOnboarding(context);
+  }
 
   void _openSettings() {
     Navigator.of(context).push(
