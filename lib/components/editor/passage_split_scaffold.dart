@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:homiletics/classes/preferences.dart';
 import 'package:homiletics/common/report_error.dart';
 import 'package:homiletics/common/verse_container.dart';
+import 'package:homiletics/components/editor/fold_aware_split.dart';
 import 'package:homiletics/components/preferences_modal.dart';
 import 'package:homiletics/l10n/l10n.dart';
 import 'package:homiletics/theme/app_theme.dart';
@@ -246,6 +247,30 @@ class _PassageSplitScaffoldState extends State<PassageSplitScaffold> {
     );
   }
 
+  /// Whether the verse panel comes first in the draggable split.
+  bool _verseFirst(bool isLandscape) => isLandscape || widget.versePanelFirst;
+
+  SplitViewController _splitController(bool isLandscape) =>
+      _splitControllers.putIfAbsent(isLandscape, () {
+        final bool verseFirst = _verseFirst(isLandscape);
+        return SplitViewController(
+          weights: verseFirst
+              ? [widget.verseWeight, 1 - widget.verseWeight]
+              : [1 - widget.verseWeight, widget.verseWeight],
+          limits: [WeightLimit(min: 0.12), WeightLimit(min: 0.2)],
+        );
+      });
+
+  /// The verse panel's current share of the draggable split in [direction]
+  /// (where a fold snap starts from). Reading it doesn't change the user's
+  /// saved divider position.
+  double _verseShare(Axis direction) {
+    final bool isLandscape = direction == Axis.horizontal;
+    final List<double?> weights = _splitController(isLandscape).weights;
+    final double? share = weights[_verseFirst(isLandscape) ? 0 : 1];
+    return share ?? widget.verseWeight;
+  }
+
   @override
   Widget build(BuildContext context) {
     final AppColors c = AppColors.of(context);
@@ -356,40 +381,36 @@ class _PassageSplitScaffoldState extends State<PassageSplitScaffold> {
               ]),
             ),
             Expanded(
-              child: LayoutBuilder(builder: (context, constraints) {
-                // Use screen size to determine orientation, not available
-                // space, so opening the keyboard doesn't flip the layout.
-                final screenSize = MediaQuery.sizeOf(context);
-                final isLandscape = screenSize.width > screenSize.height;
-                final bool verseFirst = isLandscape || widget.versePanelFirst;
-                final mode = isLandscape
-                    ? SplitViewMode.Horizontal
-                    : SplitViewMode.Vertical;
-                final controller = _splitControllers.putIfAbsent(
-                    isLandscape,
-                    () => SplitViewController(
-                          weights: verseFirst
-                              ? [widget.verseWeight, 1 - widget.verseWeight]
-                              : [1 - widget.verseWeight, widget.verseWeight],
-                          limits: [
-                            WeightLimit(min: 0.12),
-                            WeightLimit(min: 0.2)
-                          ],
-                        ));
-                return SplitView(
-                    controller: controller,
-                    viewMode: mode,
-                    gripSize: 22,
-                    gripColor: c.ground,
-                    gripColorActive: c.surfaceSunken,
-                    indicator: DragHandle(
-                        axis: isLandscape ? Axis.vertical : Axis.horizontal),
-                    activeIndicator: DragHandle(
-                        axis: isLandscape ? Axis.vertical : Axis.horizontal),
-                    children: verseFirst
-                        ? [versePane, studyPane]
-                        : [studyPane, versePane]);
-              }),
+              child: FoldAwareSplit(
+                first: versePane,
+                second: studyPane,
+                startFraction: _verseShare,
+                flat: (context) =>
+                    LayoutBuilder(builder: (context, constraints) {
+                  // Use screen size to determine orientation, not available
+                  // space, so opening the keyboard doesn't flip the layout.
+                  final screenSize = MediaQuery.sizeOf(context);
+                  final isLandscape = screenSize.width > screenSize.height;
+                  final bool verseFirst = _verseFirst(isLandscape);
+                  final mode = isLandscape
+                      ? SplitViewMode.Horizontal
+                      : SplitViewMode.Vertical;
+                  final controller = _splitController(isLandscape);
+                  return SplitView(
+                      controller: controller,
+                      viewMode: mode,
+                      gripSize: 22,
+                      gripColor: c.ground,
+                      gripColorActive: c.surfaceSunken,
+                      indicator: DragHandle(
+                          axis: isLandscape ? Axis.vertical : Axis.horizontal),
+                      activeIndicator: DragHandle(
+                          axis: isLandscape ? Axis.vertical : Axis.horizontal),
+                      children: verseFirst
+                          ? [versePane, studyPane]
+                          : [studyPane, versePane]);
+                }),
+              ),
             ),
           ]),
         ));
