@@ -127,6 +127,9 @@ String _readingCss(AppColors c) => """
     color: ${_hex(c.muted)} !important;
   }
   a, a * { color: ${_hex(c.accent)} !important; }
+  #homiletics-reader, .passage-text, .passage-content,
+  .passage-content > div { margin-top: 0 !important; padding-top: 0 !important; }
+  .passage-content > div > :first-child { margin-top: 4px !important; }
 """;
 
 class VerseContainerState extends State<VerseContainer> {
@@ -236,6 +239,20 @@ class VerseContainerState extends State<VerseContainer> {
           (document.head || document.documentElement).appendChild(style);
         }
         style.innerHTML = `$css`;
+        // Keep only the scripture (and its copyright notice): the print
+        // view still carries Bible Gateway's logo, menus and title table.
+        var text = document.querySelector('.passage-text');
+        if (text && !document.getElementById('homiletics-reader')) {
+          var reader = document.createElement('div');
+          reader.id = 'homiletics-reader';
+          reader.appendChild(text);
+          var notice = document.querySelector('.publisher-info-bottom');
+          if (notice) reader.appendChild(notice);
+          var keep = style;
+          Array.prototype.slice.call(document.body.children).forEach(
+            function (el) { if (el !== keep) el.remove(); });
+          document.body.appendChild(reader);
+        }
       })();
     ''';
     try {
