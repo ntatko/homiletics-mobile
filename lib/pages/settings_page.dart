@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:homiletics/classes/language.dart';
+import 'package:homiletics/components/backup_settings.dart';
 import 'package:homiletics/classes/preferences.dart';
 import 'package:homiletics/components/help_menu.dart';
 import 'package:homiletics/components/preferences_modal.dart';
@@ -13,7 +14,8 @@ import 'package:homiletics/theme/widgets.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 /// Full-screen settings (same controls as the editor preferences dialog),
-/// plus the app language, the on-device models and help / feedback.
+/// plus the app language, the on-device models, backup & restore and
+/// help / feedback.
 class SettingsPage extends StatelessWidget {
   const SettingsPage({Key? key, this.onTranslationChanged}) : super(key: key);
 
@@ -51,6 +53,8 @@ class SettingsPage extends StatelessWidget {
                 heading(l.settingsSectionModels),
                 const WhisperModelSettings(),
                 const FormattingModelSettings(),
+                heading(l.settingsSectionBackup),
+                const BackupSettings(),
                 heading(l.settingsSectionHelp),
                 _SettingsRow(
                   key: const ValueKey('settingsOnboarding'),

@@ -13,6 +13,7 @@ class Preferences {
   static const String _hasSeenFormattingPromptKey = 'hasSeenFormattingPrompt';
   static const String _appLanguageKey = 'appLanguage';
   static const String _hasSeenOnboardingKey = 'hasSeenOnboarding';
+  static const String _lastBackupAtKey = 'lastBackupAt';
   static const String _lastUpdateCheckKey = 'lastUpdateCheck';
   static const String _skippedUpdateVersionKey = 'skippedUpdateVersion';
 
@@ -71,6 +72,14 @@ class Preferences {
 
   static set hasSeenOnboarding(bool seen) =>
       Hive.box(_boxKey).put(_hasSeenOnboardingKey, seen);
+
+  /// When the user last made a backup (Settings → Backup & restore), or
+  /// null if never.
+  static DateTime? get lastBackupAt =>
+      DateTime.tryParse(Hive.box(_boxKey).get(_lastBackupAtKey) as String? ?? '');
+
+  static set lastBackupAt(DateTime? time) =>
+      Hive.box(_boxKey).put(_lastBackupAtKey, time?.toIso8601String());
 
   /// When the Windows update check last reached GitHub (see UpdateService).
   static DateTime? get lastUpdateCheck {

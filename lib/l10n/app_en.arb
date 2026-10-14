@@ -1997,6 +1997,122 @@
   "@wordStudyOtherUsageOpenedInBrowser": {
     "description": "Windows only: snackbar after the 'other usage' Bible Gateway search was opened in the web browser (it can't be shown in the app there); the user types or pastes references into the field themselves."
   },
+  "settingsSectionBackup": "Backup & restore",
+  "@settingsSectionBackup": {
+    "description": "Settings section heading for making and restoring backups."
+  },
+  "backupExplainer": "Save all your studies in one file and keep it in Google Drive, Files or anywhere you like. The app doesn't upload it anywhere.",
+  "@backupExplainer": {
+    "description": "Short explanation under the Backup & restore heading. The app never uploads the file itself."
+  },
+  "backupNow": "Back up now",
+  "@backupNow": {
+    "description": "Button that makes a backup file and opens the share sheet / save dialog."
+  },
+  "backupLastTime": "Last backup: {time}",
+  "@backupLastTime": {
+    "description": "Under the Back up button. {time} is a relative time such as \"3 days ago\".",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "example": "3 days ago"
+      }
+    }
+  },
+  "backupNever": "Not backed up yet",
+  "@backupNever": {
+    "description": "Under the Back up button when no backup has been made on this device."
+  },
+  "backupIncludeRecordings": "Include lecture recordings ({size})",
+  "@backupIncludeRecordings": {
+    "description": "Switch: whether the backup includes lecture audio. {size} is like \"12 MB\".",
+    "placeholders": {
+      "size": {
+        "type": "String",
+        "example": "12 MB"
+      }
+    }
+  },
+  "backupSaved": "Backup saved",
+  "@backupSaved": {
+    "description": "Snackbar after the backup file was saved (desktop)."
+  },
+  "backupFailed": "Couldn't make the backup. Please try again.",
+  "@backupFailed": {
+    "description": "Snackbar when making the backup failed."
+  },
+  "restoreFromBackup": "Restore from backup",
+  "@restoreFromBackup": {
+    "description": "Button that opens a file picker to restore a backup file."
+  },
+  "restorePreviewTitle": "Restore this backup?",
+  "@restorePreviewTitle": {
+    "description": "Title of the dialog shown before restoring a backup."
+  },
+  "restorePreviewCreated": "Made {date}",
+  "@restorePreviewCreated": {
+    "description": "In the restore dialog: when the backup was made. {date} is a date like \"Oct 14, 2026\".",
+    "placeholders": {
+      "date": {
+        "type": "String",
+        "example": "Oct 14, 2026"
+      }
+    }
+  },
+  "restoreCountHomiletics": "Homiletics",
+  "@restoreCountHomiletics": {
+    "description": "Restore dialog row label, followed by a number."
+  },
+  "restoreCountLectureNotes": "Lecture notes",
+  "@restoreCountLectureNotes": {
+    "description": "Restore dialog row label, followed by a number."
+  },
+  "restoreCountWordStudies": "Word studies",
+  "@restoreCountWordStudies": {
+    "description": "Restore dialog row label, followed by a number."
+  },
+  "restoreCountRecordings": "Recordings",
+  "@restoreCountRecordings": {
+    "description": "Restore dialog row label, followed by a number."
+  },
+  "restorePreviewNote": "Anything you don't already have is added. Nothing on this device is changed or deleted.",
+  "@restorePreviewNote": {
+    "description": "Restore dialog: reassures that restoring only adds."
+  },
+  "restoreConfirm": "Restore",
+  "@restoreConfirm": {
+    "description": "Restore dialog confirm button."
+  },
+  "restoreDone": "Restore finished. Added: {added} · Already here: {skipped}",
+  "@restoreDone": {
+    "description": "Snackbar after restoring. {added} and {skipped} are numbers of studies.",
+    "placeholders": {
+      "added": {
+        "type": "String",
+        "example": "12"
+      },
+      "skipped": {
+        "type": "String",
+        "example": "3"
+      }
+    }
+  },
+  "restoreFailed": "Couldn't restore the backup. Please try again.",
+  "@restoreFailed": {
+    "description": "Snackbar when restoring failed for an unexpected reason."
+  },
+  "restoreNotABackup": "That file isn't a Homiletics backup.",
+  "@restoreNotABackup": {
+    "description": "Snackbar when the picked file is not a Homiletics backup."
+  },
+  "restoreDamaged": "That backup looks damaged and can't be read.",
+  "@restoreDamaged": {
+    "description": "Snackbar when the backup file is damaged."
+  },
+  "restoreNewerVersion": "This backup was made by a newer version of Homiletics. Update the app, then try again.",
+  "@restoreNewerVersion": {
+    "description": "Snackbar when the backup was made by a newer app version."
+  },
   "settingsCheckForUpdates": "Check for updates",
   "@settingsCheckForUpdates": {
     "description": "Windows only: Settings row that checks GitHub for a newer version."

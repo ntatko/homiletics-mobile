@@ -2560,6 +2560,138 @@ abstract class AppLocalizations {
   /// **'Search results opened in your browser. Type or paste the references you want to keep here.'**
   String get wordStudyOtherUsageOpenedInBrowser;
 
+  /// Settings section heading for making and restoring backups.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup & restore'**
+  String get settingsSectionBackup;
+
+  /// Short explanation under the Backup & restore heading. The app never uploads the file itself.
+  ///
+  /// In en, this message translates to:
+  /// **'Save all your studies in one file and keep it in Google Drive, Files or anywhere you like. The app doesn\'t upload it anywhere.'**
+  String get backupExplainer;
+
+  /// Button that makes a backup file and opens the share sheet / save dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Back up now'**
+  String get backupNow;
+
+  /// Under the Back up button. {time} is a relative time such as "3 days ago".
+  ///
+  /// In en, this message translates to:
+  /// **'Last backup: {time}'**
+  String backupLastTime(String time);
+
+  /// Under the Back up button when no backup has been made on this device.
+  ///
+  /// In en, this message translates to:
+  /// **'Not backed up yet'**
+  String get backupNever;
+
+  /// Switch: whether the backup includes lecture audio. {size} is like "12 MB".
+  ///
+  /// In en, this message translates to:
+  /// **'Include lecture recordings ({size})'**
+  String backupIncludeRecordings(String size);
+
+  /// Snackbar after the backup file was saved (desktop).
+  ///
+  /// In en, this message translates to:
+  /// **'Backup saved'**
+  String get backupSaved;
+
+  /// Snackbar when making the backup failed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t make the backup. Please try again.'**
+  String get backupFailed;
+
+  /// Button that opens a file picker to restore a backup file.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore from backup'**
+  String get restoreFromBackup;
+
+  /// Title of the dialog shown before restoring a backup.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore this backup?'**
+  String get restorePreviewTitle;
+
+  /// In the restore dialog: when the backup was made. {date} is a date like "Oct 14, 2026".
+  ///
+  /// In en, this message translates to:
+  /// **'Made {date}'**
+  String restorePreviewCreated(String date);
+
+  /// Restore dialog row label, followed by a number.
+  ///
+  /// In en, this message translates to:
+  /// **'Homiletics'**
+  String get restoreCountHomiletics;
+
+  /// Restore dialog row label, followed by a number.
+  ///
+  /// In en, this message translates to:
+  /// **'Lecture notes'**
+  String get restoreCountLectureNotes;
+
+  /// Restore dialog row label, followed by a number.
+  ///
+  /// In en, this message translates to:
+  /// **'Word studies'**
+  String get restoreCountWordStudies;
+
+  /// Restore dialog row label, followed by a number.
+  ///
+  /// In en, this message translates to:
+  /// **'Recordings'**
+  String get restoreCountRecordings;
+
+  /// Restore dialog: reassures that restoring only adds.
+  ///
+  /// In en, this message translates to:
+  /// **'Anything you don\'t already have is added. Nothing on this device is changed or deleted.'**
+  String get restorePreviewNote;
+
+  /// Restore dialog confirm button.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore'**
+  String get restoreConfirm;
+
+  /// Snackbar after restoring. {added} and {skipped} are numbers of studies.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore finished. Added: {added} · Already here: {skipped}'**
+  String restoreDone(String added, String skipped);
+
+  /// Snackbar when restoring failed for an unexpected reason.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t restore the backup. Please try again.'**
+  String get restoreFailed;
+
+  /// Snackbar when the picked file is not a Homiletics backup.
+  ///
+  /// In en, this message translates to:
+  /// **'That file isn\'t a Homiletics backup.'**
+  String get restoreNotABackup;
+
+  /// Snackbar when the backup file is damaged.
+  ///
+  /// In en, this message translates to:
+  /// **'That backup looks damaged and can\'t be read.'**
+  String get restoreDamaged;
+
+  /// Snackbar when the backup was made by a newer app version.
+  ///
+  /// In en, this message translates to:
+  /// **'This backup was made by a newer version of Homiletics. Update the app, then try again.'**
+  String get restoreNewerVersion;
+
   /// Windows only: Settings row that checks GitHub for a newer version.
   ///
   /// In en, this message translates to:

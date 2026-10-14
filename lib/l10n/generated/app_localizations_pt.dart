@@ -1463,6 +1463,86 @@ class AppLocalizationsPt extends AppLocalizations {
       'Os resultados foram abertos no navegador. Digite ou cole aqui as referências que deseja guardar.';
 
   @override
+  String get settingsSectionBackup => 'Cópia de segurança';
+
+  @override
+  String get backupExplainer =>
+      'Guarde todos os estudos num único ficheiro e mantenha-o no Google Drive, em Arquivos ou onde preferir. A aplicação não o envia para lugar nenhum.';
+
+  @override
+  String get backupNow => 'Fazer cópia agora';
+
+  @override
+  String backupLastTime(String time) {
+    return 'Última cópia: $time';
+  }
+
+  @override
+  String get backupNever => 'Ainda sem cópias';
+
+  @override
+  String backupIncludeRecordings(String size) {
+    return 'Incluir gravações ($size)';
+  }
+
+  @override
+  String get backupSaved => 'Cópia guardada';
+
+  @override
+  String get backupFailed => 'Não foi possível fazer a cópia. Tente novamente.';
+
+  @override
+  String get restoreFromBackup => 'Restaurar cópia';
+
+  @override
+  String get restorePreviewTitle => 'Restaurar esta cópia?';
+
+  @override
+  String restorePreviewCreated(String date) {
+    return 'Feita em $date';
+  }
+
+  @override
+  String get restoreCountHomiletics => 'Homiléticas';
+
+  @override
+  String get restoreCountLectureNotes => 'Notas de palestra';
+
+  @override
+  String get restoreCountWordStudies => 'Estudos de palavra';
+
+  @override
+  String get restoreCountRecordings => 'Gravações';
+
+  @override
+  String get restorePreviewNote =>
+      'Tudo o que ainda não tem é adicionado. Nada neste dispositivo é alterado ou apagado.';
+
+  @override
+  String get restoreConfirm => 'Restaurar';
+
+  @override
+  String restoreDone(String added, String skipped) {
+    return 'Restauro concluído. Adicionados: $added · Já existentes: $skipped';
+  }
+
+  @override
+  String get restoreFailed =>
+      'Não foi possível restaurar a cópia. Tente novamente.';
+
+  @override
+  String get restoreNotABackup =>
+      'Esse ficheiro não é uma cópia do Homiletics.';
+
+  @override
+  String get restoreDamaged =>
+      'Essa cópia parece danificada e não pode ser lida.';
+
+  @override
+  String get restoreNewerVersion =>
+      'Esta cópia foi feita por uma versão mais recente do Homiletics. Atualize a aplicação e tente novamente.';
+
+  @override
   String get settingsCheckForUpdates => 'Procurar atualizações';
 
   @override
