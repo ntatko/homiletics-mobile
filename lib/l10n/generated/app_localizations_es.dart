@@ -1334,4 +1334,25 @@ class AppLocalizationsEs extends AppLocalizations {
   String bibleVerseTapLabel(String verse) {
     return 'Empezar un resumen en el versículo $verse';
   }
+
+  @override
+  String bibleWebUnavailableTitle(String translation) {
+    return 'Lee $translation en tu navegador';
+  }
+
+  @override
+  String get bibleWebUnavailableMessage =>
+      'En Windows la aplicación no puede mostrar los pasajes de Bible Gateway dentro de la aplicación. Abre este pasaje en tu navegador o cambia a una traducción que se lee desde tu dispositivo.';
+
+  @override
+  String get bibleOpenInBrowser => 'Abrir en el navegador';
+
+  @override
+  String bibleUseOfflineTranslation(String translation) {
+    return 'Usar una traducción sin conexión ($translation)';
+  }
+
+  @override
+  String get wordStudyOtherUsageOpenedInBrowser =>
+      'Los resultados se abrieron en tu navegador. Escribe o pega aquí las referencias que quieras guardar.';
 }

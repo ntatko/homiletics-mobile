@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:http/http.dart' as http;
+import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
 /// A font for a script the bundled PDF fonts (Newsreader, Public Sans,
@@ -96,8 +97,8 @@ Set<PdfScriptFont> scriptFontsFor(Iterable<String> texts,
 /// (`pdf_fonts/`) and keeps them there for later exports.
 class PdfFontService {
   /// Where fonts are kept; replaceable in tests.
-  static Future<Directory> Function() directory = () async =>
-      Directory('${(await getApplicationSupportDirectory()).path}/pdf_fonts');
+  static Future<Directory> Function() directory = () async => Directory(
+      p.join((await getApplicationSupportDirectory()).path, 'pdf_fonts'));
 
   /// No bytes for this long means the connection is dead.
   static const Duration stallTimeout = Duration(seconds: 20);
@@ -112,7 +113,7 @@ class PdfFontService {
   static final Map<PdfScriptFont, Future<Uint8List>> _inFlight = {};
 
   static Future<File> _file(PdfScriptFont font) async =>
-      File('${(await directory()).path}/${font.fileName}');
+      File(p.join((await directory()).path, font.fileName));
 
   /// Whether [font] has already been downloaded.
   static Future<bool> isDownloaded(PdfScriptFont font) async =>

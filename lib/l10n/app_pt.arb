@@ -822,5 +822,10 @@
   "bibleNeedsDownloadMessage": "Esta Bíblia é lida do seu aparelho. Baixe-a uma vez (cerca de {size}) para ver a passagem.",
   "bibleNotInTranslation": "Não foi possível encontrar esta passagem em {translation}.",
   "bibleVerseTapTip": "Dica: toque no número de um versículo para começar um resumo ali.",
-  "bibleVerseTapLabel": "Começar um resumo no versículo {verse}"
+  "bibleVerseTapLabel": "Começar um resumo no versículo {verse}",
+  "bibleWebUnavailableTitle": "Leia {translation} no navegador",
+  "bibleWebUnavailableMessage": "No Windows, o aplicativo não consegue mostrar passagens do Bible Gateway. Abra esta passagem no navegador ou mude para uma tradução lida a partir do seu dispositivo.",
+  "bibleOpenInBrowser": "Abrir no navegador",
+  "bibleUseOfflineTranslation": "Usar uma tradução offline ({translation})",
+  "wordStudyOtherUsageOpenedInBrowser": "Os resultados foram abertos no navegador. Digite ou cole aqui as referências que deseja guardar."
 }

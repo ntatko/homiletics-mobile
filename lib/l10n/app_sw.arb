@@ -822,5 +822,10 @@
   "bibleNeedsDownloadMessage": "Biblia hii inasomwa kutoka kwenye kifaa chako. Ipakue mara moja (karibu {size}) ili kuona kifungu.",
   "bibleNotInTranslation": "Kifungu hiki hakikupatikana katika {translation}.",
   "bibleVerseTapTip": "Kidokezo: gusa namba ya mstari ili kuanza muhtasari hapo.",
-  "bibleVerseTapLabel": "Anza muhtasari kwenye mstari {verse}"
+  "bibleVerseTapLabel": "Anza muhtasari kwenye mstari {verse}",
+  "bibleWebUnavailableTitle": "Soma {translation} kwenye kivinjari",
+  "bibleWebUnavailableMessage": "Kwenye Windows, programu haiwezi kuonyesha vifungu vya Bible Gateway ndani ya programu. Fungua kifungu hiki kwenye kivinjari chako, au badilisha kwenda tafsiri inayosomwa kutoka kwenye kifaa chako.",
+  "bibleOpenInBrowser": "Fungua kwenye kivinjari",
+  "bibleUseOfflineTranslation": "Tumia tafsiri isiyohitaji mtandao ({translation})",
+  "wordStudyOtherUsageOpenedInBrowser": "Matokeo yamefunguliwa kwenye kivinjari chako. Andika au bandika hapa marejeo unayotaka kuhifadhi."
 }

@@ -1,0 +1,313 @@
+name: Release
+
+# Push a version tag to ship:   git tag v3.0.0 && git push origin v3.0.0
+#
+# The tag must match pubspec.yaml's version (v3.0.0 <-> version: 3.0.0+N).
+# This builds every downloadable artifact and publishes one GitHub Release
+# with stable file names, so the website's links always reach the newest:
+#   https://github.com/ntatko/homiletics-mobile/releases/latest/download/Homiletics-Setup.exe
+#   https://github.com/ntatko/homiletics-mobile/releases/latest/download/Homiletics-Windows.zip
+#   https://github.com/ntatko/homiletics-mobile/releases/latest/download/Homiletics.apk
+# The Android App Bundle (for Play Console) is kept as a workflow artifact,
+# not published. Tags with a hyphen (v3.1.0-beta.1) publish a pre-release.
+#
+# Manual runs (workflow_dispatch) build everything as artifacts but don't
+# publish a release.
+#
+# Android signing needs these repository secrets (Settings > Secrets):
+#   ANDROID_KEYSTORE_BASE64   base64 of the upload keystore (.jks)
+#   ANDROID_KEYSTORE_PASSWORD
+#   ANDROID_KEY_ALIAS
+#   ANDROID_KEY_PASSWORD
+# Without them the Android job is skipped with a warning and the release
+# ships without an APK.
+
+on:
+  push:
+    tags: [ "v*" ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  # Keep in step with dart.yml (flutter_quill 11.5.0 needs this).
+  FLUTTER_VERSION: '3.41.7'
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Read version from pubspec
+        id: version
+        run: |
+          full=$(sed -n 's/^version:[[:space:]]*\([^[:space:]]*\).*/\1/p' pubspec.yaml | head -1)
+          name=${full%%+*}
+          echo "version=$name" >> "$GITHUB_OUTPUT"
+          echo "pubspec version: $full"
+
+      - name: Tag matches pubspec
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          tag=${GITHUB_REF_NAME#v}
+          tag=${tag%%-*}
+          if [ "$tag" != "${{ steps.version.outputs.version }}" ]; then
+            echo "::error::Tag $GITHUB_REF_NAME doesn't match pubspec version ${{ steps.version.outputs.version }}. Bump pubspec.yaml first."
+            exit 1
+          fi
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+
+      - name: Analyze and test
+        run: |
+          flutter pub get
+          flutter analyze
+          flutter test
+
+  windows:
+    needs: verify
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Read version from pubspec
+        id: version
+        shell: pwsh
+        run: |
+          $line = Select-String -Path pubspec.yaml -Pattern '^version:\s*(\S+)' | Select-Object -First 1
+          if (-not $line) { throw "No version: line in pubspec.yaml" }
+          $full = $line.Matches[0].Groups[1].Value
+          $name = $full.Split('+')[0]
+          "version=$name" >> $env:GITHUB_OUTPUT
+          Write-Host "Version $name (pubspec $full)"
+
+      - name: Build Windows app
+        run: flutter build windows --release
+
+      # flutter_gemma's build hook bundles ~170 MB of LiteRT / OpenVINO /
+      # qdrant DLLs, but transcript formatting is off on Windows
+      # (TranscriptFormatterService.isLocalModelSupported) and they are
+      # only ever loaded on demand by that code. Drop them to keep the
+      # download small. flutter_gemma_plugin.dll itself stays (the runner
+      # registers it); it links none of these.
+      - name: Remove unused flutter_gemma native libraries
+        shell: pwsh
+        run: |
+          $release = "build\windows\x64\runner\Release"
+          $patterns = 'LiteRt*.dll', 'libLiteRt*.dll', '*GemmaModelConstraintProvider.dll',
+                      'qdrant_edge_ffi.dll', 'openvino*.dll', 'tbb*.dll',
+                      'dxcompiler.dll', 'dxil.dll', 'StreamProxy.dll'
+          foreach ($pattern in $patterns) {
+            Get-ChildItem $release -Filter $pattern | ForEach-Object {
+              Write-Host "Removing $($_.Name) ($($_.Length) bytes)"
+              Remove-Item $_.FullName
+            }
+          }
+
+      # Flutter apps need the Visual C++ runtime. Ship it next to the exe
+      # (Microsoft's "app-local" deployment) so the app starts on PCs that
+      # never installed the VC++ redistributable.
+      - name: Bundle the Visual C++ runtime
+        shell: pwsh
+        run: |
+          $release = "build\windows\x64\runner\Release"
+          foreach ($dll in 'msvcp140.dll', 'vcruntime140.dll', 'vcruntime140_1.dll') {
+            Copy-Item "$env:WINDIR\System32\$dll" $release -Force
+          }
+          Get-ChildItem $release -Recurse | Select-Object FullName, Length | Format-Table -AutoSize
+
+      # --- Code signing (not set up yet) -------------------------------
+      # Unsigned builds work but Windows SmartScreen warns on first run
+      # ("Windows protected your PC" -> More info -> Run anyway). To sign,
+      # add the Authenticode certificate as repository secrets
+      # WINDOWS_CERT_PFX_BASE64 (base64 of the .pfx) and
+      # WINDOWS_CERT_PASSWORD, then uncomment this step and the matching
+      # one after the installer is built.
+      #
+      # - name: Sign app executable
+      #   shell: pwsh
+      #   env:
+      #     CERT_PFX_BASE64: ${{ secrets.WINDOWS_CERT_PFX_BASE64 }}
+      #     CERT_PASSWORD: ${{ secrets.WINDOWS_CERT_PASSWORD }}
+      #   run: |
+      #     $pfx = "$env:RUNNER_TEMP\cert.pfx"
+      #     [IO.File]::WriteAllBytes($pfx, [Convert]::FromBase64String($env:CERT_PFX_BASE64))
+      #     $signtool = Get-ChildItem "${env:ProgramFiles(x86)}\Windows Kits\10\bin\*\x64\signtool.exe" | Select-Object -Last 1
+      #     & $signtool.FullName sign /f $pfx /p $env:CERT_PASSWORD /fd SHA256 `
+      #       /tr http://timestamp.digicert.com /td SHA256 `
+      #       build\windows\x64\runner\Release\Homiletics.exe
+      #     Remove-Item $pfx
+      # -----------------------------------------------------------------
+
+      - name: Package portable zip
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force dist | Out-Null
+          Compress-Archive -Path build\windows\x64\runner\Release\* `
+            -DestinationPath dist\Homiletics-Windows.zip -Force
+
+      - name: Install Inno Setup
+        run: choco install innosetup --no-progress -y
+
+      - name: Build installer
+        shell: pwsh
+        run: |
+          $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
+          if (-not (Test-Path $iscc)) {
+            $iscc = (Get-Command iscc.exe -ErrorAction Stop).Source
+          }
+          & $iscc `
+            "/DAppVersion=${{ steps.version.outputs.version }}" `
+            "/DSourceDir=$env:GITHUB_WORKSPACE\build\windows\x64\runner\Release" `
+            "/DOutputDir=$env:GITHUB_WORKSPACE\dist" `
+            installer\windows\homiletics.iss
+          if ($LASTEXITCODE -ne 0) { throw "ISCC failed ($LASTEXITCODE)" }
+          Get-ChildItem dist | Select-Object Name, Length | Format-Table -AutoSize
+
+      # - name: Sign installer
+      #   shell: pwsh
+      #   env:
+      #     CERT_PFX_BASE64: ${{ secrets.WINDOWS_CERT_PFX_BASE64 }}
+      #     CERT_PASSWORD: ${{ secrets.WINDOWS_CERT_PASSWORD }}
+      #   run: |
+      #     $pfx = "$env:RUNNER_TEMP\cert.pfx"
+      #     [IO.File]::WriteAllBytes($pfx, [Convert]::FromBase64String($env:CERT_PFX_BASE64))
+      #     $signtool = Get-ChildItem "${env:ProgramFiles(x86)}\Windows Kits\10\bin\*\x64\signtool.exe" | Select-Object -Last 1
+      #     & $signtool.FullName sign /f $pfx /p $env:CERT_PASSWORD /fd SHA256 `
+      #       /tr http://timestamp.digicert.com /td SHA256 dist\Homiletics-Setup.exe
+      #     Remove-Item $pfx
+
+      - name: Upload installer artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Homiletics-Setup
+          path: dist/Homiletics-Setup.exe
+          if-no-files-found: error
+
+      - name: Upload portable artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Homiletics-Windows
+          path: dist/Homiletics-Windows.zip
+          if-no-files-found: error
+
+  android:
+    needs: verify
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check signing secrets
+        id: signing
+        env:
+          KEYSTORE: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+        run: |
+          if [ -z "$KEYSTORE" ]; then
+            echo "::warning::Android signing secrets aren't set, so this release has no APK. See the comment at the top of release.yml."
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/setup-java@v4
+        if: steps.signing.outputs.ready == 'true'
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: subosito/flutter-action@v2
+        if: steps.signing.outputs.ready == 'true'
+        with:
+          channel: 'stable'
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+
+      - name: Write signing config
+        if: steps.signing.outputs.ready == 'true'
+        env:
+          KEYSTORE: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          STORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          echo "$KEYSTORE" | base64 --decode > android/app/upload-keystore.jks
+          {
+            echo "storePassword=$STORE_PASSWORD"
+            echo "keyPassword=$KEY_PASSWORD"
+            echo "keyAlias=$KEY_ALIAS"
+            echo "storeFile=upload-keystore.jks"
+          } > android/key.properties
+
+      - name: Build APK and App Bundle
+        if: steps.signing.outputs.ready == 'true'
+        run: |
+          flutter pub get
+          flutter build apk --release
+          flutter build appbundle --release
+          mkdir -p dist
+          cp build/app/outputs/flutter-apk/app-release.apk dist/Homiletics.apk
+          cp build/app/outputs/bundle/release/app-release.aab "dist/Homiletics-${{ needs.verify.outputs.version }}.aab"
+          ls -la dist
+
+      - name: Remove signing files
+        if: always()
+        run: rm -f android/app/upload-keystore.jks android/key.properties
+
+      - name: Upload APK artifact
+        if: steps.signing.outputs.ready == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: Homiletics-Android-APK
+          path: dist/Homiletics.apk
+          if-no-files-found: error
+
+      - name: Upload App Bundle artifact (for Play Console)
+        if: steps.signing.outputs.ready == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: Homiletics-Android-AAB
+          path: dist/*.aab
+          if-no-files-found: error
+
+  release:
+    needs: [verify, windows, android]
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          pattern: Homiletics-*
+          merge-multiple: true
+
+      - name: List release files
+        run: ls -la artifacts
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Homiletics ${{ needs.verify.outputs.version }}
+          generate_release_notes: true
+          prerelease: ${{ contains(github.ref_name, '-') }}
+          fail_on_unmatched_files: false
+          files: |
+            artifacts/Homiletics-Setup.exe
+            artifacts/Homiletics-Windows.zip
+            artifacts/Homiletics.apk

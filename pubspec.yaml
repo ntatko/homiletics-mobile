@@ -36,6 +36,9 @@ dependencies:
   cupertino_icons: ^1.0.2
   loggy: ^2.0.1
   sqflite: ^2.3.0
+  # sqflite has no Windows/Linux implementation; there the app uses the
+  # FFI factory instead (see initDesktopDatabase in lib/main.dart).
+  sqflite_common_ffi: ^2.4.0+3
   timeago: ^3.5.0
   string_to_hex: ^0.2.2
   http: ^1.1.0
@@ -72,7 +75,6 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^2.0.3
   flutter_launcher_icons: ^0.13.1
-  sqflite_common_ffi: ^2.4.0+3
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

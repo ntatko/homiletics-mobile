@@ -1,10 +1,14 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:homiletics/common/report_error.dart';
 import 'package:homiletics/storage/app_database.dart';
 import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart'
+    show databaseFactoryFfi, sqfliteFfiInit;
 
 /// Where the app's tables live for this run.
 ///
@@ -59,6 +63,21 @@ class AppStorage {
   /// The database holding [table] for this run.
   static Future<Database> database(String table) async =>
       (await instance).databaseFor(table);
+
+  /// sqflite has no Windows or Linux implementation, so there the app uses
+  /// sqflite_common_ffi's factory instead. Its default databases path is
+  /// under the working directory (not writable for an installed app), so
+  /// the databases go in the app support directory. Does nothing on other
+  /// platforms. Call before [init] or anything else that opens a database.
+  static Future<void> useFfiOnDesktop() async {
+    if (kIsWeb || !(Platform.isWindows || Platform.isLinux)) return;
+    sqfliteFfiInit();
+    databaseFactory = databaseFactoryFfi;
+    final Directory support = await getApplicationSupportDirectory();
+    final Directory databases = Directory(p.join(support.path, 'databases'));
+    await databases.create(recursive: true);
+    await databaseFactory.setDatabasesPath(databases.path);
+  }
 
   /// Opens storage, running the one-time migration if needed. Call before
   /// `runApp` so the migration finishes before any screen reads data.

@@ -1267,6 +1267,27 @@ class AppLocalizationsZh extends AppLocalizations {
   String bibleVerseTapLabel(String verse) {
     return '从第 $verse 节开始写摘要';
   }
+
+  @override
+  String bibleWebUnavailableTitle(String translation) {
+    return '在浏览器中阅读 $translation';
+  }
+
+  @override
+  String get bibleWebUnavailableMessage =>
+      '在 Windows 上，应用无法在应用内显示 Bible Gateway 的经文。请在浏览器中打开这段经文，或改用可在设备上离线阅读的译本。';
+
+  @override
+  String get bibleOpenInBrowser => '在浏览器中打开';
+
+  @override
+  String bibleUseOfflineTranslation(String translation) {
+    return '使用离线译本（$translation）';
+  }
+
+  @override
+  String get wordStudyOtherUsageOpenedInBrowser =>
+      '搜索结果已在浏览器中打开。请在这里输入或粘贴要保留的经文出处。';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hans`).
@@ -2532,6 +2553,27 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String bibleVerseTapLabel(String verse) {
     return '从第 $verse 节开始写摘要';
   }
+
+  @override
+  String bibleWebUnavailableTitle(String translation) {
+    return '在浏览器中阅读 $translation';
+  }
+
+  @override
+  String get bibleWebUnavailableMessage =>
+      '在 Windows 上，应用无法在应用内显示 Bible Gateway 的经文。请在浏览器中打开这段经文，或改用可在设备上离线阅读的译本。';
+
+  @override
+  String get bibleOpenInBrowser => '在浏览器中打开';
+
+  @override
+  String bibleUseOfflineTranslation(String translation) {
+    return '使用离线译本（$translation）';
+  }
+
+  @override
+  String get wordStudyOtherUsageOpenedInBrowser =>
+      '搜索结果已在浏览器中打开。请在这里输入或粘贴要保留的经文出处。';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).
@@ -3798,4 +3840,25 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String bibleVerseTapLabel(String verse) {
     return '從第 $verse 節開始寫摘要';
   }
+
+  @override
+  String bibleWebUnavailableTitle(String translation) {
+    return '在瀏覽器中閱讀 $translation';
+  }
+
+  @override
+  String get bibleWebUnavailableMessage =>
+      '在 Windows 上，應用程式無法在程式內顯示 Bible Gateway 的經文。請在瀏覽器中開啟這段經文，或改用可在裝置上離線閱讀的譯本。';
+
+  @override
+  String get bibleOpenInBrowser => '在瀏覽器中開啟';
+
+  @override
+  String bibleUseOfflineTranslation(String translation) {
+    return '使用離線譯本（$translation）';
+  }
+
+  @override
+  String get wordStudyOtherUsageOpenedInBrowser =>
+      '搜尋結果已在瀏覽器中開啟。請在這裡輸入或貼上要保留的經文出處。';
 }
