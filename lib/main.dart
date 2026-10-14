@@ -3,6 +3,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:homiletics/theme/app_theme.dart';
+import 'package:homiletics/classes/language.dart';
+import 'package:homiletics/l10n/generated/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_quill/flutter_quill.dart'
     show FlutterQuillLocalizations;
@@ -64,19 +66,27 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Homiletics',
-      debugShowCheckedModeBanner: false,
-      localizationsDelegates: const [
-        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        FlutterQuillLocalizations.delegate,
-      ],
-      theme: _buildTheme(Brightness.light),
-      darkTheme: _buildTheme(Brightness.dark),
-      themeMode: ThemeMode.system,
-      home: const Home(),
+    return ValueListenableBuilder<Language?>(
+      valueListenable: Preferences.appLanguageNotifier,
+      builder: (context, language, _) => MaterialApp(
+        onGenerateTitle: (context) => AppLocalizations.of(context).appTitle,
+        debugShowCheckedModeBanner: false,
+        locale: language?.locale,
+        supportedLocales: [for (final l in Language.all) l.locale],
+        localeResolutionCallback: (locale, _) =>
+            Language.match(locale ?? const Locale('en')).locale,
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          FlutterQuillLocalizations.delegate,
+        ],
+        theme: _buildTheme(Brightness.light),
+        darkTheme: _buildTheme(Brightness.dark),
+        themeMode: ThemeMode.system,
+        home: const Home(),
+      ),
     );
   }
 }
