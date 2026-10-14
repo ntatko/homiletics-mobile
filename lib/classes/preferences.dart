@@ -13,6 +13,8 @@ class Preferences {
   static const String _hasSeenFormattingPromptKey = 'hasSeenFormattingPrompt';
   static const String _appLanguageKey = 'appLanguage';
   static const String _hasSeenOnboardingKey = 'hasSeenOnboarding';
+  static const String _lastUpdateCheckKey = 'lastUpdateCheck';
+  static const String _skippedUpdateVersionKey = 'skippedUpdateVersion';
 
   /// The interface language the user picked, or null to follow the phone.
   /// MaterialApp listens to this so a change applies immediately.
@@ -69,4 +71,21 @@ class Preferences {
 
   static set hasSeenOnboarding(bool seen) =>
       Hive.box(_boxKey).put(_hasSeenOnboardingKey, seen);
+
+  /// When the Windows update check last reached GitHub (see UpdateService).
+  static DateTime? get lastUpdateCheck {
+    final Object? ms = Hive.box(_boxKey).get(_lastUpdateCheckKey);
+    return ms is int ? DateTime.fromMillisecondsSinceEpoch(ms) : null;
+  }
+
+  static set lastUpdateCheck(DateTime? time) =>
+      Hive.box(_boxKey).put(_lastUpdateCheckKey, time?.millisecondsSinceEpoch);
+
+  /// A version the user chose to skip, so the launch check doesn't offer
+  /// it again ("3.1.0").
+  static String? get skippedUpdateVersion =>
+      Hive.box(_boxKey).get(_skippedUpdateVersionKey) as String?;
+
+  static set skippedUpdateVersion(String? version) =>
+      Hive.box(_boxKey).put(_skippedUpdateVersionKey, version);
 }

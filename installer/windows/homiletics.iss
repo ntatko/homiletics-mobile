@@ -57,6 +57,10 @@ Compression=lzma2/max
 SolidCompression=yes
 WizardStyle=modern
 CloseApplications=yes
+; The app quits itself before an in-app update runs this installer, and
+; the [Run] entry below reopens it; Restart Manager restarting it too
+; would open it twice.
+RestartApplications=no
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -75,5 +79,24 @@ Source: "{#SourceDir}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs 
 Name: "{autoprograms}\{#AppName}"; Filename: "{app}\{#AppExeName}"
 Name: "{autodesktop}\{#AppName}"; Filename: "{app}\{#AppExeName}"; Tasks: desktopicon
 
+[INI]
+; Marks an installed (not portable zip) copy, so the app knows it can
+; update itself by running a newer Homiletics-Setup.exe (see
+; lib/services/update_service.dart).
+Filename: "{app}\install.ini"; Section: "Install"; Key: "Source"; String: "setup"
+Filename: "{app}\install.ini"; Section: "Install"; Key: "Version"; String: "{#AppVersion}"
+
+[UninstallDelete]
+Type: files; Name: "{app}\install.ini"
+
 [Run]
 Filename: "{app}\{#AppExeName}"; Description: "{cm:LaunchProgram,{#AppName}}"; Flags: nowait postinstall skipifsilent
+; An in-app update runs this installer with /SILENT /RELAUNCH=1: reopen
+; the app when it's done, as the signed-in user rather than elevated.
+Filename: "{app}\{#AppExeName}"; Flags: nowait runasoriginaluser; Check: ShouldRelaunch
+
+[Code]
+function ShouldRelaunch: Boolean;
+begin
+  Result := WizardSilent and (ExpandConstant('{param:RELAUNCH|0}') = '1');
+end;

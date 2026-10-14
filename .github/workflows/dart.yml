@@ -65,3 +65,35 @@ jobs:
 
       - name: Build Windows app
         run: flutter build windows --release
+
+      - name: Install Inno Setup
+        run: choco install innosetup --no-progress -y
+
+      # Compile the installer and install it silently, checking the files the
+      # in-app updater relies on (lib/services/update_service.dart).
+      - name: Build and smoke-test installer
+        shell: pwsh
+        run: |
+          $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
+          if (-not (Test-Path $iscc)) {
+            $iscc = (Get-Command iscc.exe -ErrorAction Stop).Source
+          }
+          & $iscc "/DAppVersion=0.0.1" `
+            "/DSourceDir=$env:GITHUB_WORKSPACE\build\windows\x64\runner\Release" `
+            "/DOutputDir=$env:GITHUB_WORKSPACE\dist" `
+            installer\windows\homiletics.iss
+          if ($LASTEXITCODE -ne 0) { throw "ISCC failed ($LASTEXITCODE)" }
+
+          $dir = "$env:RUNNER_TEMP\HomileticsCI"
+          $p = Start-Process dist\Homiletics-Setup.exe -Wait -PassThru -ArgumentList `
+            '/VERYSILENT', '/SUPPRESSMSGBOXES', '/NORESTART', '/CURRENTUSER', "/DIR=$dir"
+          if ($p.ExitCode -ne 0) { throw "Setup failed ($($p.ExitCode))" }
+          foreach ($f in 'Homiletics.exe', 'install.ini', 'unins000.exe') {
+            if (-not (Test-Path "$dir\$f")) { throw "Missing $f after install" }
+          }
+          Get-Content "$dir\install.ini"
+          if (Get-Process Homiletics -ErrorAction SilentlyContinue) {
+            throw "A silent install without /RELAUNCH=1 must not start the app"
+          }
+          $u = Start-Process "$dir\unins000.exe" -Wait -PassThru -ArgumentList '/VERYSILENT', '/SUPPRESSMSGBOXES'
+          if ($u.ExitCode -ne 0) { throw "Uninstall failed ($($u.ExitCode))" }

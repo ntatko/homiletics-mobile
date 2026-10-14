@@ -1458,4 +1458,61 @@ class AppLocalizationsSw extends AppLocalizations {
   @override
   String get wordStudyOtherUsageOpenedInBrowser =>
       'Matokeo yamefunguliwa kwenye kivinjari chako. Andika au bandika hapa marejeo unayotaka kuhifadhi.';
+
+  @override
+  String get settingsCheckForUpdates => 'Angalia masasisho';
+
+  @override
+  String settingsVersion(String version) {
+    return 'Toleo $version';
+  }
+
+  @override
+  String updateAvailableTitle(String version) {
+    return 'Homiletics $version inapatikana';
+  }
+
+  @override
+  String updateAvailableMessage(String current) {
+    return 'Una toleo $current. Mapya:';
+  }
+
+  @override
+  String get updateNow => 'Sasisha sasa';
+
+  @override
+  String get updateDownload => 'Pakua';
+
+  @override
+  String get updateLater => 'Baadaye';
+
+  @override
+  String get updateSkipVersion => 'Ruka toleo hili';
+
+  @override
+  String get updateDownloading => 'Inapakua sasisho…';
+
+  @override
+  String get updateInstalling =>
+      'Inasakinisha. Homiletics itafunguka tena baada ya muda mfupi.';
+
+  @override
+  String get updateFailed =>
+      'Sasisho halikuweza kupakuliwa. Jaribu tena, au lipakue kutoka homiletics.app.';
+
+  @override
+  String get updateTryAgain => 'Jaribu tena';
+
+  @override
+  String get updatePortableNote =>
+      'Nakala hii haikusakinishwa kwa kisakinishi, kwa hiyo pakua toleo jipya kutoka homiletics.app.';
+
+  @override
+  String updateUpToDate(String version) {
+    return 'Una toleo la karibuni (Homiletics $version).';
+  }
+
+  @override
+  String get updateCheckFailed =>
+      'Haikuweza kuangalia masasisho. Angalia muunganisho wako wa intaneti kisha ujaribu tena.';
 }

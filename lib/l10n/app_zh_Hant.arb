@@ -859,5 +859,20 @@
   "bibleWebUnavailableMessage": "在 Windows 上，應用程式無法在程式內顯示 Bible Gateway 的經文。請在瀏覽器中開啟這段經文，或改用可在裝置上離線閱讀的譯本。",
   "bibleOpenInBrowser": "在瀏覽器中開啟",
   "bibleUseOfflineTranslation": "使用離線譯本（{translation}）",
-  "wordStudyOtherUsageOpenedInBrowser": "搜尋結果已在瀏覽器中開啟。請在這裡輸入或貼上要保留的經文出處。"
+  "wordStudyOtherUsageOpenedInBrowser": "搜尋結果已在瀏覽器中開啟。請在這裡輸入或貼上要保留的經文出處。",
+  "settingsCheckForUpdates": "檢查更新",
+  "settingsVersion": "版本 {version}",
+  "updateAvailableTitle": "Homiletics {version} 現已推出",
+  "updateAvailableMessage": "你目前使用的是 {current} 版。新內容：",
+  "updateNow": "立即更新",
+  "updateDownload": "下載",
+  "updateLater": "以後再說",
+  "updateSkipVersion": "略過此版本",
+  "updateDownloading": "正在下載更新…",
+  "updateInstalling": "正在安裝，Homiletics 稍後會重新開啟。",
+  "updateFailed": "無法下載更新。請再試一次，或從 homiletics.app 下載。",
+  "updateTryAgain": "重試",
+  "updatePortableNote": "此副本不是透過安裝程式安裝的，請從 homiletics.app 下載新版本。",
+  "updateUpToDate": "已是最新版本（Homiletics {version}）。",
+  "updateCheckFailed": "無法檢查更新。請檢查網路連線後再試一次。"
 }

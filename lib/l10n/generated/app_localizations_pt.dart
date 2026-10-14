@@ -1461,4 +1461,61 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get wordStudyOtherUsageOpenedInBrowser =>
       'Os resultados foram abertos no navegador. Digite ou cole aqui as referências que deseja guardar.';
+
+  @override
+  String get settingsCheckForUpdates => 'Procurar atualizações';
+
+  @override
+  String settingsVersion(String version) {
+    return 'Versão $version';
+  }
+
+  @override
+  String updateAvailableTitle(String version) {
+    return 'Homiletics $version está disponível';
+  }
+
+  @override
+  String updateAvailableMessage(String current) {
+    return 'Versão instalada: $current. Novidades:';
+  }
+
+  @override
+  String get updateNow => 'Atualizar agora';
+
+  @override
+  String get updateDownload => 'Download';
+
+  @override
+  String get updateLater => 'Mais tarde';
+
+  @override
+  String get updateSkipVersion => 'Ignorar esta versão';
+
+  @override
+  String get updateDownloading => 'A transferir a atualização…';
+
+  @override
+  String get updateInstalling =>
+      'A instalar. O Homiletics vai reabrir dentro de momentos.';
+
+  @override
+  String get updateFailed =>
+      'Não foi possível transferir a atualização. Tente novamente ou faça o download em homiletics.app.';
+
+  @override
+  String get updateTryAgain => 'Tentar novamente';
+
+  @override
+  String get updatePortableNote =>
+      'Esta cópia não foi instalada com o instalador; faça o download da nova versão em homiletics.app.';
+
+  @override
+  String updateUpToDate(String version) {
+    return 'Já tem a versão mais recente (Homiletics $version).';
+  }
+
+  @override
+  String get updateCheckFailed =>
+      'Não foi possível procurar atualizações. Verifique a ligação à internet e tente novamente.';
 }

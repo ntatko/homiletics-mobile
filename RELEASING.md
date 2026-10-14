@@ -31,3 +31,24 @@ so they always point at the newest release.
 Windows builds are unsigned until an Authenticode certificate is added (see
 the commented signing steps in the workflow); until then Windows SmartScreen
 shows a "Windows protected your PC" prompt on first run.
+
+## How Windows users get updates
+
+Windows has no store, so the app checks for itself
+(`lib/services/update_service.dart`). At launch (at most once a day) and from
+**Settings → Check for updates**, it reads
+`https://api.github.com/repos/ntatko/homiletics-mobile/releases/latest`
+(which skips drafts and pre-releases) and offers any newer `vX.Y.Z`.
+
+- **Installed copies** (the installer writes `install.ini` next to
+  `Homiletics.exe`): **Update now** downloads that release's
+  `Homiletics-Setup.exe`, checks its size against the release asset, runs it
+  with `/SILENT /SUPPRESSMSGBOXES /CLOSEAPPLICATIONS /NORESTART /RELAUNCH=1`
+  and quits. The installer keeps the existing per-user / all-users mode and
+  reopens the app.
+- **Portable zip copies:** **Download** opens homiletics.app/download.
+
+So a release reaches Windows users as soon as it's published: keep the asset
+named `Homiletics-Setup.exe`, never change the installer's `AppId`, and use a
+hyphenated tag for anything that shouldn't be offered yet. Unsigned builds
+can still show SmartScreen when the installer runs.
