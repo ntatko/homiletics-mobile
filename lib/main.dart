@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:homiletics/theme/app_theme.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_quill/flutter_quill.dart'
     show FlutterQuillLocalizations;
@@ -55,14 +56,7 @@ void main() async {
   unawaited(TranscriptFormatterService.initialize());
 }
 
-ThemeData _buildTheme(Brightness brightness) {
-  // No explicit colorScheme: with Material 3 the old `primarySwatch` was
-  // ignored, so the app has always used the default M3 baseline scheme.
-  return ThemeData(
-    useMaterial3: true,
-    brightness: brightness,
-  );
-}
+ThemeData _buildTheme(Brightness brightness) => buildAppTheme(brightness);
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);

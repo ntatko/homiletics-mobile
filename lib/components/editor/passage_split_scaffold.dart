@@ -3,6 +3,8 @@ import 'package:homiletics/classes/preferences.dart';
 import 'package:homiletics/common/report_error.dart';
 import 'package:homiletics/common/verse_container.dart';
 import 'package:homiletics/components/preferences_modal.dart';
+import 'package:homiletics/theme/app_theme.dart';
+import 'package:homiletics/theme/widgets.dart';
 import 'package:split_view/split_view.dart';
 
 /// An extra entry in the editor's app bar menu (e.g. Share / Print).
@@ -53,6 +55,17 @@ class PassageSplitScaffold extends StatefulWidget {
   /// Shown between Delete and Preferences in the menu.
   final List<EditorMenuAction> extraActions;
 
+  /// Small label above the passage field (e.g. "Homiletics · Passage").
+  final String headerLabel;
+
+  /// In portrait, whether the verse panel sits above the study pane (true)
+  /// or below it. In landscape the verses are always on the left.
+  final bool versePanelFirst;
+
+  /// Share of the height (portrait) or width (landscape) the verse panel
+  /// starts with.
+  final double verseWeight;
+
   const PassageSplitScaffold({
     Key? key,
     required this.initialPassage,
@@ -64,6 +77,9 @@ class PassageSplitScaffold extends StatefulWidget {
     required this.deleteErrorIdentifier,
     this.passageHint,
     this.extraActions = const [],
+    this.headerLabel = 'Passage',
+    this.versePanelFirst = true,
+    this.verseWeight = 0.34,
   }) : super(key: key);
 
   @override
@@ -84,6 +100,11 @@ class _PassageSplitScaffoldState extends State<PassageSplitScaffold> {
   final GlobalKey _studyPaneKey = GlobalKey();
   final GlobalKey<VerseContainerState> _versePaneKey =
       GlobalKey<VerseContainerState>();
+  final GlobalKey _versePanelKey = GlobalKey();
+
+  /// One per orientation (the pane order can differ between them); each
+  /// keeps the user's divider position.
+  final Map<bool, SplitViewController> _splitControllers = {};
 
   bool _deleting = false;
 
@@ -182,78 +203,186 @@ class _PassageSplitScaffoldState extends State<PassageSplitScaffold> {
             )));
   }
 
+  Widget _buildVersePanel(AppColors c) {
+    final translation = Preferences.translation;
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(12, 4, 12, 4),
+      child: Material(
+        color: c.surface,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppRadius.panel),
+          side: BorderSide(color: c.line),
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(18, 10, 10, 2),
+              child: Row(children: [
+                Expanded(child: Overline(translation.name)),
+                Semantics(
+                  button: true,
+                  label: 'Change translation',
+                  child: OutlinedButton(
+                    onPressed: _openPreferences,
+                    style: OutlinedButton.styleFrom(
+                      minimumSize: const Size(0, 30),
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      side: BorderSide(color: c.line),
+                      textStyle: AppText.caption
+                          .copyWith(fontWeight: FontWeight.w500, fontSize: 12),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8)),
+                    ),
+                    child: Row(mainAxisSize: MainAxisSize.min, children: [
+                      Text(translation.short),
+                      const Icon(Icons.expand_more_rounded, size: 16),
+                    ]),
+                  ),
+                ),
+              ]),
+            ),
+            Expanded(
+              child: VerseContainer(
+                  key: _versePaneKey,
+                  passage: _versePassage,
+                  translation: translation),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final AppColors c = AppColors.of(context);
     final List<EditorMenuAction> menu = [
       EditorMenuAction(
-          icon: Icons.save, title: "Save", onSelected: () async => _close()),
-      EditorMenuAction(
-          icon: Icons.delete, title: "Delete", onSelected: _confirmDelete),
+          icon: Icons.check_rounded,
+          title: "Save and close",
+          onSelected: () async => _close()),
       ...widget.extraActions,
       EditorMenuAction(
-          icon: Icons.settings,
+          icon: Icons.tune_rounded,
           title: "Preferences",
           onSelected: _openPreferences),
+      EditorMenuAction(
+          icon: Icons.delete_outline_rounded,
+          title: "Delete",
+          onSelected: _confirmDelete),
     ];
 
     final Widget studyPane =
         KeyedSubtree(key: _studyPaneKey, child: widget.child);
-    final Widget versePane = VerseContainer(
-        key: _versePaneKey,
-        passage: _versePassage,
-        translation: Preferences.translation);
+    final Widget versePane =
+        KeyedSubtree(key: _versePanelKey, child: _buildVersePanel(c));
 
     return Scaffold(
-        appBar: AppBar(
-          title: TextField(
-            keyboardType: TextInputType.text,
-            textCapitalization: TextCapitalization.sentences,
-            controller: _passageController,
-            focusNode: _passageFocusNode,
-            decoration: InputDecoration(
-                hintText: widget.passageHint,
-                suffixIcon: const Icon(Icons.edit)),
-            onChanged: widget.onPassageChanged,
-            onSubmitted: (_) => _commitPassage(),
-          ),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: _close,
-          ),
-          actions: [
-            PopupMenuButton<EditorMenuAction>(
-                onSelected: (action) => action.onSelected(),
-                icon: const Icon(Icons.menu),
-                itemBuilder: (context) => menu
-                    .map((action) => PopupMenuItem<EditorMenuAction>(
-                          value: action,
-                          child: ListTile(
-                              leading: Icon(action.icon),
-                              title: Text(action.title)),
-                        ))
-                    .toList()),
-          ],
-        ),
-        body: LayoutBuilder(builder: (context, constraints) {
-          // Use screen size to determine orientation, not available space
-          // This prevents keyboard opening from triggering layout changes
-          final screenSize = MediaQuery.sizeOf(context);
-          final isLandscape = screenSize.width > screenSize.height;
-
-          return SafeArea(
-            bottom: false,
-            child: SplitView(
-                indicator: SplitIndicator(
-                    viewMode: isLandscape
-                        ? SplitViewMode.Horizontal
-                        : SplitViewMode.Vertical),
-                viewMode: isLandscape
+        backgroundColor: c.ground,
+        body: SafeArea(
+          bottom: false,
+          child: Column(children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(4, 8, 4, 4),
+              child: Row(children: [
+                IconButton(
+                  tooltip: 'Back',
+                  icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 20),
+                  color: c.ink,
+                  onPressed: _close,
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Overline(widget.headerLabel),
+                      TextField(
+                        keyboardType: TextInputType.text,
+                        textCapitalization: TextCapitalization.sentences,
+                        controller: _passageController,
+                        focusNode: _passageFocusNode,
+                        style: AppText.passageField.copyWith(color: c.ink),
+                        decoration: InputDecoration(
+                          isDense: true,
+                          filled: false,
+                          contentPadding: EdgeInsets.zero,
+                          border: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          hintText: widget.passageHint ?? 'Add a passage',
+                          hintStyle:
+                              AppText.passageField.copyWith(color: c.muted),
+                        ),
+                        onChanged: widget.onPassageChanged,
+                        onSubmitted: (_) => _commitPassage(),
+                      ),
+                    ],
+                  ),
+                ),
+                PopupMenuButton<EditorMenuAction>(
+                    tooltip: 'More options',
+                    onSelected: (action) => action.onSelected(),
+                    icon: Icon(Icons.more_vert_rounded, color: c.ink),
+                    itemBuilder: (context) => menu
+                        .map((action) => PopupMenuItem<EditorMenuAction>(
+                              value: action,
+                              child: Row(children: [
+                                Icon(action.icon,
+                                    size: 20,
+                                    color: action.title == 'Delete'
+                                        ? c.danger
+                                        : c.ink),
+                                const SizedBox(width: 12),
+                                Text(action.title,
+                                    style: AppText.body.copyWith(
+                                        color: action.title == 'Delete'
+                                            ? c.danger
+                                            : c.ink)),
+                              ]),
+                            ))
+                        .toList()),
+              ]),
+            ),
+            Expanded(
+              child: LayoutBuilder(builder: (context, constraints) {
+                // Use screen size to determine orientation, not available
+                // space, so opening the keyboard doesn't flip the layout.
+                final screenSize = MediaQuery.sizeOf(context);
+                final isLandscape = screenSize.width > screenSize.height;
+                final bool verseFirst = isLandscape || widget.versePanelFirst;
+                final mode = isLandscape
                     ? SplitViewMode.Horizontal
-                    : SplitViewMode.Vertical,
-                children: isLandscape
-                    ? [versePane, studyPane]
-                    : [studyPane, versePane]),
-          );
-        }));
+                    : SplitViewMode.Vertical;
+                final controller = _splitControllers.putIfAbsent(
+                    isLandscape,
+                    () => SplitViewController(
+                          weights: verseFirst
+                              ? [widget.verseWeight, 1 - widget.verseWeight]
+                              : [1 - widget.verseWeight, widget.verseWeight],
+                          limits: [
+                            WeightLimit(min: 0.12),
+                            WeightLimit(min: 0.2)
+                          ],
+                        ));
+                return SplitView(
+                    controller: controller,
+                    viewMode: mode,
+                    gripSize: 22,
+                    gripColor: c.ground,
+                    gripColorActive: c.surfaceSunken,
+                    indicator: DragHandle(
+                        axis: isLandscape ? Axis.vertical : Axis.horizontal),
+                    activeIndicator: DragHandle(
+                        axis: isLandscape ? Axis.vertical : Axis.horizontal),
+                    children: verseFirst
+                        ? [versePane, studyPane]
+                        : [studyPane, versePane]);
+              }),
+            ),
+          ]),
+        ));
   }
 }

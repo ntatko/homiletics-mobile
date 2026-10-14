@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:homiletics/theme/app_theme.dart';
 import 'package:homiletics/classes/preferences.dart';
 import 'package:homiletics/classes/translation.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -77,58 +78,66 @@ bool _isBibleGatewayHost(String host) {
   return h == 'biblegateway.com' || h.endsWith('.biblegateway.com');
 }
 
-const String _darkModeStyleId = 'homiletics-dark-mode-style';
+const String _readingStyleId = 'homiletics-reading-style';
 
-const String _darkModeCss = '''
-  body {
-    background-color: #1a1a1a !important;
-    color: #e0e0e0 !important;
+String _hex(Color c) =>
+    '#${(c.toARGB32() & 0xFFFFFF).toRadixString(16).padLeft(6, '0')}';
+
+/// Restyles Bible Gateway's print view to match the app's verse panel:
+/// the panel's surface and ink, serif scripture, accent verse numbers.
+/// Newsreader comes from Google Fonts when online; Georgia otherwise.
+String _readingCss(AppColors c) => """
+  @import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&display=swap');
+  html, body {
+    background: ${_hex(c.surface)} !important;
+    color: ${_hex(c.ink)} !important;
+    margin: 0 !important;
+    -webkit-text-size-adjust: 100%;
   }
-  /* Target all text elements */
-  p, div, span, td, th, li {
-    color: #e0e0e0 !important;
-    background-color: transparent !important;
-  }
-  /* Target all heading elements more aggressively */
-  h1, h2, h3, h4, h5, h6,
-  h1 *, h2 *, h3 *, h4 *, h5 *, h6 *,
-  .passage-title, .passage-title *,
-  .reference, .passage-reference,
-  .reference *, .passage-reference * {
-    color: #ffffff !important;
-    background-color: transparent !important;
-  }
-  /* Target Bible Gateway specific elements */
-  .passage-text, .passage, .text, .verse, .chapter,
-  .passage-text *, .passage *, .text *, .verse *, .chapter * {
-    color: #e0e0e0 !important;
-    background-color: transparent !important;
-  }
-  /* Style verse numbers */
-  .verse-num, .verse-number, .verse-num *, .verse-number * {
-    color: #b0b0b0 !important;
-  }
-  /* Remove any white backgrounds from all elements */
+  body { padding: 4px 18px 32px !important; }
   *, *::before, *::after {
     background-color: transparent !important;
+    border-color: ${_hex(c.line)} !important;
+    box-shadow: none !important;
   }
-  /* Override any existing color styles */
-  [style*="color"] {
-    color: #e0e0e0 !important;
+  .passage-text, .passage-text p, .passage-text span, .passage-text li,
+  .passage-content, .passage-content p, .text, .poetry, .line {
+    font-family: 'Newsreader', Georgia, serif !important;
+    font-size: 18px !important;
+    line-height: 1.6 !important;
+    color: ${_hex(c.ink)} !important;
   }
-  /* Style links */
-  a, a * {
-    color: #4a9eff !important;
+  h1, h2, h3, h4, .passage-display-bcv, .dropdown-display-text {
+    font-family: 'Newsreader', Georgia, serif !important;
+    font-weight: 500 !important;
+    color: ${_hex(c.ink)} !important;
   }
-  a:visited, a:visited * {
-    color: #8a4aff !important;
+  h3, h4 { font-size: 15px !important; color: ${_hex(c.muted)} !important; }
+  .versenum, .chapternum, sup.versenum, .verse-num, .verse-number {
+    font-family: -apple-system, 'Roboto', sans-serif !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    color: ${_hex(c.accent)} !important;
   }
-''';
+  .chapternum { font-size: 22px !important; margin-right: 4px !important; }
+  .footnotes, .crossrefs, .footnotes *, .crossrefs *,
+  .publisher-info-bottom, .publisher-info-bottom * {
+    font-family: -apple-system, 'Roboto', sans-serif !important;
+    font-size: 12px !important;
+    color: ${_hex(c.muted)} !important;
+  }
+  a, a * { color: ${_hex(c.accent)} !important; }
+""";
 
 class VerseContainerState extends State<VerseContainer> {
   late final WebViewController _controller;
   bool _isLoading = true;
-  bool _isDarkMode = false;
+  AppColors _colors = AppColors.light;
+  bool _colorsApplied = false;
+
+  /// Hides the page until it has been restyled, so it never flashes in
+  /// Bible Gateway's own colors.
+  bool _styled = false;
 
   /// URL most recently requested, used to skip redundant reloads.
   String? _loadedUrl;
@@ -142,11 +151,13 @@ class VerseContainerState extends State<VerseContainer> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    if (isDarkMode != _isDarkMode) {
-      _isDarkMode = isDarkMode;
+    final AppColors colors = AppColors.of(context);
+    if (!_colorsApplied || colors != _colors) {
+      _colorsApplied = true;
+      _colors = colors;
+      _controller.setBackgroundColor(colors.surface);
       // Restyle an already-loaded page when the system theme changes.
-      if (!_isLoading) _applyDarkModeStyling();
+      if (!_isLoading) _applyReadingStyle();
     }
   }
 
@@ -169,6 +180,7 @@ class VerseContainerState extends State<VerseContainer> {
             if (!mounted) return;
             setState(() {
               _isLoading = true;
+              _styled = false;
             });
           },
           onPageFinished: (String url) {
@@ -176,7 +188,7 @@ class VerseContainerState extends State<VerseContainer> {
             setState(() {
               _isLoading = false;
             });
-            _applyDarkModeStyling();
+            _applyReadingStyle();
           },
         ),
       );
@@ -211,33 +223,28 @@ class VerseContainerState extends State<VerseContainer> {
     }
   }
 
-  /// Injects (or removes) the dark-mode stylesheet. Uses a fixed element id
-  /// so repeated calls replace the style instead of stacking copies.
-  Future<void> _applyDarkModeStyling() async {
-    final script = _isDarkMode
-        ? '''
-          (function() {
-            var style = document.getElementById('$_darkModeStyleId');
-            if (!style) {
-              style = document.createElement('style');
-              style.id = '$_darkModeStyleId';
-              (document.head || document.documentElement).appendChild(style);
-            }
-            style.innerHTML = `$_darkModeCss`;
-          })();
-        '''
-        : '''
-          (function() {
-            var style = document.getElementById('$_darkModeStyleId');
-            if (style) style.remove();
-          })();
-        ''';
+  /// Injects the reading stylesheet. Uses a fixed element id so repeated
+  /// calls replace the style instead of stacking copies.
+  Future<void> _applyReadingStyle() async {
+    final css = _readingCss(_colors).replaceAll('`', '');
+    final script = '''
+      (function() {
+        var style = document.getElementById('$_readingStyleId');
+        if (!style) {
+          style = document.createElement('style');
+          style.id = '$_readingStyleId';
+          (document.head || document.documentElement).appendChild(style);
+        }
+        style.innerHTML = `$css`;
+      })();
+    ''';
     try {
       await _controller.runJavaScript(script);
     } catch (_) {
       // Page may have navigated away or not be scriptable; styling is
       // re-applied on the next onPageFinished.
     }
+    if (mounted && !_styled) setState(() => _styled = true);
   }
 
   void _loadPassage(Translation translation, {bool force = false}) {
@@ -258,19 +265,27 @@ class VerseContainerState extends State<VerseContainer> {
     _loadPassage(Preferences.translation, force: true);
   }
 
-  /// Public method to apply dark mode styling
+  /// Re-applies the reading stylesheet (e.g. after a theme change).
   void applyDarkMode() {
-    _applyDarkModeStyling();
+    _applyReadingStyle();
   }
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        WebViewWidget(controller: _controller),
-        if (_isLoading)
-          const Center(
-            child: CircularProgressIndicator(),
+        Opacity(
+          opacity: _styled ? 1 : 0,
+          child: WebViewWidget(controller: _controller),
+        ),
+        if (!_styled)
+          Center(
+            child: SizedBox(
+              width: 22,
+              height: 22,
+              child: CircularProgressIndicator(
+                  strokeWidth: 2, color: _colors.muted),
+            ),
           ),
       ],
     );
