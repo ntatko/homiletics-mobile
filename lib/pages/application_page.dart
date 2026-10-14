@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:homiletics/classes/application.dart';
 import 'package:homiletics/common/application_list_item.dart';
 import 'package:homiletics/common/study_data_builder.dart';
+import 'package:homiletics/components/past_lessons.dart';
 import 'package:homiletics/storage/application_storage.dart';
 
 class ApplicationPage extends StatelessWidget {
@@ -9,6 +10,8 @@ class ApplicationPage extends StatelessWidget {
 
   const ApplicationPage({Key? key, required this.applications})
       : super(key: key);
+
+  static const double _maxWidth = 720;
 
   /// Same filtering and order as the home screen's [ApplicationList].
   static Future<List<Application>> _load() async =>
@@ -20,36 +23,35 @@ class ApplicationPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Application Questions'),
+        title: const Text('Living it out'),
       ),
-      body: StudyDataBuilder<List<Application>>(
-        load: _load,
-        initialData: applications,
-        builder: (context, snapshot) {
-          final List<Application> current = snapshot.data ?? applications;
-          return current.isEmpty
-              ? Center(
-                  child: Text(
-                    'No application questions yet.',
-                    style: TextStyle(color: colorScheme.onSurfaceVariant),
-                  ),
-                )
-              : ListView.separated(
-                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 28),
-                  itemCount: current.length,
-                  separatorBuilder: (_, __) => const SizedBox(height: 10),
-                  itemBuilder: (context, index) {
-                    return ApplicationListItem(
-                      application: current[index],
-                      displayStyle: ApplicationQuestionDisplay.list,
+      body: Align(
+        alignment: Alignment.topCenter,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: _maxWidth),
+          child: StudyDataBuilder<List<Application>>(
+            load: _load,
+            initialData: applications,
+            builder: (context, snapshot) {
+              final List<Application> current = snapshot.data ?? applications;
+              return current.isEmpty
+                  ? const StudyListEmpty('No application questions yet.')
+                  : ListView.separated(
+                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
+                      itemCount: current.length,
+                      separatorBuilder: (_, __) => const SizedBox(height: 10),
+                      itemBuilder: (context, index) {
+                        return ApplicationListItem(
+                          application: current[index],
+                          displayStyle: ApplicationQuestionDisplay.list,
+                        );
+                      },
                     );
-                  },
-                );
-        },
+            },
+          ),
+        ),
       ),
     );
   }

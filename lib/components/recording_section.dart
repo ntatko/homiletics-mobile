@@ -8,26 +8,62 @@ import 'package:homiletics/classes/preferences.dart';
 import 'package:homiletics/common/report_error.dart';
 import 'package:homiletics/services/transcript_formatter_service.dart';
 import 'package:homiletics/services/whisper_model_service.dart';
+import 'package:homiletics/theme/app_theme.dart';
+import 'package:homiletics/theme/lecture_widgets.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:record/record.dart';
 
-/// Record/playback/transcribe a lecture. Wires the already-existing
-/// [LectureNote.recordingPath]/[LectureNote.transcript] fields into a real
-/// UI for the first time.
+/// Record/playback/transcribe a lecture: the dark recording bar, then a
+/// "My notes" | "Transcript" tab row. The notes tab shows [notesToolbar]
+/// over [notesEditor]; the transcript tab shows the note's transcript.
 class RecordingSection extends StatefulWidget {
   final LectureNote note;
 
-  const RecordingSection({Key? key, required this.note}) : super(key: key);
+  /// Pass the same widget instances on every build so the editor isn't
+  /// rebuilt each time the recording clock ticks.
+  final Widget notesToolbar;
+  final Widget notesEditor;
+
+  /// Inserts a time mark ("[14:02] ") into the notes. The "+ Time mark"
+  /// button only shows while recording, and only when this is set.
+  final ValueChanged<String>? onTimeMark;
+
+  const RecordingSection({
+    Key? key,
+    required this.note,
+    required this.notesToolbar,
+    required this.notesEditor,
+    this.onTimeMark,
+  }) : super(key: key);
 
   @override
   State<RecordingSection> createState() => _RecordingSectionState();
 }
 
-class _RecordingSectionState extends State<RecordingSection> {
+class _RecordingSectionState extends State<RecordingSection>
+    with SingleTickerProviderStateMixin {
   final AudioRecorder _recorder = AudioRecorder();
   final AudioPlayer _player = AudioPlayer();
   StreamSubscription<PlayerState>? _playerStateSub;
+  StreamSubscription<Duration>? _positionSub;
+  StreamSubscription<Duration>? _durationSub;
+  StreamSubscription<Amplitude>? _amplitudeSub;
+
+  late final TabController _tabs = TabController(length: 2, vsync: this)
+    ..addListener(() {
+      if (mounted) setState(() {});
+    });
+
+  /// Playback position and the player's idea of the file length.
+  Duration _position = Duration.zero;
+  Duration? _playerDuration;
+
+  /// Recent microphone levels (0–1, oldest first) for the level meter.
+  List<double> _levels = List.filled(5, 0);
+
+  /// Formatted vs. raw transcript in the transcript tab.
+  bool _showFormatted = true;
 
   bool _isRecording = false;
   bool _isPlaying = false;
@@ -58,15 +94,48 @@ class _RecordingSectionState extends State<RecordingSection> {
     super.initState();
     _playerStateSub = _player.onPlayerStateChanged.listen((state) {
       if (!mounted) return;
-      setState(() => _isPlaying = state == PlayerState.playing);
+      setState(() {
+        _isPlaying = state == PlayerState.playing;
+        if (state == PlayerState.stopped || state == PlayerState.completed) {
+          _position = Duration.zero;
+        }
+      });
+    });
+    _positionSub = _player.onPositionChanged.listen((position) {
+      if (!mounted) return;
+      setState(() => _position = position);
+    });
+    _durationSub = _player.onDurationChanged.listen((duration) {
+      if (!mounted) return;
+      setState(() => _playerDuration = duration);
     });
     _loadRecordingDuration();
+  }
+
+  /// Starts feeding the level meter. Called once a recording has started:
+  /// the recorder polls the level only while it's recording, and subscribing
+  /// earlier would start that polling before there's anything to record.
+  void _listenToLevel() {
+    _amplitudeSub ??= _recorder
+        .onAmplitudeChanged(const Duration(milliseconds: 160))
+        .listen((amplitude) {
+      if (!mounted) return;
+      // dBFS: about -45 is room noise, 0 is clipping.
+      final double level = ((amplitude.current + 45) / 45).clamp(0.0, 1.0);
+      setState(() => _levels = [..._levels.skip(1), level]);
+    }, onError: (_) {
+      // Only cosmetic.
+    });
   }
 
   @override
   void dispose() {
     _timer?.cancel();
     _playerStateSub?.cancel();
+    _positionSub?.cancel();
+    _durationSub?.cancel();
+    _amplitudeSub?.cancel();
+    _tabs.dispose();
     // The file name was saved when recording started, so stopping here
     // finalizes the audio even though nobody is around to transcribe it.
     // The recorder serializes its calls, so dispose runs after stop.
@@ -184,6 +253,7 @@ class _RecordingSectionState extends State<RecordingSection> {
         _elapsed = Duration.zero;
         _recordingDuration = null;
       });
+      _listenToLevel();
       // Derive elapsed from the start time rather than counting ticks:
       // timers don't fire reliably while the screen is off, so a tick
       // counter would come back short after the phone wakes up.
@@ -462,71 +532,293 @@ class _RecordingSectionState extends State<RecordingSection> {
     }
   }
 
-  String _formatDuration(Duration d) {
-    String two(int n) => n.toString().padLeft(2, '0');
-    return '${two(d.inMinutes)}:${two(d.inSeconds % 60)}';
+  /// Only once something is playing or paused: before that the player has
+  /// no position to move, and play() always starts from the beginning.
+  bool get _canSeek =>
+      _player.state == PlayerState.playing ||
+      _player.state == PlayerState.paused;
+
+  Future<void> _seek(Duration position) async {
+    try {
+      await _player.seek(position);
+    } catch (error) {
+      sendError(error, "RecordingSection seek");
+    }
   }
 
-  void _showTranscriptSheet(BuildContext context) {
-    final String raw = widget.note.transcript ?? '';
-    final String? formatted = widget.note.formattedTranscript;
-    bool showFormatted = formatted != null;
+  void _insertTimeMark() {
+    final DateTime? startedAt = _recordingStartedAt;
+    if (!_isRecording || startedAt == null) return;
+    widget.onTimeMark
+        ?.call('[${formatClock(DateTime.now().difference(startedAt))}] ');
+  }
 
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      builder: (sheetContext) => DraggableScrollableSheet(
-        expand: false,
-        initialChildSize: 0.5,
-        maxChildSize: 0.9,
-        builder: (context, scrollController) => StatefulBuilder(
-          builder: (context, setSheetState) => SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+  /// The model download / transcription / formatting progress line, if any
+  /// of those is running.
+  Widget? _progressLine() {
+    if (_isDownloadingModel) {
+      return RecordingBarProgress(
+        label:
+            "Downloading model ${(_downloadProgress * 100).toStringAsFixed(0)}%",
+        value: _downloadProgress > 0 ? _downloadProgress : null,
+      );
+    }
+    if (_isTranscribing) {
+      return RecordingBarProgress(
+        label: "Transcribing $_transcribeProgress%",
+        value: _transcribeProgress > 0 ? _transcribeProgress / 100 : null,
+      );
+    }
+    if (_isFormatting) {
+      return RecordingBarProgress(
+        label: _formatTotal > 0
+            ? "Formatting transcript $_formatDone/$_formatTotal"
+            : "Formatting transcript…",
+        value: _formatTotal > 0 ? _formatDone / _formatTotal : null,
+      );
+    }
+    return null;
+  }
+
+  Widget _buildBar(BuildContext context, bool canRecord, bool canTranscribe) {
+    final AppColors c = AppColors.of(context);
+    final bool hasRecording = widget.note.recordingPath != null;
+
+    if (_isRecording) {
+      return RecordingBar(
+        child: Row(
+          children: [
+            const RecordingDot(),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Semantics(
+                label: "Recording, ${formatClock(_elapsed)}",
+                excludeSemantics: true,
+                child: RecordingBarTitle(
+                  title: formatClock(_elapsed),
+                  subtitle: "Recording · keeps going with the screen off",
+                  clock: true,
+                ),
+              ),
+            ),
+            const SizedBox(width: 8),
+            LevelMeter(levels: _levels),
+            const SizedBox(width: 14),
+            RecordingBarButton(
+              tooltip: "Stop recording",
+              size: 48,
+              onPressed: _stopRecording,
+              child: const StopGlyph(),
+            ),
+          ],
+        ),
+      );
+    }
+
+    final Widget? progress = _progressLine();
+
+    if (!hasRecording) {
+      return RecordingBar(
+        onTap: canRecord ? _startRecording : null,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              children: [
+                RecordingBarButton(
+                  tooltip: "Record lecture",
+                  size: 48,
+                  onPressed: canRecord ? _startRecording : null,
+                  child: const RecordGlyph(size: 16),
+                ),
+                const SizedBox(width: 14),
+                const Expanded(
+                  child: RecordingBarTitle(
+                    title: "Record lecture",
+                    subtitle: "Keeps recording with the screen off",
+                  ),
+                ),
+              ],
+            ),
+            if (progress != null) ...[
+              const SizedBox(height: 12),
+              progress,
+            ],
+          ],
+        ),
+      );
+    }
+
+    return RecordingBar(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            children: [
+              RecordingBarButton(
+                tooltip: _isPlaying ? "Pause" : "Play recording",
+                onPressed: _togglePlayback,
+                child: Icon(
+                    _isPlaying ? Icons.pause_rounded : Icons.play_arrow_rounded,
+                    size: 26),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: PlaybackScrubber(
+                  position: _position,
+                  duration: _recordingDuration ?? _playerDuration,
+                  onSeek: _canSeek ? _seek : null,
+                ),
+              ),
+              const SizedBox(width: 12),
+              RecordingBarButton(
+                tooltip: "Record again",
+                filled: false,
+                onPressed: canRecord ? _startRecording : null,
+                child: const RecordGlyph(size: 12),
+              ),
+            ],
+          ),
+          if (progress != null) ...[
+            const SizedBox(height: 12),
+            progress,
+          ] else if (canTranscribe)
+            Padding(
+              padding: const EdgeInsets.only(top: 6),
+              child: Row(
                 children: [
-                  if (formatted != null)
-                    SegmentedButton<bool>(
-                      segments: const [
-                        ButtonSegment(value: true, label: Text("Formatted")),
-                        ButtonSegment(value: false, label: Text("Original")),
-                      ],
-                      selected: {showFormatted},
-                      onSelectionChanged: (selection) =>
-                          setSheetState(() => showFormatted = selection.first),
-                    )
-                  else if (!_isFormatting)
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: TextButton.icon(
-                        icon: const Icon(Icons.auto_fix_high, size: 18),
-                        label: const Text("Format transcript"),
-                        onPressed: () {
-                          Navigator.pop(sheetContext);
-                          _maybeFormat(raw, userRequested: true);
-                        },
-                      ),
-                    ),
-                  const SizedBox(height: 12),
                   Expanded(
-                    child: SingleChildScrollView(
-                      controller: scrollController,
-                      child: SelectableText(
-                        showFormatted ? formatted! : raw,
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyLarge
-                            ?.copyWith(height: 1.5),
-                      ),
+                    child: Text("Not transcribed yet",
+                        style: AppText.caption
+                            .copyWith(color: recordingBarMuted(c))),
+                  ),
+                  TextButton.icon(
+                    style: TextButton.styleFrom(
+                      foregroundColor: recordingBarAccent(c),
+                      minimumSize: const Size(0, 44),
                     ),
+                    icon: const Icon(Icons.subtitles_outlined, size: 18),
+                    label: const Text("Transcribe"),
+                    onPressed: () => _maybeTranscribe(userRequested: true),
                   ),
                 ],
               ),
             ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildNotesTab(BuildContext context) {
+    final AppColors c = AppColors.of(context);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(12, 4, 12, 0),
+          child: Row(
+            children: [
+              Flexible(child: widget.notesToolbar),
+              if (_isRecording && widget.onTimeMark != null)
+                TextButton(
+                  style: TextButton.styleFrom(
+                    minimumSize: const Size(0, 44),
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    textStyle:
+                        AppText.caption.copyWith(fontWeight: FontWeight.w500),
+                  ),
+                  onPressed: _insertTimeMark,
+                  child: const Text("+ Time mark"),
+                ),
+            ],
           ),
         ),
-      ),
+        Divider(height: 1, indent: 24, endIndent: 24, color: c.line),
+        Expanded(child: widget.notesEditor),
+      ],
+    );
+  }
+
+  Widget _buildTranscriptTab(BuildContext context, bool canTranscribe) {
+    final AppColors c = AppColors.of(context);
+    final String raw = widget.note.transcript ?? '';
+    final String? formatted = widget.note.formattedTranscript;
+
+    if (raw.isEmpty) {
+      final String message;
+      if (_isRecording) {
+        message =
+            "The lecture is transcribed on this phone after you stop recording.";
+      } else if (_isTranscribing || _isDownloadingModel) {
+        message = "The transcript will appear here when it's ready.";
+      } else if (widget.note.recordingPath != null) {
+        message = "Transcribe the recording to read and search it here.";
+      } else {
+        message =
+            "Record the lecture and it's transcribed on this phone after you stop.";
+      }
+      return TranscriptEmptyState(
+        title: _isTranscribing ? "Transcribing…" : "No transcript yet",
+        message: message,
+        action: canTranscribe
+            ? FilledButton.icon(
+                icon: const Icon(Icons.subtitles_outlined, size: 18),
+                label: const Text("Transcribe"),
+                onPressed: () => _maybeTranscribe(userRequested: true),
+              )
+            : null,
+      );
+    }
+
+    final bool showFormatted = formatted != null && _showFormatted;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(24, 10, 24, 0),
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: formatted != null
+                ? SegmentedButton<bool>(
+                    showSelectedIcon: false,
+                    style: SegmentedButton.styleFrom(
+                      visualDensity: VisualDensity.compact,
+                      selectedBackgroundColor: c.accentTint,
+                      selectedForegroundColor: c.ink,
+                      foregroundColor: c.muted,
+                      side: BorderSide(color: c.line),
+                      textStyle:
+                          AppText.caption.copyWith(fontWeight: FontWeight.w600),
+                    ),
+                    segments: const [
+                      ButtonSegment(value: true, label: Text("Formatted")),
+                      ButtonSegment(value: false, label: Text("Raw")),
+                    ],
+                    selected: {showFormatted},
+                    onSelectionChanged: (selection) =>
+                        setState(() => _showFormatted = selection.first),
+                  )
+                : !_isFormatting && !_isTranscribing
+                    ? TextButton.icon(
+                        style: TextButton.styleFrom(
+                            minimumSize: const Size(0, 44)),
+                        icon: const Icon(Icons.auto_fix_high, size: 18),
+                        label: const Text("Format transcript"),
+                        onPressed: () => _maybeFormat(raw, userRequested: true),
+                      )
+                    : const SizedBox(height: 44),
+          ),
+        ),
+        Expanded(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.fromLTRB(24, 12, 24, 24),
+            child: SelectableText(
+              showFormatted ? formatted : raw,
+              style: AppText.body.copyWith(height: 1.55, color: c.ink),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -536,90 +828,37 @@ class _RecordingSectionState extends State<RecordingSection> {
     final bool hasRecording = widget.note.recordingPath != null;
     // A new recording would delete the audio a transcription is reading.
     final bool canRecord = !_isTranscribing && !_isFormatting;
-    final Duration? shownDuration =
-        _isRecording ? _elapsed : _recordingDuration;
-    return Row(
+    final bool canTranscribe = hasRecording &&
+        !hasTranscript &&
+        !_isRecording &&
+        !_isTranscribing &&
+        !_isDownloadingModel;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        IconButton(
-          visualDensity: VisualDensity.compact,
-          icon: Icon(_isRecording ? Icons.stop_circle : Icons.mic,
-              color: _isRecording ? Colors.red : null),
-          onPressed: _isRecording
-              ? _stopRecording
-              : canRecord
-                  ? _startRecording
-                  : null,
+        _buildBar(context, canRecord, canTranscribe),
+        TabBar(
+          controller: _tabs,
+          isScrollable: true,
+          tabAlignment: TabAlignment.start,
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          labelPadding: const EdgeInsets.only(right: 22),
+          indicatorSize: TabBarIndicatorSize.label,
+          tabs: const [
+            Tab(height: 44, text: "My notes"),
+            Tab(height: 44, text: "Transcript"),
+          ],
         ),
-        if (shownDuration != null)
-          Text(_formatDuration(shownDuration),
-              style: Theme.of(context).textTheme.bodySmall),
-        if (!_isRecording && hasRecording)
-          IconButton(
-            visualDensity: VisualDensity.compact,
-            icon: Icon(_isPlaying ? Icons.pause_circle : Icons.play_circle,
-                size: 20),
-            onPressed: _togglePlayback,
+        Expanded(
+          child: IndexedStack(
+            index: _tabs.index,
+            sizing: StackFit.expand,
+            children: [
+              _buildNotesTab(context),
+              _buildTranscriptTab(context, canTranscribe),
+            ],
           ),
-        if (_isDownloadingModel) ...[
-          const SizedBox(width: 8),
-          SizedBox(
-            width: 14,
-            height: 14,
-            child: CircularProgressIndicator(
-              strokeWidth: 2,
-              value: _downloadProgress > 0 ? _downloadProgress : null,
-            ),
-          ),
-          const SizedBox(width: 4),
-          Text("${(_downloadProgress * 100).toStringAsFixed(0)}%",
-              style: Theme.of(context).textTheme.bodySmall),
-        ],
-        if (_isTranscribing) ...[
-          const SizedBox(width: 8),
-          const SizedBox(
-            width: 14,
-            height: 14,
-            child: CircularProgressIndicator(strokeWidth: 2),
-          ),
-          const SizedBox(width: 4),
-          Text("Transcribing $_transcribeProgress%",
-              style: Theme.of(context).textTheme.bodySmall),
-        ],
-        if (_isFormatting) ...[
-          const SizedBox(width: 8),
-          SizedBox(
-            width: 14,
-            height: 14,
-            child: CircularProgressIndicator(
-              strokeWidth: 2,
-              value: _formatTotal > 0 ? _formatDone / _formatTotal : null,
-            ),
-          ),
-          const SizedBox(width: 4),
-          Text(
-              _formatTotal > 0
-                  ? "Formatting $_formatDone/$_formatTotal"
-                  : "Formatting…",
-              style: Theme.of(context).textTheme.bodySmall),
-        ],
-        const Spacer(),
-        if (hasRecording &&
-            !hasTranscript &&
-            !_isRecording &&
-            !_isTranscribing &&
-            !_isDownloadingModel)
-          TextButton.icon(
-            icon: const Icon(Icons.subtitles, size: 18),
-            label: const Text("Transcribe"),
-            onPressed: () => _maybeTranscribe(userRequested: true),
-          ),
-        if (hasTranscript && !_isTranscribing && !_isFormatting)
-          IconButton(
-            visualDensity: VisualDensity.compact,
-            icon: const Icon(Icons.subject, size: 20),
-            tooltip: "View transcript",
-            onPressed: () => _showTranscriptSheet(context),
-          ),
+        ),
       ],
     );
   }

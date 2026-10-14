@@ -50,13 +50,13 @@ class OtherStudyMenuButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
+    return OutlinedButton(
       onPressed: enabled ? () => _showMenu(context) : null,
       child: const Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text('Other Study'),
-          Icon(Icons.arrow_drop_down),
+          Text('Other study'),
+          Icon(Icons.arrow_drop_down_rounded),
         ],
       ),
     );

@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:homiletics/classes/homiletic.dart';
+import 'package:homiletics/theme/app_theme.dart';
+import 'package:homiletics/theme/homiletics_widgets.dart';
 
+/// The editor of the Aim step: a single multiline answer.
 class AimCard extends StatefulWidget {
+  static const String helpTitle = "Aim";
+  static const String helpText =
+      "The Aim is the key point, the one main takeaway truth you want yourself or an audience to walk away with. It may be derivable from the FCF, and will likely influence the Application Questions.";
+
   final Homiletic homiletic;
 
   const AimCard({Key? key, required this.homiletic}) : super(key: key);
@@ -35,59 +42,14 @@ class _AimCardState extends State<AimCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-        color: Theme.of(context).brightness == Brightness.light
-            ? Colors.red[100]
-            : Colors.blueGrey[900],
-        child: Padding(
-            padding: const EdgeInsets.all(8),
-            child: Column(children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text("Aim",
-                      style:
-                          TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-                  IconButton(
-                    icon: const Icon(Icons.info_outline),
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: const Text("Aim"),
-                            content: const Text(
-                              "The Aim is the key point, the one main takeaway truth you want yourself or an audience to walk away with. It may be derivable from the FCF, and will likely influence the Application Questions.",
-                            ),
-                            actions: [
-                              TextButton(
-                                child: const Text("Close"),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    },
-                  ),
-                ],
-              ),
-              Container(
-                  margin: const EdgeInsets.all(8),
-                  child: TextField(
-                      maxLines: null,
-                      keyboardType: TextInputType.multiline,
-                      textCapitalization: TextCapitalization.sentences,
-                      controller: _controller,
-                      decoration: const InputDecoration(
-                        labelText: 'Cause the audience to learn that...',
-                        border: OutlineInputBorder(),
-                      ),
-                      onChanged: (String aim) async {
-                        await widget.homiletic.updateAim(aim);
-                      })),
-            ])));
+    return StepTextField(
+      step: StudyStep.aim,
+      controller: _controller,
+      hint: 'Cause the audience to learn that…',
+      keyboardType: TextInputType.multiline,
+      onChanged: (String text) async {
+        await widget.homiletic.updateAim(text);
+      },
+    );
   }
 }

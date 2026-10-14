@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:homiletics/classes/translation.dart';
 import 'package:homiletics/common/verse_container.dart';
+import 'package:homiletics/theme/app_theme.dart';
+import 'package:homiletics/theme/widgets.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 /// Shows a bottom sheet with Bible Gateway search results for [word].
@@ -17,6 +19,9 @@ Future<void> showOtherUsageSearchSheet(
   return showModalBottomSheet<void>(
     context: context,
     isScrollControlled: true,
+    shape: const RoundedRectangleBorder(
+        borderRadius:
+            BorderRadius.vertical(top: Radius.circular(AppRadius.card))),
     builder: (context) => _OtherUsageSearchSheet(
       word: word,
       translation: translation,
@@ -97,6 +102,8 @@ class _OtherUsageSearchSheetState extends State<_OtherUsageSearchSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final AppColors c = AppColors.of(context);
+    final Color color = c.step(StudyStep.summary);
     return DraggableScrollableSheet(
       expand: false,
       initialChildSize: 0.75,
@@ -104,20 +111,30 @@ class _OtherUsageSearchSheetState extends State<_OtherUsageSearchSheet> {
       builder: (context, scrollController) {
         return SafeArea(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(16, 16, 8, 8),
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 4),
                 child: Row(
                   children: [
                     Expanded(
-                      child: Text(
-                        'Other places "${widget.word}" appears',
-                        style: const TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Overline('Other usage', color: color),
+                          const SizedBox(height: 2),
+                          Text(
+                            'Where else \u201c${widget.word}\u201d appears',
+                            style: AppText.title.copyWith(color: c.ink),
+                          ),
+                        ],
                       ),
                     ),
-                    TextButton(
+                    const SizedBox(width: 8),
+                    FilledButton(
                       onPressed: () => Navigator.of(context).pop(),
+                      style: FilledButton.styleFrom(
+                          minimumSize: const Size(64, 44)),
                       child: const Text('Done'),
                     ),
                   ],
@@ -125,23 +142,37 @@ class _OtherUsageSearchSheetState extends State<_OtherUsageSearchSheet> {
               ),
               if (_picked.isNotEmpty)
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text('Added: ${_picked.join(", ")}',
-                        style: const TextStyle(fontStyle: FontStyle.italic)),
+                  padding: const EdgeInsets.fromLTRB(16, 6, 16, 0),
+                  child: Wrap(
+                    spacing: 6,
+                    runSpacing: 6,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      Text('Added',
+                          style: AppText.caption.copyWith(color: c.muted)),
+                      for (final String reference in _picked)
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: c.stepTint(StudyStep.summary),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Text(reference,
+                              style: AppText.caption.copyWith(
+                                  color: color, fontWeight: FontWeight.w500)),
+                        ),
+                    ],
                   ),
                 ),
-              const Padding(
-                padding: EdgeInsets.fromLTRB(16, 8, 16, 4),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'Tap a result below to add its reference.',
-                    style: TextStyle(fontSize: 12, color: Colors.grey),
-                  ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                child: Text(
+                  'Tap a result below to add its reference.',
+                  style: AppText.caption.copyWith(color: c.muted),
                 ),
               ),
+              Divider(color: c.line),
               Expanded(
                 child: Stack(
                   children: [

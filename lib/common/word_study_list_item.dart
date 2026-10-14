@@ -1,44 +1,40 @@
 import 'package:flutter/material.dart';
-import 'package:homiletics/common/passage_badge.dart';
 import 'package:homiletics/classes/word_study.dart';
 import 'package:homiletics/pages/word_study_editor.dart';
+import 'package:homiletics/theme/home_widgets.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
+/// A saved word study in a list: the word (or passage), "Word study ·
+/// passage · time". Opens the word-study editor.
 class WordStudyListItem extends StatelessWidget {
   final WordStudy study;
-  const WordStudyListItem({Key? key, required this.study}) : super(key: key);
+  final bool divider;
+
+  const WordStudyListItem({Key? key, required this.study, this.divider = true})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        key: Key("${study.id}"),
-        margin: const EdgeInsets.only(top: 5),
-        child: GestureDetector(
-            onTapUp: (_) {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => WordStudyEditor(study: study)));
-            },
-            child: Card(
-              surfaceTintColor: Colors.purple,
-              clipBehavior: Clip.antiAliasWithSaveLayer,
-              child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                PassageBadge(passage: study.passage),
-                Padding(
-                    padding: const EdgeInsets.only(left: 15),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Text(study.word.isNotEmpty ? study.word : study.passage,
-                            style: const TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 17)),
-                        Text(timeago.format(study.updatedAt ?? DateTime.now(),
-                            locale: 'en_short')),
-                      ],
-                    ))
-              ]),
-            )));
+    final bool hasWord = study.word.isNotEmpty;
+    final List<String> parts = [
+      'Word study',
+      if (hasWord && study.passage.isNotEmpty) study.passage,
+      timeago.format(study.updatedAt ?? DateTime.now()),
+    ];
+    return StudyListRow(
+      key: Key("${study.id}"),
+      leading: const StudyKindTile(StudyKind.wordStudy),
+      title: hasWord
+          ? study.word
+          : (study.passage.isNotEmpty ? study.passage : 'Word study'),
+      subtitle: parts.join(' · '),
+      divider: divider,
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => WordStudyEditor(study: study)));
+      },
+    );
   }
 }

@@ -43,7 +43,7 @@ Future<void> startHomileticForPassage(
                 Navigator.pop(ctx, _DuplicatePassageChoice.createNew),
             child: const Text('Create new'),
           ),
-          ElevatedButton(
+          FilledButton(
             onPressed: () =>
                 Navigator.pop(ctx, _DuplicatePassageChoice.editExisting),
             child: const Text('Edit existing'),
@@ -98,7 +98,7 @@ Future<void> startLectureNoteForPassage(
                 Navigator.pop(ctx, _DuplicatePassageChoice.createNew),
             child: const Text('Create new'),
           ),
-          ElevatedButton(
+          FilledButton(
             onPressed: () =>
                 Navigator.pop(ctx, _DuplicatePassageChoice.editExisting),
             child: const Text('Edit existing'),
@@ -153,7 +153,7 @@ Future<void> startWordStudyForPassage(
                 Navigator.pop(ctx, _DuplicatePassageChoice.createNew),
             child: const Text('Create new'),
           ),
-          ElevatedButton(
+          FilledButton(
             onPressed: () =>
                 Navigator.pop(ctx, _DuplicatePassageChoice.editExisting),
             child: const Text('Edit existing'),

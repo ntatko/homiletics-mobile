@@ -3,6 +3,8 @@ import 'package:homiletics/classes/preferences.dart';
 import 'package:homiletics/classes/translation.dart';
 import 'package:homiletics/components/word_study/other_usage_search_sheet.dart';
 import 'package:homiletics/components/word_study/word_study_section_card.dart';
+import 'package:homiletics/theme/app_theme.dart';
+import 'package:homiletics/theme/word_study_widgets.dart';
 
 class OtherUsageCard extends StatelessWidget {
   final TextEditingController wordController;
@@ -12,7 +14,6 @@ class OtherUsageCard extends StatelessWidget {
   final Translation? translation;
   final TextEditingController controller;
   final Future<void> Function(String) onChanged;
-  final Color lightColor;
 
   const OtherUsageCard({
     Key? key,
@@ -20,7 +21,6 @@ class OtherUsageCard extends StatelessWidget {
     this.translation,
     required this.controller,
     required this.onChanged,
-    required this.lightColor,
   }) : super(key: key);
 
   /// Opens the usage-search sheet and appends any picked references to
@@ -58,27 +58,30 @@ class OtherUsageCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AppColors c = AppColors.of(context);
+    const StudyStep step = StudyStep.summary;
     return WordStudySectionCard(
-      title: 'Other Usage',
+      title: 'Other usage',
       helpText:
-          'Where else does this word or concept appear in Scripture? Tap "Find Usage" to search Bible Gateway and add references you find, or write your own.',
-      hint: 'Where else does this word or concept appear in Scripture?',
+          'Where else does this word or concept appear in Scripture? Tap "+" to search Bible Gateway and add references you find, or write your own.',
+      hint: 'Where else does it appear in Scripture?',
       controller: controller,
       onChanged: onChanged,
-      lightColor: lightColor,
-      actions: [
-        OutlinedButton.icon(
-          onPressed: () => openUsageSearch(
-            context,
-            word: wordController.text,
-            translation: translation ?? Preferences.translation,
-            controller: controller,
-            onChanged: onChanged,
-          ),
-          icon: const Icon(Icons.search),
-          label: const Text('Find Usage'),
+      step: step,
+      minLines: 3,
+      compact: true,
+      action: WordStudyAddButton(
+        tooltip: 'Find other usages',
+        color: c.step(step),
+        tint: c.stepTint(step),
+        onPressed: () => openUsageSearch(
+          context,
+          word: wordController.text,
+          translation: translation ?? Preferences.translation,
+          controller: controller,
+          onChanged: onChanged,
         ),
-      ],
+      ),
     );
   }
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:homiletics/components/word_study/definition_suggestions_sheet.dart';
 import 'package:homiletics/components/word_study/word_study_section_card.dart';
+import 'package:homiletics/theme/app_theme.dart';
+import 'package:homiletics/theme/word_study_widgets.dart';
 
 enum _ExistingDefinitionChoice { replace, append }
 
@@ -8,14 +10,12 @@ class DefinitionCard extends StatelessWidget {
   final TextEditingController wordController;
   final TextEditingController controller;
   final Future<void> Function(String) onChanged;
-  final Color lightColor;
 
   const DefinitionCard({
     Key? key,
     required this.wordController,
     required this.controller,
     required this.onChanged,
-    required this.lightColor,
   }) : super(key: key);
 
   Future<void> _suggestDefinition(BuildContext context) async {
@@ -68,21 +68,24 @@ class DefinitionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AppColors c = AppColors.of(context);
+    const StudyStep step = StudyStep.application;
     return WordStudySectionCard(
       title: 'Definition',
       helpText:
-          'What does this word mean, in plain terms? Tap "Suggest Definition" for candidate definitions pulled from a dictionary, or write your own.',
-      hint: 'What does this word mean, in plain terms?',
+          'What does this word mean, in plain terms? Tap "+" for candidate definitions pulled from a dictionary, or write your own.',
+      hint: 'What does it mean, in plain terms?',
       controller: controller,
       onChanged: onChanged,
-      lightColor: lightColor,
-      actions: [
-        OutlinedButton.icon(
-          onPressed: () => _suggestDefinition(context),
-          icon: const Icon(Icons.lightbulb_outline),
-          label: const Text('Suggest Definition'),
-        ),
-      ],
+      step: step,
+      minLines: 3,
+      compact: true,
+      action: WordStudyAddButton(
+        tooltip: 'Suggest a definition',
+        color: c.step(step),
+        tint: c.stepTint(step),
+        onPressed: () => _suggestDefinition(context),
+      ),
     );
   }
 }

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:homiletics/common/report_error.dart';
 import 'package:homiletics/services/transcript_formatter_service.dart';
 import 'package:homiletics/services/whisper_model_service.dart';
+import 'package:homiletics/theme/app_theme.dart';
+import 'package:homiletics/theme/widgets.dart';
 
 /// Settings card for the on-device transcription (Whisper) model.
 class WhisperModelSettings extends StatelessWidget {
@@ -50,7 +52,7 @@ class FormattingModelSettings extends StatelessWidget {
 }
 
 /// Download/delete card for an optional on-device model. Mirrors
-/// [PreferencesPanel]'s Card/ListTile visual style.
+/// [PreferencesPanel]'s card style.
 class ModelDownloadSettings extends StatefulWidget {
   final String title;
 
@@ -207,7 +209,8 @@ class _ModelDownloadSettingsState extends State<ModelDownloadSettings> {
       case _ModelState.downloaded:
         return TextButton(
           onPressed: _delete,
-          style: TextButton.styleFrom(foregroundColor: Colors.red),
+          style: TextButton.styleFrom(
+              foregroundColor: AppColors.of(context).danger),
           child: const Text("Delete"),
         );
     }
@@ -215,19 +218,19 @@ class _ModelDownloadSettingsState extends State<ModelDownloadSettings> {
 
   @override
   Widget build(BuildContext context) {
+    final AppColors c = AppColors.of(context);
     return Padding(
-      padding: const EdgeInsets.only(top: 20),
-      child: Card(
-        margin: EdgeInsets.zero,
-        clipBehavior: Clip.antiAlias,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: ListTile(
-            contentPadding: EdgeInsets.zero,
-            title: Text(widget.title),
-            subtitle: Text(_statusText),
-            trailing: _trailing,
-          ),
+      padding: const EdgeInsets.only(bottom: 10),
+      child: AppCard(
+        radius: AppRadius.tile,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+        child: ListTile(
+          contentPadding: EdgeInsets.zero,
+          title: Text(widget.title,
+              style: AppText.bodyStrong.copyWith(fontSize: 15, color: c.ink)),
+          subtitle: Text(_statusText,
+              style: AppText.caption.copyWith(color: c.muted)),
+          trailing: _trailing,
         ),
       ),
     );

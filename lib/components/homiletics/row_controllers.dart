@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:homiletics/common/report_error.dart';
+import 'package:homiletics/theme/app_theme.dart';
 
 /// Owns the [TextEditingController]s for each row of a list card, keyed by
 /// the row object's identity, so typing isn't reset by rebuilds and
@@ -73,7 +74,8 @@ Future<bool> confirmRemoveRow(BuildContext context, String rowName) async {
             child: const Text('Cancel')),
         TextButton(
           onPressed: () => Navigator.pop(context, true),
-          style: TextButton.styleFrom(foregroundColor: Colors.red),
+          style: TextButton.styleFrom(
+              foregroundColor: AppColors.of(context).danger),
           child: const Text('Remove'),
         ),
       ],

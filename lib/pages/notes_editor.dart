@@ -7,6 +7,8 @@ import 'package:homiletics/classes/lecture_note.dart';
 import 'package:homiletics/common/study_data_builder.dart';
 import 'package:homiletics/components/editor/passage_split_scaffold.dart';
 import 'package:homiletics/components/recording_section.dart';
+import 'package:homiletics/theme/app_theme.dart';
+import 'package:homiletics/theme/lecture_widgets.dart';
 
 class NotesEditor extends StatefulWidget {
   const NotesEditor({Key? key, this.note}) : super(key: key);
@@ -103,8 +105,75 @@ class _NotesState extends State<NotesEditor> {
     super.dispose();
   }
 
+  /// Inserts [mark] (a recording time, "[14:02] ") at the cursor,
+  /// replacing any selected text.
+  void _insertTimeMark(String mark) {
+    final TextSelection selection = _noteController.selection;
+    // The document always ends with a newline that can't be typed past.
+    final int end = _noteController.document.length - 1;
+    final int from = selection.isValid ? selection.start.clamp(0, end) : end;
+    final int to = selection.isValid ? selection.end.clamp(from, end) : end;
+    _noteController.replaceText(from, to - from, mark,
+        TextSelection.collapsed(offset: from + mark.length));
+  }
+
+  Widget _toolbarButton(Attribute attribute, Widget icon, String tooltip) {
+    return QuillToolbarToggleStyleButton(
+      controller: _noteController,
+      attribute: attribute,
+      options: QuillToolbarToggleStyleButtonOptions(
+        childBuilder: (options, extra) => NotesToolbarButton(
+          icon: icon,
+          tooltip: tooltip,
+          selected: extra.isToggled,
+          onPressed: extra.onPressed,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final AppColors c = AppColors.of(context);
+    final TextStyle noteStyle =
+        AppText.body.copyWith(height: 1.55, color: c.ink);
+    const HorizontalSpacing noSpacing = HorizontalSpacing(0, 0);
+
+    final Widget toolbar = Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        _toolbarButton(
+            Attribute.bold, const Icon(Icons.format_bold_rounded), "Bold"),
+        _toolbarButton(Attribute.italic,
+            const Icon(Icons.format_italic_rounded), "Italic"),
+        _toolbarButton(Attribute.ul,
+            const Icon(Icons.format_list_bulleted_rounded), "Bulleted list"),
+        _toolbarButton(Attribute.ol,
+            const Icon(Icons.format_list_numbered_rounded), "Numbered list"),
+      ],
+    );
+
+    final Widget editor = QuillEditor.basic(
+      controller: _noteController,
+      config: QuillEditorConfig(
+        placeholder: 'Notes',
+        padding: const EdgeInsets.fromLTRB(24, 10, 24, 24),
+        customStyles: DefaultStyles(
+          paragraph: DefaultTextBlockStyle(noteStyle, noSpacing,
+              const VerticalSpacing(0, 6), VerticalSpacing.zero, null),
+          lists: DefaultListBlockStyle(
+              noteStyle,
+              noSpacing,
+              const VerticalSpacing(0, 6),
+              const VerticalSpacing(0, 4),
+              null,
+              null),
+          placeHolder: DefaultTextBlockStyle(noteStyle.copyWith(color: c.muted),
+              noSpacing, VerticalSpacing.zero, VerticalSpacing.zero, null),
+        ),
+      ),
+    );
+
     return PassageSplitScaffold(
       initialPassage: _thisNote.passage,
       passageHint: 'Passage',
@@ -113,33 +182,15 @@ class _NotesState extends State<NotesEditor> {
       deletedMessage: "Lecture Note Deleted",
       deleteErrorIdentifier: "notes deletion",
       onDelete: _thisNote.delete,
-      child: Column(children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
-          child: RecordingSection(note: _thisNote),
-        ),
-        QuillSimpleToolbar(
-          controller: _noteController,
-          config: const QuillSimpleToolbarConfig(
-            multiRowsDisplay: false,
-            showFontFamily: false,
-            showFontSize: false,
-            showSearchButton: false,
-          ),
-        ),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: QuillEditor.basic(
-              controller: _noteController,
-              config: const QuillEditorConfig(
-                placeholder: 'Notes',
-                padding: EdgeInsets.symmetric(vertical: 8),
-              ),
-            ),
-          ),
-        ),
-      ]),
+      headerLabel: 'Lecture · Passage',
+      versePanelFirst: false,
+      verseWeight: 0.26,
+      child: RecordingSection(
+        note: _thisNote,
+        notesToolbar: toolbar,
+        notesEditor: editor,
+        onTimeMark: _insertTimeMark,
+      ),
     );
   }
 }

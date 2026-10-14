@@ -80,14 +80,14 @@ class DragHandle extends StatelessWidget {
   }
 }
 
-enum StepState { done, active, pending }
+enum StudyStepState { done, active, pending }
 
 /// The numbered circle for a homiletic step / word-study section: filled
 /// with a check when done, filled with the number when active, outlined
 /// when still to do.
 class StepBadge extends StatelessWidget {
   final StudyStep step;
-  final StepState state;
+  final StudyStepState state;
   final double size;
 
   const StepBadge({
@@ -101,7 +101,7 @@ class StepBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     final AppColors c = AppColors.of(context);
     final Color color = c.step(step);
-    final bool filled = state != StepState.pending;
+    final bool filled = state != StudyStepState.pending;
     final Color fg = filled ? c.surface : color;
     return Container(
       width: size,
@@ -112,7 +112,7 @@ class StepBadge extends StatelessWidget {
         shape: BoxShape.circle,
         border: filled ? null : Border.all(color: color, width: 1.5),
       ),
-      child: state == StepState.done
+      child: state == StudyStepState.done
           ? Icon(Icons.check_rounded, size: size * 0.55, color: fg)
           : Text('${step.index + 1}',
               style: TextStyle(

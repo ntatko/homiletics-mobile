@@ -17,6 +17,8 @@ import 'package:homiletics/storage/division_storage.dart';
 import 'package:homiletics/storage/homiletic_storage.dart';
 import 'package:homiletics/storage/lecture_note_storage.dart';
 import 'package:homiletics/storage/word_study_storage.dart';
+import 'package:homiletics/theme/app_theme.dart';
+import 'package:homiletics/theme/widgets.dart';
 import 'package:loggy/loggy.dart';
 
 /// Every kind of search result, one titled section per kind. Sections with
@@ -43,6 +45,7 @@ class SearchResults extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         SearchSection<ContentSummary>(
           title: "Content Summaries",
@@ -184,18 +187,59 @@ class _SearchSectionState<T> extends State<SearchSection<T>> {
           }
           final List<T> matches = snapshot.data ?? const [];
           if (matches.isEmpty) return const SizedBox.shrink();
-          return Column(children: [
-            Text(
-              widget.title,
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          final AppColors c = AppColors.of(context);
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(4, 8, 4, 6),
+                  child: Overline(widget.title),
+                ),
+                AppCard(
+                  radius: AppRadius.tile,
+                  padding: EdgeInsets.zero,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      for (int i = 0; i < matches.length; i++)
+                        InkWell(
+                          onTap: () => _open(matches[i]),
+                          child: Container(
+                            constraints: const BoxConstraints(minHeight: 48),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 12),
+                            decoration: i < matches.length - 1
+                                ? BoxDecoration(
+                                    border: Border(
+                                        bottom: BorderSide(color: c.line)))
+                                : null,
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    widget.label(matches[i]),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: AppText.body.copyWith(color: c.ink),
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                Icon(Icons.chevron_right_rounded,
+                                    size: 20, color: c.muted),
+                              ],
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-            ...matches.map((item) {
-              return ListTile(
-                onTap: () => _open(item),
-                title: Text(widget.label(item)),
-              );
-            }),
-          ]);
+          );
         });
   }
 }

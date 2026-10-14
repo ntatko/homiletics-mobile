@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:homiletics/common/report_error.dart';
 import 'package:homiletics/config/api_config.dart';
 import 'package:homiletics/config/github_feedback_config.dart';
+import 'package:homiletics/theme/app_theme.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 
@@ -25,6 +26,7 @@ class _FeedbackFormState extends State<FeedbackForm> {
 
   @override
   Widget build(BuildContext context) {
+    final AppColors c = AppColors.of(context);
     return Padding(
         padding:
             EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
@@ -35,27 +37,26 @@ class _FeedbackFormState extends State<FeedbackForm> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
-                  'Leave Some Feedback',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                Expanded(
+                  child: Text(
+                    'Leave some feedback',
+                    style: AppText.title.copyWith(color: c.ink),
+                  ),
                 ),
                 IconButton(
+                    tooltip: 'Close',
                     onPressed: () => Navigator.pop(context),
-                    icon: const Icon(Icons.close))
+                    icon: Icon(Icons.close_rounded, color: c.ink))
               ],
             ),
-            const Divider(),
+            const SizedBox(height: 4),
             Padding(
               padding: const EdgeInsets.only(bottom: 8),
               child: Text(
                 'Your feedback is submitted as a public GitHub issue—anyone on the internet can read it. '
                 'Do not include passwords or other private information. '
                 'Your email is partially hidden on GitHub; we may keep the full address on our servers only to follow up.',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  height: 1.35,
-                ),
+                style: AppText.caption.copyWith(color: c.muted, height: 1.4),
               ),
             ),
             SizedBox(
@@ -70,7 +71,6 @@ class _FeedbackFormState extends State<FeedbackForm> {
                         }),
                         decoration: const InputDecoration(
                           labelText: 'Name',
-                          border: OutlineInputBorder(),
                         ),
                       )),
                   Padding(
@@ -84,7 +84,6 @@ class _FeedbackFormState extends State<FeedbackForm> {
                         keyboardType: TextInputType.emailAddress,
                         decoration: const InputDecoration(
                           labelText: 'Email (optional)',
-                          border: OutlineInputBorder(),
                         ),
                       )),
                   Padding(
@@ -98,7 +97,6 @@ class _FeedbackFormState extends State<FeedbackForm> {
                         maxLines: null,
                         decoration: const InputDecoration(
                           labelText: 'Feedback',
-                          border: OutlineInputBorder(),
                         ),
                       )),
                 ],
@@ -106,8 +104,10 @@ class _FeedbackFormState extends State<FeedbackForm> {
             ),
             Padding(
               padding: const EdgeInsets.only(bottom: 15, top: 12),
-              child: ElevatedButton(
+              child: FilledButton(
                 onPressed: _submitting ? null : _submit,
+                style: FilledButton.styleFrom(
+                    minimumSize: const Size.fromHeight(46)),
                 child: _submitting
                     ? const SizedBox(
                         width: 18,

@@ -2,8 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:homiletics/classes/Division.dart';
 import 'package:homiletics/classes/homiletic.dart';
 import 'package:homiletics/components/homiletics/row_controllers.dart';
+import 'package:homiletics/theme/app_theme.dart';
+import 'package:homiletics/theme/homiletics_widgets.dart';
 
+/// The editor of the Divisions step: one row of verses + division sentence
+/// per grouping of the passage.
 class DivisionsCard extends StatefulWidget {
+  static const String helpTitle = "Divisions";
+  static const String helpText =
+      "Divisions are groupings of verses that are related. There should be at least two and no more than four.";
+
   final List<Division> divisions;
   final Homiletic homiletic;
   final VoidCallback addDivision;
@@ -56,123 +64,37 @@ class _DivisionsCardState extends State<DivisionsCard> {
   @override
   Widget build(BuildContext context) {
     _controllers.retainOnly(widget.divisions);
-    return Card(
-        color: Theme.of(context).brightness == Brightness.light
-            ? Colors.green[100]
-            : Colors.blueGrey[900],
-        child: Padding(
-            padding: const EdgeInsets.all(8),
-            child: Column(children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      "Divisions",
-                      style:
-                          TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.info_outline),
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: const Text("Divisions"),
-                              content: const Text(
-                                  "Divisions are groupings of verses that are related. There should be at least two and no more than four."),
-                              actions: [
-                                TextButton(
-                                  child: const Text("Close"),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              ),
-              ...widget.divisions.map((division) {
-                final controllers = _controllers.of(division);
-                return Container(
-                    key: ObjectKey(division),
-                    margin: const EdgeInsets.all(8),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        SizedBox(
-                            width: 75,
-                            child: TextField(
-                                autofocus:
-                                    _controllers.shouldAutofocus(division),
-                                keyboardType: TextInputType.text,
-                                textCapitalization:
-                                    TextCapitalization.sentences,
-                                controller: controllers[0],
-                                decoration: const InputDecoration(
-                                  labelText: 'Verses',
-                                  border: OutlineInputBorder(),
-                                ),
-                                onChanged: (String value) async {
-                                  await division.updatePassage(value);
-                                  await widget.homiletic.update();
-                                })),
-                        Expanded(
-                            child: TextField(
-                                keyboardType: TextInputType.text,
-                                textCapitalization:
-                                    TextCapitalization.sentences,
-                                controller: controllers[1],
-                                onSubmitted: (_) => _add(),
-                                decoration: const InputDecoration(
-                                  labelText: 'Division Sentence',
-                                  border: OutlineInputBorder(),
-                                ),
-                                maxLines: 4,
-                                minLines: 1,
-                                onChanged: (String value) async {
-                                  await division.updateText(value);
-                                  await widget.homiletic.update();
-                                })),
-                        IconButton(
-                          tooltip: 'Remove division',
-                          icon: const Icon(Icons.delete_outline),
-                          onPressed: () => _remove(division),
-                        ),
-                      ],
-                    ));
-              }),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 0),
-                        minimumSize: const Size(0, 40),
-                      ),
-                      onPressed: _add,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Icon(Icons.add, size: 20),
-                          const SizedBox(width: 4),
-                          Text('(${widget.divisions.length})'),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ])));
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        ...widget.divisions.map((division) {
+          final controllers = _controllers.of(division);
+          return Padding(
+            key: ObjectKey(division),
+            padding: const EdgeInsets.only(bottom: 8),
+            child: StepListRow(
+              step: StudyStep.divisions,
+              autofocus: _controllers.shouldAutofocus(division),
+              versesController: controllers[0],
+              onVersesChanged: (String value) async {
+                await division.updatePassage(value);
+                await widget.homiletic.update();
+              },
+              textController: controllers[1],
+              textHint: 'Division sentence…',
+              onSubmitted: (_) => _add(),
+              onTextChanged: (String value) async {
+                await division.updateText(value);
+                await widget.homiletic.update();
+              },
+              removeTooltip: 'Remove division',
+              onRemove: () => _remove(division),
+            ),
+          );
+        }),
+        DashedAddButton(
+            step: StudyStep.divisions, label: 'Add division', onPressed: _add),
+      ],
+    );
   }
 }

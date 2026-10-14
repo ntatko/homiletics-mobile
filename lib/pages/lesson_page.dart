@@ -1,34 +1,54 @@
 import 'package:flutter/material.dart';
 import 'package:homiletics/classes/homiletic.dart';
-import 'package:homiletics/common/homiletic_list_item.dart';
-import 'package:homiletics/common/study_data_builder.dart';
-import 'package:homiletics/storage/homiletic_storage.dart';
+import 'package:homiletics/components/past_lecture_notes.dart';
+import 'package:homiletics/components/past_lessons.dart';
+import 'package:homiletics/components/past_word_studies.dart';
 
+/// Every saved study, one tab per kind: homiletics, lecture notes, word
+/// studies. Reached from Home's "Continue" → "See all".
 class LessonPage extends StatelessWidget {
-  /// Shown until the page's own (refreshable) query comes back.
-  final List<Homiletic> homiletics;
+  /// Shown in the Homiletics tab until its own (refreshable) query comes
+  /// back.
+  final List<Homiletic>? homiletics;
 
-  const LessonPage({Key? key, required this.homiletics}) : super(key: key);
+  /// 0 = Homiletics, 1 = Lectures, 2 = Word studies.
+  final int initialTab;
 
-  static Future<List<Homiletic>> _load() async =>
-      (await getAllHomiletics()).reversed.toList();
+  const LessonPage({Key? key, this.homiletics, this.initialTab = 0})
+      : super(key: key);
+
+  static const double _maxWidth = 720;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text("Previous Homiletics")),
-      body: StudyDataBuilder<List<Homiletic>>(
-          load: _load,
-          initialData: homiletics,
-          builder: (context, snapshot) {
-            final List<Homiletic> current = snapshot.data ?? homiletics;
-            return ListView.builder(
-                itemBuilder: ((context, index) {
-                  Homiletic homiletic = current[index];
-                  return HomileticListItem(homiletic: homiletic);
-                }),
-                itemCount: current.length);
-          }),
+    return DefaultTabController(
+      length: 3,
+      initialIndex: initialTab,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text("Your studies"),
+          bottom: const TabBar(
+            tabs: [
+              Tab(text: 'Homiletics'),
+              Tab(text: 'Lectures'),
+              Tab(text: 'Word studies'),
+            ],
+          ),
+        ),
+        body: Align(
+          alignment: Alignment.topCenter,
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: _maxWidth),
+            child: TabBarView(
+              children: [
+                PastLessons(initialData: homiletics),
+                const PastLectureNotes(),
+                const PastWordStudies(),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

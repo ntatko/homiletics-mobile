@@ -1,15 +1,15 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:homiletics/common/home_header.dart';
 import 'package:homiletics/components/application_list.dart';
+import 'package:homiletics/components/continue_studies.dart';
 import 'package:homiletics/components/current_lesson.dart';
 import 'package:homiletics/components/help_menu.dart';
-import 'package:homiletics/components/past_lecture_notes.dart';
-import 'package:homiletics/components/past_lessons.dart';
-import 'package:homiletics/components/past_word_studies.dart';
 import 'package:homiletics/components/start_activity.dart';
 import 'package:homiletics/pages/search_page.dart';
 import 'package:homiletics/pages/settings_page.dart';
+import 'package:homiletics/theme/app_theme.dart';
 
 /// Home's study lists refresh themselves when an editor closes (see
 /// StudyDataBuilder), so they can stay const here.
@@ -24,10 +24,13 @@ class _HomeState extends State<Home> {
   static const double _wideBreakpoint = 600;
   static const double _homeMaxWidth = 720;
 
+  /// Side gutter of the sections (the week cards add their own).
+  static const double _gutter = 20;
+
   String _searchString = '';
   final TextEditingController _searchController = TextEditingController();
   final FocusNode _searchFocusNode = FocusNode();
-  bool _showSearchResults = false;
+  bool _searching = false;
 
   void _openSettings() {
     Navigator.of(context).push(
@@ -37,176 +40,90 @@ class _HomeState extends State<Home> {
     );
   }
 
+  void _openSearch() {
+    setState(() => _searching = true);
+  }
+
+  void _closeSearch() {
+    _searchController.clear();
+    _searchFocusNode.unfocus();
+    setState(() {
+      _searchString = '';
+      _searching = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
+    final AppColors c = AppColors.of(context);
     final size = MediaQuery.sizeOf(context);
     final isWide = size.width >= _wideBreakpoint;
     final maxW =
         isWide ? math.min(_homeMaxWidth, size.width - 48) : double.infinity;
 
-    final searchBarFill =
-        isWide ? colorScheme.surfaceContainerHigh : theme.cardColor;
-
-    return Scaffold(
-        backgroundColor:
-            isWide ? colorScheme.surfaceContainerLow : colorScheme.surface,
+    return PopScope(
+      canPop: !_searching,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop && _searching) _closeSearch();
+      },
+      child: Scaffold(
+        backgroundColor: c.ground,
         body: SafeArea(
-            bottom: false,
-            child: Align(
-              alignment: Alignment.topCenter,
-              child: ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: maxW),
-                child: Stack(children: [
-                  ListView(
-                    padding: EdgeInsets.fromLTRB(
-                      isWide ? 20 : 0,
-                      0,
-                      isWide ? 20 : 0,
-                      24,
-                    ),
-                    children: const [
-                      SizedBox(height: 108),
-                      CurrentLessonActions(),
-                      SizedBox(height: 8),
-                      StartActivity(),
-                      ApplicationList(),
-                      PastLessons(),
-                      PastLectureNotes(),
-                      PastWordStudies(),
-                      HelpMenu(),
-                    ],
+          child: Align(
+            alignment: Alignment.topCenter,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: maxW),
+              child: Column(
+                children: [
+                  HomeHeader(
+                    searching: _searching,
+                    searchController: _searchController,
+                    searchFocusNode: _searchFocusNode,
+                    onOpenSearch: _openSearch,
+                    onCloseSearch: _closeSearch,
+                    onSearchChanged: (value) =>
+                        setState(() => _searchString = value),
+                    onOpenSettings: _openSettings,
                   ),
-                  Positioned(
-                    top: 16,
-                    left: isWide ? 20 : 16,
-                    right: isWide ? 20 : 16,
-                    child: Column(
+                  Expanded(
+                    child: Stack(
                       children: [
-                        Material(
-                          elevation: isWide ? 2 : 1,
-                          shadowColor: Colors.black26,
-                          borderRadius: BorderRadius.circular(28),
-                          color: searchBarFill,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(28),
-                              border: Border.all(
-                                color: colorScheme.outlineVariant
-                                    .withValues(alpha: isWide ? 0.45 : 0.55),
-                              ),
+                        ListView(
+                          padding: const EdgeInsets.only(top: 6, bottom: 8),
+                          keyboardDismissBehavior:
+                              ScrollViewKeyboardDismissBehavior.onDrag,
+                          children: const [
+                            CurrentLessonActions(),
+                            ContinueStudies(
+                              padding:
+                                  EdgeInsets.fromLTRB(_gutter, 20, _gutter, 0),
                             ),
-                            child: TextField(
-                              controller: _searchController,
-                              focusNode: _searchFocusNode,
-                              style: TextStyle(
-                                color: theme.textTheme.bodyLarge?.color,
-                              ),
-                              onChanged: (value) {
-                                setState(() {
-                                  _searchString = value;
-                                  _showSearchResults = value.isNotEmpty;
-                                });
-                              },
-                              onTap: () {
-                                setState(() {
-                                  _showSearchResults = _searchString.isNotEmpty;
-                                });
-                              },
-                              decoration: InputDecoration(
-                                hintText: 'Search lessons, passages, notes…',
-                                hintStyle: TextStyle(
-                                  color: theme.textTheme.bodyMedium?.color
-                                      ?.withValues(alpha: 0.55),
-                                ),
-                                prefixIcon: Icon(
-                                  Icons.search_rounded,
-                                  color: colorScheme.onSurfaceVariant,
-                                ),
-                                suffixIcon: Padding(
-                                  padding: const EdgeInsets.only(right: 4),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      if (_searchString.isNotEmpty)
-                                        IconButton(
-                                          tooltip: 'Clear',
-                                          icon: Icon(
-                                            Icons.clear_rounded,
-                                            color: colorScheme.onSurfaceVariant,
-                                          ),
-                                          onPressed: () {
-                                            _searchController.clear();
-                                            setState(() {
-                                              _searchString = '';
-                                              _showSearchResults = false;
-                                            });
-                                            _searchFocusNode.unfocus();
-                                          },
-                                        ),
-                                      IconButton(
-                                        tooltip: 'Settings',
-                                        icon: Icon(
-                                          Icons.settings_rounded,
-                                          color: colorScheme.onSurfaceVariant,
-                                        ),
-                                        onPressed: _openSettings,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                border: InputBorder.none,
-                                contentPadding: const EdgeInsets.symmetric(
-                                  horizontal: 20,
-                                  vertical: 16,
-                                ),
-                              ),
+                            ApplicationList(
+                              padding:
+                                  EdgeInsets.fromLTRB(_gutter, 20, _gutter, 0),
                             ),
-                          ),
+                            HelpMenu(),
+                          ],
                         ),
-                        if (_showSearchResults)
-                          Container(
-                            margin: const EdgeInsets.only(top: 10),
-                            constraints: BoxConstraints(
-                              maxHeight: size.height * 0.5,
-                            ),
-                            decoration: BoxDecoration(
-                              color: isWide
-                                  ? colorScheme.surfaceContainerHigh
-                                  : theme.cardColor,
-                              borderRadius: BorderRadius.circular(16),
-                              border: Border.all(
-                                color: colorScheme.outlineVariant
-                                    .withValues(alpha: 0.4),
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black
-                                      .withValues(alpha: isWide ? 0.08 : 0.12),
-                                  blurRadius: 16,
-                                  offset: const Offset(0, 6),
-                                ),
-                              ],
-                            ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(16),
-                              child: ListView(
-                                shrinkWrap: true,
-                                children: [
-                                  const SizedBox(height: 16),
-                                  SearchResults(searchString: _searchString),
-                                  const SizedBox(height: 16),
-                                ],
-                              ),
-                            ),
+                        if (_searching)
+                          Positioned.fill(
+                            child: _SearchOverlay(searchString: _searchString),
                           ),
                       ],
                     ),
                   ),
-                ]),
+                  if (!_searching)
+                    const Padding(
+                      padding: EdgeInsets.fromLTRB(_gutter, 8, _gutter, 12),
+                      child: StartActivity(),
+                    ),
+                ],
               ),
-            )));
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   @override
@@ -214,5 +131,35 @@ class _HomeState extends State<Home> {
     _searchController.dispose();
     _searchFocusNode.dispose();
     super.dispose();
+  }
+}
+
+/// Covers Home's content while searching: a hint until something is typed,
+/// then the [SearchResults].
+class _SearchOverlay extends StatelessWidget {
+  final String searchString;
+
+  const _SearchOverlay({required this.searchString});
+
+  @override
+  Widget build(BuildContext context) {
+    final AppColors c = AppColors.of(context);
+    return ColoredBox(
+      color: c.ground,
+      child: searchString.trim().isEmpty
+          ? Padding(
+              padding: const EdgeInsets.fromLTRB(24, 16, 24, 0),
+              child: Text(
+                'Search your homiletics, divisions, applications, lecture '
+                'notes and word studies.',
+                style: AppText.body.copyWith(color: c.muted),
+              ),
+            )
+          : ListView(
+              padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
+              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+              children: [SearchResults(searchString: searchString)],
+            ),
+    );
   }
 }

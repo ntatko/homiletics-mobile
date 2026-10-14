@@ -1,12 +1,41 @@
-import 'package:homiletics/common/other_study_menu_button.dart';
+import 'dart:math' as math;
+
+import 'package:homiletics/common/homiletic_progress.dart';
 import 'package:homiletics/common/start_passage_item_flow.dart';
+import 'package:homiletics/common/study_data_builder.dart';
 import 'package:homiletics/services/suggested_passages_repository.dart';
+import 'package:homiletics/theme/app_theme.dart';
+import 'package:homiletics/theme/home_widgets.dart';
+import 'package:homiletics/theme/widgets.dart';
 import 'package:homiletics/utils/study_launch_uri.dart';
 import 'package:flutter/material.dart';
 import 'package:homiletics/classes/passage_schedule.dart';
 import 'package:loggy/loggy.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+/// Horizontal padding around each week card; Home lays this section out
+/// edge to edge so swiping shows a gap between cards.
+const double _pageGutter = 20;
+const double _cardPaddingH = 20;
+const double _cardPaddingV = 18;
+
+/// Menu values of the study filter that aren't a study.
+const String _allStudies = '';
+const String _openStudySite = '\u0000open';
+
+const TextStyle _pillText = TextStyle(
+    fontFamily: AppFonts.sans, fontSize: 12, fontWeight: FontWeight.w500);
+
+/// Outlined buttons with less side padding, so two fit side by side on a
+/// narrow card.
+final ButtonStyle _compactButton = OutlinedButton.styleFrom(
+    padding: const EdgeInsets.symmetric(horizontal: 12));
+
+const TextStyle _progressText =
+    TextStyle(fontFamily: AppFonts.sans, fontSize: 14);
+
+/// The suggested-passage cards ("This week"): one page per scheduled
+/// passage, filterable by study, starting at the current week.
 class CurrentLesson extends StatefulWidget {
   final List<PassageSchedule> schedules;
 
@@ -20,15 +49,14 @@ class _CurrentLessonState extends State<CurrentLesson> {
   late PageController _pageController;
   String? _selectedStudy;
   late List<PassageSchedule> _filteredSchedules;
+  int _currentPage = 0;
 
   @override
   void initState() {
     super.initState();
     _filteredSchedules = widget.schedules;
-    _pageController = PageController(
-      viewportFraction: 0.85,
-      initialPage: _getInitialPage(),
-    );
+    _currentPage = _getInitialPage();
+    _pageController = PageController(initialPage: _currentPage);
   }
 
   @override
@@ -46,10 +74,8 @@ class _CurrentLessonState extends State<CurrentLesson> {
   /// until this build finishes, so it's disposed after the frame.
   void _replacePageController() {
     final PageController old = _pageController;
-    _pageController = PageController(
-      viewportFraction: 0.85,
-      initialPage: _getInitialPage(),
-    );
+    _currentPage = _getInitialPage();
+    _pageController = PageController(initialPage: _currentPage);
     WidgetsBinding.instance.addPostFrameCallback((_) => old.dispose());
   }
 
@@ -66,13 +92,17 @@ class _CurrentLessonState extends State<CurrentLesson> {
     return true;
   }
 
+  /// Index of the latest passage that has rolled out, or -1 if none has.
+  int get _currentWeekIndex {
+    final now = DateTime.now();
+    return _filteredSchedules
+        .lastIndexWhere((schedule) => schedule.rollout.isBefore(now));
+  }
+
   int _getInitialPage() {
     if (_filteredSchedules.isEmpty) return 0;
-    final now = DateTime.now();
-    final int index = _filteredSchedules
-        .lastIndexWhere((schedule) => schedule.rollout.isBefore(now));
     // Nothing has rolled out yet: start at the first lesson.
-    return index < 0 ? 0 : index;
+    return math.max(0, _currentWeekIndex);
   }
 
   List<String> get _uniqueStudies {
@@ -89,119 +119,131 @@ class _CurrentLessonState extends State<CurrentLesson> {
     });
   }
 
+  /// "bsfinternational.org/john" rather than a full URL.
+  static String _studyLabel(String study) => study
+      .trim()
+      .replaceFirst(RegExp(r'^https?://', caseSensitive: false), '')
+      .replaceFirst(RegExp(r'^www\.', caseSensitive: false), '')
+      .replaceFirst(RegExp(r'/$'), '');
+
+  String get _filterLabel =>
+      _selectedStudy == null ? 'All studies' : _studyLabel(_selectedStudy!);
+
+  String _overlineFor(int index) {
+    final int current = _currentWeekIndex;
+    final String when = index == current
+        ? 'This week'
+        : (current >= 0 && index < current ? 'Earlier' : 'Coming up');
+    final String lesson = _filteredSchedules[index].lesson.trim();
+    return lesson.isEmpty ? when : '$when · $lesson';
+  }
+
+  /// Widest the filter pill may get, given the card's inner width.
+  static double _pillMaxWidth(double inner) => inner * 0.5;
+
+  /// The schedule whose passage takes the most room (so its card is the
+  /// tallest once the title wraps).
+  PassageSchedule _longestPassage(TextScaler scaler) {
+    PassageSchedule longest = _filteredSchedules.first;
+    double widest = -1;
+    for (final PassageSchedule s in _filteredSchedules) {
+      final TextPainter painter = TextPainter(
+        text: TextSpan(text: s.passage, style: AppText.display),
+        textDirection: TextDirection.ltr,
+        textScaler: scaler,
+      )..layout();
+      if (painter.width > widest) {
+        widest = painter.width;
+        longest = s;
+      }
+      painter.dispose();
+    }
+    return longest;
+  }
+
+  Future<void> _onFilterMenu(String value, PassageSchedule schedule) async {
+    if (value == _openStudySite) {
+      await launchUrl(studyLaunchUri(schedule.study));
+      return;
+    }
+    _filterSchedules(value == _allStudies ? null : value);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding:
-              const EdgeInsets.only(left: 16, right: 16, top: 20, bottom: 10),
-          child: Row(
+    if (_filteredSchedules.isEmpty) return const SizedBox.shrink();
+    final TextScaler scaler = MediaQuery.textScalerOf(context);
+
+    return LayoutBuilder(builder: (context, constraints) {
+      final double inner =
+          constraints.maxWidth - 2 * _pageGutter - 2 * _cardPaddingH;
+      final double pillMaxWidth = _pillMaxWidth(inner);
+      Widget pill(PassageSchedule schedule) => _StudyFilterPill(
+            label: _filterLabel,
+            selected: _selectedStudy,
+            studies: _uniqueStudies,
+            studyLabel: _studyLabel,
+            canOpenSite: schedule.study.trim().isNotEmpty,
+            onSelected: (value) => _onFilterMenu(value, schedule),
+          );
+      final PassageSchedule tallest = _longestPassage(scaler);
+
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // A PageView needs a fixed height: an invisible copy of the
+          // tallest card sizes the stack, and the pages fill it.
+          Stack(
             children: [
-              Expanded(
-                child: Wrap(
-                  alignment: WrapAlignment.spaceBetween,
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  children: [
-                    const Text(
-                      "Current Lessons",
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                    DropdownButton<String>(
-                      value: _selectedStudy,
-                      hint: const Text("Filter by study"),
-                      onChanged: _filterSchedules,
-                      items: [
-                        const DropdownMenuItem<String>(
-                          value: null,
-                          child: Text("All studies"),
+              ExcludeSemantics(
+                child: ExcludeFocus(
+                  child: IgnorePointer(
+                    child: Opacity(
+                      opacity: 0,
+                      child: Padding(
+                        padding:
+                            const EdgeInsets.symmetric(horizontal: _pageGutter),
+                        child: _WeekCard(
+                          schedule: tallest,
+                          overline: 'This week',
+                          pillMaxWidth: pillMaxWidth,
+                          filter: pill(tallest),
+                          measuring: true,
                         ),
-                        ..._uniqueStudies
-                            .map((study) => DropdownMenuItem<String>(
-                                  value: study,
-                                  child: Text(study),
-                                )),
-                      ],
+                      ),
                     ),
-                  ],
+                  ),
+                ),
+              ),
+              Positioned.fill(
+                child: PageView.builder(
+                  controller: _pageController,
+                  itemCount: _filteredSchedules.length,
+                  onPageChanged: (index) =>
+                      setState(() => _currentPage = index),
+                  itemBuilder: (context, index) {
+                    final PassageSchedule schedule = _filteredSchedules[index];
+                    return Padding(
+                      padding:
+                          const EdgeInsets.symmetric(horizontal: _pageGutter),
+                      child: _WeekCard(
+                        schedule: schedule,
+                        overline: _overlineFor(index),
+                        pillMaxWidth: pillMaxWidth,
+                        filter: pill(schedule),
+                      ),
+                    );
+                  },
                 ),
               ),
             ],
           ),
-        ),
-        SizedBox(
-          height:
-              200, // room for the button row to wrap to two lines with 3 buttons
-          child: PageView.builder(
-            controller: _pageController,
-            itemCount: _filteredSchedules.length,
-            itemBuilder: (context, index) {
-              return _buildLessonCard(_filteredSchedules[index]);
-            },
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildLessonCard(PassageSchedule schedule) {
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Wrap(
-              alignment: WrapAlignment.spaceBetween,
-              crossAxisAlignment: WrapCrossAlignment.end,
-              spacing: 8,
-              runSpacing: 4,
-              children: [
-                Text(
-                  schedule.passage,
-                  style: const TextStyle(
-                      fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-                Text(
-                  schedule.lesson,
-                  style: const TextStyle(
-                      fontSize: 14, fontStyle: FontStyle.italic),
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: [
-                ElevatedButton(
-                  onPressed: () => startHomileticForPassage(
-                    context,
-                    schedule.passage,
-                  ),
-                  child: const Text("Homiletics"),
-                ),
-                OtherStudyMenuButton(passage: schedule.passage),
-              ],
-            ),
-            Expanded(
-              child: Align(
-                alignment: Alignment.bottomLeft,
-                child: TextButton(
-                  onPressed: () async {
-                    await launchUrl(studyLaunchUri(schedule.study));
-                  },
-                  child: Text(schedule.study),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+          const SizedBox(height: 10),
+          PageDots(count: _filteredSchedules.length, index: _currentPage),
+        ],
+      );
+    });
   }
 
   @override
@@ -211,12 +253,301 @@ class _CurrentLessonState extends State<CurrentLesson> {
   }
 }
 
+/// The "All studies ▾" pill; its menu filters the cards by study and can
+/// open the current card's study website.
+class _StudyFilterPill extends StatelessWidget {
+  final String label;
+  final String? selected;
+  final List<String> studies;
+  final String Function(String) studyLabel;
+  final bool canOpenSite;
+  final ValueChanged<String> onSelected;
+
+  const _StudyFilterPill({
+    required this.label,
+    required this.selected,
+    required this.studies,
+    required this.studyLabel,
+    required this.canOpenSite,
+    required this.onSelected,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final AppColors c = AppColors.of(context);
+    PopupMenuItem<String> item(String value, String text, bool checked) =>
+        PopupMenuItem<String>(
+          value: value,
+          child: Row(children: [
+            SizedBox(
+              width: 28,
+              child: checked
+                  ? Icon(Icons.check_rounded, size: 18, color: c.accent)
+                  : null,
+            ),
+            Flexible(child: Text(text, overflow: TextOverflow.ellipsis)),
+          ]),
+        );
+
+    return PopupMenuButton<String>(
+      tooltip: 'Filter by study',
+      onSelected: onSelected,
+      position: PopupMenuPosition.under,
+      itemBuilder: (context) => [
+        item(_allStudies, 'All studies', selected == null),
+        for (final String study in studies)
+          item(study, studyLabel(study), selected == study),
+        if (canOpenSite) ...[
+          const PopupMenuDivider(),
+          PopupMenuItem<String>(
+            value: _openStudySite,
+            child: Row(children: [
+              SizedBox(
+                  width: 28,
+                  child: Icon(Icons.open_in_new_rounded,
+                      size: 18, color: c.muted)),
+              const Text('Open study website'),
+            ]),
+          ),
+        ],
+      ],
+      // The pill is 32px tall; the tap target around it is 44px.
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(minHeight: 44),
+        child: Center(
+          widthFactor: 1,
+          child: Container(
+            height: 32,
+            padding: const EdgeInsets.only(left: 12, right: 6),
+            decoration: ShapeDecoration(
+              shape: StadiumBorder(side: BorderSide(color: c.lineStrong)),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Flexible(
+                  child: Text(
+                    label,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: _pillText.copyWith(color: c.ink),
+                  ),
+                ),
+                Icon(Icons.arrow_drop_down_rounded, size: 20, color: c.ink),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _WeekCard extends StatelessWidget {
+  final PassageSchedule schedule;
+  final String overline;
+  final Widget filter;
+  final double pillMaxWidth;
+
+  /// An invisible copy used only to size the PageView: no data loading,
+  /// and no [Spacer] (its height is unbounded).
+  final bool measuring;
+
+  const _WeekCard({
+    required this.schedule,
+    required this.overline,
+    required this.filter,
+    required this.pillMaxWidth,
+    this.measuring = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final AppColors c = AppColors.of(context);
+    return AppCard(
+      padding: const EdgeInsets.symmetric(
+          horizontal: _cardPaddingH, vertical: _cardPaddingV),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // The pill shares the overline's row (its 44px tap target sets
+          // the row height) so the passage gets the card's full width.
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  overline.toUpperCase(),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppText.overline.copyWith(color: c.accent),
+                ),
+              ),
+              const SizedBox(width: 8),
+              ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: pillMaxWidth),
+                child: filter,
+              ),
+            ],
+          ),
+          Text(
+            schedule.passage,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: AppText.display.copyWith(color: c.ink),
+          ),
+          if (!measuring) const Spacer(),
+          const SizedBox(height: 14),
+          measuring
+              ? const _ProgressRowContent(status: '', done: {})
+              : _HomileticProgressRow(passage: schedule.passage),
+          const SizedBox(height: 14),
+          Row(
+            children: [
+              Expanded(
+                child: OutlinedButton(
+                  style: _compactButton,
+                  onPressed: () =>
+                      startLectureNoteForPassage(context, schedule.passage),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        width: 9,
+                        height: 9,
+                        decoration: BoxDecoration(
+                          color: c.recording,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      const Flexible(
+                        child: Text('Lecture',
+                            maxLines: 1, overflow: TextOverflow.ellipsis),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: OutlinedButton(
+                  style: _compactButton,
+                  onPressed: () =>
+                      startWordStudyForPassage(context, schedule.passage),
+                  child: const Text('Word study',
+                      maxLines: 1, overflow: TextOverflow.ellipsis),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// "Homiletics — 2 of 6 steps" over the step bar, for the latest homiletic
+/// on [passage]. Tapping it opens (or starts) that homiletic.
+class _HomileticProgressRow extends StatelessWidget {
+  final String passage;
+
+  const _HomileticProgressRow({required this.passage});
+
+  @override
+  Widget build(BuildContext context) {
+    return StudyDataBuilder<Set<StudyStep>?>(
+      key: ValueKey(passage),
+      load: () => loadPassageProgress(passage),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) logError('${snapshot.error}');
+        final Set<StudyStep>? done = snapshot.data;
+        final bool loading =
+            snapshot.connectionState != ConnectionState.done && done == null;
+        final String status = loading ? '' : describeProgress(done);
+        return Semantics(
+          button: true,
+          label: 'Homiletics. $status',
+          excludeSemantics: true,
+          child: InkWell(
+            onTap: () => startHomileticForPassage(context, passage),
+            borderRadius: BorderRadius.circular(AppRadius.control),
+            child: _ProgressRowContent(status: status, done: done ?? const {}),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _ProgressRowContent extends StatelessWidget {
+  final String status;
+  final Set<StudyStep> done;
+
+  const _ProgressRowContent({required this.status, required this.done});
+
+  @override
+  Widget build(BuildContext context) {
+    final AppColors c = AppColors.of(context);
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Text('Homiletics',
+                    style: _progressText.copyWith(
+                        fontWeight: FontWeight.w600, color: c.ink)),
+              ),
+              Text(status, style: _progressText.copyWith(color: c.muted)),
+              Icon(Icons.chevron_right_rounded, size: 18, color: c.muted),
+            ],
+          ),
+          const SizedBox(height: 7),
+          StepProgressBar(done: done),
+        ],
+      ),
+    );
+  }
+}
+
+/// Placeholder card while the suggested passages load.
 class LoadingLesson extends StatelessWidget {
   const LoadingLesson({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return const CurrentLesson(schedules: []);
+    final AppColors c = AppColors.of(context);
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: _pageGutter),
+      child: AppCard(
+        padding: const EdgeInsets.symmetric(
+            horizontal: _cardPaddingH, vertical: _cardPaddingV),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Overline('This week', color: c.accent),
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                const SizedBox(
+                  width: 16,
+                  height: 16,
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                ),
+                const SizedBox(width: 10),
+                Flexible(
+                  child: Text('Loading suggested passages…',
+                      style: AppText.body.copyWith(color: c.muted)),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 

@@ -1,28 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:homiletics/classes/homiletic.dart';
-import 'package:homiletics/common/home_header.dart';
-import 'package:homiletics/common/study_data_builder.dart';
 import 'package:homiletics/common/homiletic_list_item.dart';
-import 'package:homiletics/pages/lesson_page.dart';
+import 'package:homiletics/common/study_data_builder.dart';
 import 'package:homiletics/storage/homiletic_storage.dart';
+import 'package:homiletics/theme/app_theme.dart';
 import 'package:loggy/loggy.dart';
 
+/// Every saved homiletic, newest first (the "Homiletics" tab of
+/// [LessonPage]).
 class PastLessons extends StatelessWidget {
-  const PastLessons({Key? key}) : super(key: key);
+  /// Shown until the list's own (refreshable) query comes back.
+  final List<Homiletic>? initialData;
+
+  const PastLessons({Key? key, this.initialData}) : super(key: key);
+
+  static Future<List<Homiletic>> _load() async =>
+      (await getAllHomiletics()).reversed.toList();
 
   @override
   Widget build(BuildContext context) {
     return StudyDataBuilder<List<Homiletic>>(
-        load: getAllHomiletics,
+        load: _load,
+        initialData: initialData,
         builder: (context, snapshot) {
           if (snapshot.hasError) logError('${snapshot.error}');
-
-          return snapshot.hasData
-              ? Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  child: DisplayLessons(snapshot.data?.reversed.toList() ?? []))
-              : const SizedBox.shrink();
+          if (!snapshot.hasData) return const StudyListLoading();
+          return DisplayLessons(snapshot.data!);
         });
   }
 }
@@ -34,40 +37,48 @@ class DisplayLessons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return homiletics.isNotEmpty
-        ? Card(
-            color: Theme.of(context).brightness == Brightness.dark
-                ? Colors.blueGrey[900]
-                : Colors.blueGrey[100],
-            child: Padding(
-              padding: const EdgeInsets.all(8),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  HomeHeader(
-                    title: "Past Homiletics",
-                    onExpand: homiletics.length > 4
-                        ? () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    LessonPage(homiletics: homiletics),
-                              ),
-                            );
-                          }
-                        : null,
-                  ),
-                  const SizedBox(height: 2),
-                  ...homiletics.take(6).map((homiletic) {
-                    return HomileticListItem(
-                      homiletic: homiletic,
-                    );
-                  }).toList(),
-                ],
-              ),
-            ),
-          )
-        : const SizedBox.shrink();
+    if (homiletics.isEmpty) {
+      return const StudyListEmpty('No homiletics yet.');
+    }
+    return ListView.builder(
+      padding: studyListPadding,
+      itemCount: homiletics.length,
+      itemBuilder: (context, index) => HomileticListItem(
+        key: ValueKey(homiletics[index].id),
+        homiletic: homiletics[index],
+        divider: index < homiletics.length - 1,
+      ),
+    );
+  }
+}
+
+/// Padding of the full study lists.
+const EdgeInsets studyListPadding = EdgeInsets.fromLTRB(16, 8, 16, 32);
+
+/// Spinner shown while a study list loads.
+class StudyListLoading extends StatelessWidget {
+  const StudyListLoading({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) =>
+      const Center(child: CircularProgressIndicator());
+}
+
+/// Muted message for a study list with nothing in it.
+class StudyListEmpty extends StatelessWidget {
+  final String message;
+
+  const StudyListEmpty(this.message, {Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(32),
+        child: Text(message,
+            textAlign: TextAlign.center,
+            style: AppText.body.copyWith(color: AppColors.of(context).muted)),
+      ),
+    );
   }
 }
