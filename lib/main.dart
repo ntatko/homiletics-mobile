@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:homiletics/common/fold_posture.dart';
 import 'package:homiletics/theme/app_theme.dart';
 import 'package:homiletics/classes/language.dart';
 import 'package:homiletics/l10n/generated/app_localizations.dart';
@@ -132,6 +133,8 @@ class MyApp extends StatelessWidget {
         theme: _buildTheme(Brightness.light),
         darkTheme: _buildTheme(Brightness.dark),
         themeMode: themeMode,
+        // Reports the iPhone Duo's fold like Android's (see HingeFeatures).
+        builder: (context, child) => HingeFeatures(child: child!),
         home: home,
       ),
     );
