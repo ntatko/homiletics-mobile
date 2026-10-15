@@ -1,11 +1,4 @@
 PODS:
-  - app_links (7.0.0):
-    - Flutter
-  - audioplayers_darwin (0.0.1):
-    - Flutter
-    - FlutterMacOS
-  - background_downloader (0.0.1):
-    - Flutter
   - ffmpeg_kit_flutter_new_min (7.1.1):
     - ffmpeg_kit_flutter_new_min/min (= 7.1.1)
     - Flutter
@@ -16,62 +9,22 @@ PODS:
     - Flutter
     - MediaPipeTasksGenAI (= 0.10.33)
     - MediaPipeTasksGenAIC (= 0.10.33)
-  - flutter_keyboard_visibility_temp_fork (0.0.1):
-    - Flutter
-  - is_ios_simulator (0.0.1):
-    - Flutter
-  - large_file_handler (0.4.0):
-    - Flutter
   - MediaPipeTasksGenAI (0.10.33):
     - MediaPipeTasksGenAIC (= 0.10.33)
   - MediaPipeTasksGenAIC (0.10.33)
   - package_info_plus (0.4.5):
     - Flutter
-  - path_provider_foundation (0.0.1):
-    - Flutter
-    - FlutterMacOS
   - printing (1.0.0):
     - Flutter
-  - quill_native_bridge_ios (0.0.1):
-    - Flutter
-  - record_ios (1.2.1):
-    - Flutter
-  - share_plus (0.0.1):
-    - Flutter
-  - shared_preferences_foundation (0.0.1):
-    - Flutter
-    - FlutterMacOS
-  - sqflite_darwin (0.0.4):
-    - Flutter
-    - FlutterMacOS
-  - url_launcher_ios (0.0.1):
-    - Flutter
-  - webview_flutter_wkwebview (0.0.1):
-    - Flutter
-    - FlutterMacOS
   - whisper_ggml (1.0.1):
     - Flutter
 
 DEPENDENCIES:
-  - app_links (from `.symlinks/plugins/app_links/ios`)
-  - audioplayers_darwin (from `.symlinks/plugins/audioplayers_darwin/darwin`)
-  - background_downloader (from `.symlinks/plugins/background_downloader/ios`)
   - ffmpeg_kit_flutter_new_min (from `.symlinks/plugins/ffmpeg_kit_flutter_new_min/ios`)
   - Flutter (from `Flutter`)
   - flutter_gemma (from `.symlinks/plugins/flutter_gemma/ios`)
-  - flutter_keyboard_visibility_temp_fork (from `.symlinks/plugins/flutter_keyboard_visibility_temp_fork/ios`)
-  - is_ios_simulator (from `.symlinks/plugins/is_ios_simulator/ios`)
-  - large_file_handler (from `.symlinks/plugins/large_file_handler/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
-  - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - printing (from `.symlinks/plugins/printing/ios`)
-  - quill_native_bridge_ios (from `.symlinks/plugins/quill_native_bridge_ios/ios`)
-  - record_ios (from `.symlinks/plugins/record_ios/ios`)
-  - share_plus (from `.symlinks/plugins/share_plus/ios`)
-  - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
-  - sqflite_darwin (from `.symlinks/plugins/sqflite_darwin/darwin`)
-  - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
-  - webview_flutter_wkwebview (from `.symlinks/plugins/webview_flutter_wkwebview/darwin`)
   - whisper_ggml (from `.symlinks/plugins/whisper_ggml/ios`)
 
 SPEC REPOS:
@@ -80,71 +33,29 @@ SPEC REPOS:
     - MediaPipeTasksGenAIC
 
 EXTERNAL SOURCES:
-  app_links:
-    :path: ".symlinks/plugins/app_links/ios"
-  audioplayers_darwin:
-    :path: ".symlinks/plugins/audioplayers_darwin/darwin"
-  background_downloader:
-    :path: ".symlinks/plugins/background_downloader/ios"
   ffmpeg_kit_flutter_new_min:
     :path: ".symlinks/plugins/ffmpeg_kit_flutter_new_min/ios"
   Flutter:
     :path: Flutter
   flutter_gemma:
     :path: ".symlinks/plugins/flutter_gemma/ios"
-  flutter_keyboard_visibility_temp_fork:
-    :path: ".symlinks/plugins/flutter_keyboard_visibility_temp_fork/ios"
-  is_ios_simulator:
-    :path: ".symlinks/plugins/is_ios_simulator/ios"
-  large_file_handler:
-    :path: ".symlinks/plugins/large_file_handler/ios"
   package_info_plus:
     :path: ".symlinks/plugins/package_info_plus/ios"
-  path_provider_foundation:
-    :path: ".symlinks/plugins/path_provider_foundation/darwin"
   printing:
     :path: ".symlinks/plugins/printing/ios"
-  quill_native_bridge_ios:
-    :path: ".symlinks/plugins/quill_native_bridge_ios/ios"
-  record_ios:
-    :path: ".symlinks/plugins/record_ios/ios"
-  share_plus:
-    :path: ".symlinks/plugins/share_plus/ios"
-  shared_preferences_foundation:
-    :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
-  sqflite_darwin:
-    :path: ".symlinks/plugins/sqflite_darwin/darwin"
-  url_launcher_ios:
-    :path: ".symlinks/plugins/url_launcher_ios/ios"
-  webview_flutter_wkwebview:
-    :path: ".symlinks/plugins/webview_flutter_wkwebview/darwin"
   whisper_ggml:
     :path: ".symlinks/plugins/whisper_ggml/ios"
 
 SPEC CHECKSUMS:
-  app_links: 6d01271b3907b0ee7325c5297c75d697c4226c4d
-  audioplayers_darwin: f15e209a3e856d1a7edcf98dc029f484fead2242
-  background_downloader: a05c77d32a0d70615b9c04577aa203535fc924ff
   ffmpeg_kit_flutter_new_min: f28813df6012a3b3c0e66e4e9f3583a9b30be4d6
   Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
   flutter_gemma: 6bf34a12b45df17e3db9b33db7fea51506c8628f
-  flutter_keyboard_visibility_temp_fork: 8a8809c4129e31d25fca77446e0f3fd548122ced
-  is_ios_simulator: 98bedb8c4b0788dfb2a763c59fdeae8dd3785d50
-  large_file_handler: b0da5998ce84ea647987d9cc2c37d2383eabdca6
   MediaPipeTasksGenAI: 8eed8e6d03fe26d30c4205cb5295ec7b394432ad
   MediaPipeTasksGenAIC: cb098ecea44e248efe8fe7e2f62b4cb0df781802
   package_info_plus: 115f4ad11e0698c8c1c5d8a689390df880f47e85
-  path_provider_foundation: 0b743cbb62d8e47eab856f09262bb8c1ddcfe6ba
   printing: 233e1b73bd1f4a05615548e9b5a324c98588640b
-  quill_native_bridge_ios: 2b01d585fcc73d0f5eed78c0bd244ee564b06f5a
-  record_ios: 3b171007ae5de51221a3a76d2b379a7105ca98b5
-  share_plus: 8b6f8b3447e494cca5317c8c3073de39b3600d1f
-  shared_preferences_foundation: 5086985c1d43c5ba4d5e69a4e8083a389e2909e6
-  sqflite_darwin: 5a7236e3b501866c1c9befc6771dfd73ffb8702d
-  url_launcher_ios: bb13df5870e8c4234ca12609d04010a21be43dfa
-  webview_flutter_wkwebview: 29eb20d43355b48fe7d07113835b9128f84e3af4
   whisper_ggml: d57b6294869638841747f2cb5c259c87cacbd489
 
-PODFILE CHECKSUM: ad8859dfe4f328f8626ddc945c13fe9244220444
+PODFILE CHECKSUM: b23e1ede72c2c05d4a9351a009a75c21bdf4ac7b
 
 COCOAPODS: 1.16.2
