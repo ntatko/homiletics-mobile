@@ -255,6 +255,12 @@ jobs:
             echo "storeFile=upload-keystore.jks"
           } > android/key.properties
 
+      # Flutter 3.44 wants an NDK the runner doesn't have; Gradle can only
+      # install it once the SDK licences are accepted.
+      - name: Accept Android SDK licences
+        if: steps.signing.outputs.ready == 'true'
+        run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null
+
       - name: Build APK and App Bundle
         if: steps.signing.outputs.ready == 'true'
         run: |
