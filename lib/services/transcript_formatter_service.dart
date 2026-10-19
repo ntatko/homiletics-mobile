@@ -121,8 +121,20 @@ class TranscriptFormatterService {
   static String get _localModelFileName =>
       Uri.parse(_localModelUrl).pathSegments.last;
 
-  /// flutter_gemma's `.task` runtime is mobile-only.
-  static bool get isLocalModelSupported => Platform.isAndroid || Platform.isIOS;
+  /// flutter_gemma's `.task` runtime is mobile-only. On iOS it's limited to
+  /// 16+: the app still runs on iPadOS 15 for older iPads, which don't have
+  /// the memory for a 1.6GB model anyway.
+  static bool get isLocalModelSupported =>
+      Platform.isAndroid || (Platform.isIOS && iosMajorVersion() >= 16);
+
+  /// The major version in an iOS [Platform.operatingSystemVersion] string
+  /// (e.g. "Version 15.8.4 (Build 19H390)"), or 0 if there isn't one.
+  @visibleForTesting
+  static int iosMajorVersion([String? osVersion]) {
+    final Match? match = RegExp(r'(\d+)\.')
+        .firstMatch(osVersion ?? Platform.operatingSystemVersion);
+    return match == null ? 0 : int.parse(match.group(1)!);
+  }
 
   /// Must run once before any other call touches flutter_gemma.
   static Future<void> initialize() async {
