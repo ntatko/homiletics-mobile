@@ -49,13 +49,13 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   ffmpeg_kit_flutter_new_min: f28813df6012a3b3c0e66e4e9f3583a9b30be4d6
   Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
-  flutter_gemma: 6bf34a12b45df17e3db9b33db7fea51506c8628f
+  flutter_gemma: 9b70c2c53d6436b2755090f8a1669e77bc1122a6
   MediaPipeTasksGenAI: 8eed8e6d03fe26d30c4205cb5295ec7b394432ad
   MediaPipeTasksGenAIC: cb098ecea44e248efe8fe7e2f62b4cb0df781802
   package_info_plus: 115f4ad11e0698c8c1c5d8a689390df880f47e85
   printing: 233e1b73bd1f4a05615548e9b5a324c98588640b
   whisper_ggml: d57b6294869638841747f2cb5c259c87cacbd489
 
-PODFILE CHECKSUM: b23e1ede72c2c05d4a9351a009a75c21bdf4ac7b
+PODFILE CHECKSUM: 59f679c1325beca99e895789c7d0af7973580317
 
 COCOAPODS: 1.16.2

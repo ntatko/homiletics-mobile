@@ -1,5 +1,5 @@
 # Uncomment this line to define a global platform for your project
-platform :ios, '16.0'
+platform :ios, '15.6'
 
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
@@ -27,6 +27,18 @@ require File.expand_path(File.join('packages', 'flutter_tools', 'bin', 'podhelpe
 
 flutter_ios_podfile_setup
 
+# flutter_gemma's podspec asks for iOS 16, but its Swift code targets iOS 13
+# and its MediaPipe frameworks are built for iOS 15, so it builds fine at
+# 15.6 (the floor whisper_ggml sets). Lowering it keeps the app installable on
+# iPadOS 15; the app only loads the model on iOS 16+ (see
+# TranscriptFormatterService.isLocalModelSupported).
+Pod::Specification.prepend(Module.new do
+  def platform=(args)
+    args = [:ios, '15.6'] if name == 'flutter_gemma' && Array(args).first.to_s == 'ios'
+    super(args)
+  end
+end)
+
 target 'Runner' do
   # Static linkage: flutter_gemma's MediaPipe GenAI pods ship static-only
   # xcframeworks that CocoaPods rejects under dynamic use_frameworks!.
@@ -39,12 +51,11 @@ end
 post_install do |installer|
   installer.pods_project.targets.each do |target|
     flutter_additional_ios_build_settings(target)
-    # Xcode 27 refuses deployment targets below iOS 15; some plugins still
-    # declare 12 or 13. Match the app's own minimum.
+    # Build every pod for the app's own minimum. Xcode 27 refuses targets
+    # below iOS 15 (some plugins still declare 12 or 13), and a pod built for
+    # a newer iOS than the app's minimum can crash at launch on older devices.
     target.build_configurations.each do |config|
-      if config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'].to_f < 16.0
-        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '16.0'
-      end
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.6'
     end
   end
 end

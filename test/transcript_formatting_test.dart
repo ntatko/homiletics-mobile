@@ -263,4 +263,21 @@ void main() {
           startsWith('以下是普通話的句子。'));
     });
   });
+
+  group('iosMajorVersion', () {
+    test('reads the major version', () {
+      expect(
+          TranscriptFormatterService.iosMajorVersion(
+              'Version 15.8.4 (Build 19H390)'),
+          15);
+      expect(
+          TranscriptFormatterService.iosMajorVersion(
+              'Version 26.0 (Build 23A341)'),
+          26);
+    });
+
+    test('is 0 when there is no version', () {
+      expect(TranscriptFormatterService.iosMajorVersion(''), 0);
+    });
+  });
 }
