@@ -1290,6 +1290,18 @@ class AppLocalizationsZh extends AppLocalizations {
   String get shareSharePdf => '分享 PDF';
 
   @override
+  String get shareCopyText => '复制为文字';
+
+  @override
+  String get shareCopyTextSubtitle => '用于粘贴到帖子或评论中';
+
+  @override
+  String get shareTextCopied => '文字已复制';
+
+  @override
+  String get shareTextFailed => '无法复制文字。';
+
+  @override
   String get shareImages => '以图片分享';
 
   @override
@@ -2917,6 +2929,18 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String get shareSharePdf => '分享 PDF';
+
+  @override
+  String get shareCopyText => '复制为文字';
+
+  @override
+  String get shareCopyTextSubtitle => '用于粘贴到帖子或评论中';
+
+  @override
+  String get shareTextCopied => '文字已复制';
+
+  @override
+  String get shareTextFailed => '无法复制文字。';
 
   @override
   String get shareImages => '以图片分享';
@@ -4547,6 +4571,18 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get shareSharePdf => '分享 PDF';
+
+  @override
+  String get shareCopyText => '複製為文字';
+
+  @override
+  String get shareCopyTextSubtitle => '用於貼到貼文或留言中';
+
+  @override
+  String get shareTextCopied => '文字已複製';
+
+  @override
+  String get shareTextFailed => '無法複製文字。';
 
   @override
   String get shareImages => '以圖片分享';

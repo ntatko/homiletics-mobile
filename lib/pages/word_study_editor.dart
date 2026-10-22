@@ -13,6 +13,7 @@ import 'package:homiletics/components/word_study/word_study_section_card.dart';
 import 'package:homiletics/l10n/l10n.dart';
 import 'package:homiletics/services/share_link.dart';
 import 'package:homiletics/storage/pdf_generation.dart';
+import 'package:homiletics/storage/study_text.dart';
 import 'package:homiletics/theme/app_theme.dart';
 import 'package:homiletics/theme/widgets.dart';
 
@@ -162,6 +163,7 @@ class _WordStudyEditorState extends State<WordStudyEditor> {
       buildLink: () => ShareLink.encodeWordStudy(_thisStudy,
           translation: Preferences.preferredVersion),
       title: title,
+      buildText: (l) => wordStudyText(_thisStudy, l),
       buildImages: () => wordStudyImages(_thisStudy),
       onSharePdf: _sharePdf,
       onPrint: _print,

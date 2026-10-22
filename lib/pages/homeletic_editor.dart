@@ -21,6 +21,7 @@ import 'package:homiletics/storage/application_storage.dart';
 import 'package:homiletics/storage/content_summary_storage.dart';
 import 'package:homiletics/storage/division_storage.dart';
 import 'package:homiletics/storage/pdf_generation.dart';
+import 'package:homiletics/storage/study_text.dart';
 import 'package:homiletics/theme/app_theme.dart';
 import 'package:homiletics/theme/widgets.dart';
 import 'package:homiletics/theme/homiletics_widgets.dart';
@@ -449,6 +450,8 @@ class _HomileticState extends State<HomileticEditor> {
       title: passage.isEmpty
           ? context.l10n.pdfUntitledPassage
           : context.l10n.pdfHomileticLabel(passage),
+      buildText: (l) => homileticText(
+          _thisHomiletic, _summaries, _divisions, _applications, l),
       buildImages: () => homileticImages(
           _thisHomiletic, _summaries, _divisions, _applications),
       onSharePdf: _sharePdf,

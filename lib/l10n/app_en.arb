@@ -1851,6 +1851,22 @@
   "@shareSharePdf": {
     "description": "Share-sheet option: share the study as a PDF document."
   },
+  "shareCopyText": "Copy as text",
+  "@shareCopyText": {
+    "description": "Share-sheet option: copy the study to the clipboard as plain text."
+  },
+  "shareCopyTextSubtitle": "For pasting into a post or comment",
+  "@shareCopyTextSubtitle": {
+    "description": "Subtitle under the copy-as-text option."
+  },
+  "shareTextCopied": "Text copied",
+  "@shareTextCopied": {
+    "description": "Snack bar after the study's text was copied."
+  },
+  "shareTextFailed": "Couldn't copy the text.",
+  "@shareTextFailed": {
+    "description": "Snack bar when copying the study's text failed."
+  },
   "shareImages": "Share as images",
   "@shareImages": {
     "description": "Share-sheet option: share the study as square images for social media."

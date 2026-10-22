@@ -16,8 +16,8 @@ import 'package:share_plus/share_plus.dart';
 
 /// The ways to share a study, in one bottom sheet: as a link (system share
 /// sheet, which includes AirDrop on Apple devices), copied to the
-/// clipboard, as a QR code for another phone to scan, as square images
-/// for social media, as a PDF, or printed.
+/// clipboard, as a QR code for another phone to scan, as text or square
+/// images for social media, as a PDF, or printed.
 ///
 /// [buildLink] is called when an option needs the link, so it reflects the
 /// study as it is then. [title] (e.g. the passage) heads the QR sheet and
@@ -26,6 +26,7 @@ Future<void> showStudyShareSheet(
   BuildContext context, {
   required String Function() buildLink,
   required String title,
+  required String Function(AppLocalizations l) buildText,
   required Future<HandoutImages> Function() buildImages,
   required Future<void> Function() onSharePdf,
   required Future<void> Function() onPrint,
@@ -85,6 +86,11 @@ Future<void> showStudyShareSheet(
               option(Icons.qr_code_2_rounded, l.shareShowQr, null,
                   (_) => showStudyQrCode(context, buildLink(), title)),
               Divider(color: c.line, height: 17, indent: 16, endIndent: 16),
+              option(
+                  Icons.notes_rounded,
+                  l.shareCopyText,
+                  l.shareCopyTextSubtitle,
+                  (_) => copyStudyText(context, buildText(l))),
               option(
                   Icons.image_outlined,
                   l.shareImages,
@@ -275,6 +281,17 @@ class _QrSheet extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+/// Copies the study, as plain text, to the clipboard.
+Future<void> copyStudyText(BuildContext context, String text) async {
+  try {
+    await Clipboard.setData(ClipboardData(text: text));
+    if (context.mounted) _snack(context, context.l10n.shareTextCopied);
+  } catch (error) {
+    sendError(error, 'Copy study text');
+    if (context.mounted) _snack(context, context.l10n.shareTextFailed);
   }
 }
 

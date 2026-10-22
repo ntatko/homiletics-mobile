@@ -1351,6 +1351,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get shareSharePdf => 'Share PDF';
 
   @override
+  String get shareCopyText => 'Copy as text';
+
+  @override
+  String get shareCopyTextSubtitle => 'For pasting into a post or comment';
+
+  @override
+  String get shareTextCopied => 'Text copied';
+
+  @override
+  String get shareTextFailed => 'Couldn\'t copy the text.';
+
+  @override
   String get shareImages => 'Share as images';
 
   @override
