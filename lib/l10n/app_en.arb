@@ -1851,6 +1851,38 @@
   "@shareSharePdf": {
     "description": "Share-sheet option: share the study as a PDF document."
   },
+  "shareCopyText": "Copy as text",
+  "@shareCopyText": {
+    "description": "Share-sheet option: copy the study to the clipboard as plain text."
+  },
+  "shareCopyTextSubtitle": "For pasting into a post or comment",
+  "@shareCopyTextSubtitle": {
+    "description": "Subtitle under the copy-as-text option."
+  },
+  "shareTextCopied": "Text copied",
+  "@shareTextCopied": {
+    "description": "Snack bar after the study's text was copied."
+  },
+  "shareTextFailed": "Couldn't copy the text.",
+  "@shareTextFailed": {
+    "description": "Snack bar when copying the study's text failed."
+  },
+  "shareImages": "Share as images",
+  "@shareImages": {
+    "description": "Share-sheet option: share the study as square images for social media."
+  },
+  "shareImagesSubtitle": "Square, for posting to social media",
+  "@shareImagesSubtitle": {
+    "description": "Subtitle under the share-as-images option."
+  },
+  "shareImagesSaved": "Images saved.",
+  "@shareImagesSaved": {
+    "description": "Snack bar after the study's images were saved to a folder (desktop)."
+  },
+  "shareImagesFailed": "Couldn't make the images. Try again soon.",
+  "@shareImagesFailed": {
+    "description": "Snack bar when making or sharing the study's images failed."
+  },
   "shareLinkFailed": "Couldn't share the link.",
   "@shareLinkFailed": {
     "description": "Snack bar when sharing or copying the study link failed."

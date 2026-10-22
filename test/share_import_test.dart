@@ -21,6 +21,7 @@ import 'package:homiletics/storage/application_storage.dart';
 import 'package:homiletics/storage/content_summary_storage.dart';
 import 'package:homiletics/storage/division_storage.dart';
 import 'package:homiletics/storage/homiletic_storage.dart';
+import 'package:homiletics/storage/pdf_generation.dart' show HandoutImages;
 import 'package:homiletics/storage/word_study_storage.dart';
 import 'package:homiletics/theme/app_theme.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -255,6 +256,8 @@ void main() {
             onPressed: () => showStudyShareSheet(context,
                 buildLink: () => link,
                 title: 'Homiletics · Romans 3:1-20',
+                buildText: (_) => 'Romans 3:1-20',
+                buildImages: () async => const HandoutImages('study', []),
                 onSharePdf: () async {},
                 onPrint: () async {}),
             child: const Text('share'),
@@ -271,6 +274,8 @@ void main() {
         'Share link',
         'Copy link',
         'Show QR code',
+        'Copy as text',
+        'Share as images',
         'Share PDF',
         'Print',
       ]) {

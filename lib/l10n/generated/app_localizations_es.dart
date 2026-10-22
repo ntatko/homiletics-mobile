@@ -1357,6 +1357,33 @@ class AppLocalizationsEs extends AppLocalizations {
   String get shareSharePdf => 'Compartir PDF';
 
   @override
+  String get shareCopyText => 'Copiar como texto';
+
+  @override
+  String get shareCopyTextSubtitle =>
+      'Para pegar en una publicación o comentario';
+
+  @override
+  String get shareTextCopied => 'Texto copiado';
+
+  @override
+  String get shareTextFailed => 'No se pudo copiar el texto.';
+
+  @override
+  String get shareImages => 'Compartir como imágenes';
+
+  @override
+  String get shareImagesSubtitle =>
+      'Cuadradas, para publicar en redes sociales';
+
+  @override
+  String get shareImagesSaved => 'Imágenes guardadas.';
+
+  @override
+  String get shareImagesFailed =>
+      'No se pudieron crear las imágenes. Inténtalo de nuevo pronto.';
+
+  @override
   String get shareLinkFailed => 'No se pudo compartir el enlace.';
 
   @override

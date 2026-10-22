@@ -105,28 +105,36 @@ void main() {
     List<ContentSummary> s,
     List<Division> d,
     List<Application> a, {
-    PdfPageFormat format = PdfPageFormat.letter,
+    PdfPageFormat? format,
+    HandoutLayout layout = HandoutLayout.page,
     String? previewName,
     AppLocalizations? strings,
     HomileticPdfFonts? withFonts,
   }) async {
     return preview(
         await buildHomileticsDocument(h, s, d, a,
-                fonts: withFonts ?? fonts, format: format, strings: strings)
+                fonts: withFonts ?? fonts,
+                format: format,
+                layout: layout,
+                strings: strings)
             .save(),
         previewName);
   }
 
   Future<Uint8List> renderWordStudy(
     WordStudy study, {
-    PdfPageFormat format = PdfPageFormat.letter,
+    PdfPageFormat? format,
+    HandoutLayout layout = HandoutLayout.page,
     String? previewName,
     AppLocalizations? strings,
     HomileticPdfFonts? withFonts,
   }) async {
     return preview(
         await buildWordStudyDocument(study,
-                fonts: withFonts ?? fonts, format: format, strings: strings)
+                fonts: withFonts ?? fonts,
+                format: format,
+                layout: layout,
+                strings: strings)
             .save(),
         previewName);
   }
@@ -228,6 +236,28 @@ void main() {
     final Uint8List a4 = await render(h, summaries, divisions, applications,
         format: PdfPageFormat.a4, previewName: 'homiletic_sample_a4.pdf');
     expect(pageCount(a4), greaterThan(1));
+
+    // A typical study, without the oversized 2:8–9 summary.
+    final List<ContentSummary> typical = [
+      for (final ContentSummary s in summaries)
+        s.passage == '2:8–9'
+            ? ContentSummary(
+                homileticId: 1,
+                passage: '2:8–9',
+                summary: 'To Smyrna, the First and the Last, who died and came '
+                    'to life, says He knows their tribulation and poverty — '
+                    'yet they are rich.')
+            : s
+    ];
+    expect(
+        pageCount(await render(h, typical, divisions, applications,
+            previewName: 'homiletic_typical.pdf')),
+        1,
+        reason: 'a typical homiletic should fit on one printed page');
+
+    final Uint8List square = await render(h, typical, divisions, applications,
+        layout: HandoutLayout.square, previewName: 'homiletic_square.pdf');
+    expect(pageCount(square), greaterThanOrEqualTo(1));
   });
 
   test('handles empty and pathological input without crashing', () async {
@@ -249,6 +279,24 @@ void main() {
         h, many, [Division(1, passage: '1:1')], [Application(homileticsId: 1)],
         previewName: 'homiletic_stress.pdf');
     expect(pageCount(stress), greaterThan(5));
+
+    // Square images shrink to fit instead of running on: one per half.
+    final Uint8List squareStress = await render(
+        h, many, [Division(1, passage: '1:1')], [Application(homileticsId: 1)],
+        layout: HandoutLayout.square,
+        previewName: 'homiletic_square_stress.pdf');
+    expect(pageCount(squareStress), 2);
+    expect(
+        pageCount(await render(Homiletic(), [], [], [],
+            layout: HandoutLayout.square)),
+        1);
+  });
+
+  test('HandoutImages names one image or a numbered set', () {
+    expect(HandoutImages('homiletics-John_1', [Uint8List(0)]).fileNames,
+        ['homiletics-John_1.png']);
+    expect(HandoutImages('word-study', [Uint8List(0), Uint8List(0)]).fileNames,
+        ['word-study-1.png', 'word-study-2.png']);
   });
 
   test('splitForPages keeps every character and bounds piece size', () {
@@ -294,6 +342,10 @@ void main() {
     final Uint8List a4 = await renderWordStudy(study,
         format: PdfPageFormat.a4, previewName: 'word_study_sample_a4.pdf');
     expect(pageCount(a4), 1);
+
+    final Uint8List square = await renderWordStudy(study,
+        layout: HandoutLayout.square, previewName: 'word_study_square.pdf');
+    expect(pageCount(square), greaterThanOrEqualTo(1));
   });
 
   test('word study: empty and very long input', () async {
