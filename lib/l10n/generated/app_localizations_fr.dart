@@ -1364,6 +1364,19 @@ class AppLocalizationsFr extends AppLocalizations {
   String get shareSharePdf => 'Partager le PDF';
 
   @override
+  String get shareImages => 'Partager en images';
+
+  @override
+  String get shareImagesSubtitle => 'Carrées, pour les réseaux sociaux';
+
+  @override
+  String get shareImagesSaved => 'Images enregistrées.';
+
+  @override
+  String get shareImagesFailed =>
+      'Impossible de créer les images. Réessayez bientôt.';
+
+  @override
   String get shareLinkFailed => 'Impossible de partager le lien.';
 
   @override

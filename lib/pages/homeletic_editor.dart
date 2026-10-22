@@ -449,6 +449,8 @@ class _HomileticState extends State<HomileticEditor> {
       title: passage.isEmpty
           ? context.l10n.pdfUntitledPassage
           : context.l10n.pdfHomileticLabel(passage),
+      buildImages: () => homileticImages(
+          _thisHomiletic, _summaries, _divisions, _applications),
       onSharePdf: _sharePdf,
       onPrint: _print,
     );

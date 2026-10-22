@@ -1,17 +1,23 @@
+import 'dart:io';
+
+import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:homiletics/common/report_error.dart';
 import 'package:homiletics/l10n/l10n.dart';
 import 'package:homiletics/services/share_link.dart';
+import 'package:homiletics/storage/pdf_generation.dart' show HandoutImages;
 import 'package:homiletics/theme/app_theme.dart';
 import 'package:homiletics/theme/widgets.dart';
+import 'package:path/path.dart' as path;
+import 'package:path_provider/path_provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 
 /// The ways to share a study, in one bottom sheet: as a link (system share
 /// sheet, which includes AirDrop on Apple devices), copied to the
-/// clipboard, as a QR code for another phone to scan, as a PDF, or
-/// printed.
+/// clipboard, as a QR code for another phone to scan, as square images
+/// for social media, as a PDF, or printed.
 ///
 /// [buildLink] is called when an option needs the link, so it reflects the
 /// study as it is then. [title] (e.g. the passage) heads the QR sheet and
@@ -20,6 +26,7 @@ Future<void> showStudyShareSheet(
   BuildContext context, {
   required String Function() buildLink,
   required String title,
+  required Future<HandoutImages> Function() buildImages,
   required Future<void> Function() onSharePdf,
   required Future<void> Function() onPrint,
 }) {
@@ -78,6 +85,12 @@ Future<void> showStudyShareSheet(
               option(Icons.qr_code_2_rounded, l.shareShowQr, null,
                   (_) => showStudyQrCode(context, buildLink(), title)),
               Divider(color: c.line, height: 17, indent: 16, endIndent: 16),
+              option(
+                  Icons.image_outlined,
+                  l.shareImages,
+                  l.shareImagesSubtitle,
+                  (origin) =>
+                      shareStudyImages(context, buildImages, origin: origin)),
               option(Icons.picture_as_pdf_outlined, l.shareSharePdf, null,
                   (_) => onSharePdf()),
               option(
@@ -262,5 +275,50 @@ class _QrSheet extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+/// Renders the study as square images and opens the system share sheet
+/// with them on Android and iOS, or saves them to a folder the user picks
+/// on desktop. [origin] anchors the popover on iPad / Mac.
+Future<void> shareStudyImages(
+    BuildContext context, Future<HandoutImages> Function() buildImages,
+    {Rect? origin}) async {
+  final AppLocalizations l = context.l10n;
+  final Size screen = MediaQuery.sizeOf(context);
+  final Rect anchor = origin ??
+      Rect.fromCenter(
+          center: Offset(screen.width / 2, screen.height / 2),
+          width: 1,
+          height: 1);
+  try {
+    final HandoutImages images = await buildImages();
+    final List<String> names = images.fileNames;
+    if (Platform.isAndroid || Platform.isIOS) {
+      // Replaced on the next share rather than deleted now: the app the
+      // images go to may still be reading them after the sheet closes.
+      final Directory dir = Directory(
+          path.join((await getTemporaryDirectory()).path, 'share_images'));
+      if (await dir.exists()) await dir.delete(recursive: true);
+      await dir.create(recursive: true);
+      final List<XFile> files = [];
+      for (final (int i, Uint8List png) in images.pngs.indexed) {
+        final File file = File(path.join(dir.path, names[i]));
+        await file.writeAsBytes(png);
+        files.add(XFile(file.path, mimeType: 'image/png'));
+      }
+      await SharePlus.instance
+          .share(ShareParams(files: files, sharePositionOrigin: anchor));
+    } else {
+      final String? folder = await getDirectoryPath();
+      if (folder == null) return;
+      for (final (int i, Uint8List png) in images.pngs.indexed) {
+        await File(path.join(folder, names[i])).writeAsBytes(png);
+      }
+      if (context.mounted) _snack(context, l.shareImagesSaved);
+    }
+  } catch (error) {
+    sendError(error, 'Share study images');
+    if (context.mounted) _snack(context, l.shareImagesFailed);
   }
 }

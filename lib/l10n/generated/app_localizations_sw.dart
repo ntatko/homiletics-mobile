@@ -1354,6 +1354,20 @@ class AppLocalizationsSw extends AppLocalizations {
   String get shareSharePdf => 'Shiriki PDF';
 
   @override
+  String get shareImages => 'Shiriki kama picha';
+
+  @override
+  String get shareImagesSubtitle =>
+      'Za mraba, za kuchapisha kwenye mitandao ya kijamii';
+
+  @override
+  String get shareImagesSaved => 'Picha zimehifadhiwa.';
+
+  @override
+  String get shareImagesFailed =>
+      'Imeshindikana kutengeneza picha. Jaribu tena baadaye.';
+
+  @override
   String get shareLinkFailed => 'Imeshindwa kushiriki kiungo.';
 
   @override

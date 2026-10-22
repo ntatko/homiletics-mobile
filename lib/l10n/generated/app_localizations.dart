@@ -2380,6 +2380,30 @@ abstract class AppLocalizations {
   /// **'Share PDF'**
   String get shareSharePdf;
 
+  /// Share-sheet option: share the study as square images for social media.
+  ///
+  /// In en, this message translates to:
+  /// **'Share as images'**
+  String get shareImages;
+
+  /// Subtitle under the share-as-images option.
+  ///
+  /// In en, this message translates to:
+  /// **'Square, for posting to social media'**
+  String get shareImagesSubtitle;
+
+  /// Snack bar after the study's images were saved to a folder (desktop).
+  ///
+  /// In en, this message translates to:
+  /// **'Images saved.'**
+  String get shareImagesSaved;
+
+  /// Snack bar when making or sharing the study's images failed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t make the images. Try again soon.'**
+  String get shareImagesFailed;
+
   /// Snack bar when sharing or copying the study link failed.
   ///
   /// In en, this message translates to:

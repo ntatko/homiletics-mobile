@@ -162,6 +162,7 @@ class _WordStudyEditorState extends State<WordStudyEditor> {
       buildLink: () => ShareLink.encodeWordStudy(_thisStudy,
           translation: Preferences.preferredVersion),
       title: title,
+      buildImages: () => wordStudyImages(_thisStudy),
       onSharePdf: _sharePdf,
       onPrint: _print,
     );

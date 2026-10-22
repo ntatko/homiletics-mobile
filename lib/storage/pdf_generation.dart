@@ -240,6 +240,23 @@ String _dateLocale(AppLocalizations l) {
 String _formatDate(DateTime date, AppLocalizations l) =>
     DateFormat.yMMMMd(_dateLocale(l)).format(date.toLocal());
 
+/// How a handout is set.
+enum HandoutLayout {
+  /// A printable page (Letter, A4, ...), set compactly.
+  page,
+
+  /// Square images for a social media feed: larger type on a 540pt square
+  /// (1080px at 144 dpi), one image per page.
+  square,
+}
+
+/// The square page that [HandoutLayout.square] images are laid out on.
+const PdfPageFormat squareImageFormat = PdfPageFormat(540, 540);
+
+/// The resolution [HandoutLayout.square] pages are rasterized at, making
+/// them 1080px square.
+const double squareImageDpi = 144;
+
 final RegExp _token = RegExp(r'\S+\s*|\s+');
 final RegExp _sentenceEnd = RegExp(r'[.!?;:”"]\s*$');
 
@@ -291,13 +308,14 @@ pw.Document buildHomileticsDocument(
   List<Division> divisions,
   List<Application> applications, {
   required HomileticPdfFonts fonts,
-  PdfPageFormat format = PdfPageFormat.letter,
+  PdfPageFormat? format,
+  HandoutLayout layout = HandoutLayout.page,
   AppLocalizations? strings,
 }) {
   final AppLocalizations l = strings ?? _english;
   final String passage = homiletic.passage.trim();
   final String title = passage.isEmpty ? l.pdfUntitledPassage : passage;
-  final _Styles styles = _Styles(fonts, l);
+  final _Styles styles = _Styles(fonts, l, layout);
   final String label = l.pdfHomileticLabel(title);
 
   final pw.Document doc = pw.Document(
@@ -306,11 +324,10 @@ pw.Document buildHomileticsDocument(
     producer: 'Homiletics',
   );
 
-  final List<pw.Widget> body = [
-    _header(l.pdfOverlineHomiletics, title, styles,
-        updatedAt: homiletic.updatedAt)
-  ];
-  final int before = body.length;
+  // The study's two halves, which are separate square images: the passage
+  // (Content and Divisions), then the message (Summary to Application).
+  final List<pw.Widget> passageHalf = [];
+  final List<pw.Widget> messageHalf = [];
 
   final List<(String, String)> contentRows = [
     for (final ContentSummary s in summaries)
@@ -318,7 +335,7 @@ pw.Document buildHomileticsDocument(
         (s.passage.trim(), s.summary.trim())
   ];
   if (contentRows.isNotEmpty) {
-    body.addAll(_rowSection(StudyStep.content, 1, contentRows, styles));
+    passageHalf.addAll(_rowSection(StudyStep.content, 1, contentRows, styles));
   }
 
   final List<(String, String)> divisionRows = [
@@ -327,20 +344,21 @@ pw.Document buildHomileticsDocument(
         (d.passage.trim(), d.title.trim())
   ];
   if (divisionRows.isNotEmpty) {
-    body.addAll(_rowSection(StudyStep.divisions, 2, divisionRows, styles));
+    passageHalf
+        .addAll(_rowSection(StudyStep.divisions, 2, divisionRows, styles));
   }
 
   if (homiletic.subjectSentence.trim().isNotEmpty) {
-    body.addAll(_statementSection(
+    messageHalf.addAll(_statementSection(
         StudyStep.summary, 3, homiletic.subjectSentence.trim(), styles));
   }
   if (homiletic.fcf.trim().isNotEmpty) {
-    body.addAll(_statementSection(
+    messageHalf.addAll(_statementSection(
         StudyStep.fcf, 4, homiletic.fcf.trim(), styles,
         caption: l.pdfFcfCaption));
   }
   if (homiletic.aim.trim().isNotEmpty) {
-    body.addAll(_statementSection(
+    messageHalf.addAll(_statementSection(
         StudyStep.aim, 5, homiletic.aim.trim(), styles,
         leadIn: l.pdfAimLeadIn));
   }
@@ -350,40 +368,43 @@ pw.Document buildHomileticsDocument(
       if (a.text.trim().isNotEmpty) a.text.trim()
   ];
   if (questions.isNotEmpty) {
-    body.addAll(_rowSection(
+    messageHalf.addAll(_rowSection(
       StudyStep.application,
       6,
       [for (final (int i, String q) in questions.indexed) ('${i + 1}', q)],
       styles,
-      labelWidth: 22,
+      labelWidth: styles.numberLabelWidth,
     ));
   }
 
-  if (body.length == before) {
-    body.add(_emptyNote(l.pdfEmptyHomiletic, styles));
-  }
-
-  doc.addPage(_handoutPage(body, fonts, styles, format, label));
+  _addPages(
+      doc,
+      _header(l.pdfOverlineHomiletics, title, styles,
+          updatedAt: homiletic.updatedAt),
+      [passageHalf, messageHalf],
+      _emptyNote(l.pdfEmptyHomiletic, styles),
+      fonts,
+      styles,
+      format,
+      label,
+      title);
   return doc;
 }
-
-/// Space above each word study section; a little tighter than the
-/// homiletic's so a typical study fits on one page.
-const double _wordStudyGap = 18;
 
 /// Lays out a word study as a printable handout, in the same style as
 /// [buildHomileticsDocument]. Pure, like it.
 pw.Document buildWordStudyDocument(
   WordStudy study, {
   required HomileticPdfFonts fonts,
-  PdfPageFormat format = PdfPageFormat.letter,
+  PdfPageFormat? format,
+  HandoutLayout layout = HandoutLayout.page,
   AppLocalizations? strings,
 }) {
   final AppLocalizations l = strings ?? _english;
   final String word = study.word.trim();
   final String passage = study.passage.trim();
   final String title = word.isEmpty ? l.pdfUntitledWord : word;
-  final _Styles styles = _Styles(fonts, l);
+  final _Styles styles = _Styles(fonts, l, layout);
   final String label = passage.isEmpty
       ? l.pdfWordStudyLabel(title)
       : l.pdfWordStudyLabelWithPassage(title, passage);
@@ -394,18 +415,16 @@ pw.Document buildWordStudyDocument(
     producer: 'Homiletics',
   );
 
-  final List<pw.Widget> body = [
-    _header(l.pdfOverlineWordStudy, title, styles,
-        subtitle: passage.isEmpty ? null : passage, updatedAt: study.updatedAt)
-  ];
-  final int before = body.length;
+  // The study's two halves, which are separate square images: the word
+  // (Definition and Other usage), then what it means here.
+  final List<pw.Widget> wordHalf = [];
+  final List<pw.Widget> meaningHalf = [];
 
-  void prose(String title, StudyStep step, String text) {
+  void prose(List<pw.Widget> body, String title, StudyStep step, String text) {
     if (text.trim().isEmpty) return;
     body.addAll(_withHeading(
-        _sectionHeading(step, title, styles, top: _wordStudyGap),
-        _tintedBlocks(step, text.trim(), styles.body,
-            padding: const pw.EdgeInsets.fromLTRB(14, 10, 14, 11))));
+        _sectionHeading(step, title, styles, top: styles.wordStudyGap),
+        _tintedBlocks(step, text.trim(), styles.body, styles)));
   }
 
   final String definition = study.definition.trim();
@@ -414,106 +433,241 @@ pw.Document buildWordStudyDocument(
       if (line.trim().isNotEmpty) line.trim()
   ];
   // Like the editor, short Definition and Other usage sit side by side;
-  // anything longer is stacked so it can run across pages.
-  final bool sideBySide = definition.isNotEmpty &&
+  // anything longer is stacked so it can run across pages. A square image
+  // is too narrow for two columns.
+  final bool sideBySide = layout == HandoutLayout.page &&
+      definition.isNotEmpty &&
       usages.isNotEmpty &&
       definition.length <= 420 &&
       '\n'.allMatches(definition).length < 6 &&
       usages.length <= 10 &&
       usages.every((String line) => line.length <= 70);
   if (sideBySide) {
-    body.add(_definitionAndUsage(definition, usages, styles));
+    wordHalf.add(_definitionAndUsage(definition, usages, styles));
   } else {
-    prose(l.pdfWordStudyDefinition, StudyStep.application, definition);
+    prose(
+        wordHalf, l.pdfWordStudyDefinition, StudyStep.application, definition);
     if (usages.isNotEmpty) {
-      body.addAll(_withHeading(
+      wordHalf.addAll(_withHeading(
           _sectionHeading(StudyStep.summary, l.pdfWordStudyOtherUsage, styles,
-              top: _wordStudyGap),
+              top: styles.wordStudyGap),
           _usageList(StudyStep.summary, usages, styles)));
     }
   }
 
+  prose(meaningHalf, l.pdfWordStudyContextualMeaning, StudyStep.fcf,
+      study.contextualMeaning);
+  prose(meaningHalf, l.pdfWordStudyDeeperMeaning, StudyStep.divisions,
+      study.deeperMeaning);
   prose(
-      l.pdfWordStudyContextualMeaning, StudyStep.fcf, study.contextualMeaning);
-  prose(l.pdfWordStudyDeeperMeaning, StudyStep.divisions, study.deeperMeaning);
-  prose(l.pdfWordStudyApplication, StudyStep.aim, study.application);
+      meaningHalf, l.pdfWordStudyApplication, StudyStep.aim, study.application);
 
-  if (body.length == before) {
-    body.add(_emptyNote(l.pdfEmptyWordStudy, styles));
-  }
-
-  doc.addPage(_handoutPage(body, fonts, styles, format, label));
+  _addPages(
+      doc,
+      _header(l.pdfOverlineWordStudy, title, styles,
+          subtitle: passage.isEmpty ? null : passage,
+          updatedAt: study.updatedAt),
+      [wordHalf, meaningHalf],
+      _emptyNote(l.pdfEmptyWordStudy, styles),
+      fonts,
+      styles,
+      format,
+      label,
+      title);
   return doc;
 }
 
-/// The page setup every handout shares: margins, fonts and the running
-/// footer labelled [footerLabel].
-pw.MultiPage _handoutPage(List<pw.Widget> body, HomileticPdfFonts fonts,
-    _Styles styles, PdfPageFormat format, String footerLabel) {
-  return pw.MultiPage(
-    pageTheme: pw.PageTheme(
-      pageFormat: format,
-      margin: const pw.EdgeInsets.fromLTRB(58, 52, 58, 36),
-      theme: pw.ThemeData.withFont(
-        base: fonts.sans,
-        bold: fonts.sansBold,
-        italic: fonts.sansItalic,
-        boldItalic: fonts.sansBold,
-        fontFallback: fonts.fallback,
-      ),
+/// Adds a handout's pages to [doc]: [header], then the [halves] of the
+/// study, or [emptyNote] when there's nothing in them.
+///
+/// A printed handout runs everything together across as many pages as it
+/// takes. Square images put each half on its own image (the header with the
+/// first) and shrink a half that doesn't fit, so every image in a feed is
+/// complete; a half that's empty is left out.
+void _addPages(
+  pw.Document doc,
+  pw.Widget header,
+  List<List<pw.Widget>> halves,
+  pw.Widget emptyNote,
+  HomileticPdfFonts fonts,
+  _Styles styles,
+  PdfPageFormat? format,
+  String footerLabel,
+  String title,
+) {
+  final bool square = styles.layout == HandoutLayout.square;
+  final pw.PageTheme theme = pw.PageTheme(
+    pageFormat: format ?? (square ? squareImageFormat : PdfPageFormat.letter),
+    margin: square
+        ? const pw.EdgeInsets.fromLTRB(34, 30, 34, 20)
+        : const pw.EdgeInsets.fromLTRB(42, 36, 42, 26),
+    theme: pw.ThemeData.withFont(
+      base: fonts.sans,
+      bold: fonts.sansBold,
+      italic: fonts.sansItalic,
+      boldItalic: fonts.sansBold,
+      fontFallback: fonts.fallback,
     ),
-    maxPages: 500,
-    footer: (pw.Context context) => _footer(context, footerLabel, styles),
-    build: (pw.Context context) => body,
   );
+  final List<List<pw.Widget>> filled = [
+    for (final List<pw.Widget> half in halves)
+      if (half.isNotEmpty) half
+  ];
+  if (filled.isEmpty) filled.add([emptyNote]);
+
+  if (!square) {
+    doc.addPage(pw.MultiPage(
+      pageTheme: theme,
+      maxPages: 500,
+      footer: (pw.Context context) =>
+          _footer(context.pageNumber, context.pagesCount, footerLabel, styles),
+      build: (pw.Context context) =>
+          [header, for (final List<pw.Widget> half in filled) ...half],
+    ));
+    return;
+  }
+
+  for (final (int i, List<pw.Widget> half) in filled.indexed) {
+    final List<pw.Widget> children = [
+      if (i == 0)
+        header
+      else
+        // Later images repeat the title, so each stands on its own.
+        pw.Text(title.toUpperCase(), style: styles.overline, maxLines: 1),
+      ...half,
+    ];
+    doc.addPage(pw.Page(
+      pageTheme: theme,
+      build: (pw.Context context) => pw.Column(
+        crossAxisAlignment: pw.CrossAxisAlignment.stretch,
+        children: [
+          pw.Expanded(
+            child: pw.LayoutBuilder(
+              builder: (pw.Context context, pw.BoxConstraints? box) =>
+                  pw.FittedBox(
+                fit: pw.BoxFit.scaleDown,
+                alignment: pw.Alignment.topLeft,
+                child: pw.SizedBox(
+                  width: box!.maxWidth,
+                  child: pw.Column(
+                    crossAxisAlignment: pw.CrossAxisAlignment.stretch,
+                    children: children,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          _footer(i + 1, filled.length, footerLabel, styles),
+        ],
+      ),
+    ));
+  }
 }
 
 pw.Widget _emptyNote(String text, _Styles styles) {
   return pw.Padding(
-    padding: const pw.EdgeInsets.only(top: 28),
+    padding: pw.EdgeInsets.only(top: styles.sectionTop),
     child: pw.Text(text, style: styles.statementLead),
   );
 }
 
 class _Styles {
-  _Styles(HomileticPdfFonts f, this.strings)
-      : overline = pw.TextStyle(
-            font: f.sansSemiBold,
-            fontSize: 8,
-            letterSpacing: 1.8,
-            color: _Palette.accent),
-        passage = pw.TextStyle(
-            font: f.serifMedium,
-            fontSize: 30,
-            lineSpacing: 2,
-            color: _Palette.ink),
-        date = pw.TextStyle(font: f.sans, fontSize: 9, color: _Palette.muted),
-        number = pw.TextStyle(
-            font: f.sansBold, fontSize: 8.5, color: _Palette.onAccent),
-        sectionTitle = pw.TextStyle(
-            font: f.serifSemiBold, fontSize: 15, color: _Palette.ink),
-        caption = pw.TextStyle(
-            font: f.serifItalic, fontSize: 10.5, color: _Palette.muted),
-        rowLabel = pw.TextStyle(font: f.serifSemiBold, fontSize: 10.5),
-        rowText = pw.TextStyle(
-            font: f.sans, fontSize: 10.5, lineSpacing: 4, color: _Palette.ink),
-        body = pw.TextStyle(
-            font: f.sans, fontSize: 10.75, lineSpacing: 4, color: _Palette.ink),
-        reference = pw.TextStyle(
-            font: f.sansSemiBold, fontSize: 10.75, color: _Palette.ink),
-        subtitle = pw.TextStyle(
-            font: f.serifItalic, fontSize: 12, color: _Palette.muted),
-        statement = pw.TextStyle(
-            font: f.serif, fontSize: 13, lineSpacing: 4.5, color: _Palette.ink),
-        statementLead = pw.TextStyle(
-            font: f.serifItalic,
-            fontSize: 13,
-            lineSpacing: 4.5,
-            color: _Palette.muted),
-        footer = pw.TextStyle(font: f.sans, fontSize: 8, color: _Palette.muted);
+  factory _Styles(
+      HomileticPdfFonts f, AppLocalizations strings, HandoutLayout layout) {
+    final bool square = layout == HandoutLayout.square;
+    // Type sizes: [s] picks the page size or the square image's.
+    double s(double page, double image) => square ? image : page;
+    return _Styles._(
+      strings: strings,
+      layout: layout,
+      overline: pw.TextStyle(
+          font: f.sansSemiBold,
+          fontSize: s(7.5, 9),
+          letterSpacing: 1.6,
+          color: _Palette.accent),
+      passage: pw.TextStyle(
+          font: f.serifMedium,
+          fontSize: s(22, 26),
+          lineSpacing: 1.5,
+          color: _Palette.ink),
+      date: pw.TextStyle(
+          font: f.sans, fontSize: s(8.5, 10), color: _Palette.muted),
+      number: pw.TextStyle(
+          font: f.sansBold, fontSize: s(7.5, 9.5), color: _Palette.onAccent),
+      sectionTitle: pw.TextStyle(
+          font: f.serifSemiBold, fontSize: s(13, 16), color: _Palette.ink),
+      caption: pw.TextStyle(
+          font: f.serifItalic, fontSize: s(9.5, 11.5), color: _Palette.muted),
+      rowLabel: pw.TextStyle(font: f.serifSemiBold, fontSize: s(10, 13)),
+      rowText: pw.TextStyle(
+          font: f.sans,
+          fontSize: s(10, 13),
+          lineSpacing: s(2.5, 3.5),
+          color: _Palette.ink),
+      body: pw.TextStyle(
+          font: f.sans,
+          fontSize: s(10.25, 13),
+          lineSpacing: s(2.5, 3.5),
+          color: _Palette.ink),
+      reference: pw.TextStyle(
+          font: f.sansSemiBold, fontSize: s(10.25, 13), color: _Palette.ink),
+      subtitle: pw.TextStyle(
+          font: f.serifItalic, fontSize: s(11, 14), color: _Palette.muted),
+      statement: pw.TextStyle(
+          font: f.serif,
+          fontSize: s(11.5, 15),
+          lineSpacing: s(3, 4),
+          color: _Palette.ink),
+      statementLead: pw.TextStyle(
+          font: f.serifItalic,
+          fontSize: s(11.5, 15),
+          lineSpacing: s(3, 4),
+          color: _Palette.muted),
+      footer: pw.TextStyle(
+          font: f.sans, fontSize: s(7.5, 9.5), color: _Palette.muted),
+      sectionTop: s(14, 16),
+      wordStudyGap: s(12, 14),
+      markerSize: s(16, 20),
+      rowPadding: s(4, 5),
+      labelWidth: s(56, 66),
+      numberLabelWidth: s(18, 22),
+      tintPadding: square
+          ? const pw.EdgeInsets.fromLTRB(12, 9, 12, 10)
+          : const pw.EdgeInsets.fromLTRB(10, 6, 10, 7),
+      maxPieceChars: square ? 420 : 600,
+    );
+  }
+
+  const _Styles._({
+    required this.strings,
+    required this.layout,
+    required this.overline,
+    required this.passage,
+    required this.date,
+    required this.number,
+    required this.sectionTitle,
+    required this.caption,
+    required this.rowLabel,
+    required this.rowText,
+    required this.body,
+    required this.reference,
+    required this.subtitle,
+    required this.statement,
+    required this.statementLead,
+    required this.footer,
+    required this.sectionTop,
+    required this.wordStudyGap,
+    required this.markerSize,
+    required this.rowPadding,
+    required this.labelWidth,
+    required this.numberLabelWidth,
+    required this.tintPadding,
+    required this.maxPieceChars,
+  });
 
   /// The handout's language.
   final AppLocalizations strings;
+  final HandoutLayout layout;
 
   final pw.TextStyle overline;
   final pw.TextStyle passage;
@@ -529,38 +683,66 @@ class _Styles {
   final pw.TextStyle statement;
   final pw.TextStyle statementLead;
   final pw.TextStyle footer;
+
+  /// Space above a homiletic section heading.
+  final double sectionTop;
+
+  /// Space above a word study section heading.
+  final double wordStudyGap;
+
+  /// The diameter of a homiletic step's numbered circle.
+  final double markerSize;
+
+  /// Space above and below each row's text.
+  final double rowPadding;
+
+  /// The label column of a row section (passage references).
+  final double labelWidth;
+
+  /// The label column of the numbered application questions.
+  final double numberLabelWidth;
+
+  /// Padding inside a tinted block.
+  final pw.EdgeInsets tintPadding;
+
+  /// The longest piece [splitForPages] cuts long text into.
+  final int maxPieceChars;
+
+  /// [text] in pieces that each fit on one page.
+  List<String> split(String text) =>
+      splitForPages(text, maxChars: maxPieceChars);
 }
 
-/// The title block: a small accent [overline], the [title] large in serif,
-/// then a rule with the [subtitle] (if any) and the date beneath it.
+/// The title block: a small accent [overline], the [title] large in serif
+/// with the date across from it, then a rule with the [subtitle] (if any)
+/// beneath it.
 pw.Widget _header(String overline, String title, _Styles styles,
     {String? subtitle, DateTime? updatedAt}) {
   return pw.Column(
     crossAxisAlignment: pw.CrossAxisAlignment.start,
     children: [
       pw.Text(overline, style: styles.overline),
-      pw.SizedBox(height: 6),
-      pw.Text(title, style: styles.passage),
-      pw.SizedBox(height: 10),
-      pw.Container(height: 0.75, color: _Palette.lineStrong),
-      pw.SizedBox(height: 6),
-      if (subtitle != null || updatedAt != null)
-        pw.Row(
-          crossAxisAlignment: pw.CrossAxisAlignment.end,
-          children: [
-            pw.Expanded(
-              child: subtitle == null
-                  ? pw.SizedBox()
-                  : pw.Text(subtitle, style: styles.subtitle),
-            ),
-            if (updatedAt != null) ...[
-              pw.SizedBox(width: 12),
-              pw.Text(_formatDate(updatedAt, styles.strings),
+      pw.SizedBox(height: 3),
+      pw.Row(
+        crossAxisAlignment: pw.CrossAxisAlignment.end,
+        children: [
+          pw.Expanded(child: pw.Text(title, style: styles.passage)),
+          if (updatedAt != null) ...[
+            pw.SizedBox(width: 12),
+            pw.Padding(
+              padding: const pw.EdgeInsets.only(bottom: 4),
+              child: pw.Text(_formatDate(updatedAt, styles.strings),
                   style: styles.date),
-            ],
+            ),
           ],
-        ),
-      pw.SizedBox(height: 4),
+        ],
+      ),
+      pw.SizedBox(height: 6),
+      pw.Container(height: 0.75, color: _Palette.lineStrong),
+      if (subtitle != null) ...[
+        pw.SizedBox(height: 4),
+        pw.Text(subtitle, style: styles.subtitle),
+      ],
     ],
   );
 }
@@ -568,8 +750,8 @@ pw.Widget _header(String overline, String title, _Styles styles,
 /// The numbered circle that marks a homiletic step.
 pw.Widget _numberMarker(StudyStep step, int number, _Styles styles) {
   return pw.Container(
-    width: 19,
-    height: 19,
+    width: styles.markerSize,
+    height: styles.markerSize,
     alignment: pw.Alignment.center,
     decoration:
         pw.BoxDecoration(color: _Palette.step(step), shape: pw.BoxShape.circle),
@@ -593,9 +775,9 @@ pw.Widget _squareMarker(StudyStep step) {
 /// given, otherwise a small square) and [title] (default: the step's
 /// localized name).
 pw.Widget _sectionHeading(StudyStep step, String? title, _Styles styles,
-    {int? number, String? caption, double top = 22}) {
+    {int? number, String? caption, double? top}) {
   return pw.Padding(
-    padding: pw.EdgeInsets.only(top: top, bottom: 8),
+    padding: pw.EdgeInsets.only(top: top ?? styles.sectionTop, bottom: 5),
     child: pw.Row(
       crossAxisAlignment: pw.CrossAxisAlignment.center,
       children: [
@@ -640,7 +822,7 @@ List<pw.Widget> _rowSection(
   int number,
   List<(String, String)> rows,
   _Styles styles, {
-  double labelWidth = 68,
+  double? labelWidth,
 }) {
   final pw.TextStyle labelStyle =
       styles.rowLabel.copyWith(color: _Palette.step(step));
@@ -649,16 +831,15 @@ List<pw.Widget> _rowSection(
   final List<pw.Widget> out = [];
 
   for (final (int r, (String label, String text)) in rows.indexed) {
-    final List<String> pieces =
-        text.isEmpty ? const ['—'] : splitForPages(text);
+    final List<String> pieces = text.isEmpty ? const ['—'] : styles.split(text);
     final bool lastRow = r == rows.length - 1;
     for (final (int p, String piece) in pieces.indexed) {
       final bool lastPiece = p == pieces.length - 1;
       final pw.Widget row = pw.Container(
         // Continuation pieces keep the paragraph's line rhythm.
         padding: pw.EdgeInsets.only(
-            top: p == 0 ? 7 : styles.rowText.lineSpacing!,
-            bottom: lastPiece ? 7 : 0),
+            top: p == 0 ? styles.rowPadding : styles.rowText.lineSpacing!,
+            bottom: lastPiece ? styles.rowPadding : 0),
         decoration: lastPiece && !lastRow
             ? pw.BoxDecoration(
                 border: pw.Border(
@@ -668,7 +849,7 @@ List<pw.Widget> _rowSection(
           crossAxisAlignment: pw.CrossAxisAlignment.start,
           children: [
             pw.SizedBox(
-              width: labelWidth,
+              width: labelWidth ?? styles.labelWidth,
               child: p == 0 && label.isNotEmpty
                   ? pw.Padding(
                       padding: const pw.EdgeInsets.only(right: 8),
@@ -703,7 +884,7 @@ List<pw.Widget> _statementSection(
 }) {
   return _withHeading(
     _sectionHeading(step, null, styles, number: number, caption: caption),
-    _tintedBlocks(step, text, styles.statement,
+    _tintedBlocks(step, text, styles.statement, styles,
         lead: leadIn == null
             ? null
             : pw.TextSpan(text: leadIn, style: styles.statementLead)),
@@ -716,11 +897,12 @@ List<pw.Widget> _statementSection(
 List<pw.Widget> _tintedBlocks(
   StudyStep step,
   String text,
-  pw.TextStyle style, {
+  pw.TextStyle style,
+  _Styles styles, {
   pw.InlineSpan? lead,
-  pw.EdgeInsets padding = const pw.EdgeInsets.fromLTRB(14, 11, 14, 12),
 }) {
-  final List<String> pieces = splitForPages(text);
+  final pw.EdgeInsets padding = styles.tintPadding;
+  final List<String> pieces = styles.split(text);
   return [
     for (final (int i, String piece) in pieces.indexed)
       _tintedBox(
@@ -806,7 +988,7 @@ pw.Widget _usageRow(StudyStep step, String piece, _Styles styles,
 List<pw.Widget> _usageList(StudyStep step, List<String> lines, _Styles styles) {
   final List<pw.Widget> out = [];
   for (final (int r, String line) in lines.indexed) {
-    final List<String> pieces = splitForPages(line);
+    final List<String> pieces = styles.split(line);
     for (final (int p, String piece) in pieces.indexed) {
       final bool lastPiece = p == pieces.length - 1;
       final bool lastRow = r == lines.length - 1 && lastPiece;
@@ -814,10 +996,12 @@ List<pw.Widget> _usageList(StudyStep step, List<String> lines, _Styles styles) {
         step,
         _usageRow(step, piece, styles, continuation: p > 0),
         padding: pw.EdgeInsets.fromLTRB(
-            12,
-            r == 0 && p == 0 ? 10 : (p == 0 ? 4 : styles.body.lineSpacing!),
-            14,
-            lastRow ? 11 : (lastPiece ? 4 : 0)),
+            styles.tintPadding.left,
+            r == 0 && p == 0
+                ? styles.tintPadding.top
+                : (p == 0 ? 4 : styles.body.lineSpacing!),
+            styles.tintPadding.right,
+            lastRow ? styles.tintPadding.bottom : (lastPiece ? 4 : 0)),
       ));
     }
   }
@@ -839,17 +1023,17 @@ pw.Widget _definitionAndUsage(
     children: [
       pw.TableRow(children: [
         _sectionHeading(defStep, styles.strings.pdfWordStudyDefinition, styles,
-            top: _wordStudyGap),
+            top: styles.wordStudyGap),
         pw.SizedBox(),
         _sectionHeading(useStep, styles.strings.pdfWordStudyOtherUsage, styles,
-            top: _wordStudyGap),
+            top: styles.wordStudyGap),
       ]),
       // "full" stretches both cards to the taller one's height.
       pw.TableRow(
         verticalAlignment: pw.TableCellVerticalAlignment.full,
         children: [
           _tintedBox(defStep, pw.Text(definition, style: styles.body),
-              padding: const pw.EdgeInsets.fromLTRB(14, 10, 14, 11)),
+              padding: styles.tintPadding),
           pw.SizedBox(),
           _tintedBox(
             useStep,
@@ -863,7 +1047,7 @@ pw.Widget _definitionAndUsage(
                   ),
               ],
             ),
-            padding: const pw.EdgeInsets.fromLTRB(12, 10, 12, 11),
+            padding: styles.tintPadding,
           ),
         ],
       ),
@@ -871,9 +1055,10 @@ pw.Widget _definitionAndUsage(
   );
 }
 
-pw.Widget _footer(pw.Context context, String label, _Styles styles) {
+pw.Widget _footer(
+    int pageNumber, int pagesCount, String label, _Styles styles) {
   return pw.Container(
-    margin: const pw.EdgeInsets.only(top: 18),
+    margin: const pw.EdgeInsets.only(top: 10),
     padding: const pw.EdgeInsets.only(top: 6),
     decoration: pw.BoxDecoration(
         border:
@@ -886,10 +1071,12 @@ pw.Widget _footer(pw.Context context, String label, _Styles styles) {
               maxLines: 1,
               overflow: pw.TextOverflow.clip),
         ),
-        pw.SizedBox(width: 12),
-        pw.Text(
-            styles.strings.pdfPageOf(context.pageNumber, context.pagesCount),
-            style: styles.footer),
+        // A lone square image needs no "page 1 of 1".
+        if (styles.layout == HandoutLayout.page || pagesCount > 1) ...[
+          pw.SizedBox(width: 12),
+          pw.Text(styles.strings.pdfPageOf(pageNumber, pagesCount),
+              style: styles.footer),
+        ],
       ],
     ),
   );
@@ -995,6 +1182,64 @@ String _wordStudyFileName(WordStudy study) {
       .where((String part) => part.isNotEmpty)
       .join('-');
   return slug.isEmpty ? 'word-study.pdf' : 'word-study-$slug.pdf';
+}
+
+/// A study rendered as square PNG images for a social media feed.
+class HandoutImages {
+  /// The file name the images share, without an extension.
+  final String baseName;
+
+  /// The images, in order, each 1080px square.
+  final List<Uint8List> pngs;
+
+  const HandoutImages(this.baseName, this.pngs);
+
+  /// A file name for each image: `name.png` for one, `name-1.png`, ... for
+  /// more.
+  List<String> get fileNames => pngs.length == 1
+      ? ['$baseName.png']
+      : [for (int i = 1; i <= pngs.length; i++) '$baseName-$i.png'];
+}
+
+/// Rasterizes each page of [doc] at [squareImageDpi].
+Future<List<Uint8List>> _pngs(pw.Document doc) async {
+  final Uint8List bytes = await doc.save();
+  return [
+    await for (final PdfRaster page
+        in Printing.raster(bytes, dpi: squareImageDpi))
+      await page.toPng()
+  ];
+}
+
+String _baseName(String fileName) =>
+    fileName.substring(0, fileName.length - '.pdf'.length);
+
+/// The homiletic as square images, in the app's language.
+Future<HandoutImages> homileticImages(
+    Homiletic homiletic,
+    List<ContentSummary> summaries,
+    List<Division> divisions,
+    List<Application> applications) async {
+  final (AppLocalizations l, Locale locale) = _appStrings();
+  final HomileticPdfFonts fonts = await _fontsFor(
+      homileticPdfTexts(homiletic, summaries, divisions, applications, l),
+      locale);
+  return HandoutImages(
+      _baseName(_fileName(homiletic)),
+      await _pngs(buildHomileticsDocument(
+          homiletic, summaries, divisions, applications,
+          fonts: fonts, layout: HandoutLayout.square, strings: l)));
+}
+
+/// The word study as square images, like [homileticImages].
+Future<HandoutImages> wordStudyImages(WordStudy study) async {
+  final (AppLocalizations l, Locale locale) = _appStrings();
+  final HomileticPdfFonts fonts =
+      await _fontsFor(wordStudyPdfTexts(study, l), locale);
+  return HandoutImages(
+      _baseName(_wordStudyFileName(study)),
+      await _pngs(buildWordStudyDocument(study,
+          fonts: fonts, layout: HandoutLayout.square, strings: l)));
 }
 
 Future<void> printHomiletic(Homiletic homiletic, List<ContentSummary> summaries,
