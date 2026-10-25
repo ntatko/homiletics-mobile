@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Modify this file to customize your launch splash screen -->
+<!-- The launch screen before Android 12: the app's paper (or dark)
+     ground, so launch flows into Home without a flash, the "H." tile in the
+     middle and a quiet 13one.org line at the bottom. Android 12+ uses the
+     system splash instead (values-v31/styles.xml). -->
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@android:color/white" />
-
-    <!-- You can insert your own image assets here -->
-    <!-- <item>
-        <bitmap
-            android:gravity="center"
-            android:src="@mipmap/launch_image" />
-    </item> -->
+    <item android:drawable="@color/splash_ground" />
+    <item
+        android:width="144dp"
+        android:height="144dp"
+        android:drawable="@drawable/splash_mark"
+        android:gravity="center" />
+    <item
+        android:width="200dp"
+        android:height="80dp"
+        android:bottom="16dp"
+        android:drawable="@drawable/splash_branding"
+        android:gravity="bottom|center_horizontal" />
 </layer-list>

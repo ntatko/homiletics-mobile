@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:homiletics/common/vertical_bar.dart';
 import 'package:homiletics/classes/language.dart';
 import 'package:homiletics/components/backup_settings.dart';
 import 'package:homiletics/classes/preferences.dart';
@@ -31,59 +32,66 @@ class SettingsPage extends StatelessWidget {
           child: Overline(text),
         );
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(l.settingsTitle),
-      ),
-      body: SafeArea(
-        child: Align(
-          alignment: Alignment.topCenter,
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 520),
-            child: ListView(
-              padding: const EdgeInsets.fromLTRB(20, 0, 20, 32),
-              children: [
-                heading(l.settingsSectionLanguage),
-                const _AppLanguageRow(),
-                heading(l.settingsSectionReading),
-                PreferencesPanel(
-                  onTranslationChanged: onTranslationChanged,
-                  showHeader: false,
-                  showAppLanguage: false,
-                ),
-                heading(l.settingsSectionModels),
-                const WhisperModelSettings(),
-                const FormattingModelSettings(),
-                heading(l.settingsSectionStorage),
-                const RecordingStorageSettings(),
-                heading(l.settingsSectionBackup),
-                const BackupSettings(),
-                heading(l.settingsSectionHelp),
-                _SettingsRow(
-                  key: const ValueKey('settingsOnboarding'),
-                  icon: Icons.school_outlined,
-                  label: l.onboardingSettingsRow,
-                  onTap: () => showOnboarding(context),
-                ),
-                const SizedBox(height: 10),
-                _SettingsRow(
-                  icon: Icons.chat_bubble_outline_rounded,
-                  label: l.helpRequestFeedback,
-                  onTap: () => showFeedbackSheet(context),
-                ),
-                if (UpdateService.isSupported) ...[
-                  const SizedBox(height: 10),
-                  const _CheckForUpdatesRow(),
-                ],
-                const SizedBox(height: 16),
-                Center(
-                  child: Text(
-                    l.settingsCopyright('${DateTime.now().year}'),
-                    textAlign: TextAlign.center,
-                    style: AppText.caption.copyWith(color: c.muted),
+    final bool verticalBar = VerticalBar.of(context) != null;
+    return VerticalBarLayout(
+      groups: const [
+        BarGroup(children: [BackButton()])
+      ],
+      child: Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: !verticalBar,
+          title: Text(l.settingsTitle),
+        ),
+        body: SafeArea(
+          child: Align(
+            alignment: Alignment.topCenter,
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 520),
+              child: ListView(
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 32),
+                children: [
+                  heading(l.settingsSectionLanguage),
+                  const _AppLanguageRow(),
+                  heading(l.settingsSectionReading),
+                  PreferencesPanel(
+                    onTranslationChanged: onTranslationChanged,
+                    showHeader: false,
+                    showAppLanguage: false,
                   ),
-                ),
-              ],
+                  heading(l.settingsSectionModels),
+                  const WhisperModelSettings(),
+                  const FormattingModelSettings(),
+                  heading(l.settingsSectionStorage),
+                  const RecordingStorageSettings(),
+                  heading(l.settingsSectionBackup),
+                  const BackupSettings(),
+                  heading(l.settingsSectionHelp),
+                  _SettingsRow(
+                    key: const ValueKey('settingsOnboarding'),
+                    icon: Icons.school_outlined,
+                    label: l.onboardingSettingsRow,
+                    onTap: () => showOnboarding(context),
+                  ),
+                  const SizedBox(height: 10),
+                  _SettingsRow(
+                    icon: Icons.chat_bubble_outline_rounded,
+                    label: l.helpRequestFeedback,
+                    onTap: () => showFeedbackSheet(context),
+                  ),
+                  if (UpdateService.isSupported) ...[
+                    const SizedBox(height: 10),
+                    const _CheckForUpdatesRow(),
+                  ],
+                  const SizedBox(height: 16),
+                  Center(
+                    child: Text(
+                      l.settingsCopyright('${DateTime.now().year}'),
+                      textAlign: TextAlign.center,
+                      style: AppText.caption.copyWith(color: c.muted),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

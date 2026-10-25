@@ -926,5 +926,12 @@
   "updateTryAgain": "重试",
   "updatePortableNote": "此副本不是通过安装程序安装的，请从 homiletics.app 下载新版本。",
   "updateUpToDate": "已是最新版本（Homiletics {version}）。",
-  "updateCheckFailed": "无法检查更新。请检查网络连接后重试。"
+  "updateCheckFailed": "无法检查更新。请检查网络连接后重试。",
+  "homileticTooManySummariesTitle": "咯咯哒！第{count}条摘要？",
+  "homileticTooManySummariesMessage": "内容摘要以10到20条为宜。试着把几段相邻的经文合并，让每条摘要涵盖多一点经文。",
+  "homileticTooManySummariesCombine": "我来合并几条",
+  "homileticTooManySummariesAddAnyway": "仍要添加",
+  "bibleRepeatedWordsTitle": "重复出现的词",
+  "bibleRepeatedWordsNote": "不含虚词，以及神、耶稣、以色列等名字。",
+  "bibleRepeatedWordLabel": "{word}，{count}次"
 }

@@ -8,6 +8,7 @@ import 'package:homiletics/components/bible/bible_passage_view.dart';
 import 'package:homiletics/l10n/l10n.dart';
 import 'package:homiletics/services/bible_text.dart';
 import 'package:homiletics/services/bible_text_service.dart';
+import 'package:homiletics/services/repeated_words.dart';
 import 'package:homiletics/common/web_view_scroll.dart';
 import 'package:homiletics/theme/app_theme.dart';
 import 'package:homiletics/classes/preferences.dart';
@@ -161,6 +162,31 @@ String _readingCss(AppColors c) => """
   }
   #homiletics-reader-header .short { stroke: none !important; }
   #homiletics-reader-header svg { width: 16px; height: 16px; }
+  #homiletics-repeated {
+    margin: 28px 0 20px; padding-top: 14px;
+    border-top: 1px solid ${_hex(c.line)} !important;
+    font-family: -apple-system, 'Roboto', sans-serif !important;
+  }
+  #homiletics-repeated .label {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.08em;
+    text-transform: uppercase; color: ${_hex(c.muted)} !important;
+  }
+  #homiletics-repeated .chips {
+    display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px;
+  }
+  #homiletics-repeated .chip {
+    background-color: ${_hex(c.surfaceSunken)} !important;
+    border-radius: 10px; padding: 4px 9px 4px 10px;
+    font: 15px/1.3 'Newsreader', Georgia, serif;
+    color: ${_hex(c.ink)} !important;
+  }
+  #homiletics-repeated .chip b {
+    margin-left: 6px; font: 600 11px -apple-system, 'Roboto', sans-serif;
+    font-variant-numeric: tabular-nums; color: ${_hex(c.accent)} !important;
+  }
+  #homiletics-repeated .note {
+    margin-top: 8px; font-size: 12px; color: ${_hex(c.muted)} !important;
+  }
   #homiletics-reader, .passage-text, .passage-content,
   .passage-content > div { margin-top: 0 !important; padding-top: 0 !important; }
   .passage-content > div > :first-child { margin-top: 4px !important; }
@@ -423,7 +449,9 @@ class VerseContainerState extends State<VerseContainer> {
 
   void _onReaderMessage(JavaScriptMessage message) {
     final String m = message.message;
-    if (m == 'translation') {
+    if (m.startsWith('text:')) {
+      _showRepeatedWords(m.substring('text:'.length));
+    } else if (m == 'translation') {
       widget.onTranslationTap?.call();
     } else if (m.startsWith('verse:')) {
       // verse:<chapter>:<verse>:<1 when the page spans chapters>
@@ -434,6 +462,52 @@ class VerseContainerState extends State<VerseContainer> {
       widget.onVerseTap?.call(reference);
     }
   }
+
+  /// Adds the passage's repeated words under the page's text (see
+  /// [RepeatedWordsPanel] for offline texts), from the scripture text the
+  /// page sent.
+  Future<void> _showRepeatedWords(String text) async {
+    final WebViewController? controller = _controller;
+    if (controller == null || !mounted) return;
+    final AppLocalizations l = context.l10n;
+    final List<RepeatedWord> words =
+        repeatedWords(text, languageCode: _loadedTranslation.languageCode);
+    final String html = words.isEmpty
+        ? ''
+        : '<div class="label">${_escape(l.bibleRepeatedWordsTitle)}</div>'
+            '<div class="chips">'
+            '${words.map((w) => '<span class="chip" aria-label="${_escape(l.bibleRepeatedWordLabel(w.word, w.count))}">'
+                '${_escape(w.word)}<b aria-hidden="true">${w.count}</b></span>').join()}'
+            '</div>'
+            '<div class="note">${_escape(l.bibleRepeatedWordsNote)}</div>';
+    try {
+      await controller.runJavaScript('''
+        (function () {
+          var reader = document.getElementById('homiletics-reader');
+          if (!reader) return;
+          var box = document.getElementById('homiletics-repeated');
+          if (!box) {
+            box = document.createElement('div');
+            box.id = 'homiletics-repeated';
+            // Right after the scripture, above its notes and references.
+            var notes = reader.querySelector(
+                '.full-chap-link, .footnotes, .crossrefs, .publisher-info-bottom');
+            if (notes) {
+              notes.parentNode.insertBefore(box, notes);
+            } else {
+              reader.appendChild(box);
+            }
+          }
+          box.innerHTML = ${jsonEncode(html)};
+          box.style.display = ${jsonEncode(html.isEmpty ? 'none' : 'block')};
+        })();
+      ''');
+    } catch (_) {
+      // The page moved on; the next page sends its own text.
+    }
+  }
+
+  static String _escape(String s) => const HtmlEscape().convert(s);
 
   /// Keeps the web view on Bible Gateway; other links open externally.
   NavigationDecision _onNavigationRequest(NavigationRequest request) {
@@ -544,6 +618,16 @@ class VerseContainerState extends State<VerseContainer> {
           header.querySelector('.short').textContent = $translationShort;
           header.querySelector('button').setAttribute('aria-label',
             $changeLabel);
+        }
+        // The scripture alone (no verse numbers, notes or headings), for
+        // the repeated words under it.
+        var passage = document.querySelector('#homiletics-reader .passage-text');
+        if (passage) {
+          var copy = passage.cloneNode(true);
+          copy.querySelectorAll('.versenum, .chapternum, sup, h1, h2, h3, ' +
+              'h4, .footnotes, .crossrefs, .full-chap-link, .footnote, ' +
+              '.crossreference').forEach(function (el) { el.remove(); });
+          HomileticsReader.postMessage('text:' + copy.textContent);
         }
         // Tapping a verse (or chapter) number reports it to the app.
         document.body.classList.toggle('homiletics-verse-tap', $verseTap);
@@ -700,6 +784,7 @@ class VerseContainerState extends State<VerseContainer> {
           copyright: _copyright,
           onTranslationTap: widget.onTranslationTap,
           onVerseTap: widget.onVerseTap,
+          languageCode: t.languageCode,
         );
       case _PanelMode.needsDownload:
         return _message(

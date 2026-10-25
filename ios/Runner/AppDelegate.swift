@@ -15,5 +15,8 @@ import UIKit
     if let registrar = engineBridge.pluginRegistry.registrar(forPlugin: "FoundationModelsBridge") {
       FoundationModelsBridge.register(with: registrar)
     }
+    if let registrar = engineBridge.pluginRegistry.registrar(forPlugin: "HingeBridge") {
+      HingeBridge.register(with: registrar)
+    }
   }
 }

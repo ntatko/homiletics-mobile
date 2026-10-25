@@ -3,6 +3,8 @@
 // with `-t tool/store_art/main_store_shots.dart`.
 //   homiletic_mid   Divisions + Summary sentence expanded
 //   homiletic_late  FCF + Aim + Application expanded
+//   chicken         Content at 20 summaries, asking about a 21st
+//   share_images    The homiletic's square share images, light and dark
 //
 // It keeps all data in a throwaway folder (so it can't touch real
 // studies, even on a device that has them), seeds sample studies, and
@@ -11,10 +13,22 @@
 //   HSCREEN  home | homiletic | lecture | wordstudy | walkthrough
 //   HLANG    en | es | zh_Hans | zh_Hant | fr | pt | sw   (default en)
 //   HTHEME   light | dark                                 (default light)
+//   HVERSION a translation code, e.g. niv for Bible Gateway (default web)
+//   HPASSAGE the sample homiletic's passage (default Romans 3:1-20)
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:homiletics/components/homiletics/too_many_summaries_dialog.dart';
+import 'package:homiletics/storage/application_storage.dart';
+import 'package:homiletics/storage/content_summary_storage.dart';
+import 'package:homiletics/storage/division_storage.dart';
+import 'package:homiletics/services/incoming_links.dart' show appNavigatorKey;
+import 'package:homiletics/storage/pdf_generation.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:printing/printing.dart';
 import 'package:homiletics/classes/Division.dart';
 import 'package:homiletics/classes/application.dart';
 import 'package:homiletics/classes/content_summary.dart';
@@ -50,6 +64,8 @@ String _setting(String name, String fallback) {
     'HSCREEN' => const String.fromEnvironment('HSCREEN'),
     'HLANG' => const String.fromEnvironment('HLANG'),
     'HTHEME' => const String.fromEnvironment('HTHEME'),
+    'HVERSION' => const String.fromEnvironment('HVERSION'),
+    'HPASSAGE' => const String.fromEnvironment('HPASSAGE'),
     _ => '',
   };
   return defined.isNotEmpty ? defined : fallback;
@@ -106,11 +122,22 @@ Future<void> main() async {
   Preferences.hasSeenOnboarding = true;
   // The offline World English Bible renders natively (and identically on
   // every platform); fall back to the web view if it can't download.
-  Preferences.preferredVersion = Translation.web.code;
-  await BibleTextService.instance.download(Translation.web);
+  final String version = _setting('HVERSION', Translation.web.code);
+  Preferences.preferredVersion = version;
+  if (version == Translation.web.code) {
+    await BibleTextService.instance.download(Translation.web);
+  }
 
   final _Samples samples = await _Samples.seed();
-  final Widget home = switch (_setting('HSCREEN', 'home')) {
+  final String screen = _setting('HSCREEN', 'home');
+  if (screen == 'chicken') await samples.fillContent(20);
+  final String passage = _setting('HPASSAGE', '');
+  if (passage.isNotEmpty) await samples.homiletic.updatePassage(passage);
+  final Widget home = switch (screen) {
+    'chicken' => HomileticEditor(
+        homiletic: samples.homiletic,
+        initialExpanded: const {StudyStep.content}),
+    'share_images' => _ShareImages(samples),
     'homiletic' => HomileticEditor(
         homiletic: samples.homiletic,
         initialExpanded: const {StudyStep.content, StudyStep.divisions}),
@@ -118,17 +145,24 @@ Future<void> main() async {
         homiletic: samples.homiletic,
         initialExpanded: const {StudyStep.divisions, StudyStep.summary}),
     'homiletic_late' => HomileticEditor(
-        homiletic: samples.homiletic,
-        initialExpanded: const {
-          StudyStep.fcf,
-          StudyStep.aim,
-          StudyStep.application
-        }),
+          homiletic: samples.homiletic,
+          initialExpanded: const {
+            StudyStep.fcf,
+            StudyStep.aim,
+            StudyStep.application
+          }),
     'lecture' => NotesEditor(note: samples.lecture),
     'wordstudy' => WordStudyEditor(study: samples.wordStudy),
     'walkthrough' => OnboardingPage(loadThisWeek: () async => null),
     _ => const Home(),
   };
+  if (screen == 'chicken') {
+    // Ask about a 21st once the editor has loaded.
+    Future<void>.delayed(const Duration(seconds: 3), () {
+      final BuildContext? context = appNavigatorKey.currentContext;
+      if (context != null) confirmExtraContentSummary(context, 21);
+    });
+  }
   runApp(MyApp(
     home: home,
     themeMode: _setting('HTHEME', 'light') == 'dark'
@@ -143,6 +177,42 @@ class _Samples {
   final WordStudy wordStudy;
 
   _Samples(this.homiletic, this.lecture, this.wordStudy);
+
+  /// Splits the homiletic's Content into [count] rows, a verse or so each.
+  Future<void> fillContent(int count) async {
+    for (final ContentSummary s
+        in await getSummariesByHomileticId(homiletic.id)) {
+      await s.delete();
+    }
+    const List<String> lines = [
+      'Advantage of the Jews',
+      'Entrusted with the oracles of God',
+      'Unbelief does not nullify faithfulness',
+      'Let God be true',
+      'Our unrighteousness shows His',
+      'Is God unjust to inflict wrath?',
+      'By no means: He judges the world',
+      'Why not do evil that good may come?',
+      'Are we any better? No',
+      'None is righteous, not even one',
+      'No one understands or seeks God',
+      'All have turned aside',
+      'Their throat an open grave',
+      'Mouths full of curses',
+      'Feet swift to shed blood',
+      'Ruin and misery in their paths',
+      'The way of peace not known',
+      'No fear of God',
+      'The law speaks to those under it',
+      'By the law comes knowledge of sin',
+    ];
+    for (int i = 0; i < count; i++) {
+      await (ContentSummary.blank(homiletic.id)
+            ..passage = '${i + 1}'
+            ..summary = lines[i % lines.length])
+          .update();
+    }
+  }
 
   static Future<_Samples> seed() async {
     // An earlier, unfinished study so Home's lists aren't a single item.
@@ -258,5 +328,69 @@ class _Samples {
     await wordStudy.update();
 
     return _Samples(h, lecture, wordStudy);
+  }
+}
+
+/// The homiletic's square share images, light and dark side by side.
+class _ShareImages extends StatelessWidget {
+  final _Samples samples;
+
+  const _ShareImages(this.samples);
+
+  Future<List<Uint8List>> _render(AppColors colors) async {
+    final Homiletic h = samples.homiletic;
+    final HomileticPdfFonts fonts =
+        await HomileticPdfFonts.load(rootBundle.load);
+    final pw.Document doc = buildHomileticsDocument(
+        h,
+        await getSummariesByHomileticId(h.id),
+        await getDivisionsByHomileticId(h.id),
+        await getApplicationsByHomileticId(h.id),
+        fonts: fonts,
+        layout: HandoutLayout.square,
+        colors: colors);
+    return [
+      await for (final PdfRaster page
+          in Printing.raster(await doc.save(), dpi: squareImageDpi))
+        await page.toPng()
+    ];
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFF808080),
+      body: FutureBuilder<List<List<Uint8List>>>(
+        future:
+            Future.wait([_render(AppColors.light), _render(AppColors.dark)]),
+        builder: (context, snapshot) {
+          final List<List<Uint8List>>? sets = snapshot.data;
+          if (sets == null) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          return Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: [
+                for (final List<Uint8List> set in sets)
+                  Expanded(
+                    child: Row(
+                      children: [
+                        for (final Uint8List png in set)
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8),
+                              child: Image.memory(png),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:homiletics/common/vertical_bar.dart';
 import 'package:homiletics/common/report_error.dart';
 import 'package:homiletics/common/study_data_builder.dart';
 import 'package:homiletics/l10n/l10n.dart';
@@ -102,125 +103,135 @@ class _ImportPreviewPageState extends State<ImportPreviewPage> {
       SharedWordStudy w => _wordStudySections(context, w),
     };
 
-    return Scaffold(
-      backgroundColor: c.ground,
-      appBar: AppBar(
+    final Widget closeButton = IconButton(
+      tooltip: l.commonCancel,
+      icon: const Icon(Icons.close_rounded),
+      onPressed: () => Navigator.of(context).maybePop(),
+    );
+    final bool verticalBar = VerticalBar.of(context) != null;
+    return VerticalBarLayout(
+      groups: [
+        BarGroup(children: [closeButton])
+      ],
+      child: Scaffold(
         backgroundColor: c.ground,
-        surfaceTintColor: Colors.transparent,
-        leading: IconButton(
-          tooltip: l.commonCancel,
-          icon: const Icon(Icons.close_rounded),
-          onPressed: () => Navigator.of(context).maybePop(),
+        appBar: AppBar(
+          backgroundColor: c.ground,
+          surfaceTintColor: Colors.transparent,
+          automaticallyImplyLeading: false,
+          leading: verticalBar ? null : closeButton,
         ),
-      ),
-      body: SafeArea(
-        top: false,
-        child: Column(children: [
-          Expanded(
-            child: Align(
-              alignment: Alignment.topCenter,
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 760),
-                child: ListView(
-                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(4, 0, 4, 4),
-                      child: Overline(isHomiletic
-                          ? l.importPreviewHomiletic
-                          : l.importPreviewWordStudy),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4),
-                      child: Text(
-                          passage.isEmpty ? l.pdfUntitledPassage : passage,
-                          style: AppText.display.copyWith(color: c.ink)),
-                    ),
-                    if (translation != null && translation.isNotEmpty)
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(4, 4, 4, 0),
-                        child: Text(
-                            l.importPreviewTranslation(
-                                translation.toUpperCase()),
-                            style: AppText.caption.copyWith(color: c.muted)),
-                      ),
-                    const SizedBox(height: 12),
-                    Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: c.accentTint,
-                        borderRadius: BorderRadius.circular(AppRadius.tile),
-                      ),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Icon(Icons.info_outline_rounded,
-                              size: 18, color: c.accent),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: Text(l.importPreviewNote,
-                                style: AppText.caption.copyWith(color: c.ink)),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    if (body.isEmpty)
-                      Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: Text(
-                            isHomiletic
-                                ? l.pdfEmptyHomiletic
-                                : l.pdfEmptyWordStudy,
-                            style: AppText.body.copyWith(color: c.muted)),
-                      ),
-                    for (int i = 0; i < body.length; i++) ...[
-                      if (i > 0) const SizedBox(height: 10),
-                      body[i],
-                    ],
-                  ],
-                ),
-              ),
-            ),
-          ),
-          Material(
-            color: c.surface,
-            shape: Border(top: BorderSide(color: c.line)),
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
-              child: Center(
+        body: SafeArea(
+          top: false,
+          child: Column(children: [
+            Expanded(
+              child: Align(
+                alignment: Alignment.topCenter,
                 child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 520),
-                  child: Row(children: [
-                    Expanded(
-                      child: OutlinedButton(
-                        onPressed: _saving
-                            ? null
-                            : () => Navigator.of(context).maybePop(),
-                        child: Text(l.commonCancel),
+                  constraints: const BoxConstraints(maxWidth: 760),
+                  child: ListView(
+                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(4, 0, 4, 4),
+                        child: Overline(isHomiletic
+                            ? l.importPreviewHomiletic
+                            : l.importPreviewWordStudy),
                       ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: FilledButton.icon(
-                        key: const ValueKey('importSaveCopy'),
-                        onPressed: _saving ? null : _save,
-                        icon: _saving
-                            ? const SizedBox(
-                                width: 16,
-                                height: 16,
-                                child:
-                                    CircularProgressIndicator(strokeWidth: 2))
-                            : const Icon(Icons.download_done_rounded, size: 18),
-                        label: Text(l.importSaveCopy),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 4),
+                        child: Text(
+                            passage.isEmpty ? l.pdfUntitledPassage : passage,
+                            style: AppText.display.copyWith(color: c.ink)),
                       ),
-                    ),
-                  ]),
+                      if (translation != null && translation.isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(4, 4, 4, 0),
+                          child: Text(
+                              l.importPreviewTranslation(
+                                  translation.toUpperCase()),
+                              style: AppText.caption.copyWith(color: c.muted)),
+                        ),
+                      const SizedBox(height: 12),
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: c.accentTint,
+                          borderRadius: BorderRadius.circular(AppRadius.tile),
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Icon(Icons.info_outline_rounded,
+                                size: 18, color: c.accent),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Text(l.importPreviewNote,
+                                  style:
+                                      AppText.caption.copyWith(color: c.ink)),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      if (body.isEmpty)
+                        Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: Text(
+                              isHomiletic
+                                  ? l.pdfEmptyHomiletic
+                                  : l.pdfEmptyWordStudy,
+                              style: AppText.body.copyWith(color: c.muted)),
+                        ),
+                      for (int i = 0; i < body.length; i++) ...[
+                        if (i > 0) const SizedBox(height: 10),
+                        body[i],
+                      ],
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-        ]),
+            Material(
+              color: c.surface,
+              shape: Border(top: BorderSide(color: c.line)),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+                child: Center(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 520),
+                    child: Row(children: [
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: _saving
+                              ? null
+                              : () => Navigator.of(context).maybePop(),
+                          child: Text(l.commonCancel),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: FilledButton.icon(
+                          key: const ValueKey('importSaveCopy'),
+                          onPressed: _saving ? null : _save,
+                          icon: _saving
+                              ? const SizedBox(
+                                  width: 16,
+                                  height: 16,
+                                  child:
+                                      CircularProgressIndicator(strokeWidth: 2))
+                              : const Icon(Icons.download_done_rounded,
+                                  size: 18),
+                          label: Text(l.importSaveCopy),
+                        ),
+                      ),
+                    ]),
+                  ),
+                ),
+              ),
+            ),
+          ]),
+        ),
       ),
     );
   }

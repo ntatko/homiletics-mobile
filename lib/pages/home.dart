@@ -2,7 +2,9 @@ import 'dart:math' as math;
 import 'package:homiletics/l10n/l10n.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:homiletics/common/home_header.dart';
+import 'package:homiletics/common/vertical_bar.dart';
 import 'package:homiletics/components/application_list.dart';
 import 'package:homiletics/components/continue_studies.dart';
 import 'package:homiletics/components/current_lesson.dart';
@@ -38,7 +40,22 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
+    HardwareKeyboard.instance.addHandler(_onKey);
     WidgetsBinding.instance.addPostFrameCallback((_) => _maybeShowOnboarding());
+  }
+
+  /// Escape closes search, wherever focus is (the field, a result, or
+  /// nowhere after a click on the background) — but not while another
+  /// page or a dialog is on top of Home.
+  bool _onKey(KeyEvent event) {
+    if (!_searching ||
+        event is! KeyDownEvent ||
+        event.logicalKey != LogicalKeyboardKey.escape ||
+        ModalRoute.of(context)?.isCurrent == false) {
+      return false;
+    }
+    _closeSearch();
+    return true;
   }
 
   /// Opens the first-run guide on a fresh install (see
@@ -77,64 +94,76 @@ class _HomeState extends State<Home> {
     final maxW =
         isWide ? math.min(_homeMaxWidth, size.width - 48) : double.infinity;
 
-    return PopScope(
-      canPop: !_searching,
-      onPopInvokedWithResult: (didPop, _) {
-        if (!didPop && _searching) _closeSearch();
-      },
-      child: Scaffold(
-        backgroundColor: c.ground,
-        body: SafeArea(
-          child: Align(
-            alignment: Alignment.topCenter,
-            child: ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: maxW),
-              child: Column(
-                children: [
-                  HomeHeader(
-                    searching: _searching,
-                    searchController: _searchController,
-                    searchFocusNode: _searchFocusNode,
-                    onOpenSearch: _openSearch,
-                    onCloseSearch: _closeSearch,
-                    onSearchChanged: (value) =>
-                        setState(() => _searchString = value),
-                    onOpenSettings: _openSettings,
-                    onImportLink: () => showImportLinkSheet(context),
-                  ),
-                  Expanded(
-                    child: Stack(
-                      children: [
-                        ListView(
-                          padding: const EdgeInsets.only(top: 6, bottom: 8),
-                          keyboardDismissBehavior:
-                              ScrollViewKeyboardDismissBehavior.onDrag,
-                          children: const [
-                            CurrentLessonActions(),
-                            ContinueStudies(
-                              padding:
-                                  EdgeInsets.fromLTRB(_gutter, 20, _gutter, 0),
-                            ),
-                            ApplicationList(
-                              padding:
-                                  EdgeInsets.fromLTRB(_gutter, 20, _gutter, 0),
-                            ),
-                            HelpMenu(),
-                          ],
-                        ),
-                        if (_searching)
-                          Positioned.fill(
-                            child: _SearchOverlay(searchString: _searchString),
+    final bool verticalBar = VerticalBar.of(context) != null;
+    final HomeHeader header = HomeHeader(
+      searching: _searching,
+      searchController: _searchController,
+      searchFocusNode: _searchFocusNode,
+      onOpenSearch: _openSearch,
+      onCloseSearch: _closeSearch,
+      onSearchChanged: (value) => setState(() => _searchString = value),
+      onOpenSettings: _openSettings,
+      onImportLink: () => showImportLinkSheet(context),
+      showButtons: !verticalBar,
+    );
+
+    return VerticalBarLayout(
+      groups: [
+        BarGroup(
+            children: _searching
+                ? [header.closeSearchButton(context)]
+                : header.buttons(context)),
+      ],
+      child: PopScope(
+        canPop: !_searching,
+        onPopInvokedWithResult: (didPop, _) {
+          if (!didPop && _searching) _closeSearch();
+        },
+        child: Scaffold(
+          backgroundColor: c.ground,
+          body: SafeArea(
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: maxW),
+                child: Column(
+                  children: [
+                    header,
+                    Expanded(
+                      child: Stack(
+                        children: [
+                          ListView(
+                            padding: const EdgeInsets.only(top: 6, bottom: 8),
+                            keyboardDismissBehavior:
+                                ScrollViewKeyboardDismissBehavior.onDrag,
+                            children: const [
+                              CurrentLessonActions(),
+                              ContinueStudies(
+                                padding: EdgeInsets.fromLTRB(
+                                    _gutter, 20, _gutter, 0),
+                              ),
+                              ApplicationList(
+                                padding: EdgeInsets.fromLTRB(
+                                    _gutter, 20, _gutter, 0),
+                              ),
+                              HelpMenu(),
+                            ],
                           ),
-                      ],
+                          if (_searching)
+                            Positioned.fill(
+                              child:
+                                  _SearchOverlay(searchString: _searchString),
+                            ),
+                        ],
+                      ),
                     ),
-                  ),
-                  if (!_searching)
-                    const Padding(
-                      padding: EdgeInsets.fromLTRB(_gutter, 8, _gutter, 12),
-                      child: StartActivity(),
-                    ),
-                ],
+                    if (!_searching)
+                      const Padding(
+                        padding: EdgeInsets.fromLTRB(_gutter, 8, _gutter, 12),
+                        child: StartActivity(),
+                      ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -145,6 +174,7 @@ class _HomeState extends State<Home> {
 
   @override
   void dispose() {
+    HardwareKeyboard.instance.removeHandler(_onKey);
     _searchController.dispose();
     _searchFocusNode.dispose();
     super.dispose();

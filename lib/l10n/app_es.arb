@@ -926,5 +926,12 @@
   "updateTryAgain": "Reintentar",
   "updatePortableNote": "Esta copia no se instaló con el instalador; descarga la nueva versión desde homiletics.app.",
   "updateUpToDate": "Tienes la versión más reciente (Homiletics {version}).",
-  "updateCheckFailed": "No se pudo buscar actualizaciones. Revisa tu conexión a internet e inténtalo de nuevo."
+  "updateCheckFailed": "No se pudo buscar actualizaciones. Revisa tu conexión a internet e inténtalo de nuevo.",
+  "homileticTooManySummariesTitle": "¡Coc-co-coc! ¿Resumen número {count}?",
+  "homileticTooManySummariesMessage": "La homilética apunta a entre 10 y 20 resúmenes de contenido. Intenta combinar algunas secciones vecinas, para que cada resumen abarque un poco más del pasaje.",
+  "homileticTooManySummariesCombine": "Combinaré algunos",
+  "homileticTooManySummariesAddAnyway": "Agregar de todos modos",
+  "bibleRepeatedWordsTitle": "Palabras repetidas",
+  "bibleRepeatedWordsNote": "Sin contar palabras pequeñas ni nombres como Dios, Jesús e Israel.",
+  "bibleRepeatedWordLabel": "{word}, {count} veces"
 }

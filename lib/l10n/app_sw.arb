@@ -926,5 +926,12 @@
   "updateTryAgain": "Jaribu tena",
   "updatePortableNote": "Nakala hii haikusakinishwa kwa kisakinishi, kwa hiyo pakua toleo jipya kutoka homiletics.app.",
   "updateUpToDate": "Una toleo la karibuni (Homiletics {version}).",
-  "updateCheckFailed": "Haikuweza kuangalia masasisho. Angalia muunganisho wako wa intaneti kisha ujaribu tena."
+  "updateCheckFailed": "Haikuweza kuangalia masasisho. Angalia muunganisho wako wa intaneti kisha ujaribu tena.",
+  "homileticTooManySummariesTitle": "Ko-ko-ko! Muhtasari wa {count}?",
+  "homileticTooManySummariesMessage": "Homiletiki inalenga mihtasari ya maudhui 10 hadi 20. Jaribu kuunganisha sehemu chache zinazofuatana, ili kila muhtasari ugusie sehemu kubwa zaidi ya kifungu.",
+  "homileticTooManySummariesCombine": "Nitaunganisha baadhi",
+  "homileticTooManySummariesAddAnyway": "Ongeza hata hivyo",
+  "bibleRepeatedWordsTitle": "Maneno yanayojirudia",
+  "bibleRepeatedWordsNote": "Bila maneno madogo wala majina kama Mungu, Yesu na Israeli.",
+  "bibleRepeatedWordLabel": "{word}, mara {count}"
 }

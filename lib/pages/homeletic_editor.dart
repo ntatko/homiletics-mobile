@@ -13,6 +13,7 @@ import 'package:homiletics/components/homiletics/content_summaries_card.dart';
 import 'package:homiletics/components/homiletics/divisions_card.dart';
 import 'package:homiletics/components/homiletics/fcf_card.dart';
 import 'package:homiletics/components/homiletics/summary_sentence_card.dart';
+import 'package:homiletics/components/homiletics/too_many_summaries_dialog.dart';
 import 'package:homiletics/components/share/study_share_sheet.dart';
 import 'package:homiletics/l10n/l10n.dart';
 import 'package:homiletics/services/bible_text_service.dart';
@@ -55,6 +56,10 @@ class _HomileticState extends State<HomileticEditor> {
 
   final GlobalKey<ContentSummariesCardState> _contentCardKey =
       GlobalKey<ContentSummariesCardState>();
+
+  /// Set once the user chooses to go past [maxContentSummaries], so the
+  /// hen only asks once per visit.
+  bool _extraSummariesOk = false;
 
   /// Whether to show the "tap a verse number" tip (until it's first used).
   bool _showVerseTapTip = !VerseTapTip.hasUsed;
@@ -241,10 +246,12 @@ class _HomileticState extends State<HomileticEditor> {
             showVerseTapTip: _showVerseTapTip,
             contentSummaries: _summaries,
             homiletic: _thisHomiletic,
-            addContentSummary: () {
+            addContentSummary: () async {
+              if (!await _mayAddSummary()) return false;
               setState(() {
                 _summaries.add(ContentSummary.blank(_thisHomiletic.id));
               });
+              return true;
             },
             removeContentSummary: (summary) =>
                 _removeRow(_summaries, summary, summary.delete));
@@ -312,6 +319,8 @@ class _HomileticState extends State<HomileticEditor> {
       return ExpandedStepCard(
         key: _stepKeys[step],
         step: step,
+        count: step == StudyStep.content ? _summaries.length : null,
+        countLimit: maxContentSummaries,
         title: step.localizedLabel(l),
         helpTitle: helpTitle,
         helpText: helpText,
@@ -367,15 +376,28 @@ class _HomileticState extends State<HomileticEditor> {
     ];
   }
 
+  /// Whether another Content row may be added: past [maxContentSummaries]
+  /// the user is asked first.
+  Future<bool> _mayAddSummary() async {
+    if (_summaries.length < maxContentSummaries || _extraSummariesOk) {
+      return true;
+    }
+    final bool ok =
+        await confirmExtraContentSummary(context, _summaries.length + 1);
+    if (ok) _extraSummariesOk = true;
+    return ok && mounted;
+  }
+
   /// A verse number in the passage was tapped: start a Content summary
   /// there. Fills the last row when it's completely empty, otherwise adds
   /// one, opens the Content step and puts the cursor in the summary.
   Future<void> _startSummaryAt(String verses) async {
     final ContentSummary? last = _summaries.lastOrNull;
+    final bool reuseLast =
+        last != null && !_filled(last.summary) && !_filled(last.passage);
+    if (!reuseLast && !await _mayAddSummary()) return;
     final ContentSummary row =
-        last != null && !_filled(last.summary) && !_filled(last.passage)
-            ? last
-            : ContentSummary.blank(_thisHomiletic.id);
+        reuseLast ? last : ContentSummary.blank(_thisHomiletic.id);
     VerseTapTip.markUsed();
     setState(() {
       if (!identical(row, last)) _summaries.add(row);

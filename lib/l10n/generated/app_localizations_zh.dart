@@ -1643,6 +1643,32 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get updateCheckFailed => '无法检查更新。请检查网络连接后重试。';
+
+  @override
+  String homileticTooManySummariesTitle(int count) {
+    return '咯咯哒！第$count条摘要？';
+  }
+
+  @override
+  String get homileticTooManySummariesMessage =>
+      '内容摘要以10到20条为宜。试着把几段相邻的经文合并，让每条摘要涵盖多一点经文。';
+
+  @override
+  String get homileticTooManySummariesCombine => '我来合并几条';
+
+  @override
+  String get homileticTooManySummariesAddAnyway => '仍要添加';
+
+  @override
+  String get bibleRepeatedWordsTitle => '重复出现的词';
+
+  @override
+  String get bibleRepeatedWordsNote => '不含虚词，以及神、耶稣、以色列等名字。';
+
+  @override
+  String bibleRepeatedWordLabel(String word, int count) {
+    return '$word，$count次';
+  }
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hans`).
@@ -3284,6 +3310,32 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String get updateCheckFailed => '无法检查更新。请检查网络连接后重试。';
+
+  @override
+  String homileticTooManySummariesTitle(int count) {
+    return '咯咯哒！第$count条摘要？';
+  }
+
+  @override
+  String get homileticTooManySummariesMessage =>
+      '内容摘要以10到20条为宜。试着把几段相邻的经文合并，让每条摘要涵盖多一点经文。';
+
+  @override
+  String get homileticTooManySummariesCombine => '我来合并几条';
+
+  @override
+  String get homileticTooManySummariesAddAnyway => '仍要添加';
+
+  @override
+  String get bibleRepeatedWordsTitle => '重复出现的词';
+
+  @override
+  String get bibleRepeatedWordsNote => '不含虚词，以及神、耶稣、以色列等名字。';
+
+  @override
+  String bibleRepeatedWordLabel(String word, int count) {
+    return '$word，$count次';
+  }
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).
@@ -4926,4 +4978,30 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get updateCheckFailed => '無法檢查更新。請檢查網路連線後再試一次。';
+
+  @override
+  String homileticTooManySummariesTitle(int count) {
+    return '咯咯噠！第$count則摘要？';
+  }
+
+  @override
+  String get homileticTooManySummariesMessage =>
+      '內容摘要以10到20則為宜。試著把幾段相鄰的經文合併，讓每則摘要涵蓋多一點經文。';
+
+  @override
+  String get homileticTooManySummariesCombine => '我來合併幾則';
+
+  @override
+  String get homileticTooManySummariesAddAnyway => '仍要新增';
+
+  @override
+  String get bibleRepeatedWordsTitle => '重複出現的詞';
+
+  @override
+  String get bibleRepeatedWordsNote => '不含虛詞，以及神、耶穌、以色列等名字。';
+
+  @override
+  String bibleRepeatedWordLabel(String word, int count) {
+    return '$word，$count次';
+  }
 }

@@ -1732,4 +1732,31 @@ class AppLocalizationsSw extends AppLocalizations {
   @override
   String get updateCheckFailed =>
       'Haikuweza kuangalia masasisho. Angalia muunganisho wako wa intaneti kisha ujaribu tena.';
+
+  @override
+  String homileticTooManySummariesTitle(int count) {
+    return 'Ko-ko-ko! Muhtasari wa $count?';
+  }
+
+  @override
+  String get homileticTooManySummariesMessage =>
+      'Homiletiki inalenga mihtasari ya maudhui 10 hadi 20. Jaribu kuunganisha sehemu chache zinazofuatana, ili kila muhtasari ugusie sehemu kubwa zaidi ya kifungu.';
+
+  @override
+  String get homileticTooManySummariesCombine => 'Nitaunganisha baadhi';
+
+  @override
+  String get homileticTooManySummariesAddAnyway => 'Ongeza hata hivyo';
+
+  @override
+  String get bibleRepeatedWordsTitle => 'Maneno yanayojirudia';
+
+  @override
+  String get bibleRepeatedWordsNote =>
+      'Bila maneno madogo wala majina kama Mungu, Yesu na Israeli.';
+
+  @override
+  String bibleRepeatedWordLabel(String word, int count) {
+    return '$word, mara $count';
+  }
 }

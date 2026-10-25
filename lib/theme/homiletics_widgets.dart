@@ -144,6 +144,11 @@ class ExpandedStepCard extends StatelessWidget {
   final VoidCallback onCollapse;
   final Widget child;
 
+  /// How many rows the step has, shown beside [title] (Content's
+  /// summaries); drawn in the danger color once it's past [countLimit].
+  final int? count;
+  final int? countLimit;
+
   const ExpandedStepCard({
     Key? key,
     required this.step,
@@ -152,6 +157,8 @@ class ExpandedStepCard extends StatelessWidget {
     required this.helpText,
     required this.onCollapse,
     required this.child,
+    this.count,
+    this.countLimit,
   }) : super(key: key);
 
   @override
@@ -179,7 +186,7 @@ class ExpandedStepCard extends StatelessWidget {
                     child: Row(children: [
                       StepBadge(step: step, state: StudyStepState.active),
                       const SizedBox(width: 12),
-                      Expanded(
+                      Flexible(
                         child: Text(title,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
@@ -189,6 +196,13 @@ class ExpandedStepCard extends StatelessWidget {
                                 fontWeight: FontWeight.w500,
                                 color: c.ink)),
                       ),
+                      if (count != null) ...[
+                        const SizedBox(width: 8),
+                        _CountPill(
+                            count: count!,
+                            over: countLimit != null && count! > countLimit!),
+                      ],
+                      const Spacer(),
                     ]),
                   ),
                 ),
@@ -203,6 +217,34 @@ class ExpandedStepCard extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+/// A step's row count beside its title, e.g. Content's "12".
+class _CountPill extends StatelessWidget {
+  final int count;
+
+  /// Past the step's recommended number of rows.
+  final bool over;
+
+  const _CountPill({required this.count, required this.over});
+
+  @override
+  Widget build(BuildContext context) {
+    final AppColors c = AppColors.of(context);
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+      decoration: BoxDecoration(
+        color: over ? c.danger.withValues(alpha: 0.12) : c.surfaceSunken,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Text('$count',
+          style: AppText.caption.copyWith(
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+              fontFeatures: const [FontFeature.tabularFigures()],
+              color: over ? c.danger : c.muted)),
     );
   }
 }
