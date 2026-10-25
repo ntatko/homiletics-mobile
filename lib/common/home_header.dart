@@ -4,6 +4,8 @@ import 'package:homiletics/theme/app_theme.dart';
 
 /// Home's top bar: the serif "Homiletics" wordmark with import-from-link,
 /// search and settings buttons, or — while [searching] — a search field with a close button.
+/// Without [showButtons] (the buttons are on the iPhone Duo's vertical bar)
+/// it's just the wordmark or the field.
 class HomeHeader extends StatelessWidget {
   final bool searching;
   final TextEditingController searchController;
@@ -13,6 +15,7 @@ class HomeHeader extends StatelessWidget {
   final ValueChanged<String> onSearchChanged;
   final VoidCallback onOpenSettings;
   final VoidCallback onImportLink;
+  final bool showButtons;
 
   const HomeHeader({
     Key? key,
@@ -24,6 +27,7 @@ class HomeHeader extends StatelessWidget {
     required this.onSearchChanged,
     required this.onOpenSettings,
     required this.onImportLink,
+    this.showButtons = true,
   }) : super(key: key);
 
   static const TextStyle _wordmark = TextStyle(
@@ -33,12 +37,44 @@ class HomeHeader extends StatelessWidget {
     letterSpacing: -0.26,
   );
 
+  /// Import from link, search and settings: on the right of the wordmark,
+  /// or on the vertical bar.
+  List<Widget> buttons(BuildContext context) {
+    final AppColors c = AppColors.of(context);
+    final AppLocalizations l = context.l10n;
+    return [
+      IconButton(
+        key: const ValueKey('homeImportLink'),
+        tooltip: l.importFromLink,
+        icon: Icon(Icons.add_link_rounded, size: 24, color: c.ink),
+        onPressed: onImportLink,
+      ),
+      IconButton(
+        tooltip: l.homeSearchTooltip,
+        icon: Icon(Icons.search_rounded, size: 24, color: c.ink),
+        onPressed: onOpenSearch,
+      ),
+      IconButton(
+        tooltip: l.settingsTitle,
+        icon: Icon(Icons.settings_outlined, size: 24, color: c.ink),
+        onPressed: onOpenSettings,
+      ),
+    ];
+  }
+
+  /// The close-search button, for the vertical bar while [searching].
+  Widget closeSearchButton(BuildContext context) => IconButton(
+        tooltip: context.l10n.homeCloseSearch,
+        icon: Icon(Icons.close_rounded, color: AppColors.of(context).ink),
+        onPressed: onCloseSearch,
+      );
+
   @override
   Widget build(BuildContext context) {
     final AppColors c = AppColors.of(context);
     final AppLocalizations l = context.l10n;
     return Padding(
-      padding: const EdgeInsets.fromLTRB(24, 12, 12, 8),
+      padding: EdgeInsets.fromLTRB(24, 12, showButtons ? 12 : 24, 8),
       child: SizedBox(
         height: 48,
         child: AnimatedSwitcher(
@@ -69,12 +105,14 @@ class HomeHeader extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(width: 4),
-                    IconButton(
-                      tooltip: l.homeCloseSearch,
-                      icon: Icon(Icons.close_rounded, color: c.ink),
-                      onPressed: onCloseSearch,
-                    ),
+                    if (showButtons) ...[
+                      const SizedBox(width: 4),
+                      IconButton(
+                        tooltip: l.homeCloseSearch,
+                        icon: Icon(Icons.close_rounded, color: c.ink),
+                        onPressed: onCloseSearch,
+                      ),
+                    ],
                   ],
                 )
               : Row(
@@ -89,24 +127,7 @@ class HomeHeader extends StatelessWidget {
                             style: _wordmark.copyWith(color: c.ink)),
                       ),
                     ),
-                    IconButton(
-                      key: const ValueKey('homeImportLink'),
-                      tooltip: l.importFromLink,
-                      icon:
-                          Icon(Icons.add_link_rounded, size: 24, color: c.ink),
-                      onPressed: onImportLink,
-                    ),
-                    IconButton(
-                      tooltip: l.homeSearchTooltip,
-                      icon: Icon(Icons.search_rounded, size: 24, color: c.ink),
-                      onPressed: onOpenSearch,
-                    ),
-                    IconButton(
-                      tooltip: l.settingsTitle,
-                      icon:
-                          Icon(Icons.settings_outlined, size: 24, color: c.ink),
-                      onPressed: onOpenSettings,
-                    ),
+                    if (showButtons) ...buttons(context),
                   ],
                 ),
         ),

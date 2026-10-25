@@ -2362,5 +2362,49 @@
   "updateCheckFailed": "Couldn't check for updates. Check your internet connection and try again.",
   "@updateCheckFailed": {
     "description": "Snackbar when a manual update check can't reach the server."
+  },
+  "homileticTooManySummariesTitle": "Bawk! Summary number {count}?",
+  "@homileticTooManySummariesTitle": {
+    "description": "Title of the playful (chicken) dialog shown when adding a content summary past 20.",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "21"
+      }
+    }
+  },
+  "homileticTooManySummariesMessage": "Homiletics aims for 10 to 20 content summaries. Try combining a few neighboring sections, so each summary covers a bit more of the passage.",
+  "@homileticTooManySummariesMessage": {
+    "description": "Body of the dialog shown when adding a content summary past 20."
+  },
+  "homileticTooManySummariesCombine": "I'll combine some",
+  "@homileticTooManySummariesCombine": {
+    "description": "Dialog button: do not add the row; the user will combine summaries instead."
+  },
+  "homileticTooManySummariesAddAnyway": "Add anyway",
+  "@homileticTooManySummariesAddAnyway": {
+    "description": "Dialog button: add the extra content summary anyway."
+  },
+  "bibleRepeatedWordsTitle": "Repeated words",
+  "@bibleRepeatedWordsTitle": {
+    "description": "Heading of the list of words used more than once, under the passage."
+  },
+  "bibleRepeatedWordsNote": "Leaving out small words and names like God, Jesus and Israel.",
+  "@bibleRepeatedWordsNote": {
+    "description": "Small note under the repeated words list explaining what is left out."
+  },
+  "bibleRepeatedWordLabel": "{word}, {count} times",
+  "@bibleRepeatedWordLabel": {
+    "description": "Screen reader label of one repeated word and how often it appears.",
+    "placeholders": {
+      "word": {
+        "type": "String",
+        "example": "faith"
+      },
+      "count": {
+        "type": "int",
+        "example": "12"
+      }
+    }
   }
 }

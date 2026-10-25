@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- The app's ground (AppColors.light.ground), behind the launch screen
+         and the app. -->
+    <color name="splash_ground">#F6F5F1</color>
+</resources>

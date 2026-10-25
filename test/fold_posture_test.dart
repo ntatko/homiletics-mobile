@@ -3,6 +3,7 @@ import 'dart:ui' show DisplayFeature, DisplayFeatureState, DisplayFeatureType;
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:homiletics/common/fold_posture.dart';
+import 'package:homiletics/common/vertical_bar.dart';
 import 'package:homiletics/components/editor/fold_aware_split.dart';
 import 'package:split_view/split_view.dart';
 
@@ -87,15 +88,17 @@ void main() {
     });
   });
 
-  group('HingeFeatures.featureFromEvent', () {
+  group('HingeFeatures events', () {
     test('reads a half-opened fold', () {
       final DisplayFeature? f = HingeFeatures.featureFromEvent({
-        'type': 'fold',
-        'state': 'halfOpened',
-        'left': 412.0,
-        'top': 0,
-        'right': 412.0,
-        'bottom': 951,
+        'fold': {
+          'type': 'fold',
+          'state': 'halfOpened',
+          'left': 412.0,
+          'top': 0,
+          'right': 412.0,
+          'bottom': 951,
+        },
       });
       expect(f, isNotNull);
       expect(f!.bounds, const Rect.fromLTRB(412, 0, 412, 951));
@@ -106,8 +109,30 @@ void main() {
 
     test('null and malformed events mean no fold', () {
       expect(HingeFeatures.featureFromEvent(null), isNull);
-      expect(HingeFeatures.featureFromEvent({'type': 'fold'}), isNull);
+      expect(
+          HingeFeatures.featureFromEvent({
+            'fold': {'type': 'fold'}
+          }),
+          isNull);
       expect(HingeFeatures.featureFromEvent('flat'), isNull);
+      expect(HingeFeatures.featureFromEvent(<String, Object?>{}), isNull);
+    });
+
+    test('reads the vertical bar', () {
+      final VerticalBar? bar = HingeFeatures.barFromEvent({
+        'bar': {
+          'side': 'right',
+          'left': 740.0,
+          'top': 20,
+          'right': 800,
+          'bottom': 580,
+        },
+      });
+      expect(bar, isNotNull);
+      expect(bar!.rect, const Rect.fromLTRB(740, 20, 800, 580));
+      expect(bar.side, AxisDirection.right);
+      expect(HingeFeatures.barFromEvent({'fold': null}), isNull);
+      expect(HingeFeatures.barFromEvent(null), isNull);
     });
   });
 

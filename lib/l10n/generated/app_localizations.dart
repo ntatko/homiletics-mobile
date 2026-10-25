@@ -2961,6 +2961,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Couldn\'t check for updates. Check your internet connection and try again.'**
   String get updateCheckFailed;
+
+  /// Title of the playful (chicken) dialog shown when adding a content summary past 20.
+  ///
+  /// In en, this message translates to:
+  /// **'Bawk! Summary number {count}?'**
+  String homileticTooManySummariesTitle(int count);
+
+  /// Body of the dialog shown when adding a content summary past 20.
+  ///
+  /// In en, this message translates to:
+  /// **'Homiletics aims for 10 to 20 content summaries. Try combining a few neighboring sections, so each summary covers a bit more of the passage.'**
+  String get homileticTooManySummariesMessage;
+
+  /// Dialog button: do not add the row; the user will combine summaries instead.
+  ///
+  /// In en, this message translates to:
+  /// **'I\'ll combine some'**
+  String get homileticTooManySummariesCombine;
+
+  /// Dialog button: add the extra content summary anyway.
+  ///
+  /// In en, this message translates to:
+  /// **'Add anyway'**
+  String get homileticTooManySummariesAddAnyway;
+
+  /// Heading of the list of words used more than once, under the passage.
+  ///
+  /// In en, this message translates to:
+  /// **'Repeated words'**
+  String get bibleRepeatedWordsTitle;
+
+  /// Small note under the repeated words list explaining what is left out.
+  ///
+  /// In en, this message translates to:
+  /// **'Leaving out small words and names like God, Jesus and Israel.'**
+  String get bibleRepeatedWordsNote;
+
+  /// Screen reader label of one repeated word and how often it appears.
+  ///
+  /// In en, this message translates to:
+  /// **'{word}, {count} times'**
+  String bibleRepeatedWordLabel(String word, int count);
 }
 
 class _AppLocalizationsDelegate

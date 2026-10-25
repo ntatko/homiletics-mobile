@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The app icon's "H." on its slate tile, for the launch screen before
+     Android 12 (see splash_mark_animated for 12+). -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="144dp"
+    android:height="144dp"
+    android:viewportWidth="1024"
+    android:viewportHeight="1024">
+    <path android:fillColor="#333F48" android:pathData="M232,0H792A232,232 0,0 1,1024 232V792A232,232 0,0 1,792 1024H232A232,232 0,0 1,0 792V232A232,232 0,0 1,232 0Z" />
+    <path android:fillColor="#90FFDC" android:pathData="M206,275H335V469H515V275H644V795H515V582H335V795H206Z" />
+    <path android:fillColor="#FCAF17" android:pathData="M729,665H851V795H729Z" />
+</vector>

@@ -3,6 +3,7 @@ import 'package:homiletics/classes/content_summary.dart';
 import 'package:homiletics/classes/homiletic.dart';
 import 'package:homiletics/l10n/l10n.dart';
 import 'package:homiletics/components/homiletics/row_controllers.dart';
+import 'package:homiletics/components/homiletics/too_many_summaries_dialog.dart';
 import 'package:homiletics/theme/app_theme.dart';
 import 'package:homiletics/theme/homiletics_widgets.dart';
 
@@ -14,7 +15,9 @@ class ContentSummariesCard extends StatefulWidget {
 
   final List<ContentSummary> contentSummaries;
   final Homiletic homiletic;
-  final VoidCallback addContentSummary;
+  /// Adds a row; completes with whether it did (the editor may ask first,
+  /// past [maxContentSummaries]).
+  final Future<bool> Function() addContentSummary;
   final Future<void> Function(ContentSummary summary) removeContentSummary;
 
   /// Shows the "tap a verse number" tip under the rows.
@@ -100,9 +103,9 @@ class ContentSummariesCardState extends State<ContentSummariesCard> {
     });
   }
 
-  void _add() {
+  Future<void> _add() async {
     _controllers.focusNextNewRow();
-    widget.addContentSummary();
+    if (!await widget.addContentSummary()) _controllers.cancelFocusNextNewRow();
   }
 
   Future<void> _remove(ContentSummary summary) {

@@ -1,4 +1,4 @@
-import 'dart:ui' show Locale;
+import 'dart:ui' show Brightness, Locale, PlatformDispatcher;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -199,17 +199,21 @@ AppLocalizations get _english => lookupAppLocalizations(const Locale('en'));
 
 PdfColor _pdf(Color color) => PdfColor.fromInt(color.toARGB32());
 
-/// Print-safe colors, taken from the light "Scripture Desk" palette.
+/// A handout's colors, from one of the "Scripture Desk" palettes: the light
+/// one for print, either for square images (which match the device).
 class _Palette {
-  static const AppColors _c = AppColors.light;
-  static final PdfColor ink = _pdf(_c.ink);
-  static final PdfColor muted = _pdf(_c.muted);
-  static final PdfColor line = _pdf(_c.line);
-  static final PdfColor lineStrong = _pdf(_c.lineStrong);
-  static final PdfColor accent = _pdf(_c.accent);
-  static final PdfColor onAccent = _pdf(_c.onAccent);
-  static PdfColor step(StudyStep s) => _pdf(_c.stepColors[s.index]);
-  static PdfColor tint(StudyStep s) => _pdf(_c.stepTints[s.index]);
+  _Palette(this._c);
+
+  final AppColors _c;
+  late final PdfColor paper = _pdf(_c.surface);
+  late final PdfColor ink = _pdf(_c.ink);
+  late final PdfColor muted = _pdf(_c.muted);
+  late final PdfColor line = _pdf(_c.line);
+  late final PdfColor lineStrong = _pdf(_c.lineStrong);
+  late final PdfColor accent = _pdf(_c.accent);
+  late final PdfColor onAccent = _pdf(_c.onAccent);
+  PdfColor step(StudyStep s) => _pdf(_c.stepColors[s.index]);
+  PdfColor tint(StudyStep s) => _pdf(_c.stepTints[s.index]);
 }
 
 bool _dateSymbolsLoaded = false;
@@ -301,7 +305,8 @@ List<String> splitForPages(String text,
 }
 
 /// Lays out a homiletic as a printable handout. Pure: no platform channels,
-/// so it can be built in tests with fonts read from disk.
+/// so it can be built in tests with fonts read from disk. [colors] picks the
+/// palette (square images follow the device's light or dark theme).
 pw.Document buildHomileticsDocument(
   Homiletic homiletic,
   List<ContentSummary> summaries,
@@ -311,11 +316,12 @@ pw.Document buildHomileticsDocument(
   PdfPageFormat? format,
   HandoutLayout layout = HandoutLayout.page,
   AppLocalizations? strings,
+  AppColors colors = AppColors.light,
 }) {
   final AppLocalizations l = strings ?? _english;
   final String passage = homiletic.passage.trim();
   final String title = passage.isEmpty ? l.pdfUntitledPassage : passage;
-  final _Styles styles = _Styles(fonts, l, layout);
+  final _Styles styles = _Styles(fonts, l, layout, colors);
   final String label = l.pdfHomileticLabel(title);
 
   final pw.Document doc = pw.Document(
@@ -399,12 +405,13 @@ pw.Document buildWordStudyDocument(
   PdfPageFormat? format,
   HandoutLayout layout = HandoutLayout.page,
   AppLocalizations? strings,
+  AppColors colors = AppColors.light,
 }) {
   final AppLocalizations l = strings ?? _english;
   final String word = study.word.trim();
   final String passage = study.passage.trim();
   final String title = word.isEmpty ? l.pdfUntitledWord : word;
-  final _Styles styles = _Styles(fonts, l, layout);
+  final _Styles styles = _Styles(fonts, l, layout, colors);
   final String label = passage.isEmpty
       ? l.pdfWordStudyLabel(title)
       : l.pdfWordStudyLabelWithPassage(title, passage);
@@ -508,6 +515,14 @@ void _addPages(
       boldItalic: fonts.sansBold,
       fontFallback: fonts.fallback,
     ),
+    // A printed page is the paper itself; an image needs its own ground,
+    // or it's transparent and dark text vanishes in a dark-mode feed.
+    buildBackground: square
+        ? (pw.Context context) => pw.FullPage(
+              ignoreMargins: true,
+              child: pw.Container(color: styles.palette.paper),
+            )
+        : null,
   );
   final List<List<pw.Widget>> filled = [
     for (final List<pw.Widget> half in halves)
@@ -573,58 +588,61 @@ pw.Widget _emptyNote(String text, _Styles styles) {
 
 class _Styles {
   factory _Styles(
-      HomileticPdfFonts f, AppLocalizations strings, HandoutLayout layout) {
+      HomileticPdfFonts f, AppLocalizations strings, HandoutLayout layout,
+      [AppColors colors = AppColors.light]) {
+    final _Palette p = _Palette(colors);
     final bool square = layout == HandoutLayout.square;
     // Type sizes: [s] picks the page size or the square image's.
     double s(double page, double image) => square ? image : page;
     return _Styles._(
       strings: strings,
       layout: layout,
+      palette: p,
       overline: pw.TextStyle(
           font: f.sansSemiBold,
           fontSize: s(7.5, 9),
           letterSpacing: 1.6,
-          color: _Palette.accent),
+          color: p.accent),
       passage: pw.TextStyle(
           font: f.serifMedium,
           fontSize: s(22, 26),
           lineSpacing: 1.5,
-          color: _Palette.ink),
+          color: p.ink),
       date: pw.TextStyle(
-          font: f.sans, fontSize: s(8.5, 10), color: _Palette.muted),
+          font: f.sans, fontSize: s(8.5, 10), color: p.muted),
       number: pw.TextStyle(
-          font: f.sansBold, fontSize: s(7.5, 9.5), color: _Palette.onAccent),
+          font: f.sansBold, fontSize: s(7.5, 9.5), color: p.onAccent),
       sectionTitle: pw.TextStyle(
-          font: f.serifSemiBold, fontSize: s(13, 16), color: _Palette.ink),
+          font: f.serifSemiBold, fontSize: s(13, 16), color: p.ink),
       caption: pw.TextStyle(
-          font: f.serifItalic, fontSize: s(9.5, 11.5), color: _Palette.muted),
+          font: f.serifItalic, fontSize: s(9.5, 11.5), color: p.muted),
       rowLabel: pw.TextStyle(font: f.serifSemiBold, fontSize: s(10, 13)),
       rowText: pw.TextStyle(
           font: f.sans,
           fontSize: s(10, 13),
           lineSpacing: s(2.5, 3.5),
-          color: _Palette.ink),
+          color: p.ink),
       body: pw.TextStyle(
           font: f.sans,
           fontSize: s(10.25, 13),
           lineSpacing: s(2.5, 3.5),
-          color: _Palette.ink),
+          color: p.ink),
       reference: pw.TextStyle(
-          font: f.sansSemiBold, fontSize: s(10.25, 13), color: _Palette.ink),
+          font: f.sansSemiBold, fontSize: s(10.25, 13), color: p.ink),
       subtitle: pw.TextStyle(
-          font: f.serifItalic, fontSize: s(11, 14), color: _Palette.muted),
+          font: f.serifItalic, fontSize: s(11, 14), color: p.muted),
       statement: pw.TextStyle(
           font: f.serif,
           fontSize: s(11.5, 15),
           lineSpacing: s(3, 4),
-          color: _Palette.ink),
+          color: p.ink),
       statementLead: pw.TextStyle(
           font: f.serifItalic,
           fontSize: s(11.5, 15),
           lineSpacing: s(3, 4),
-          color: _Palette.muted),
+          color: p.muted),
       footer: pw.TextStyle(
-          font: f.sans, fontSize: s(7.5, 9.5), color: _Palette.muted),
+          font: f.sans, fontSize: s(7.5, 9.5), color: p.muted),
       sectionTop: s(14, 16),
       wordStudyGap: s(12, 14),
       markerSize: s(16, 20),
@@ -641,6 +659,7 @@ class _Styles {
   const _Styles._({
     required this.strings,
     required this.layout,
+    required this.palette,
     required this.overline,
     required this.passage,
     required this.date,
@@ -668,6 +687,7 @@ class _Styles {
   /// The handout's language.
   final AppLocalizations strings;
   final HandoutLayout layout;
+  final _Palette palette;
 
   final pw.TextStyle overline;
   final pw.TextStyle passage;
@@ -738,7 +758,7 @@ pw.Widget _header(String overline, String title, _Styles styles,
         ],
       ),
       pw.SizedBox(height: 6),
-      pw.Container(height: 0.75, color: _Palette.lineStrong),
+      pw.Container(height: 0.75, color: styles.palette.lineStrong),
       if (subtitle != null) ...[
         pw.SizedBox(height: 4),
         pw.Text(subtitle, style: styles.subtitle),
@@ -754,19 +774,19 @@ pw.Widget _numberMarker(StudyStep step, int number, _Styles styles) {
     height: styles.markerSize,
     alignment: pw.Alignment.center,
     decoration:
-        pw.BoxDecoration(color: _Palette.step(step), shape: pw.BoxShape.circle),
+        pw.BoxDecoration(color: styles.palette.step(step), shape: pw.BoxShape.circle),
     child: pw.Text('$number', style: styles.number),
   );
 }
 
 /// The small rounded square that marks a word study section.
-pw.Widget _squareMarker(StudyStep step) {
+pw.Widget _squareMarker(StudyStep step, _Styles styles) {
   return pw.Container(
     width: 9,
     height: 9,
     margin: const pw.EdgeInsets.only(left: 1, right: 1, top: 1),
     decoration: pw.BoxDecoration(
-        color: _Palette.step(step),
+        color: styles.palette.step(step),
         borderRadius: const pw.BorderRadius.all(pw.Radius.circular(2))),
   );
 }
@@ -784,7 +804,7 @@ pw.Widget _sectionHeading(StudyStep step, String? title, _Styles styles,
         if (number != null)
           _numberMarker(step, number, styles)
         else
-          _squareMarker(step),
+          _squareMarker(step, styles),
         pw.SizedBox(width: number != null ? 9 : 8),
         pw.Text(title ?? step.localizedLabel(styles.strings),
             style: styles.sectionTitle),
@@ -825,9 +845,9 @@ List<pw.Widget> _rowSection(
   double? labelWidth,
 }) {
   final pw.TextStyle labelStyle =
-      styles.rowLabel.copyWith(color: _Palette.step(step));
+      styles.rowLabel.copyWith(color: styles.palette.step(step));
   final pw.TextStyle emptyStyle =
-      styles.rowText.copyWith(color: _Palette.muted);
+      styles.rowText.copyWith(color: styles.palette.muted);
   final List<pw.Widget> out = [];
 
   for (final (int r, (String label, String text)) in rows.indexed) {
@@ -843,7 +863,7 @@ List<pw.Widget> _rowSection(
         decoration: lastPiece && !lastRow
             ? pw.BoxDecoration(
                 border: pw.Border(
-                    bottom: pw.BorderSide(color: _Palette.line, width: 0.6)))
+                    bottom: pw.BorderSide(color: styles.palette.line, width: 0.6)))
             : null,
         child: pw.Row(
           crossAxisAlignment: pw.CrossAxisAlignment.start,
@@ -913,6 +933,7 @@ List<pw.Widget> _tintedBlocks(
             pw.TextSpan(text: piece, style: style),
           ]),
         ),
+        styles,
         // Continuation pieces keep the paragraph's line rhythm.
         padding: pw.EdgeInsets.fromLTRB(
             padding.left,
@@ -923,15 +944,15 @@ List<pw.Widget> _tintedBlocks(
   ];
 }
 
-pw.Widget _tintedBox(StudyStep step, pw.Widget child,
+pw.Widget _tintedBox(StudyStep step, pw.Widget child, _Styles styles,
     {required pw.EdgeInsets padding}) {
   return pw.Container(
     width: double.infinity,
     padding: padding,
     decoration: pw.BoxDecoration(
-      color: _Palette.tint(step),
+      color: styles.palette.tint(step),
       border: pw.Border(
-          left: pw.BorderSide(color: _Palette.step(step), width: 2.5)),
+          left: pw.BorderSide(color: styles.palette.step(step), width: 2.5)),
     ),
     child: child,
   );
@@ -965,7 +986,7 @@ pw.Widget _usageRow(StudyStep step, String piece, _Styles styles,
                 height: 4,
                 margin: const pw.EdgeInsets.only(top: 5),
                 decoration: pw.BoxDecoration(
-                    color: _Palette.step(step), shape: pw.BoxShape.circle),
+                    color: styles.palette.step(step), shape: pw.BoxShape.circle),
               ),
       ),
       pw.Expanded(
@@ -995,6 +1016,7 @@ List<pw.Widget> _usageList(StudyStep step, List<String> lines, _Styles styles) {
       out.add(_tintedBox(
         step,
         _usageRow(step, piece, styles, continuation: p > 0),
+        styles,
         padding: pw.EdgeInsets.fromLTRB(
             styles.tintPadding.left,
             r == 0 && p == 0
@@ -1032,7 +1054,7 @@ pw.Widget _definitionAndUsage(
       pw.TableRow(
         verticalAlignment: pw.TableCellVerticalAlignment.full,
         children: [
-          _tintedBox(defStep, pw.Text(definition, style: styles.body),
+          _tintedBox(defStep, pw.Text(definition, style: styles.body), styles,
               padding: styles.tintPadding),
           pw.SizedBox(),
           _tintedBox(
@@ -1047,6 +1069,7 @@ pw.Widget _definitionAndUsage(
                   ),
               ],
             ),
+            styles,
             padding: styles.tintPadding,
           ),
         ],
@@ -1062,7 +1085,7 @@ pw.Widget _footer(
     padding: const pw.EdgeInsets.only(top: 6),
     decoration: pw.BoxDecoration(
         border:
-            pw.Border(top: pw.BorderSide(color: _Palette.line, width: 0.6))),
+            pw.Border(top: pw.BorderSide(color: styles.palette.line, width: 0.6))),
     child: pw.Row(
       children: [
         pw.Expanded(
@@ -1201,6 +1224,13 @@ class HandoutImages {
       : [for (int i = 1; i <= pngs.length; i++) '$baseName-$i.png'];
 }
 
+/// The palette the app is showing (it follows the system's light or dark
+/// mode), so shared images look like the study on screen.
+AppColors _deviceColors() =>
+    PlatformDispatcher.instance.platformBrightness == Brightness.dark
+        ? AppColors.dark
+        : AppColors.light;
+
 /// Rasterizes each page of [doc] at [squareImageDpi].
 Future<List<Uint8List>> _pngs(pw.Document doc) async {
   final Uint8List bytes = await doc.save();
@@ -1228,7 +1258,10 @@ Future<HandoutImages> homileticImages(
       _baseName(_fileName(homiletic)),
       await _pngs(buildHomileticsDocument(
           homiletic, summaries, divisions, applications,
-          fonts: fonts, layout: HandoutLayout.square, strings: l)));
+          fonts: fonts,
+          layout: HandoutLayout.square,
+          strings: l,
+          colors: _deviceColors())));
 }
 
 /// The word study as square images, like [homileticImages].
@@ -1239,7 +1272,42 @@ Future<HandoutImages> wordStudyImages(WordStudy study) async {
   return HandoutImages(
       _baseName(_wordStudyFileName(study)),
       await _pngs(buildWordStudyDocument(study,
-          fonts: fonts, layout: HandoutLayout.square, strings: l)));
+          fonts: fonts,
+          layout: HandoutLayout.square,
+          strings: l,
+          colors: _deviceColors())));
+}
+
+/// Countries that print on US Letter; everywhere else uses A4.
+const Set<String> _letterCountries = {
+  'US', 'CA', 'MX', 'PH', 'CL', 'CO', 'VE', 'CR', 'GT', 'PR', 'DO', 'SV',
+  'PA', 'NI', 'HN', 'BO',
+};
+
+/// The paper for the user's region, for when the print dialog can't say.
+PdfPageFormat _regionalPaper() {
+  final String? country = PlatformDispatcher.instance.locale.countryCode;
+  return country == null || _letterCountries.contains(country.toUpperCase())
+      ? PdfPageFormat.letter
+      : PdfPageFormat.a4;
+}
+
+/// Opens the print dialog for the document [build] lays out.
+///
+/// Elsewhere the document is laid out for the paper the user picks in the
+/// dialog (Letter, A4, ...). Not on macOS: there the printing plugin
+/// blocks the main thread until Dart hands it the re-laid-out document,
+/// and Flutter runs Dart on that same thread, so the dialog hung forever.
+/// There it's laid out once for the region's paper, before the dialog.
+Future<void> _layoutPdf(
+    String name, Future<Uint8List> Function(PdfPageFormat format) build) {
+  final bool macOS = !kIsWeb && defaultTargetPlatform == TargetPlatform.macOS;
+  return Printing.layoutPdf(
+    name: name,
+    format: macOS ? _regionalPaper() : PdfPageFormat.standard,
+    dynamicLayout: !macOS,
+    onLayout: build,
+  );
 }
 
 Future<void> printHomiletic(Homiletic homiletic, List<ContentSummary> summaries,
@@ -1248,10 +1316,9 @@ Future<void> printHomiletic(Homiletic homiletic, List<ContentSummary> summaries,
   final HomileticPdfFonts fonts = await _fontsFor(
       homileticPdfTexts(homiletic, summaries, divisions, applications, l),
       locale);
-  await Printing.layoutPdf(
-    name: _fileName(homiletic),
-    // Lay out for the paper the user picks (Letter, A4, ...).
-    onLayout: (PdfPageFormat format) => buildHomileticsDocument(
+  await _layoutPdf(
+    _fileName(homiletic),
+    (PdfPageFormat format) => buildHomileticsDocument(
             homiletic, summaries, divisions, applications,
             fonts: fonts, format: format, strings: l)
         .save(),
@@ -1270,10 +1337,9 @@ Future<void> printWordStudy(WordStudy study) async {
   final (AppLocalizations l, Locale locale) = _appStrings();
   final HomileticPdfFonts fonts =
       await _fontsFor(wordStudyPdfTexts(study, l), locale);
-  await Printing.layoutPdf(
-    name: _wordStudyFileName(study),
-    // Lay out for the paper the user picks (Letter, A4, ...).
-    onLayout: (PdfPageFormat format) =>
+  await _layoutPdf(
+    _wordStudyFileName(study),
+    (PdfPageFormat format) =>
         buildWordStudyDocument(study, fonts: fonts, format: format, strings: l)
             .save(),
   );

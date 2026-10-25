@@ -7,11 +7,12 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 /// Scrolls an embedded web view from mouse-wheel and trackpad gestures.
 ///
-/// On macOS, Flutter doesn't forward scroll-wheel or two-finger trackpad
-/// pans to platform views, so a [WebViewWidget] can't be scrolled with
-/// them. This catches those events in Flutter and scrolls the page with
-/// [WebViewController.scrollBy]. On other platforms it passes [child]
-/// through unchanged (touch scrolling already works there).
+/// On macOS a web view gets the mouse and trackpad straight from AppKit,
+/// except where Flutter paints over it (see the verse panel's border);
+/// there the events reach Flutter instead. This catches those and scrolls
+/// the page from JavaScript — [WebViewController.scrollBy] scrolls a
+/// UIScrollView, which macOS's WKWebView doesn't have. On other platforms
+/// it passes [child] through unchanged (touch scrolling already works).
 class WebViewScrollForwarder extends StatelessWidget {
   final WebViewController controller;
   final Widget child;
@@ -28,7 +29,9 @@ class WebViewScrollForwarder extends StatelessWidget {
     final int dx = delta.dx.round();
     final int dy = delta.dy.round();
     if (dx == 0 && dy == 0) return;
-    controller.scrollBy(dx, dy).catchError((Object _) {});
+    controller
+        .runJavaScript('window.scrollBy($dx, $dy);')
+        .catchError((Object _) {});
   }
 
   @override

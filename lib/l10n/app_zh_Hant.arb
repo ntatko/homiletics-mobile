@@ -926,5 +926,12 @@
   "updateTryAgain": "重試",
   "updatePortableNote": "此副本不是透過安裝程式安裝的，請從 homiletics.app 下載新版本。",
   "updateUpToDate": "已是最新版本（Homiletics {version}）。",
-  "updateCheckFailed": "無法檢查更新。請檢查網路連線後再試一次。"
+  "updateCheckFailed": "無法檢查更新。請檢查網路連線後再試一次。",
+  "homileticTooManySummariesTitle": "咯咯噠！第{count}則摘要？",
+  "homileticTooManySummariesMessage": "內容摘要以10到20則為宜。試著把幾段相鄰的經文合併，讓每則摘要涵蓋多一點經文。",
+  "homileticTooManySummariesCombine": "我來合併幾則",
+  "homileticTooManySummariesAddAnyway": "仍要新增",
+  "bibleRepeatedWordsTitle": "重複出現的詞",
+  "bibleRepeatedWordsNote": "不含虛詞，以及神、耶穌、以色列等名字。",
+  "bibleRepeatedWordLabel": "{word}，{count}次"
 }

@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:homiletics/l10n/l10n.dart';
 import 'package:homiletics/services/bible_text.dart';
+import 'package:homiletics/services/repeated_words.dart';
 import 'package:homiletics/theme/app_theme.dart';
 import 'package:homiletics/theme/widgets.dart';
 
@@ -82,6 +83,9 @@ class BiblePassageView extends StatefulWidget {
   final VoidCallback? onTranslationTap;
   final ValueChanged<String>? onVerseTap;
 
+  /// The translation's language, for the repeated words under the text.
+  final String languageCode;
+
   const BiblePassageView({
     Key? key,
     required this.chapters,
@@ -90,6 +94,7 @@ class BiblePassageView extends StatefulWidget {
     required this.copyright,
     this.onTranslationTap,
     this.onVerseTap,
+    this.languageCode = 'en',
   }) : super(key: key);
 
   /// The reference a tap on [verse] in [chapter] reports.
@@ -105,6 +110,24 @@ class BiblePassageView extends StatefulWidget {
 
 class _BiblePassageViewState extends State<BiblePassageView> {
   final List<TapGestureRecognizer> _recognizers = [];
+
+  late List<RepeatedWord> _repeated = _countWords();
+
+  @override
+  void didUpdateWidget(covariant BiblePassageView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (!identical(oldWidget.chapters, widget.chapters) ||
+        oldWidget.languageCode != widget.languageCode) {
+      _repeated = _countWords();
+    }
+  }
+
+  List<RepeatedWord> _countWords() => repeatedWords(
+      [
+        for (final PassageChapter pc in widget.chapters)
+          for (final BibleVerse v in pc.verses) v.text
+      ].join(' '),
+      languageCode: widget.languageCode);
 
   @override
   void dispose() {
@@ -239,7 +262,74 @@ class _BiblePassageViewState extends State<BiblePassageView> {
             ],
           ),
         ),
+        if (_repeated.isNotEmpty) RepeatedWordsPanel(words: _repeated),
       ],
+    );
+  }
+}
+
+/// The words a passage keeps coming back to, under its text: each with how
+/// many times it's used.
+class RepeatedWordsPanel extends StatelessWidget {
+  final List<RepeatedWord> words;
+
+  const RepeatedWordsPanel({Key? key, required this.words}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final AppColors c = AppColors.of(context);
+    final AppLocalizations l = context.l10n;
+    return Container(
+      margin: const EdgeInsets.only(top: 24),
+      padding: const EdgeInsets.only(top: 14),
+      decoration: BoxDecoration(border: Border(top: BorderSide(color: c.line))),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Semantics(header: true, child: Overline(l.bibleRepeatedWordsTitle)),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 6,
+            runSpacing: 6,
+            children: [
+              for (final RepeatedWord w in words)
+                Semantics(
+                  label: l.bibleRepeatedWordLabel(w.word, w.count),
+                  excludeSemantics: true,
+                  child: Container(
+                    padding: const EdgeInsets.fromLTRB(10, 4, 9, 4),
+                    decoration: BoxDecoration(
+                      color: c.surfaceSunken,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Text.rich(
+                      TextSpan(children: [
+                        TextSpan(
+                            text: w.word,
+                            style: AppText.scripture.copyWith(
+                                fontSize: 15, height: 1.3, color: c.ink)),
+                        const TextSpan(text: '  '),
+                        TextSpan(
+                            text: '${w.count}',
+                            style: TextStyle(
+                                fontFamily: AppFonts.sans,
+                                fontSize: 11,
+                                fontWeight: FontWeight.w600,
+                                fontFeatures: const [
+                                  FontFeature.tabularFigures()
+                                ],
+                                color: c.accent)),
+                      ]),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Text(l.bibleRepeatedWordsNote,
+              style: AppText.caption.copyWith(fontSize: 12, color: c.muted)),
+        ],
+      ),
     );
   }
 }

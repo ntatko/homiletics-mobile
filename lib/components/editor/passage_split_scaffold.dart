@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:homiletics/classes/preferences.dart';
 import 'package:homiletics/common/report_error.dart';
+import 'package:homiletics/common/vertical_bar.dart';
 import 'package:homiletics/common/verse_container.dart';
 import 'package:homiletics/components/editor/fold_aware_split.dart';
 import 'package:homiletics/components/preferences_modal.dart';
@@ -230,18 +231,23 @@ class _PassageSplitScaffoldState extends State<PassageSplitScaffold> {
           side: BorderSide(color: c.line),
         ),
         clipBehavior: Clip.antiAlias,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Expanded(
-              child: VerseContainer(
-                  key: _versePaneKey,
-                  passage: _versePassage,
-                  translation: translation,
-                  onTranslationTap: _openPreferences,
-                  onVerseTap: widget.onVerseTap),
-            ),
-          ],
+        // Nothing may be painted over the web view: on macOS, wherever
+        // Flutter draws above a platform view it takes that view's mouse
+        // events, so a border drawn on top cost the passage its clicks,
+        // trackpad scrolling and text selection. The border goes
+        // underneath instead, kept visible by the 1px inset.
+        borderOnForeground: false,
+        child: Padding(
+          padding: const EdgeInsets.all(1),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(AppRadius.panel - 1),
+            child: VerseContainer(
+                key: _versePaneKey,
+                passage: _versePassage,
+                translation: translation,
+                onTranslationTap: _openPreferences,
+                onVerseTap: widget.onVerseTap),
+          ),
         ),
       ),
     );
@@ -275,12 +281,10 @@ class _PassageSplitScaffoldState extends State<PassageSplitScaffold> {
   Widget build(BuildContext context) {
     final AppColors c = AppColors.of(context);
     final AppLocalizations l = context.l10n;
-    final List<EditorMenuAction> menu = [
-      EditorMenuAction(
-          icon: Icons.check_rounded,
-          title: l.editorSaveAndClose,
-          onSelected: () async => _close()),
-      ...widget.extraActions,
+    // Preferences and Delete are always in the menu; on top it also holds
+    // Save & close and the study's own actions, which the vertical bar
+    // shows as buttons instead.
+    final List<EditorMenuAction> settingsActions = [
       EditorMenuAction(
           icon: Icons.tune_rounded,
           title: l.commonPreferences,
@@ -290,6 +294,14 @@ class _PassageSplitScaffoldState extends State<PassageSplitScaffold> {
           title: l.commonDelete,
           onSelected: _confirmDelete,
           destructive: true),
+    ];
+    final List<EditorMenuAction> menu = [
+      EditorMenuAction(
+          icon: Icons.check_rounded,
+          title: l.editorSaveAndClose,
+          onSelected: () async => _close()),
+      ...widget.extraActions,
+      ...settingsActions,
     ];
 
     // On desktops and wide tablets the editor would otherwise stretch to
@@ -307,20 +319,58 @@ class _PassageSplitScaffoldState extends State<PassageSplitScaffold> {
     final Widget versePane =
         KeyedSubtree(key: _versePanelKey, child: _buildVersePanel(c));
 
-    return Scaffold(
+    final VerticalBar? bar = VerticalBar.of(context);
+    final Widget backButton = IconButton(
+      tooltip: l.editorBack,
+      icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 20),
+      color: c.ink,
+      onPressed: _close,
+    );
+    Widget menuButton(List<EditorMenuAction> actions) =>
+        PopupMenuButton<EditorMenuAction>(
+            tooltip: l.editorMoreOptions,
+            onSelected: (action) => action.onSelected(),
+            icon: Icon(Icons.more_vert_rounded, color: c.ink),
+            itemBuilder: (context) => actions
+                .map((action) => PopupMenuItem<EditorMenuAction>(
+                      value: action,
+                      child: Row(children: [
+                        Icon(action.icon,
+                            size: 20,
+                            color: action.destructive ? c.danger : c.ink),
+                        const SizedBox(width: 12),
+                        Text(action.title,
+                            style: AppText.body.copyWith(
+                                color: action.destructive ? c.danger : c.ink)),
+                      ]),
+                    ))
+                .toList());
+
+    return VerticalBarLayout(
+      // On the iPhone Duo's vertical bar: Back on top, then the study's
+      // own actions as buttons, with the rest in the menu.
+      groups: [
+        BarGroup(children: [backButton]),
+        BarGroup(children: [
+          for (final EditorMenuAction action in widget.extraActions)
+            IconButton(
+              tooltip: action.title,
+              icon: Icon(action.icon,
+                  color: action.destructive ? c.danger : c.ink),
+              onPressed: action.onSelected,
+            ),
+          menuButton(settingsActions),
+        ]),
+      ],
+      child: Scaffold(
         backgroundColor: c.ground,
         body: SafeArea(
           bottom: true,
           child: Column(children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(4, 8, 4, 4),
+              padding: EdgeInsets.fromLTRB(bar == null ? 4 : 16, 8, 4, 4),
               child: Row(children: [
-                IconButton(
-                  tooltip: l.editorBack,
-                  icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 20),
-                  color: c.ink,
-                  onPressed: _close,
-                ),
+                if (bar == null) backButton,
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -357,27 +407,10 @@ class _PassageSplitScaffoldState extends State<PassageSplitScaffold> {
                     ],
                   ),
                 ),
-                PopupMenuButton<EditorMenuAction>(
-                    tooltip: l.editorMoreOptions,
-                    onSelected: (action) => action.onSelected(),
-                    icon: Icon(Icons.more_vert_rounded, color: c.ink),
-                    itemBuilder: (context) => menu
-                        .map((action) => PopupMenuItem<EditorMenuAction>(
-                              value: action,
-                              child: Row(children: [
-                                Icon(action.icon,
-                                    size: 20,
-                                    color:
-                                        action.destructive ? c.danger : c.ink),
-                                const SizedBox(width: 12),
-                                Text(action.title,
-                                    style: AppText.body.copyWith(
-                                        color: action.destructive
-                                            ? c.danger
-                                            : c.ink)),
-                              ]),
-                            ))
-                        .toList()),
+                if (bar == null)
+                  menuButton(menu)
+                else
+                  const SizedBox(width: 12),
               ]),
             ),
             Expanded(
@@ -413,6 +446,8 @@ class _PassageSplitScaffoldState extends State<PassageSplitScaffold> {
               ),
             ),
           ]),
-        ));
+        ),
+      ),
+    );
   }
 }

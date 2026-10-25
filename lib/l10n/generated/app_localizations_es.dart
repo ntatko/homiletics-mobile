@@ -1735,4 +1735,31 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get updateCheckFailed =>
       'No se pudo buscar actualizaciones. Revisa tu conexión a internet e inténtalo de nuevo.';
+
+  @override
+  String homileticTooManySummariesTitle(int count) {
+    return '¡Coc-co-coc! ¿Resumen número $count?';
+  }
+
+  @override
+  String get homileticTooManySummariesMessage =>
+      'La homilética apunta a entre 10 y 20 resúmenes de contenido. Intenta combinar algunas secciones vecinas, para que cada resumen abarque un poco más del pasaje.';
+
+  @override
+  String get homileticTooManySummariesCombine => 'Combinaré algunos';
+
+  @override
+  String get homileticTooManySummariesAddAnyway => 'Agregar de todos modos';
+
+  @override
+  String get bibleRepeatedWordsTitle => 'Palabras repetidas';
+
+  @override
+  String get bibleRepeatedWordsNote =>
+      'Sin contar palabras pequeñas ni nombres como Dios, Jesús e Israel.';
+
+  @override
+  String bibleRepeatedWordLabel(String word, int count) {
+    return '$word, $count veces';
+  }
 }

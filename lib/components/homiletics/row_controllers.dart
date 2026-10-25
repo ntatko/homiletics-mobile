@@ -30,6 +30,9 @@ class RowControllers<T extends Object> {
   /// user adds a row, so rows loaded from storage don't grab focus).
   void focusNextNewRow() => _focusNextNewRow = true;
 
+  /// Undoes [focusNextNewRow] when the row wasn't added after all.
+  void cancelFocusNextNewRow() => _focusNextNewRow = false;
+
   bool shouldAutofocus(T row) => identical(row, _autofocusRow);
 
   /// Disposes controllers for rows no longer in [rows]. Disposal waits a

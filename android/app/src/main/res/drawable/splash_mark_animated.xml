@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Android 12+ launch animation: the "H." tile settles into place, then
+     its orange period drops in and lands. A 288dp canvas whose middle
+     192dp circle is what the system shows; the 144dp tile sits inside it
+     (corners included), so nothing is cropped. -->
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt">
+    <aapt:attr name="android:drawable">
+        <vector
+            android:width="288dp"
+            android:height="288dp"
+            android:viewportWidth="432"
+            android:viewportHeight="432">
+            <group
+                android:name="mark"
+                android:pivotX="216"
+                android:pivotY="216"
+                android:scaleX="0.88"
+                android:scaleY="0.88">
+                <group
+                    android:scaleX="0.2109375"
+                    android:scaleY="0.2109375"
+                    android:translateX="108"
+                    android:translateY="108">
+                    <path android:fillColor="#333F48" android:pathData="M232,0H792A232,232 0,0 1,1024 232V792A232,232 0,0 1,792 1024H232A232,232 0,0 1,0 792V232A232,232 0,0 1,232 0Z" />
+                    <path android:fillColor="#90FFDC" android:pathData="M206,275H335V469H515V275H644V795H515V582H335V795H206Z" />
+                    <group
+                        android:name="period"
+                        android:pivotX="790"
+                        android:pivotY="795"
+                        android:scaleX="0"
+                        android:scaleY="0"
+                        android:translateY="-220">
+                        <path android:fillColor="#FCAF17" android:pathData="M729,665H851V795H729Z" />
+                    </group>
+                </group>
+            </group>
+        </vector>
+    </aapt:attr>
+
+    <target android:name="mark">
+        <aapt:attr name="android:animation">
+            <set>
+                <objectAnimator
+                    android:duration="420"
+                    android:interpolator="@android:interpolator/fast_out_slow_in"
+                    android:propertyName="scaleX"
+                    android:valueFrom="0.88"
+                    android:valueTo="1" />
+                <objectAnimator
+                    android:duration="420"
+                    android:interpolator="@android:interpolator/fast_out_slow_in"
+                    android:propertyName="scaleY"
+                    android:valueFrom="0.88"
+                    android:valueTo="1" />
+            </set>
+        </aapt:attr>
+    </target>
+
+    <target android:name="period">
+        <aapt:attr name="android:animation">
+            <set>
+                <objectAnimator
+                    android:duration="160"
+                    android:interpolator="@android:interpolator/fast_out_linear_in"
+                    android:propertyName="scaleX"
+                    android:startOffset="300"
+                    android:valueFrom="0"
+                    android:valueTo="1" />
+                <objectAnimator
+                    android:duration="160"
+                    android:interpolator="@android:interpolator/fast_out_linear_in"
+                    android:propertyName="scaleY"
+                    android:startOffset="300"
+                    android:valueFrom="0"
+                    android:valueTo="1" />
+                <objectAnimator
+                    android:duration="520"
+                    android:interpolator="@android:anim/bounce_interpolator"
+                    android:propertyName="translateY"
+                    android:startOffset="300"
+                    android:valueFrom="-220"
+                    android:valueTo="0" />
+            </set>
+        </aapt:attr>
+    </target>
+</animated-vector>

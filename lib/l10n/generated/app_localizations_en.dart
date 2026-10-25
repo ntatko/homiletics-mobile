@@ -1724,4 +1724,31 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get updateCheckFailed =>
       'Couldn\'t check for updates. Check your internet connection and try again.';
+
+  @override
+  String homileticTooManySummariesTitle(int count) {
+    return 'Bawk! Summary number $count?';
+  }
+
+  @override
+  String get homileticTooManySummariesMessage =>
+      'Homiletics aims for 10 to 20 content summaries. Try combining a few neighboring sections, so each summary covers a bit more of the passage.';
+
+  @override
+  String get homileticTooManySummariesCombine => 'I\'ll combine some';
+
+  @override
+  String get homileticTooManySummariesAddAnyway => 'Add anyway';
+
+  @override
+  String get bibleRepeatedWordsTitle => 'Repeated words';
+
+  @override
+  String get bibleRepeatedWordsNote =>
+      'Leaving out small words and names like God, Jesus and Israel.';
+
+  @override
+  String bibleRepeatedWordLabel(String word, int count) {
+    return '$word, $count times';
+  }
 }
