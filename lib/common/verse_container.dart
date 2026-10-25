@@ -163,7 +163,7 @@ String _readingCss(AppColors c) => """
   #homiletics-reader-header .short { stroke: none !important; }
   #homiletics-reader-header svg { width: 16px; height: 16px; }
   #homiletics-repeated {
-    margin-top: 28px; padding-top: 14px;
+    margin: 28px 0 20px; padding-top: 14px;
     border-top: 1px solid ${_hex(c.line)} !important;
     font-family: -apple-system, 'Roboto', sans-serif !important;
   }
@@ -489,7 +489,14 @@ class VerseContainerState extends State<VerseContainer> {
           if (!box) {
             box = document.createElement('div');
             box.id = 'homiletics-repeated';
-            reader.appendChild(box);
+            // Right after the scripture, above its notes and references.
+            var notes = reader.querySelector(
+                '.full-chap-link, .footnotes, .crossrefs, .publisher-info-bottom');
+            if (notes) {
+              notes.parentNode.insertBefore(box, notes);
+            } else {
+              reader.appendChild(box);
+            }
           }
           box.innerHTML = ${jsonEncode(html)};
           box.style.display = ${jsonEncode(html.isEmpty ? 'none' : 'block')};

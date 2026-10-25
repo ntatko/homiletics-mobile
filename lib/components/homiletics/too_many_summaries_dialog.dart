@@ -20,9 +20,13 @@ Future<bool> confirmExtraContentSummary(BuildContext context, int count) async {
         icon: const _CluckingHen(size: 96),
         title: Text(l.homileticTooManySummariesTitle(count),
             textAlign: TextAlign.center),
-        content: Text(l.homileticTooManySummariesMessage,
-            textAlign: TextAlign.center,
-            style: AppText.body.copyWith(color: c.muted)),
+        content: ConstrainedBox(
+          // Reads as a short note, not a banner, on wide windows.
+          constraints: const BoxConstraints(maxWidth: 360),
+          child: Text(l.homileticTooManySummariesMessage,
+              textAlign: TextAlign.center,
+              style: AppText.body.copyWith(color: c.muted)),
+        ),
         actionsAlignment: MainAxisAlignment.center,
         actions: [
           TextButton(
@@ -76,19 +80,24 @@ class _CluckingHenState extends State<_CluckingHen>
   @override
   Widget build(BuildContext context) {
     final AppColors c = AppColors.of(context);
+    // The dialog's icon slot is as wide as the dialog; keep her square.
     return ExcludeSemantics(
-      child: AnimatedBuilder(
-        animation: _bob,
-        builder: (context, _) => CustomPaint(
-          size: Size.square(widget.size),
-          painter: _HenPainter(
-            // Three quick pecks that settle.
-            peck: math.sin(_bob.value * math.pi * 6) * (1 - _bob.value),
-            body: c.surface,
-            outline: c.ink,
-            comb: c.danger,
-            beak: const Color(0xFFF5A623),
-            wing: c.surfaceSunken,
+      child: Center(
+        child: SizedBox.square(
+          dimension: widget.size,
+          child: AnimatedBuilder(
+            animation: _bob,
+            builder: (context, _) => CustomPaint(
+              painter: _HenPainter(
+                // Three quick pecks that settle.
+                peck: math.sin(_bob.value * math.pi * 6) * (1 - _bob.value),
+                body: c.surface,
+                outline: c.ink,
+                comb: c.danger,
+                beak: const Color(0xFFF5A623),
+                wing: c.surfaceSunken,
+              ),
+            ),
           ),
         ),
       ),
@@ -116,7 +125,7 @@ class _HenPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final double u = size.width / 100;
+    final double u = math.min(size.width, size.height) / 100;
     canvas.scale(u);
     final Paint stroke = Paint()
       ..color = outline
