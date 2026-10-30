@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:homiletics/classes/preferences.dart';
 import 'package:homiletics/common/report_error.dart';
@@ -277,6 +279,23 @@ class _PassageSplitScaffoldState extends State<PassageSplitScaffold> {
     return share ?? widget.verseWeight;
   }
 
+  /// Room around the passage header. With a vertical bar there's no back
+  /// button on the left, and no status bar above to keep the overline off
+  /// the screen's rounded corners, so it starts at least as far in as the
+  /// corners need.
+  static EdgeInsets _headerPadding(BuildContext context, VerticalBar? bar) {
+    if (bar == null) return const EdgeInsets.fromLTRB(4, 8, 4, 4);
+    // The bar already keeps its own side clear.
+    final EdgeInsets safe = MediaQuery.paddingOf(context);
+    final bool barOnRight = bar.side == AxisDirection.right;
+    return EdgeInsets.fromLTRB(
+      barOnRight ? math.max(16, bar.cornerLeft - safe.left) : 16,
+      8,
+      barOnRight ? 4 : math.max(4, bar.cornerRight - safe.right),
+      4,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final AppColors c = AppColors.of(context);
@@ -368,7 +387,7 @@ class _PassageSplitScaffoldState extends State<PassageSplitScaffold> {
           bottom: true,
           child: Column(children: [
             Padding(
-              padding: EdgeInsets.fromLTRB(bar == null ? 4 : 16, 8, 4, 4),
+              padding: _headerPadding(context, bar),
               child: Row(children: [
                 if (bar == null) backButton,
                 Expanded(

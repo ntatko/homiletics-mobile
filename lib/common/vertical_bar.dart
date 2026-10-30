@@ -16,7 +16,18 @@ class VerticalBar {
   /// The edge it runs along: [AxisDirection.left] or [AxisDirection.right].
   final AxisDirection side;
 
-  const VerticalBar({required this.rect, required this.side});
+  /// How far in from each side a row along the top of the screen must start
+  /// to clear the display's rounded corners. Without a status bar across
+  /// the top, the safe area no longer does this.
+  final double cornerLeft;
+  final double cornerRight;
+
+  const VerticalBar({
+    required this.rect,
+    required this.side,
+    this.cornerLeft = 0,
+    this.cornerRight = 0,
+  });
 
   /// The bar for [context], or null when bars should stay horizontal.
   static VerticalBar? of(BuildContext context) =>
@@ -24,10 +35,14 @@ class VerticalBar {
 
   @override
   bool operator ==(Object other) =>
-      other is VerticalBar && other.rect == rect && other.side == side;
+      other is VerticalBar &&
+      other.rect == rect &&
+      other.side == side &&
+      other.cornerLeft == cornerLeft &&
+      other.cornerRight == cornerRight;
 
   @override
-  int get hashCode => Object.hash(rect, side);
+  int get hashCode => Object.hash(rect, side, cornerLeft, cornerRight);
 }
 
 /// Provides [VerticalBar.of].

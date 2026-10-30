@@ -131,7 +131,15 @@ final class HingeBridge: NSObject, FlutterStreamHandler {
       let frame = guide.layoutFrame
       if frame.width > 0, frame.height > 0 {
         let side = frame.midX > view.bounds.midX ? "right" : "left"
-        event["bar"] = rect(frame, ["side": side])
+        // With the status bar moved into the vertical bar, nothing keeps
+        // content off the screen's rounded corners; the corner-adapted
+        // safe area says how far in a top row has to start.
+        let corners = view.edgeInsets(for: .safeArea(cornerAdaptation: .horizontal))
+        event["bar"] = rect(frame, [
+          "side": side,
+          "cornerLeft": Double(corners.left),
+          "cornerRight": Double(corners.right),
+        ])
       }
     }
     return event
