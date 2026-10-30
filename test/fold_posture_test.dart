@@ -131,6 +131,21 @@ void main() {
       expect(bar, isNotNull);
       expect(bar!.rect, const Rect.fromLTRB(740, 20, 800, 580));
       expect(bar.side, AxisDirection.right);
+      expect(bar.cornerLeft, 0, reason: 'older bridges send no corners');
+      expect(
+          HingeFeatures.barFromEvent({
+            'bar': {
+              'side': 'right',
+              'left': 740.0,
+              'top': 0,
+              'right': 800,
+              'bottom': 600,
+              'cornerLeft': 34.5,
+              'cornerRight': 12,
+            },
+          })!
+              .cornerLeft,
+          34.5);
       expect(HingeFeatures.barFromEvent({'fold': null}), isNull);
       expect(HingeFeatures.barFromEvent(null), isNull);
     });
