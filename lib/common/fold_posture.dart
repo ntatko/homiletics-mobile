@@ -87,7 +87,9 @@ class FoldPosture {
 ///   - `fold`: `{'type': 'fold' | 'hinge', 'state': 'flat' | 'halfOpened',
 ///     'left', 'top', 'right', 'bottom'}` — the fold's rectangle;
 ///   - `bar`: `{'side': 'left' | 'right', 'left', 'top', 'right',
-///     'bottom'}` — where the vertical bar goes, when the system uses one;
+///     'bottom', 'cornerLeft', 'cornerRight'}` — where the vertical bar
+///     goes, when the system uses one, and how far a top row must start
+///     from each side to clear the screen's rounded corners;
 ///   rectangles in logical points in the Flutter view's coordinates (the
 ///   same space as [MediaQueryData.size]). An event comes on every change,
 ///   and the current state as soon as a listener subscribes.
@@ -132,8 +134,11 @@ class HingeFeatures extends StatefulWidget {
     final Rect? rect = _rect(bar);
     if (bar is! Map || rect == null || rect.isEmpty) return null;
     return VerticalBar(
-        rect: rect,
-        side: bar['side'] == 'left' ? AxisDirection.left : AxisDirection.right);
+      rect: rect,
+      side: bar['side'] == 'left' ? AxisDirection.left : AxisDirection.right,
+      cornerLeft: (bar['cornerLeft'] as num?)?.toDouble() ?? 0,
+      cornerRight: (bar['cornerRight'] as num?)?.toDouble() ?? 0,
+    );
   }
 
   @override
